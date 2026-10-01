@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-white scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DansUGC - Real human reactions, for ads that go viral</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Newsreader, Playfair Display, Inter, Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Newsreader', 'Playfair Display', 'Georgia', 'serif'],
+            sans: ['Inter', 'Plus Jakarta Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              blue: '#3b5bfd',
+              searchBtn: '#5352ed',
+              dark: '#111111',
+              chat: '#0091ff',
+              badgeGreen: '#16a34a',
+            }
+          },
+          boxShadow: {
+            'nav': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+            'search': '0 10px 32px -4px rgba(0, 0, 0, 0.06), 0 4px 12px -2px rgba(0, 0, 0, 0.03)',
+            'sticker': '0 5px 18px rgba(0, 0, 0, 0.17)',
+            'chat': '0 6px 20px rgba(0, 145, 255, 0.38)',
+            'btn': '0 3px 12px rgba(0, 0, 0, 0.12)',
+            'pill': '0 1px 2px rgba(0, 0, 0, 0.02)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Reset & smooth scroll */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      color: #111111;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Grand Editorial Serif Title */
+    .hero-heading {
+      font-family: 'Newsreader', 'Playfair Display', Georgia, serif;
+      letter-spacing: -0.028em;
+      line-height: 1.12;
+      font-weight: 400;
+      color: #111111;
+      text-align: center;
+    }
+
+    /* Subtitle styling */
+    .hero-subtitle {
+      font-family: 'Inter', sans-serif;
+      color: #4b5563;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* Blue blinking cursor */
+    @keyframes cursorBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .custom-cursor {
+      display: inline-block;
+      width: 1.5px;
+      height: 19px;
+      background-color: #3b5bfd;
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: cursorBlink 1s infinite;
+    }
+
+    /* Live pulsing dot */
+    @keyframes dotPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.4); }
+    }
+    .dot-pulse {
+      animation: dotPulse 2s infinite ease-in-out;
+    }
+
+    /* Avatar Sticker Hover & Rotation */
+    .sticker-img {
+      transform: rotate(3.5deg);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+    }
+    .sticker-img:hover {
+      transform: rotate(0deg) scale(1.08);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+    }
+  </style>
+</head>
+
+<body class="bg-white min-h-screen flex flex-col justify-between selection:bg-indigo-100 selection:text-indigo-900 relative">
+
+  <!-- ================= TOP HERO SECTION (TINY NOTCH UP) ================= -->
+  <div class="w-full flex flex-col items-center justify-start pt-5 md:pt-7 px-4 sm:px-6 relative">
+    
+    <!-- 1. FLOATING NAVIGATION BAR -->
+    <header class="w-full max-w-[910px] mb-7 sm:mb-9">
+      <nav class="w-full bg-white border border-[#eaeaea] rounded-full px-4 sm:px-5 py-2 sm:py-2.5 flex items-center justify-between shadow-nav">
+        
+        <!-- Brand Logo -->
+        <a href="#" class="flex items-center gap-2 pl-0.5 group">
+          <!-- Logo Mark D -->
+          <div class="w-5 h-5 sm:w-[22px] sm:h-[22px] bg-black rounded-[5px] flex items-center justify-center text-white shrink-0 transition-transform group-hover:scale-105">
+            <svg class="w-3 h-3.5 sm:w-3 sm:h-3.5 fill-current" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M4 4h9c5.523 0 10 4.477 10 10s-4.477 10-10 10H4V4zm5.5 4.5v11h3.5c3.038 0 5.5-2.462 5.5-5.5s-2.462-5.5-5.5-5.5H9.5z"/>
+            </svg>
+          </div>
+          <span class="font-bold text-[15.5px] sm:text-[16px] tracking-[-0.02em] text-black">DansUGC</span>
+        </a>
+
+        <!-- Center Nav Links -->
+        <div class="hidden md:flex items-center gap-6 lg:gap-7 text-[14px] text-[#374151] font-medium">
+          <a href="#library" class="hover:text-black transition-colors">Library</a>
+          <a href="#reelclaw" class="flex items-center gap-1.5 hover:text-black transition-colors">
+            <span>ReelClaw</span>
+            <span class="bg-[#e9ebff] text-[#5e54f3] text-[9.5px] font-bold px-1.5 py-[1px] rounded-full uppercase tracking-wider">NEW</span>
+          </a>
+          <a href="#custom-orders" class="hover:text-black transition-colors">Custom orders</a>
+          <a href="#pricing" class="hover:text-black transition-colors">Pricing</a>
+          <a href="#results" class="hover:text-black transition-colors">Results</a>
+        </div>
+
+        <!-- Right Buttons -->
+        <div class="flex items-center gap-3.5 sm:gap-4 pr-0.5">
+          <a href="#login" onclick="openLoginModal()" class="text-[14px] text-[#222222] font-medium hover:text-black transition-colors px-1">Log in</a>
+          <a href="#signup" onclick="openLoginModal()" class="bg-[#111111] hover:bg-black text-white text-[13px] sm:text-[13.5px] font-semibold pl-4 pr-3.5 py-1.5 sm:py-2 rounded-full flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]">
+            <span>Start free</span>
+            <svg class="w-3.5 h-3.5 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </a>
+        </div>
+
+      </nav>
+    </header>
+
+
+    <!-- 2. LIVE PILL BADGE -->
+    <div class="inline-flex items-center gap-2 bg-[#f0f8f2] border border-[#d8eedf] rounded-full pl-1.5 pr-3.5 py-0.5 mb-5 sm:mb-7 shadow-sm transition-transform hover:scale-[1.01]">
+      <span class="inline-flex items-center gap-1 bg-[#d6f2dc] text-[#15803d] text-[10.5px] font-bold px-2 py-0.5 rounded-full tracking-wider uppercase">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#16a34a] dot-pulse"></span>
+        LIVE
+      </span>
+      <span class="text-[13px] text-[#4b5563] font-medium">
+        5,000+ real-human reactions · 0 made by AI
+      </span>
+    </div>
+
+
+    <!-- 3. HERO HEADLINE -->
+    <h1 class="hero-heading text-[42px] sm:text-[54px] md:text-[62px] lg:text-[68px] max-w-4xl mx-auto mb-4 sm:mb-5">
+      <!-- Line 1: Real human [avatar] reactions, -->
+      <span class="block">
+        Real human 
+        <span class="inline-block align-middle mx-1.5 relative -top-1.5 sm:-top-2">
+          <img 
+            src="assets/avatar.png" 
+            alt="Real creator" 
+            class="sticker-img w-[40px] sm:w-[50px] md:w-[58px] h-auto rounded-[10px] sm:rounded-[13px] border-[2px] sm:border-[2.5px] border-white shadow-sticker inline-block cursor-pointer"
+            title="Real Creator Reaction Clip"
+          />
+        </span>
+        reactions,
+      </span>
+      
+      <!-- Line 2: for ads that go viral. -->
+      <span class="block mt-0.5 sm:mt-1">
+        for ads that go 
+        <span class="relative inline-block whitespace-nowrap">
+          viral.
+          <!-- Pixel-accurate SVG double hand-drawn underline under 'viral.' -->
+          <svg class="absolute -bottom-2 sm:-bottom-3 left-0 w-[102%] h-3.5 sm:h-4.5 text-[#3b5bfd] pointer-events-none" viewBox="0 0 140 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 5.5 C 38 3.5, 96 4, 138 6.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+            <path d="M26 13.5 C 58 11.5, 102 12, 133 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </span>
+      </span>
+    </h1>
+
+
+    <!-- 4. SUBTITLE COPY -->
+    <p class="hero-subtitle text-[14.5px] sm:text-[16px] max-w-[580px] mx-auto mb-7 sm:mb-9 font-normal">
+      Search 5,000+ raw reaction clips from real creators. Download in seconds,<br class="hidden sm:inline" />
+      drop in your app demo, and ship the ad today.
+    </p>
+
+
+    <!-- 5. SEARCH BOX COMPONENT -->
+    <div class="w-full max-w-[520px] sm:max-w-[550px] bg-white border border-[#e5e7eb] rounded-[20px] shadow-search overflow-hidden mb-6 sm:mb-7 text-left transition-all focus-within:border-zinc-300 focus-within:shadow-lg">
+      
+      <!-- Upper Search Input Row -->
+      <div class="flex items-center px-4 py-2.5 sm:py-3 gap-2.5">
+        <!-- Magnifying Glass Icon -->
+        <svg class="w-4 h-4 sm:w-[18px] sm:h-[18px] text-[#9ca3af] shrink-0 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+        </svg>
+
+        <!-- Search Input with Cursor -->
+        <div class="flex-1 flex items-center relative">
+          <input 
+            type="text" 
+            id="searchInput" 
+            value="guy laughing at"
+            placeholder="Search creator reactions..." 
+            class="w-full bg-transparent border-none outline-none text-[14.5px] sm:text-[15.5px] text-[#222222] font-normal placeholder-zinc-400 p-0 m-0"
+          />
+          <span id="cursorBar" class="custom-cursor"></span>
+        </div>
+
+        <!-- Search Button -->
+        <button 
+          id="searchBtn"
+          onclick="performSearch()"
+          class="bg-[#5352ed] hover:bg-[#4645db] active:bg-[#3d3cc2] text-white text-[13px] sm:text-[13.5px] font-semibold pl-4 pr-3.5 py-2 rounded-[11px] flex items-center gap-1.5 shadow-sm shrink-0 transition-all hover:scale-[1.02]"
+        >
+          <span>Search</span>
+          <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Lower Filter Tags Tray -->
+      <div class="bg-[#fafafa] border-t border-[#f0f0f0] px-4 py-2 flex items-center gap-1.5 sm:gap-2 overflow-x-auto">
+        <span class="text-[10px] font-bold text-[#9ca3af] uppercase tracking-wider shrink-0 mr-0.5">TRY</span>
+        <div class="flex items-center gap-1.5 flex-nowrap shrink-0">
+          <button onclick="setSearch('Shocked')" class="tag-pill bg-white hover:bg-zinc-50 border border-[#e5e5e5] text-[#4b5563] hover:text-black text-[11.5px] sm:text-[12px] font-medium px-2.5 py-0.5 rounded-full shadow-pill transition-all whitespace-nowrap">Shocked</button>
+          <button onclick="setSearch('Crying')" class="tag-pill bg-white hover:bg-zinc-50 border border-[#e5e5e5] text-[#4b5563] hover:text-black text-[11.5px] sm:text-[12px] font-medium px-2.5 py-0.5 rounded-full shadow-pill transition-all whitespace-nowrap">Crying</button>
+          <button onclick="setSearch('Laughing')" class="tag-pill bg-white hover:bg-zinc-50 border border-[#e5e5e5] text-[#4b5563] hover:text-black text-[11.5px] sm:text-[12px] font-medium px-2.5 py-0.5 rounded-full shadow-pill transition-all whitespace-nowrap">Laughing</button>
+          <button onclick="setSearch('Talking head')" class="tag-pill bg-white hover:bg-zinc-50 border border-[#e5e5e5] text-[#4b5563] hover:text-black text-[11.5px] sm:text-[12px] font-medium px-2.5 py-0.5 rounded-full shadow-pill transition-all whitespace-nowrap">Talking head</button>
+          <button onclick="setSearch('Skits')" class="tag-pill bg-white hover:bg-zinc-50 border border-[#e5e5e5] text-[#4b5563] hover:text-black text-[11.5px] sm:text-[12px] font-medium px-2.5 py-0.5 rounded-full shadow-pill transition-all whitespace-nowrap">Skits</button>
+          <button onclick="setSearch('Couples')" class="tag-pill bg-white hover:bg-zinc-50 border border-[#e5e5e5] text-[#4b5563] hover:text-black text-[11.5px] sm:text-[12px] font-medium px-2.5 py-0.5 rounded-full shadow-pill transition-all whitespace-nowrap">Couples</button>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- 6. BOTTOM CTA BUTTONS ROW -->
+    <div class="flex items-center justify-center gap-3 mb-12 sm:mb-16 flex-wrap">
+      
+      <!-- Button 1: Sign up free with Google -->
+      <button 
+        onclick="openLoginModal()" 
+        class="bg-[#111111] hover:bg-black text-white text-[13px] sm:text-[13.5px] font-semibold pl-2.5 pr-4 py-2.5 rounded-full flex items-center gap-2 shadow-btn transition-all hover:scale-[1.02] active:scale-[0.98]"
+      >
+        <span class="w-5 h-5 rounded-full bg-white flex items-center justify-center p-0.5 shadow-sm">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"/>
+            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24Z"/>
+            <path fill="#FBBC05" d="M5.28 14.27a7.14 7.14 0 0 1 0-4.54V6.58H1.25a11.93 11.93 0 0 0 0 10.84l4.03-3.15Z"/>
+            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98Z"/>
+          </svg>
+        </span>
+        <span>Sign up free with Google</span>
+      </button>
+
+      <!-- Button 2: Browse the library -->
+      <a 
+        href="#library" 
+        onclick="scrollToClips()"
+        class="bg-white hover:bg-zinc-50 border border-[#e5e5e5] text-[#222222] text-[13px] sm:text-[13.5px] font-medium px-6 sm:px-6.5 py-2.5 rounded-full flex items-center gap-2 shadow-pill transition-all hover:border-zinc-300"
+      >
+        <span>Browse the library</span>
+        <svg class="w-3.5 h-3.5 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================= 7. FLOATING BLUE SUPPORT CHAT WIDGET ================= -->
+  <div class="fixed bottom-6 right-6 sm:bottom-7 sm:right-7 z-50">
+    <button 
+      id="chatTriggerBtn"
+      onclick="toggleChat()" 
+      class="w-[46px] h-[46px] sm:w-[50px] sm:h-[50px] rounded-full bg-[#0091ff] hover:bg-[#0081e6] active:scale-95 text-white flex items-center justify-center shadow-chat transition-all duration-200 hover:scale-105"
+      aria-label="Open support chat"
+    >
+      <svg class="w-5 h-5 sm:w-5.5 sm:h-5.5 fill-current" viewBox="0 0 24 24">
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+      </svg>
+    </button>
+
+    <!-- Chat Modal Window -->
+    <div 
+      id="chatModal" 
+      class="hidden absolute bottom-14 right-0 w-[310px] sm:w-[340px] bg-white rounded-3xl shadow-2xl border border-zinc-200 overflow-hidden text-left transition-all origin-bottom-right"
+    >
+      <!-- Chat Header -->
+      <div class="bg-[#0091ff] text-white p-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center font-bold text-xs">
+            D
+          </div>
+          <div>
+            <h4 class="font-bold text-xs leading-tight">DansUGC Concierge</h4>
+            <p class="text-[11px] text-blue-100 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-300"></span> Online now
+            </p>
+          </div>
+        </div>
+        <button onclick="toggleChat()" class="text-white/80 hover:text-white text-base font-bold">✕</button>
+      </div>
+
+      <!-- Chat Messages -->
+      <div class="p-3.5 bg-zinc-50 min-h-[160px] flex flex-col gap-2.5 text-xs">
+        <div class="bg-white p-3 rounded-2xl rounded-tl-none border border-zinc-200/80 shadow-sm text-zinc-700 leading-relaxed">
+          Hi! Looking for authentic creator reaction hooks for your viral ads? Type any concept or search above! 🎬
+        </div>
+      </div>
+
+      <!-- Chat Input -->
+      <div class="p-2.5 bg-white border-t border-zinc-200 flex items-center gap-2">
+        <input type="text" placeholder="Ask a question..." class="flex-1 text-xs bg-zinc-100 px-3.5 py-2 rounded-full outline-none focus:ring-1 focus:ring-blue-500" />
+        <button class="w-7 h-7 bg-[#0091ff] rounded-full text-white flex items-center justify-center shrink-0">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= 8. EXPANDED CLIPS EXPLORER SECTION ================= -->
+  <section id="librarySection" class="w-full max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-20">
+    <div class="border-t border-zinc-100 pt-10">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-7">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 flex items-center gap-2.5">
+            <span>5,000+ Raw UGC Reaction Clips</span>
+            <span class="bg-[#edf7f0] text-[#15803d] border border-[#d8eedf] text-[11px] font-bold px-2.5 py-0.5 rounded-full">Updated Daily</span>
+          </h2>
+          <p class="text-xs text-zinc-500 mt-1">High-retention viral hooks for TikTok, Meta & YouTube Shorts</p>
+        </div>
+        
+        <!-- Filter Tabs -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
+          <button class="px-3.5 py-1 text-xs font-semibold rounded-full bg-zinc-900 text-white shadow-sm">All Hooks</button>
+          <button onclick="setSearch('Laughing')" class="px-3.5 py-1 text-xs font-medium rounded-full bg-zinc-100 text-zinc-600 hover:bg-zinc-200 transition-colors">Laughing</button>
+          <button onclick="setSearch('Shocked')" class="px-3.5 py-1 text-xs font-medium rounded-full bg-zinc-100 text-zinc-600 hover:bg-zinc-200 transition-colors">Shocked</button>
+          <button onclick="setSearch('Talking head')" class="px-3.5 py-1 text-xs font-medium rounded-full bg-zinc-100 text-zinc-600 hover:bg-zinc-200 transition-colors">Talking Head</button>
+        </div>
+      </div>
+
+      <!-- Video Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        
+        <!-- Clip 1 -->
+        <div class="group relative rounded-xl overflow-hidden bg-zinc-100 border border-zinc-200/80 shadow-sm hover:shadow-md transition-all cursor-pointer">
+          <div class="aspect-[9/16] bg-zinc-900 relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80" alt="Reaction clip" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 brightness-95" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
+            <div class="absolute top-2 left-2 bg-black/60 backdrop-blur-md text-white text-[9px] font-semibold px-1.5 py-0.5 rounded">4K 60fps</div>
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <div class="w-8 h-8 rounded-full bg-white/95 text-black flex items-center justify-center shadow-lg">
+                <svg class="w-3.5 h-3.5 ml-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+            </div>
+            <div class="absolute bottom-2.5 left-2.5 right-2.5 text-white">
+              <p class="text-xs font-semibold truncate leading-tight">"Wait... no way!"</p>
+              <div class="flex items-center justify-between text-[9.5px] text-zinc-300 mt-1">
+                <span>@sarah_reacts</span>
+                <span>0:04</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clip 2 -->
+        <div class="group relative rounded-xl overflow-hidden bg-zinc-100 border border-zinc-200/80 shadow-sm hover:shadow-md transition-all cursor-pointer">
+          <div class="aspect-[9/16] bg-zinc-900 relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=80" alt="Reaction clip" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 brightness-95" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
+            <div class="absolute top-2 left-2 bg-black/60 backdrop-blur-md text-white text-[9px] font-semibold px-1.5 py-0.5 rounded">Viral Hook</div>
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <div class="w-8 h-8 rounded-full bg-white/95 text-black flex items-center justify-center shadow-lg">
+                <svg class="w-3.5 h-3.5 ml-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+            </div>
+            <div class="absolute bottom-2.5 left-2.5 right-2.5 text-white">
+              <p class="text-xs font-semibold truncate leading-tight">Guy laughing at phone</p>
+              <div class="flex items-center justify-between text-[9.5px] text-zinc-300 mt-1">
+                <span>@alex_m</span>
+                <span>0:06</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clip 3 -->
+        <div class="group relative rounded-xl overflow-hidden bg-zinc-100 border border-zinc-200/80 shadow-sm hover:shadow-md transition-all cursor-pointer">
+          <div class="aspect-[9/16] bg-zinc-900 relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=80" alt="Reaction clip" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 brightness-95" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
+            <div class="absolute top-2 left-2 bg-black/60 backdrop-blur-md text-white text-[9px] font-semibold px-1.5 py-0.5 rounded">4K Raw</div>
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <div class="w-8 h-8 rounded-full bg-white/95 text-black flex items-center justify-center shadow-lg">
+                <svg class="w-3.5 h-3.5 ml-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+            </div>
+            <div class="absolute bottom-2.5 left-2.5 right-2.5 text-white">
+              <p class="text-xs font-semibold truncate leading-tight">Shocked jaw drop</p>
+              <div class="flex items-center justify-between text-[9.5px] text-zinc-300 mt-1">
+                <span>@elena.ugc</span>
+                <span>0:05</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clip 4 -->
+        <div class="group relative rounded-xl overflow-hidden bg-zinc-100 border border-zinc-200/80 shadow-sm hover:shadow-md transition-all cursor-pointer">
+          <div class="aspect-[9/16] bg-zinc-900 relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=80" alt="Reaction clip" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 brightness-95" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
+            <div class="absolute top-2 left-2 bg-black/60 backdrop-blur-md text-white text-[9px] font-semibold px-1.5 py-0.5 rounded">Talking Head</div>
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <div class="w-8 h-8 rounded-full bg-white/95 text-black flex items-center justify-center shadow-lg">
+                <svg class="w-3.5 h-3.5 ml-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+            </div>
+            <div class="absolute bottom-2.5 left-2.5 right-2.5 text-white">
+              <p class="text-xs font-semibold truncate leading-tight">"Guys you NEED this"</p>
+              <div class="flex items-center justify-between text-[9.5px] text-zinc-300 mt-1">
+                <span>@marcus_v</span>
+                <span>0:09</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clip 5 -->
+        <div class="group relative rounded-xl overflow-hidden bg-zinc-100 border border-zinc-200/80 shadow-sm hover:shadow-md transition-all cursor-pointer">
+          <div class="aspect-[9/16] bg-zinc-900 relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80" alt="Reaction clip" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 brightness-95" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
+            <div class="absolute top-2 left-2 bg-black/60 backdrop-blur-md text-white text-[9px] font-semibold px-1.5 py-0.5 rounded">Skit</div>
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <div class="w-8 h-8 rounded-full bg-white/95 text-black flex items-center justify-center shadow-lg">
+                <svg class="w-3.5 h-3.5 ml-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+            </div>
+            <div class="absolute bottom-2.5 left-2.5 right-2.5 text-white">
+              <p class="text-xs font-semibold truncate leading-tight">Secret hack reveal</p>
+              <div class="flex items-center justify-between text-[9.5px] text-zinc-300 mt-1">
+                <span>@chloe.c</span>
+                <span>0:07</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clip 6 -->
+        <div class="group relative rounded-xl overflow-hidden bg-zinc-100 border border-zinc-200/80 shadow-sm hover:shadow-md transition-all cursor-pointer">
+          <div class="aspect-[9/16] bg-zinc-900 relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=500&auto=format&fit=crop&q=80" alt="Reaction clip" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 brightness-95" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
+            <div class="absolute top-2 left-2 bg-black/60 backdrop-blur-md text-white text-[9px] font-semibold px-1.5 py-0.5 rounded">Couple</div>
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <div class="w-8 h-8 rounded-full bg-white/95 text-black flex items-center justify-center shadow-lg">
+                <svg class="w-3.5 h-3.5 ml-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+            </div>
+            <div class="absolute bottom-2.5 left-2.5 right-2.5 text-white">
+              <p class="text-xs font-semibold truncate leading-tight">Couple looking at app</p>
+              <div class="flex items-center justify-between text-[9.5px] text-zinc-300 mt-1">
+                <span>@jake_liv</span>
+                <span>0:08</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================= 9. FOOTER SECTION ================= -->
+  <footer class="w-full border-t border-zinc-100 bg-[#fafafa] py-8 px-6 text-center text-xs text-zinc-500">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3.5">
+      <div class="flex items-center gap-2">
+        <div class="w-4 h-4 bg-black rounded-[3.5px] flex items-center justify-center text-white">
+          <svg class="w-2.5 h-2.5 fill-current" viewBox="0 0 24 24"><path d="M4 4h9c5.523 0 10 4.477 10 10s-4.477 10-10 10H4V4zm6 5v10h3c2.761 0 5-2.239 5-5s-2.239-5-5-5h-3z"/></svg>
+        </div>
+        <span class="font-bold text-zinc-800 text-xs">DansUGC</span>
+        <span>© 2026. All rights reserved.</span>
+      </div>
+      <div class="flex items-center gap-5 text-zinc-500 text-xs font-medium">
+        <a href="#" class="hover:text-zinc-900 transition-colors">Privacy Policy</a>
+        <a href="#" class="hover:text-zinc-900 transition-colors">Terms of Service</a>
+        <a href="#" class="hover:text-zinc-900 transition-colors">Creator Licensing</a>
+        <a href="#" class="hover:text-zinc-900 transition-colors">Support</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ================= 10. AUTH MODAL ================= -->
+  <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 sm:p-7 max-w-sm w-full shadow-2xl relative animate-in fade-in duration-200">
+      <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-zinc-600 text-lg font-bold">✕</button>
+      
+      <div class="text-center mb-5">
+        <div class="w-10 h-10 bg-black rounded-xl mx-auto flex items-center justify-center text-white mb-2.5 shadow">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M4 4h9c5.523 0 10 4.477 10 10s-4.477 10-10 10H4V4zm5.5 4.5v11h3.5c3.038 0 5.5-2.462 5.5-5.5s-2.462-5.5-5.5-5.5H9.5z"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-zinc-900 tracking-tight">Get Instant Access</h3>
+        <p class="text-xs text-zinc-500 mt-0.5">Download raw creator reaction clips in seconds</p>
+      </div>
+
+      <div class="flex flex-col gap-2.5">
+        <button class="w-full bg-[#111111] hover:bg-black text-white font-semibold text-xs py-2.5 rounded-full flex items-center justify-center gap-2.5 shadow transition-all hover:scale-[1.01]">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"/>
+            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24Z"/>
+            <path fill="#FBBC05" d="M5.28 14.27a7.14 7.14 0 0 1 0-4.54V6.58H1.25a11.93 11.93 0 0 0 0 10.84l4.03-3.15Z"/>
+            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98Z"/>
+          </svg>
+          <span>Sign up free with Google</span>
+        </button>
+
+        <div class="relative flex py-1.5 items-center">
+          <div class="flex-grow border-t border-zinc-200"></div>
+          <span class="flex-shrink mx-2 text-[10px] text-zinc-400 uppercase tracking-wider font-semibold">or email</span>
+          <div class="flex-grow border-t border-zinc-200"></div>
+        </div>
+
+        <input type="email" placeholder="Work email address" class="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3.5 py-2 text-xs text-zinc-800 outline-none focus:border-indigo-500" />
+        <button class="w-full bg-[#5352ed] hover:bg-[#4645db] text-white font-semibold text-xs py-2 rounded-lg transition-colors">Continue</button>
+      </div>
+
+      <p class="text-[10px] text-center text-zinc-400 mt-3.5">By signing up, you agree to our Terms and Licensing.</p>
+    </div>
+  </div>
+
+
+  <!-- ================= 11. JAVASCRIPT ================= -->
+  <script>
+    // Search tag pills handler
+    function setSearch(query) {
+      const input = document.getElementById('searchInput');
+      if (input) {
+        input.value = query;
+      }
+      
+      // Update active tag styling
+      document.querySelectorAll('.tag-pill').forEach(btn => {
+        if (btn.innerText.trim() === query.trim()) {
+          btn.classList.add('bg-zinc-900', 'text-white', 'border-zinc-900');
+          btn.classList.remove('bg-white', 'text-[#4b5563]', 'border-[#e5e5e5]');
+        } else {
+          btn.classList.remove('bg-zinc-900', 'text-white', 'border-zinc-900');
+          btn.classList.add('bg-white', 'text-[#4b5563]', 'border-[#e5e5e5]');
+        }
+      });
+    }
+
+    // Search action
+    function performSearch() {
+      const searchBtn = document.getElementById('searchBtn');
+      searchBtn.innerHTML = '<span>Searching...</span>';
+      setTimeout(() => {
+        searchBtn.innerHTML = `<span>Search</span><svg class="w-3.5 h-3.5 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>`;
+        scrollToClips();
+      }, 300);
+    }
+
+    // Scroll to clips
+    function scrollToClips() {
+      document.getElementById('librarySection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Chat Toggle
+    function toggleChat() {
+      const modal = document.getElementById('chatModal');
+      modal.classList.toggle('hidden');
+    }
+
+    // Auth Modal
+    function openLoginModal() {
+      document.getElementById('authModal').classList.remove('hidden');
+    }
+    function closeLoginModal() {
+      document.getElementById('authModal').classList.add('hidden');
+    }
+
+    // Enter key trigger search
+    document.getElementById('searchInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') performSearch();
+    });
+
+    // Hide custom cursor when focused
+    const searchInput = document.getElementById('searchInput');
+    const cursorBar = document.getElementById('cursorBar');
+    searchInput.addEventListener('focus', () => {
+      cursorBar.style.display = 'none';
+    });
+    searchInput.addEventListener('blur', () => {
+      if (searchInput.value === 'guy laughing at') {
+        cursorBar.style.display = 'inline-block';
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+# Temporary screenshots and test crops
+screenshot*.png
+comparison*.png
+*_test.png
+*_crop.png
+*_area.png
+*_ref.png
+avatar_full.png
+avatar_sticker.png
+creator_avatar.png
+heading_full.png
+logo_mark*.png
+nav_*.png
+search_*.png
+viral_*.png
+cta_*.png
+chat_*.png
