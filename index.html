@@ -231,16 +231,14 @@
           <span id="cursorBar" class="custom-cursor"></span>
         </div>
 
-        <!-- Search Button -->
+        <!-- Search Button (Pixel-Perfect Copy of Gradient Pill Button) -->
         <button 
           id="searchBtn"
           onclick="performSearch()"
-          class="bg-[#5352ed] hover:bg-[#4645db] active:bg-[#3d3cc2] text-white text-[13px] sm:text-[13.5px] font-semibold pl-4 pr-3.5 py-2 rounded-[11px] flex items-center gap-1.5 shadow-sm shrink-0 transition-all hover:scale-[1.02]"
+          style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);"
+          class="text-white text-[13.5px] sm:text-[14.5px] font-bold px-6 sm:px-7 py-2 sm:py-2.5 rounded-full shadow-[0_3px_12px_rgba(33,58,231,0.25)] hover:shadow-[0_6px_20px_rgba(33,58,231,0.4)] hover:brightness-105 active:scale-[0.98] transition-all tracking-[-0.02em] shrink-0 flex items-center justify-center cursor-pointer"
         >
           <span>Search</span>
-          <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-          </svg>
         </button>
       </div>
 
@@ -588,7 +586,7 @@
       const searchBtn = document.getElementById('searchBtn');
       searchBtn.innerHTML = '<span>Searching...</span>';
       setTimeout(() => {
-        searchBtn.innerHTML = `<span>Search</span><svg class="w-3.5 h-3.5 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>`;
+        searchBtn.innerHTML = '<span>Search</span>';
         scrollToClips();
       }, 300);
     }
