@@ -8,7 +8,6 @@ A pixel-perfect, responsive replica of the DansUGC landing page with interactive
 - **Dynamic Floating Navigation**: Clean pill-shaped navigation with logo mark, status badges, and interactive CTA buttons.
 - **Live Counter Badge**: Pulsing indicator with real-time creator clips count.
 - **Interactive Search & Tag Filtering**: Instant tag-click query population and search simulation.
-- **5,000+ Raw UGC Clips Explorer**: Responsive video card grid featuring creator tags, 4K quality chips, and hover video previews.
 - **Support Chat Concierge**: Interactive floating chat widget and instant reply demo.
 - **Google Authentication Modal**: Clean sign-up/sign-in modal overlay.
 

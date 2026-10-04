@@ -8,11 +8,24 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Google Fonts: Inter -->
+  <!-- Google Fonts: Newsreader, Playfair Display, Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Newsreader', 'Playfair Display', 'Georgia', 'serif'],
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -21,7 +34,7 @@
     }
     body {
       background: #ffffff;
-      color: #222222;
+      color: #111111;
       font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       min-height: 100vh;
       display: flex;
@@ -37,7 +50,7 @@
 
   <!-- Section Header -->
   <div class="flex flex-col items-center mb-10 sm:mb-14">
-    <h1 class="text-[22px] sm:text-[26px] md:text-[30px] font-bold text-[#262626] tracking-[-0.02em] leading-tight mb-2.5">
+    <h1 class="font-serif text-[30px] sm:text-[38px] md:text-[44px] lg:text-[48px] font-normal text-[#111111] tracking-[-0.028em] leading-tight mb-2.5">
       Why Choose Us Section
     </h1>
     <div class="flex flex-col items-center gap-[3.5px]">
@@ -57,7 +70,7 @@
         <div class="w-8 h-8 sm:w-9 sm:h-9 bg-[#ececec] rounded-full flex items-center justify-center font-semibold text-[#262626] text-[15px] sm:text-base mb-3 shadow-sm">
           ?
         </div>
-        <h2 class="text-[17px] sm:text-[19px] font-semibold text-[#262626] tracking-[-0.015em] mb-3">
+        <h2 class="font-serif text-[20px] sm:text-[22px] md:text-[24px] font-normal text-[#111111] tracking-[-0.025em] leading-snug mb-3">
           Title
         </h2>
         <div class="flex flex-col gap-2 sm:gap-2.5 w-full">
@@ -72,7 +85,7 @@
         <div class="w-8 h-8 sm:w-9 sm:h-9 bg-[#ececec] rounded-full flex items-center justify-center font-semibold text-[#262626] text-[15px] sm:text-base mb-3 shadow-sm">
           ?
         </div>
-        <h2 class="text-[17px] sm:text-[19px] font-semibold text-[#262626] tracking-[-0.015em] mb-3">
+        <h2 class="font-serif text-[20px] sm:text-[22px] md:text-[24px] font-normal text-[#111111] tracking-[-0.025em] leading-snug mb-3">
           Title
         </h2>
         <div class="flex flex-col gap-2 sm:gap-2.5 w-full">
@@ -87,7 +100,7 @@
         <div class="w-8 h-8 sm:w-9 sm:h-9 bg-[#ececec] rounded-full flex items-center justify-center font-semibold text-[#262626] text-[15px] sm:text-base mb-3 shadow-sm">
           ?
         </div>
-        <h2 class="text-[17px] sm:text-[19px] font-semibold text-[#262626] tracking-[-0.015em] mb-3">
+        <h2 class="font-serif text-[20px] sm:text-[22px] md:text-[24px] font-normal text-[#111111] tracking-[-0.025em] leading-snug mb-3">
           Title
         </h2>
         <div class="flex flex-col gap-2 sm:gap-2.5 w-full">
@@ -102,7 +115,7 @@
         <div class="w-8 h-8 sm:w-9 sm:h-9 bg-[#ececec] rounded-full flex items-center justify-center font-semibold text-[#262626] text-[15px] sm:text-base mb-3 shadow-sm">
           ?
         </div>
-        <h2 class="text-[17px] sm:text-[19px] font-semibold text-[#262626] tracking-[-0.015em] mb-3">
+        <h2 class="font-serif text-[20px] sm:text-[22px] md:text-[24px] font-normal text-[#111111] tracking-[-0.025em] leading-snug mb-3">
           Title
         </h2>
         <div class="flex flex-col gap-2 sm:gap-2.5 w-full">
