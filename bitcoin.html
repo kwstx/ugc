@@ -509,72 +509,79 @@
     <!-- Billing Toggle Pill -->
     <div class="inline-flex items-center p-1 bg-[#ede0cb]/65 backdrop-blur-md rounded-full border border-[#e4d4be]/80 shadow-[inset_0_1px_3px_rgba(0,0,0,0.06)] mb-10 sm:mb-14">
       <button 
+        id="billMonthlyBtn" 
+        onclick="setBilling('monthly')"
+        class="flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-white text-[#18181b] text-[12px] sm:text-[13px] font-semibold shadow-sm transition-all cursor-pointer"
+      >
+        <span>Bill monthly</span>
+      </button>
+      <button 
         id="billYearlyBtn" 
         onclick="setBilling('yearly')"
-        class="flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-white text-[#18181b] text-[12px] sm:text-[13px] font-semibold shadow-sm transition-all cursor-pointer"
+        class="flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full text-[#6b655c] hover:text-[#18181b] text-[12px] sm:text-[13px] font-medium transition-all cursor-pointer"
       >
         <span>Bill yearly</span>
         <span 
           style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);"
           class="text-white font-bold text-[10px] px-2 py-0.5 rounded-full tracking-tight shadow-xs"
         >
-          Save $60
+          Save 20%
         </span>
-      </button>
-      <button 
-        id="billMonthlyBtn" 
-        onclick="setBilling('monthly')"
-        class="px-3.5 sm:px-4 py-1.5 rounded-full text-[#6b655c] hover:text-[#18181b] text-[12px] sm:text-[13px] font-medium transition-all cursor-pointer"
-      >
-        <span>Bill monthly</span>
       </button>
     </div>
 
     <!-- 3 Pricing Cards Grid -->
     <div class="w-full max-w-[1020px] grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 items-stretch">
       
-      <!-- Card 1: Plus Plan -->
+      <!-- Card 1: Starter Plan -->
       <div class="bg-white rounded-[24px] sm:rounded-[28px] p-6 sm:p-7 md:p-8 flex flex-col justify-between border border-[#eee5d8] shadow-[0_4px_24px_rgba(180,140,80,0.06)] hover:shadow-[0_8px_32px_rgba(180,140,80,0.12)] transition-all">
         <div>
-          <h3 class="text-[#525252] text-[14px] sm:text-[15px] font-semibold tracking-[-0.01em] mb-2.5">
-            Plus Plan
+          <h3 class="text-[#18181b] text-[17px] sm:text-[18px] font-bold tracking-tight mb-1">
+            Starter
           </h3>
-          <div class="flex items-baseline gap-2 mb-0.5">
-            <span id="plus-old-price" class="text-[#a1a1aa] line-through text-[19px] sm:text-[21px] font-normal">$25</span>
-            <span id="plus-price" class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$20</span>
+          <p class="text-[#71717a] text-[12px] sm:text-[12.5px] font-normal mb-4">
+            Your first viral test
+          </p>
+          
+          <div class="flex items-baseline gap-1 mb-0.5">
+            <span id="starter-old-price" class="text-[#a1a1aa] line-through text-[18px] sm:text-[20px] font-normal" style="display: none;">$99</span>
+            <span id="starter-price" class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$99</span>
+            <span class="text-[#71717a] text-[13px] sm:text-[14px] font-normal">/mo</span>
           </div>
-          <p id="plus-subtext" class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5">
-            per user per month, billed yearly
+          <p id="starter-subtext" class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5">
+            Billed monthly · cancel anytime
           </p>
 
-          <p class="text-[#18181b] text-[13px] sm:text-[13.5px] font-semibold mb-4">
-            Perfect for busy professionals
-          </p>
+          <!-- Credits & Clips box -->
+          <div class="p-3 sm:p-3.5 bg-[#faf8f5] rounded-[14px] border border-[#eee5d8] mb-6">
+            <div class="flex items-center justify-between text-[12.5px] sm:text-[13px] font-semibold text-[#18181b]">
+              <span>110 credits</span>
+              <span class="text-[#213ae7] font-bold text-[11px] bg-[#eff2fe] px-2 py-0.5 rounded-full">+$11 free/mo</span>
+            </div>
+            <p class="text-[11px] sm:text-[11.5px] text-[#71717a] mt-1">
+              ≈ 10 library clips at $11 each
+            </p>
+          </div>
 
+          <!-- Features list -->
           <ul class="flex flex-col gap-2.5 sm:gap-3 text-[12px] sm:text-[12.5px] text-[#3f3f46] mb-8">
             <li class="flex items-start gap-2.5">
               <svg class="w-3.5 h-3.5 text-[#c084fc] shrink-0 mt-0.5" viewBox="0 0 16 16" fill="currentColor">
                 <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2L8 0Z"/>
               </svg>
-              <span>Automate email categorization</span>
+              <span>Library, packs and custom orders</span>
             </li>
             <li class="flex items-start gap-2.5">
               <svg class="w-3.5 h-3.5 text-[#c084fc] shrink-0 mt-0.5" viewBox="0 0 16 16" fill="currentColor">
                 <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2L8 0Z"/>
               </svg>
-              <span>Connect up to 2 inboxes with unlimited calendars</span>
+              <span>ReelClaw in the dashboard</span>
             </li>
             <li class="flex items-start gap-2.5">
               <svg class="w-3.5 h-3.5 text-[#c084fc] shrink-0 mt-0.5" viewBox="0 0 16 16" fill="currentColor">
                 <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2L8 0Z"/>
               </svg>
-              <span>Chat with 1 year of email history</span>
-            </li>
-            <li class="flex items-start gap-2.5">
-              <svg class="w-3.5 h-3.5 text-[#c084fc] shrink-0 mt-0.5" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2L8 0Z"/>
-              </svg>
-              <span>Get 10 pre-written email drafts daily</span>
+              <span>Scheduler + 1 social set</span>
             </li>
           </ul>
         </div>
@@ -589,7 +596,7 @@
         </div>
       </div>
 
-      <!-- Card 2: Pro Plan (Center / Most popular) -->
+      <!-- Card 2: Growth Plan (Center / Most popular) -->
       <div class="bg-white rounded-[24px] sm:rounded-[28px] overflow-hidden flex flex-col justify-between border border-[#e2d5c3] shadow-[0_8px_36px_rgba(180,140,80,0.14)] hover:shadow-[0_12px_44px_rgba(180,140,80,0.2)] transition-all md:-translate-y-2 relative">
         
         <!-- Top Most Popular Banner -->
@@ -604,52 +611,70 @@
 
         <div class="p-6 sm:p-7 md:p-8 pt-5 sm:pt-6 flex flex-col justify-between h-full bg-gradient-to-b from-[#eef2ff]/80 via-white/90 to-white">
           <div>
-            <h3 class="text-[#525252] text-[14px] sm:text-[15px] font-semibold tracking-[-0.01em] mb-2.5">
-              Pro Plan
+            <h3 class="text-[#18181b] text-[17px] sm:text-[18px] font-bold tracking-tight mb-1">
+              Growth
             </h3>
-            <div class="flex items-baseline gap-2 mb-0.5">
-              <span id="pro-old-price" class="text-[#a1a1aa] line-through text-[19px] sm:text-[21px] font-normal">$50</span>
-              <span id="pro-price" class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$40</span>
+            <p class="text-[#71717a] text-[12px] sm:text-[12.5px] font-normal mb-4">
+              For teams shipping ads every week
+            </p>
+
+            <div class="flex items-baseline gap-1 mb-0.5">
+              <span id="growth-old-price" class="text-[#a1a1aa] line-through text-[18px] sm:text-[20px] font-normal" style="display: none;">$299</span>
+              <span id="growth-price" class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$299</span>
+              <span class="text-[#71717a] text-[13px] sm:text-[14px] font-normal">/mo</span>
             </div>
-            <p id="pro-subtext" class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5">
-              per user per month, billed yearly
+            <p id="growth-subtext" class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5">
+              Billed monthly · cancel anytime
             </p>
 
-            <p class="text-[#18181b] text-[13px] sm:text-[13.5px] font-semibold mb-4">
-              For teams and power users
-            </p>
+            <!-- Credits & Clips box -->
+            <div class="p-3 sm:p-3.5 bg-white/90 backdrop-blur-xs rounded-[14px] border border-[#dbe4ff] shadow-xs mb-6">
+              <div class="flex items-center justify-between text-[12.5px] sm:text-[13px] font-semibold text-[#18181b]">
+                <span>330 credits</span>
+                <span style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);" class="text-white font-bold text-[11px] px-2 py-0.5 rounded-full shadow-xs">+$31 free/mo</span>
+              </div>
+              <p class="text-[11px] sm:text-[11.5px] text-[#71717a] mt-1">
+                ≈ 30 library clips at $11 each
+              </p>
+            </div>
 
+            <!-- Features list -->
             <ul class="flex flex-col gap-2.5 sm:gap-3 text-[12px] sm:text-[12.5px] text-[#3f3f46] mb-8">
               <li class="flex items-start gap-2.5">
                 <svg class="w-3.5 h-3.5 text-[#c084fc] shrink-0 mt-0.5" viewBox="0 0 16 16" fill="currentColor">
                   <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2L8 0Z"/>
                 </svg>
-                <span>Connect up to 8 inboxes with unlimited calendars</span>
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <a href="https://dansugc.com/reelclaw" target="_blank" class="hover:underline font-medium text-[#18181b] inline-flex items-center gap-1.5">
+                    DansUGC MCP + ReelClaw skill
+                  </a>
+                  <span style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);" class="text-white text-[9px] font-bold px-1.5 py-0.2 rounded tracking-wider uppercase shadow-xs">NEW</span>
+                </div>
               </li>
               <li class="flex items-start gap-2.5">
                 <svg class="w-3.5 h-3.5 text-[#c084fc] shrink-0 mt-0.5" viewBox="0 0 16 16" fill="currentColor">
                   <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2L8 0Z"/>
                 </svg>
-                <span>Chat with 3 years of email history</span>
+                <span>5% off custom</span>
               </li>
               <li class="flex items-start gap-2.5">
                 <svg class="w-3.5 h-3.5 text-[#c084fc] shrink-0 mt-0.5" viewBox="0 0 16 16" fill="currentColor">
                   <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2L8 0Z"/>
                 </svg>
-                <span>Get 30 pre-written email drafts daily</span>
+                <span class="font-medium text-[#18181b]">Everything in Starter</span>
               </li>
               <li class="flex items-start gap-2.5">
                 <svg class="w-3.5 h-3.5 text-[#c084fc] shrink-0 mt-0.5" viewBox="0 0 16 16" fill="currentColor">
                   <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2L8 0Z"/>
                 </svg>
-                <span>Custom integrations and MCPs</span>
+                <span>Scheduler + 5 social sets</span>
               </li>
             </ul>
           </div>
 
           <div>
             <button class="w-full bg-[#141312] hover:bg-black text-white text-[12.5px] sm:text-[13px] font-semibold py-3 rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.12)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)] active:scale-[0.99] transition-all cursor-pointer mb-2.5">
-              Try Pro – full power unlocked
+              Start your free trial
             </button>
             <p class="text-center text-[#78716c] text-[10.5px] sm:text-[11px]">
               Your 7-day free trial included – cancel anytime
@@ -658,57 +683,76 @@
         </div>
       </div>
 
-      <!-- Card 3: Enterprise Plan -->
+      <!-- Card 3: Scale Plan -->
       <div class="bg-white rounded-[24px] sm:rounded-[28px] p-6 sm:p-7 md:p-8 flex flex-col justify-between border border-[#eee5d8] shadow-[0_4px_24px_rgba(180,140,80,0.06)] hover:shadow-[0_8px_32px_rgba(180,140,80,0.12)] transition-all">
         <div>
-          <h3 class="text-[#525252] text-[14px] sm:text-[15px] font-semibold tracking-[-0.01em] mb-2.5">
-            Enterprise Plan
+          <h3 class="text-[#18181b] text-[17px] sm:text-[18px] font-bold tracking-tight mb-1">
+            Scale
           </h3>
-          <h4 class="font-serif text-[30px] sm:text-[34px] font-normal text-[#111111] tracking-[-0.025em] leading-tight mb-1 pt-1">
-            Talk to sales
-          </h4>
-          <p class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5 invisible select-none">
-            placeholder
+          <p class="text-[#71717a] text-[12px] sm:text-[12.5px] font-normal mb-4">
+            For studios and agencies
           </p>
 
-          <p class="text-[#18181b] text-[13px] sm:text-[13.5px] font-semibold mb-4">
-            Most powerful model for your business
+          <div class="flex items-baseline gap-1 mb-0.5">
+            <span id="scale-old-price" class="text-[#a1a1aa] line-through text-[18px] sm:text-[20px] font-normal" style="display: none;">$999</span>
+            <span id="scale-price" class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$999</span>
+            <span class="text-[#71717a] text-[13px] sm:text-[14px] font-normal">/mo</span>
+          </div>
+          <p id="scale-subtext" class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5">
+            Billed monthly · cancel anytime
           </p>
 
+          <!-- Credits & Clips box -->
+          <div class="p-3 sm:p-3.5 bg-[#faf8f5] rounded-[14px] border border-[#eee5d8] mb-6">
+            <div class="flex items-center justify-between text-[12.5px] sm:text-[13px] font-semibold text-[#18181b]">
+              <span>1,100 credits</span>
+              <span class="text-[#213ae7] font-bold text-[11px] bg-[#eff2fe] px-2 py-0.5 rounded-full">+$101 free/mo</span>
+            </div>
+            <p class="text-[11px] sm:text-[11.5px] text-[#71717a] mt-1">
+              ≈ 100 library clips at $11 each
+            </p>
+          </div>
+
+          <!-- Features list -->
           <ul class="flex flex-col gap-2.5 sm:gap-3 text-[12px] sm:text-[12.5px] text-[#3f3f46] mb-8">
             <li class="flex items-start gap-2.5">
               <svg class="w-3.5 h-3.5 text-[#c084fc] shrink-0 mt-0.5" viewBox="0 0 16 16" fill="currentColor">
                 <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2L8 0Z"/>
               </svg>
-              <span>Talk to us about advanced features for bigger teams</span>
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <a href="https://dansugc.com/reelclaw" target="_blank" class="hover:underline font-medium text-[#18181b] inline-flex items-center gap-1.5">
+                  DansUGC MCP + ReelClaw skill
+                </a>
+                <span style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);" class="text-white text-[9px] font-bold px-1.5 py-0.2 rounded tracking-wider uppercase shadow-xs">NEW</span>
+              </div>
             </li>
             <li class="flex items-start gap-2.5">
               <svg class="w-3.5 h-3.5 text-[#c084fc] shrink-0 mt-0.5" viewBox="0 0 16 16" fill="currentColor">
                 <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2L8 0Z"/>
               </svg>
-              <span>White-glove setup</span>
+              <span>10% off custom</span>
             </li>
             <li class="flex items-start gap-2.5">
               <svg class="w-3.5 h-3.5 text-[#c084fc] shrink-0 mt-0.5" viewBox="0 0 16 16" fill="currentColor">
                 <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2L8 0Z"/>
               </svg>
-              <span>Usage-based pricing</span>
+              <span class="font-medium text-[#18181b]">Everything in Growth + public API</span>
             </li>
             <li class="flex items-start gap-2.5">
               <svg class="w-3.5 h-3.5 text-[#c084fc] shrink-0 mt-0.5" viewBox="0 0 16 16" fill="currentColor">
                 <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2L8 0Z"/>
               </svg>
-              <span>Dedicated Account Manager</span>
+              <span>10 social sets + onboarding call</span>
             </li>
           </ul>
         </div>
 
         <div>
-          <button class="w-full bg-white hover:bg-zinc-50 border border-[#e4e4e7] hover:border-zinc-400 text-[#18181b] text-[12.5px] sm:text-[13px] font-semibold py-3 rounded-full shadow-xs active:scale-[0.99] transition-all cursor-pointer mb-2.5">
-            Talk to sales
+          <button class="w-full bg-[#141312] hover:bg-black text-white text-[12.5px] sm:text-[13px] font-semibold py-3 rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.12)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)] active:scale-[0.99] transition-all cursor-pointer mb-2.5">
+            Start your free trial
           </button>
-          <p class="text-center text-transparent text-[10.5px] sm:text-[11px] select-none">
-            placeholder
+          <p class="text-center text-[#78716c] text-[10.5px] sm:text-[11px]">
+            Your 7-day free trial included – cancel anytime
           </p>
         </div>
       </div>
@@ -740,31 +784,49 @@
     function setBilling(mode) {
       const yearlyBtn = document.getElementById('billYearlyBtn');
       const monthlyBtn = document.getElementById('billMonthlyBtn');
-      const plusOldPrice = document.getElementById('plus-old-price');
-      const plusPrice = document.getElementById('plus-price');
-      const plusSubtext = document.getElementById('plus-subtext');
-      const proOldPrice = document.getElementById('pro-old-price');
-      const proPrice = document.getElementById('pro-price');
-      const proSubtext = document.getElementById('pro-subtext');
+      
+      const starterOldPrice = document.getElementById('starter-old-price');
+      const starterPrice = document.getElementById('starter-price');
+      const starterSubtext = document.getElementById('starter-subtext');
+      
+      const growthOldPrice = document.getElementById('growth-old-price');
+      const growthPrice = document.getElementById('growth-price');
+      const growthSubtext = document.getElementById('growth-subtext');
+      
+      const scaleOldPrice = document.getElementById('scale-old-price');
+      const scalePrice = document.getElementById('scale-price');
+      const scaleSubtext = document.getElementById('scale-subtext');
 
       if (mode === 'yearly') {
         yearlyBtn.className = 'flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-white text-[#18181b] text-[12px] sm:text-[13px] font-semibold shadow-sm transition-all cursor-pointer';
         monthlyBtn.className = 'px-3.5 sm:px-4 py-1.5 rounded-full text-[#6b655c] hover:text-[#18181b] text-[12px] sm:text-[13px] font-medium transition-all cursor-pointer';
-        if (plusOldPrice) plusOldPrice.style.display = 'inline';
-        if (plusPrice) plusPrice.textContent = '$20';
-        if (plusSubtext) plusSubtext.textContent = 'per user per month, billed yearly';
-        if (proOldPrice) proOldPrice.style.display = 'inline';
-        if (proPrice) proPrice.textContent = '$40';
-        if (proSubtext) proSubtext.textContent = 'per user per month, billed yearly';
+        
+        if (starterOldPrice) starterOldPrice.style.display = 'inline';
+        if (starterPrice) starterPrice.textContent = '$79';
+        if (starterSubtext) starterSubtext.textContent = 'Billed yearly · cancel anytime';
+        
+        if (growthOldPrice) growthOldPrice.style.display = 'inline';
+        if (growthPrice) growthPrice.textContent = '$239';
+        if (growthSubtext) growthSubtext.textContent = 'Billed yearly · cancel anytime';
+
+        if (scaleOldPrice) scaleOldPrice.style.display = 'inline';
+        if (scalePrice) scalePrice.textContent = '$799';
+        if (scaleSubtext) scaleSubtext.textContent = 'Billed yearly · cancel anytime';
       } else {
         monthlyBtn.className = 'flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-white text-[#18181b] text-[12px] sm:text-[13px] font-semibold shadow-sm transition-all cursor-pointer';
         yearlyBtn.className = 'flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full text-[#6b655c] hover:text-[#18181b] text-[12px] sm:text-[13px] font-medium transition-all cursor-pointer';
-        if (plusOldPrice) plusOldPrice.style.display = 'none';
-        if (plusPrice) plusPrice.textContent = '$25';
-        if (plusSubtext) plusSubtext.textContent = 'per user per month, billed monthly';
-        if (proOldPrice) proOldPrice.style.display = 'none';
-        if (proPrice) proPrice.textContent = '$50';
-        if (proSubtext) proSubtext.textContent = 'per user per month, billed monthly';
+        
+        if (starterOldPrice) starterOldPrice.style.display = 'none';
+        if (starterPrice) starterPrice.textContent = '$99';
+        if (starterSubtext) starterSubtext.textContent = 'Billed monthly · cancel anytime';
+        
+        if (growthOldPrice) growthOldPrice.style.display = 'none';
+        if (growthPrice) growthPrice.textContent = '$299';
+        if (growthSubtext) growthSubtext.textContent = 'Billed monthly · cancel anytime';
+
+        if (scaleOldPrice) scaleOldPrice.style.display = 'none';
+        if (scalePrice) scalePrice.textContent = '$999';
+        if (scaleSubtext) scaleSubtext.textContent = 'Billed monthly · cancel anytime';
       }
     }
   </script>
