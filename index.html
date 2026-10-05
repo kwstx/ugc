@@ -780,8 +780,8 @@
           </p>
           
           <div class="flex items-baseline gap-1 mb-0.5">
-            <span id="starter-old-price" class="text-[#a1a1aa] line-through text-[18px] sm:text-[20px] font-normal" style="display: none;">$99</span>
-            <span id="starter-price" class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$99</span>
+            <span id="starter-old-price" class="text-[#a1a1aa] line-through text-[18px] sm:text-[20px] font-normal" style="display: none;">$280</span>
+            <span id="starter-price" class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$280</span>
             <span class="text-[#71717a] text-[13px] sm:text-[14px] font-normal">/mo</span>
           </div>
           <p id="starter-subtext" class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5">
@@ -855,8 +855,8 @@
             </p>
 
             <div class="flex items-baseline gap-1 mb-0.5">
-              <span id="growth-old-price" class="text-[#a1a1aa] line-through text-[18px] sm:text-[20px] font-normal" style="display: none;">$299</span>
-              <span id="growth-price" class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$299</span>
+              <span id="growth-old-price" class="text-[#a1a1aa] line-through text-[18px] sm:text-[20px] font-normal" style="display: none;">$880</span>
+              <span id="growth-price" class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$880</span>
               <span class="text-[#71717a] text-[13px] sm:text-[14px] font-normal">/mo</span>
             </div>
             <p id="growth-subtext" class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5">
@@ -930,8 +930,8 @@
           </p>
 
           <div class="flex items-baseline gap-1 mb-0.5">
-            <span id="scale-old-price" class="text-[#a1a1aa] line-through text-[18px] sm:text-[20px] font-normal" style="display: none;">$999</span>
-            <span id="scale-price" class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$999</span>
+            <span id="scale-old-price" class="text-[#a1a1aa] line-through text-[18px] sm:text-[20px] font-normal" style="display: none;">$2,980</span>
+            <span id="scale-price" class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$2,980</span>
             <span class="text-[#71717a] text-[13px] sm:text-[14px] font-normal">/mo</span>
           </div>
           <p id="scale-subtext" class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5">
@@ -1207,30 +1207,30 @@
         monthlyBtn.className = 'px-3.5 sm:px-4 py-1.5 rounded-full text-[#6b655c] hover:text-[#18181b] text-[12px] sm:text-[13px] font-medium transition-all cursor-pointer';
         
         if (starterOldPrice) starterOldPrice.style.display = 'inline';
-        if (starterPrice) starterPrice.textContent = '$79';
+        if (starterPrice) starterPrice.textContent = '$224';
         if (starterSubtext) starterSubtext.textContent = 'Billed yearly · cancel anytime';
         
         if (growthOldPrice) growthOldPrice.style.display = 'inline';
-        if (growthPrice) growthPrice.textContent = '$239';
+        if (growthPrice) growthPrice.textContent = '$704';
         if (growthSubtext) growthSubtext.textContent = 'Billed yearly · cancel anytime';
 
         if (scaleOldPrice) scaleOldPrice.style.display = 'inline';
-        if (scalePrice) scalePrice.textContent = '$799';
+        if (scalePrice) scalePrice.textContent = '$2,384';
         if (scaleSubtext) scaleSubtext.textContent = 'Billed yearly · cancel anytime';
       } else {
         monthlyBtn.className = 'flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-white text-[#18181b] text-[12px] sm:text-[13px] font-semibold shadow-sm transition-all cursor-pointer';
         yearlyBtn.className = 'flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full text-[#6b655c] hover:text-[#18181b] text-[12px] sm:text-[13px] font-medium transition-all cursor-pointer';
         
         if (starterOldPrice) starterOldPrice.style.display = 'none';
-        if (starterPrice) starterPrice.textContent = '$99';
+        if (starterPrice) starterPrice.textContent = '$280';
         if (starterSubtext) starterSubtext.textContent = 'Billed monthly · cancel anytime';
         
         if (growthOldPrice) growthOldPrice.style.display = 'none';
-        if (growthPrice) growthPrice.textContent = '$299';
+        if (growthPrice) growthPrice.textContent = '$880';
         if (growthSubtext) growthSubtext.textContent = 'Billed monthly · cancel anytime';
 
         if (scaleOldPrice) scaleOldPrice.style.display = 'none';
-        if (scalePrice) scalePrice.textContent = '$999';
+        if (scalePrice) scalePrice.textContent = '$2,980';
         if (scaleSubtext) scaleSubtext.textContent = 'Billed monthly · cancel anytime';
       }
     }
