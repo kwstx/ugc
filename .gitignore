@@ -19,3 +19,5 @@ scratch_*.png
 pricing_*.png
 sideshift_*.png
 index_*.png
+claude.*
+claude_icon.*
