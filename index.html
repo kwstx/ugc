@@ -112,10 +112,17 @@
 
     /* Comparison section custom dotted separator and highlight stroke */
     .custom-dotted {
-      background-image: radial-gradient(circle, #cebeab 1.2px, transparent 1.2px);
+      background-image: radial-gradient(circle, #d4d4d8 1.2px, transparent 1.2px);
       background-size: 7px 2px;
       background-repeat: repeat-x;
       height: 2px;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
     .highlight-stroke {
       position: absolute;
@@ -1032,11 +1039,11 @@
         </p>
       </div>
 
-      <!-- Main Beige/Cream Container -->
-      <div class="w-full rounded-[32px] sm:rounded-[38px] bg-gradient-to-b from-[#FFFDF7] via-[#FFF9EE] to-[#FFF3DE] border border-[#F3EAD9]/90 shadow-[0_4px_30px_rgba(220,180,120,0.06)] p-5 sm:p-8 md:p-10 lg:p-12">
+      <!-- Main Container (White Card) -->
+      <div class="w-full rounded-[32px] sm:rounded-[38px] bg-white border border-[#eaeaea] shadow-[0_8px_30px_rgba(0,0,0,0.04)] p-5 sm:p-8 md:p-10 lg:p-12">
         
         <!-- Comparison Grid -->
-        <div class="w-full overflow-x-auto pb-2">
+        <div class="w-full overflow-x-auto no-scrollbar pb-2">
           <div class="min-w-[660px] grid grid-cols-[1.1fr_1.35fr_1fr_1fr] items-stretch gap-x-2 sm:gap-x-4">
             
             <!-- Column 1: Feature / Metric Labels -->
@@ -1048,23 +1055,23 @@
                 </span>
               </div>
               <!-- Row 1 -->
-              <div class="h-[64px] flex items-center px-3 border-t border-[#ebdcc8]/70 font-semibold text-[#18181b] text-[13.5px]">
+              <div class="h-[64px] flex items-center px-3 border-t border-[#f0f0f0] font-semibold text-[#18181b] text-[13.5px]">
                 Real human faces
               </div>
               <!-- Row 2 -->
-              <div class="h-[64px] flex items-center px-3 border-t border-[#ebdcc8]/70 font-semibold text-[#18181b] text-[13.5px]">
+              <div class="h-[64px] flex items-center px-3 border-t border-[#f0f0f0] font-semibold text-[#18181b] text-[13.5px]">
                 Cost per video
               </div>
               <!-- Row 3 -->
-              <div class="h-[64px] flex items-center px-3 border-t border-[#ebdcc8]/70 font-semibold text-[#18181b] text-[13.5px]">
+              <div class="h-[64px] flex items-center px-3 border-t border-[#f0f0f0] font-semibold text-[#18181b] text-[13.5px]">
                 Time to first ad
               </div>
               <!-- Row 4 -->
-              <div class="h-[64px] flex items-center px-3 border-t border-[#ebdcc8]/70 font-semibold text-[#18181b] text-[13.5px]">
+              <div class="h-[64px] flex items-center px-3 border-t border-[#f0f0f0] font-semibold text-[#18181b] text-[13.5px]">
                 Yours to keep, forever
               </div>
               <!-- Row 5 -->
-              <div class="h-[68px] flex items-center px-3 border-t border-[#ebdcc8]/70 font-semibold text-[#18181b] text-[13.5px]">
+              <div class="h-[68px] flex items-center px-3 border-t border-[#f0f0f0] font-semibold text-[#18181b] text-[13.5px]">
                 Your coding agent can use it
               </div>
             </div>
@@ -1148,7 +1155,7 @@
                 <span class="text-[11px] text-[#8e8e93] font-normal">Traditional</span>
               </div>
               <!-- Row 1 -->
-              <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#52525b] text-[13px]">
+              <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#f0f0f0] text-[#52525b] text-[13px]">
                 <div class="inline-flex items-center gap-1.5">
                   <div class="w-4.5 h-4.5 rounded-full bg-zinc-200/80 flex items-center justify-center shrink-0">
                     <svg class="w-2.5 h-2.5 text-zinc-700" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
@@ -1157,19 +1164,19 @@
                 </div>
               </div>
               <!-- Row 2 -->
-              <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 font-semibold text-[#52525b] text-[13.5px]">
+              <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#f0f0f0] font-semibold text-[#52525b] text-[13.5px]">
                 $150–500
               </div>
               <!-- Row 3 -->
-              <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#71717a] text-[13px]">
+              <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#f0f0f0] text-[#71717a] text-[13px]">
                 2–4 weeks
               </div>
               <!-- Row 4 -->
-              <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#e11d48] font-medium text-[12.5px]">
+              <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#f0f0f0] text-[#e11d48] font-medium text-[12.5px]">
                 Often limited
               </div>
               <!-- Row 5 -->
-              <div class="h-[68px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#71717a] text-[13px]">
+              <div class="h-[68px] flex items-center justify-center px-3 border-t border-[#f0f0f0] text-[#71717a] text-[13px]">
                 <div class="inline-flex items-center gap-1.5 text-zinc-400">
                   <div class="w-4.5 h-4.5 rounded-full bg-zinc-200/60 flex items-center justify-center shrink-0">
                     <svg class="w-2.5 h-2.5 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -1189,7 +1196,7 @@
                 <span class="text-[11px] text-[#8e8e93] font-normal">Synthetic</span>
               </div>
               <!-- Row 1 -->
-              <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#71717a] text-[13px]">
+              <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#f0f0f0] text-[#71717a] text-[13px]">
                 <div class="inline-flex items-center gap-1.5 text-zinc-400">
                   <div class="w-4.5 h-4.5 rounded-full bg-red-100/80 flex items-center justify-center shrink-0">
                     <svg class="w-2.5 h-2.5 text-red-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -1198,19 +1205,19 @@
                 </div>
               </div>
               <!-- Row 2 -->
-              <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#71717a] text-[13.5px]">
+              <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#f0f0f0] text-[#71717a] text-[13.5px]">
                 $20–60
               </div>
               <!-- Row 3 -->
-              <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#71717a] text-[13px]">
+              <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#f0f0f0] text-[#71717a] text-[13px]">
                 Hours
               </div>
               <!-- Row 4 -->
-              <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#71717a] text-[12.5px]">
+              <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#f0f0f0] text-[#71717a] text-[12.5px]">
                 Plan dependent
               </div>
               <!-- Row 5 -->
-              <div class="h-[68px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#71717a] text-[13px]">
+              <div class="h-[68px] flex items-center justify-center px-3 border-t border-[#f0f0f0] text-[#71717a] text-[13px]">
                 <div class="inline-flex items-center gap-1.5 text-zinc-400">
                   <div class="w-4.5 h-4.5 rounded-full bg-zinc-200/60 flex items-center justify-center shrink-0">
                     <svg class="w-2.5 h-2.5 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
