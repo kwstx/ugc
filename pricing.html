@@ -36,6 +36,23 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
+    .custom-dotted {
+      background-image: radial-gradient(circle, #cebeab 1.2px, transparent 1.2px);
+      background-size: 7px 2px;
+      background-repeat: repeat-x;
+      height: 2px;
+    }
+    .highlight-stroke {
+      position: absolute;
+      bottom: -1px;
+      left: -3px;
+      right: -3px;
+      height: 6px;
+      background: linear-gradient(90deg, #d8b4fe 0%, #fde047 55%, #fed7aa 100%);
+      opacity: 0.82;
+      border-radius: 9999px;
+      z-index: -1;
+    }
   </style>
 </head>
 <body class="bg-white min-h-screen flex flex-col items-center justify-center py-16 sm:py-20 px-4 sm:px-6 md:px-8">
@@ -46,8 +63,8 @@
     <!-- Main Headline -->
     <div class="text-center mb-8 sm:mb-10">
       <h2 class="font-serif text-[34px] sm:text-[46px] md:text-[54px] lg:text-[60px] font-normal text-[#1a1a1a] tracking-[-0.03em] leading-[1.12]">
-        Perfect knowledge and<br>
-        perfect voice
+        The right reaction.<br>
+        Right on time.
       </h2>
     </div>
 
@@ -306,197 +323,229 @@
 
   </section>
 
-  <!-- ================= COMPARISON SECTION (REPLACE 4 TOOLS) ================= -->
-  <section class="w-full max-w-[760px] flex flex-col items-center mt-20 sm:mt-28 mb-8">
+  <!-- ================= COMPARISON SECTION (WHY TEAMS SWITCH TO DANSUGC) ================= -->
+  <section class="w-full max-w-[980px] flex flex-col items-center select-none py-12 mt-8">
     
-    <!-- Headline -->
-    <h2 class="font-serif text-[32px] sm:text-[38px] md:text-[42px] font-normal text-[#1a1a1a] tracking-[-0.025em] leading-[1.14] text-center mb-3">
-      Replace 4 tools with one<br>intelligent assistant
-    </h2>
-    
-    <!-- Subtitle -->
-    <p class="text-[11.5px] sm:text-[12px] text-[#71717a] text-center max-w-[430px] leading-relaxed mx-auto mb-9 font-normal">
-      Stop paying for multiple subscriptions. Jace consolidates your email<br class="hidden sm:inline"> workflow into one powerful platform.
-    </p>
+    <!-- Headline & Subtitle -->
+    <div class="text-center mb-9 sm:mb-12 max-w-[700px]">
+      <h2 class="font-serif text-[34px] sm:text-[44px] md:text-[50px] font-normal text-[#1a1a1a] tracking-[-0.03em] leading-[1.12] mb-3.5">
+        Why teams switch to DansUGC
+      </h2>
+      <p class="text-[#71717a] text-[13px] sm:text-[14.5px] leading-[1.5] max-w-[500px] mx-auto font-normal">
+        DansUGC compared with UGC agencies and AI avatars
+      </p>
+    </div>
 
-    <!-- Outer Box Container -->
-    <div class="w-full bg-[#fffcf5] border border-[#f5ebdb] rounded-[28px] p-5 sm:p-7 md:p-8 shadow-[0_4px_30px_rgba(215,190,150,0.1)]">
-      <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 sm:gap-6 md:gap-7 items-stretch">
-        
-        <!-- Left Column: 4 Tools Stack -->
-        <div class="flex flex-col justify-between h-full">
-          <div class="flex flex-col gap-2.5 sm:gap-3">
-            
-            <!-- Tool 1: Fyxer.ai -->
-            <div class="bg-white rounded-[13px] border border-[#eee5d8] shadow-[0_1px_4px_rgba(0,0,0,0.025)] p-3">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                  <span class="text-[#18181b] font-bold text-[12px] leading-none select-none">—</span>
-                  <span class="font-semibold text-[12px] sm:text-[12.5px] text-[#18181b]">Fyxer.ai</span>
-                </div>
-                <span class="text-[9.5px] sm:text-[10px] font-medium text-[#71717a] bg-[#f4f4f5] border border-[#e4e4e7] px-2 py-0.5 rounded-full">$30</span>
-              </div>
-              <p class="text-[10px] sm:text-[10.5px] text-[#71717a] mt-1 font-normal">Email organizer</p>
-            </div>
-
-            <!-- Tool 2: Chat GPT -->
-            <div class="bg-white rounded-[13px] border border-[#eee5d8] shadow-[0_1px_4px_rgba(0,0,0,0.025)] p-3">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                  <div class="w-3.5 h-3.5 rounded-[4px] bg-[#10a37f] flex items-center justify-center shrink-0">
-                    <svg class="w-2.5 h-2.5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M22.28 9.82a5.98 5.98 0 0 0-.52-4.91 6.05 6.05 0 0 0-6.5-2.9A6.07 6.07 0 0 0 5 4.18a5.98 5.98 0 0 0-4 2.9 6.05 6.05 0 0 0 .74 7.1 5.98 5.98 0 0 0 .51 4.91 6.05 6.05 0 0 0 6.51 2.9A5.98 5.98 0 0 0 13.26 24a6.06 6.06 0 0 0 5.77-4.21 5.99 5.99 0 0 0 4-2.9 6.06 6.06 0 0 0-.75-7.07zm-9.02 12.6a4.48 4.48 0 0 1-2.88-1.04l.14-.08 4.78-2.76a.8.8 0 0 0 .4-.68v-6.74l2.02 1.17a.07.07 0 0 1 .04.05v5.58a4.5 4.5 0 0 1-4.5 4.5zm-9.66-4.12a4.47 4.47 0 0 1-.53-3.01l.14.08 4.78 2.76a.77.77 0 0 0 .78 0l5.85-3.37v2.33a.08.08 0 0 1-.03.06L9.74 19.95a4.5 4.5 0 0 1-6.14-1.65zM2.34 7.9a4.48 4.48 0 0 1 2.37-1.98v5.68a.77.77 0 0 0 .38.68l5.82 3.35-2.02 1.17a.08.08 0 0 1-.07 0l-4.83-2.79a4.5 4.5 0 0 1-1.65-6.11zm16.6 3.85L13.1 8.36 15.12 7.2a.08.08 0 0 1 .07 0l4.83 2.8a4.5 4.5 0 0 1-.68 8.1v-5.68a.79.79 0 0 0-.4-.66zm2.01-3.02l-.14-.09-4.77-2.78a.78.78 0 0 0-.79 0L9.41 9.23V6.9a.07.07 0 0 1 .03-.06l4.83-2.79a4.5 4.5 0 0 1 6.68 4.66zM8.31 12.86l-2.02-1.16a.08.08 0 0 1-.04-.06V6.07a4.5 4.5 0 0 1 7.38-3.45l-.14.08-4.79 2.76a.8.8 0 0 0-.39.68zm1.1-2.36l2.6-1.5 2.6 1.5v3l-2.6 1.5-2.6-1.5z"/>
-                    </svg>
-                  </div>
-                  <span class="font-semibold text-[12px] sm:text-[12.5px] text-[#18181b]">Chat GPT</span>
-                </div>
-                <span class="text-[9.5px] sm:text-[10px] font-medium text-[#71717a] bg-[#f4f4f5] border border-[#e4e4e7] px-2 py-0.5 rounded-full">$20</span>
-              </div>
-              <p class="text-[10px] sm:text-[10.5px] text-[#71717a] mt-1 font-normal">Answers many general questions</p>
-            </div>
-
-            <!-- Tool 3: Calendly -->
-            <div class="bg-white rounded-[13px] border border-[#eee5d8] shadow-[0_1px_4px_rgba(0,0,0,0.025)] p-3">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                  <div class="w-3.5 h-3.5 rounded-full bg-[#006bff] flex items-center justify-center shrink-0">
-                    <svg class="w-2.5 h-2.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M16 8A6 6 0 1 0 8 16"/>
-                    </svg>
-                  </div>
-                  <span class="font-semibold text-[12px] sm:text-[12.5px] text-[#18181b]">Calendly</span>
-                </div>
-                <span class="text-[9.5px] sm:text-[10px] font-medium text-[#71717a] bg-[#f4f4f5] border border-[#e4e4e7] px-2 py-0.5 rounded-full">$13</span>
-              </div>
-              <p class="text-[10px] sm:text-[10.5px] text-[#71717a] mt-1 font-normal">Scheduling tool</p>
-            </div>
-
-            <!-- Tool 4: Superhuman -->
-            <div class="bg-white rounded-[13px] border border-[#eee5d8] shadow-[0_1px_4px_rgba(0,0,0,0.025)] p-3">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                  <div class="w-3.5 h-3.5 rounded-[4px] bg-[#18181b] flex items-center justify-center shrink-0">
-                    <svg class="w-2 h-2 text-white" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2L2 7l10 5 10-5-10-5zm0 9l-10-5v10l10 5 10-5V6l-10 5z"/>
-                    </svg>
-                  </div>
-                  <span class="font-semibold text-[12px] sm:text-[12.5px] text-[#18181b]">Superhuman</span>
-                </div>
-                <span class="text-[9.5px] sm:text-[10px] font-medium text-[#71717a] bg-[#f4f4f5] border border-[#e4e4e7] px-2 py-0.5 rounded-full">$30</span>
-              </div>
-              <p class="text-[10px] sm:text-[10.5px] text-[#71717a] mt-1 font-normal">Productivity-focused email inbox</p>
-            </div>
-
-          </div>
-
-          <!-- Total Left -->
-          <div class="border-t border-dotted border-[#ded5c7] pt-3 mt-4 flex items-center justify-between">
-            <span class="text-[10px] sm:text-[10.5px] text-[#71717a]">In total</span>
-            <div class="flex items-baseline gap-0.5">
-              <span class="text-[18px] sm:text-[19px] font-bold text-[#18181b] tracking-tight">$93</span>
-              <span class="text-[10.5px] sm:text-[11px] text-[#71717a]">/month</span>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Middle: VS Divider -->
-        <div class="flex items-center justify-center py-2 md:py-0 px-2 self-center select-none">
-          <span class="font-black text-[16px] text-[#18181b] tracking-wider uppercase">VS</span>
-        </div>
-
-        <!-- Right Column: Jace Card -->
-        <div class="flex flex-col justify-between h-full pt-4">
+    <!-- Main Beige/Cream Container -->
+    <div class="w-full rounded-[32px] sm:rounded-[38px] bg-gradient-to-b from-[#FFFDF7] via-[#FFF9EE] to-[#FFF3DE] border border-[#F3EAD9]/90 shadow-[0_4px_30px_rgba(220,180,120,0.06)] p-5 sm:p-8 md:p-10 lg:p-12">
+      
+      <!-- Comparison Grid -->
+      <div class="w-full overflow-x-auto pb-2">
+        <div class="min-w-[660px] grid grid-cols-[1.1fr_1.35fr_1fr_1fr] items-stretch gap-x-2 sm:gap-x-4">
           
-          <div class="bg-white rounded-[16px] sm:rounded-[18px] border border-[#eee5d8] shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-4 sm:p-5 pt-8 relative flex flex-col justify-between h-full">
+          <!-- Column 1: Feature / Metric Labels -->
+          <div class="flex flex-col">
+            <!-- Header Spacer -->
+            <div class="h-[90px] flex items-end pb-3 px-3">
+              <span class="text-[12px] sm:text-[12.5px] font-semibold text-[#8e8e93] uppercase tracking-wider">
+                Comparison
+              </span>
+            </div>
+            <!-- Row 1 -->
+            <div class="h-[64px] flex items-center px-3 border-t border-[#ebdcc8]/70 font-semibold text-[#18181b] text-[13.5px]">
+              Real human faces
+            </div>
+            <!-- Row 2 -->
+            <div class="h-[64px] flex items-center px-3 border-t border-[#ebdcc8]/70 font-semibold text-[#18181b] text-[13.5px]">
+              Cost per video
+            </div>
+            <!-- Row 3 -->
+            <div class="h-[64px] flex items-center px-3 border-t border-[#ebdcc8]/70 font-semibold text-[#18181b] text-[13.5px]">
+              Time to first ad
+            </div>
+            <!-- Row 4 -->
+            <div class="h-[64px] flex items-center px-3 border-t border-[#ebdcc8]/70 font-semibold text-[#18181b] text-[13.5px]">
+              Yours to keep, forever
+            </div>
+            <!-- Row 5 -->
+            <div class="h-[68px] flex items-center px-3 border-t border-[#ebdcc8]/70 font-semibold text-[#18181b] text-[13.5px]">
+              Your coding agent can use it
+            </div>
+          </div>
+
+          <!-- Column 2: DansUGC (ONE CONNECTED CARD FROM TOP TO BOTTOM) -->
+          <div class="bg-white rounded-[24px] shadow-[0_8px_30px_rgba(0,0,0,0.05),0_2px_6px_rgba(0,0,0,0.02)] border border-[#e2d7c5] flex flex-col overflow-hidden relative">
             
-            <!-- Top Floating Jace Badge -->
-            <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-[46px] h-[46px] rounded-[14px] bg-gradient-to-b from-[#eedcff] via-[#e2c8fe] to-[#cfabfa] shadow-[0_4px_14px_rgba(196,158,248,0.4)] flex items-center justify-center border-2 border-white">
-              <span class="font-bold text-[13.5px] text-[#2e1065] tracking-tight font-sans">jace</span>
+            <!-- Card Header -->
+            <div class="h-[90px] flex flex-col items-center justify-center p-3 border-b border-[#f1e8dc]/80 bg-gradient-to-b from-[#ffffff] to-[#faf8f5]/60">
+              <div class="flex items-center gap-2 mb-1.5">
+                <div class="w-5 h-5 bg-black rounded-[4.5px] flex items-center justify-center text-white shrink-0">
+                  <svg class="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M4 4h9c5.523 0 10 4.477 10 10s-4.477 10-10 10H4V4zm6 5v10h3c2.761 0 5-2.239 5-5s-2.239-5-5-5h-3z"/></svg>
+                </div>
+                <span class="font-bold text-[15px] text-[#18181b] tracking-tight">DansUGC</span>
+              </div>
+              <span style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);" class="text-white text-[9.5px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
+                Recommended
+              </span>
             </div>
 
-            <!-- Jace Features List -->
-            <div class="flex flex-col gap-3.5 my-auto">
-              
-              <!-- Item 1 -->
-              <div class="flex items-start gap-2">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#c084fc] shrink-0 mt-1.5"></span>
-                <div>
-                  <p class="text-[11px] sm:text-[11.5px] font-semibold text-[#18181b] leading-tight">Full-stack AI Chief of Staff</p>
-                  <div class="text-[9.5px] text-[#71717a] mt-0.5 flex items-center gap-1.5">
-                    <span>Replaces</span>
-                    <span class="font-bold text-[#18181b] text-[10px]">—</span>
-                    <span class="text-[#52525b]">Fyxer.ai</span>
-                  </div>
+            <!-- Row 1: Real human faces -->
+            <div class="h-[64px] flex items-center justify-center px-4 border-b border-[#f4ece1]/80">
+              <div class="inline-flex items-center gap-1.5 text-[#16a34a] font-semibold text-[13px]">
+                <div class="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+                  <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                 </div>
+                <span>100% Real faces</span>
               </div>
+            </div>
 
-              <!-- Item 2 -->
-              <div class="flex items-start gap-2">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#c084fc] shrink-0 mt-1.5"></span>
-                <div>
-                  <p class="text-[11px] sm:text-[11.5px] font-semibold text-[#18181b] leading-tight">Answers any question, even about your business</p>
-                  <div class="text-[9.5px] text-[#71717a] mt-0.5 flex items-center gap-1.5">
-                    <span>Replaces</span>
-                    <div class="w-2.5 h-2.5 rounded-[2px] bg-[#10a37f] flex items-center justify-center shrink-0">
-                      <svg class="w-1.5 h-1.5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                      </svg>
-                    </div>
-                    <span class="text-[#52525b]">Chat GPT</span>
-                  </div>
+            <!-- Row 2: Cost per video -->
+            <div class="h-[64px] flex items-center justify-center px-4 border-b border-[#f4ece1]/80">
+              <div class="inline-flex flex-col items-center">
+                <span class="relative z-10 text-[18px] font-bold text-[#18181b] tracking-tight">
+                  $11 <span class="text-[12px] font-medium text-[#71717a]">per clip</span>
+                  <span class="highlight-stroke"></span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Row 3: Time to first ad -->
+            <div class="h-[64px] flex items-center justify-center px-4 border-b border-[#f4ece1]/80">
+              <div class="inline-flex items-center gap-1 bg-[#eff2fe] px-3 py-1 rounded-full text-[#213ae7] font-bold text-[12.5px]">
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <span>Minutes</span>
+              </div>
+            </div>
+
+            <!-- Row 4: Yours to keep, forever -->
+            <div class="h-[64px] flex items-center justify-center px-4 border-b border-[#f4ece1]/80">
+              <div class="inline-flex items-center gap-1.5 text-[#16a34a] font-semibold text-[13px]">
+                <div class="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+                  <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                 </div>
+                <span>Yes, forever</span>
               </div>
+            </div>
 
-              <!-- Item 3 -->
-              <div class="flex items-start gap-2">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#c084fc] shrink-0 mt-1.5"></span>
-                <div>
-                  <p class="text-[11px] sm:text-[11.5px] font-semibold text-[#18181b] leading-tight">Seamless scheduling without switching apps</p>
-                  <div class="text-[9.5px] text-[#71717a] mt-0.5 flex items-center gap-1.5">
-                    <span>Replaces</span>
-                    <div class="w-2.5 h-2.5 rounded-full bg-[#006bff] flex items-center justify-center shrink-0 text-white font-bold text-[6.5px]">C</div>
-                    <span class="text-[#52525b]">Calendly</span>
+            <!-- Row 5: Your coding agent can use it -->
+            <div class="h-[68px] flex items-center justify-center px-4">
+              <div class="inline-flex flex-col items-center">
+                <div class="inline-flex items-center gap-1.5 text-[#213ae7] font-semibold text-[12.5px]">
+                  <div class="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                    <svg class="w-3 h-3 text-[#213ae7]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                   </div>
+                  <span>DansUGC MCP</span>
                 </div>
+                <span class="text-[10px] text-[#71717a] mt-0.5">+ ReelClaw skill</span>
               </div>
-
-              <!-- Item 4 -->
-              <div class="flex items-start gap-2">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#c084fc] shrink-0 mt-1.5"></span>
-                <div>
-                  <p class="text-[11px] sm:text-[11.5px] font-semibold text-[#18181b] leading-tight">AI-native, productivity-focused email inbox</p>
-                  <div class="text-[9.5px] text-[#71717a] mt-0.5 flex items-center gap-1.5">
-                    <span>Replaces</span>
-                    <div class="w-2.5 h-2.5 rounded-[2px] bg-[#18181b] flex items-center justify-center shrink-0">
-                      <svg class="w-1.5 h-1.5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                      </svg>
-                    </div>
-                    <span class="text-[#52525b]">Superhuman</span>
-                  </div>
-                </div>
-              </div>
-
             </div>
 
           </div>
 
-          <!-- Total Right -->
-          <div class="border-t border-dotted border-[#ded5c7] pt-3 mt-4 flex items-center justify-between">
-            <span class="text-[10px] sm:text-[10.5px] text-[#71717a]">In total</span>
-            <div class="flex items-baseline gap-0.5">
-              <span class="relative inline-block text-[18px] sm:text-[19px] font-bold text-[#18181b] tracking-tight z-10 px-0.5">
-                <span class="absolute inset-x-0 bottom-0.5 top-1.5 bg-[#fef08a]/85 -z-10 rounded-[2px]"></span>
-                $25
-              </span>
-              <span class="text-[10.5px] sm:text-[11px] text-[#71717a]">/month</span>
+          <!-- Column 3: UGC Agency -->
+          <div class="flex flex-col text-center">
+            <!-- Header -->
+            <div class="h-[90px] flex flex-col items-center justify-center p-3 pb-4">
+              <div class="text-[14px] sm:text-[15px] font-bold text-[#3f3f46] tracking-tight">
+                UGC agency
+              </div>
+              <span class="text-[11px] text-[#8e8e93] font-normal">Traditional</span>
+            </div>
+            <!-- Row 1 -->
+            <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#52525b] text-[13px]">
+              <div class="inline-flex items-center gap-1.5">
+                <div class="w-4.5 h-4.5 rounded-full bg-zinc-200/80 flex items-center justify-center shrink-0">
+                  <svg class="w-2.5 h-2.5 text-zinc-700" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <span>Yes</span>
+              </div>
+            </div>
+            <!-- Row 2 -->
+            <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 font-semibold text-[#52525b] text-[13.5px]">
+              $150–500
+            </div>
+            <!-- Row 3 -->
+            <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#71717a] text-[13px]">
+              2–4 weeks
+            </div>
+            <!-- Row 4 -->
+            <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#e11d48] font-medium text-[12.5px]">
+              Often limited
+            </div>
+            <!-- Row 5 -->
+            <div class="h-[68px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#71717a] text-[13px]">
+              <div class="inline-flex items-center gap-1.5 text-zinc-400">
+                <div class="w-4.5 h-4.5 rounded-full bg-zinc-200/60 flex items-center justify-center shrink-0">
+                  <svg class="w-2.5 h-2.5 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </div>
+                <span>No</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 4: AI Avatars -->
+          <div class="flex flex-col text-center">
+            <!-- Header -->
+            <div class="h-[90px] flex flex-col items-center justify-center p-3 pb-4">
+              <div class="text-[14px] sm:text-[15px] font-bold text-[#3f3f46] tracking-tight">
+                AI avatars
+              </div>
+              <span class="text-[11px] text-[#8e8e93] font-normal">Synthetic</span>
+            </div>
+            <!-- Row 1 -->
+            <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#71717a] text-[13px]">
+              <div class="inline-flex items-center gap-1.5 text-zinc-400">
+                <div class="w-4.5 h-4.5 rounded-full bg-red-100/80 flex items-center justify-center shrink-0">
+                  <svg class="w-2.5 h-2.5 text-red-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </div>
+                <span>Synthetic (AI)</span>
+              </div>
+            </div>
+            <!-- Row 2 -->
+            <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#71717a] text-[13.5px]">
+              $20–60
+            </div>
+            <!-- Row 3 -->
+            <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#71717a] text-[13px]">
+              Hours
+            </div>
+            <!-- Row 4 -->
+            <div class="h-[64px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#71717a] text-[12.5px]">
+              Plan dependent
+            </div>
+            <!-- Row 5 -->
+            <div class="h-[68px] flex items-center justify-center px-3 border-t border-[#ebdcc8]/70 text-[#71717a] text-[13px]">
+              <div class="inline-flex items-center gap-1.5 text-zinc-400">
+                <div class="w-4.5 h-4.5 rounded-full bg-zinc-200/60 flex items-center justify-center shrink-0">
+                  <svg class="w-2.5 h-2.5 text-zinc-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </div>
+                <span>No</span>
+              </div>
             </div>
           </div>
 
         </div>
-
       </div>
+
+      <!-- Bottom Dotted Line & Summary -->
+      <div class="custom-dotted w-full mt-8 mb-6"></div>
+      
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full bg-[#213ae7] flex items-center justify-center text-white font-bold text-sm shadow-sm">
+            ⚡
+          </div>
+          <div>
+            <h4 class="text-[13.5px] font-semibold text-[#18181b]">Stop overpaying and waiting weeks</h4>
+            <p class="text-[12px] text-[#71717a]">Download raw authentic creator hooks instantly for $11/clip</p>
+          </div>
+        </div>
+        <a href="#searchSection" class="inline-flex items-center gap-1.5 bg-[#141312] hover:bg-black text-white text-[12.5px] font-semibold px-5 py-2.5 rounded-full shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all">
+          <span>Explore Creator Library</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+
     </div>
 
   </section>
