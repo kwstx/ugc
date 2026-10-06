@@ -1,24 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full bg-white scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SideShift in your AI tool of choice</title>
+  <title>SideShift for AI · Scale your brand from your favorite AI assistant</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Google Fonts: Inter -->
+  <!-- Google Fonts: Instrument Serif, Cormorant Garamond, Newsreader, Playfair Display, Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;450;500;600;700;750;800&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
+            serif: ['Newsreader', 'Playfair Display', 'Georgia', 'serif'],
+            serifTitle: ['Instrument Serif', 'Georgia', 'serif'],
+            serifSwash: ['Cormorant Garamond', 'Georgia', 'serif'],
+            sansBody: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
             sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          },
+          boxShadow: {
+            'nav': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+            'pill-btn': '0 4px 16px 0 rgba(0, 0, 0, 0.2), 0 1px 3px 0 rgba(0, 0, 0, 0.1)',
           }
         }
       }
@@ -26,78 +34,288 @@
   </script>
 
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
+    
     body {
       background-color: #ffffff;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #111111;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+    }
+
+    .dlig-swash {
+      font-feature-settings: "dlig" 1, "liga" 1, "hlig" 1, "calt" 1;
+      font-variant-ligatures: discretionary-ligatures;
+    }
+
+    /* Grand Editorial Serif Title */
+    .hero-heading {
+      font-family: 'Newsreader', 'Playfair Display', Georgia, serif;
+      letter-spacing: -0.028em;
+      line-height: 1.12;
+      font-weight: 400;
+      color: #111111;
+      text-align: center;
+    }
+
+    .btn-connect-pill {
+      background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);
+      box-shadow: 0 3px 12px rgba(33, 58, 231, 0.25);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+    }
+
+    .btn-connect-pill:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1.5px);
+      box-shadow: 0 6px 20px rgba(33, 58, 231, 0.4);
+    }
+
+    .btn-connect-pill:active {
+      transform: translateY(0px) scale(0.98);
     }
   </style>
 </head>
-<body class="bg-white min-h-screen flex flex-col justify-center items-center p-4 sm:p-6 md:p-8">
+<body class="flex flex-col items-center justify-between min-h-screen px-4 sm:px-6 pt-5 md:pt-7 pb-12 select-none">
 
-  <!-- ================= SIDESHIFT AI INTEGRATION BANNER ================= -->
-  <section class="w-full max-w-[980px] mx-auto pt-10 sm:pt-12 pb-12 sm:pb-16 border-t border-[#ebebeb]">
-    
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 sm:gap-6">
+  <!-- 1. FLOATING NAVIGATION BAR (Matches Landing Page) -->
+  <header class="w-full max-w-[910px] mb-8 sm:mb-12 md:mb-16">
+    <nav class="w-full bg-white border border-[#eaeaea] rounded-full px-4 sm:px-5 py-2 sm:py-2.5 flex items-center justify-between shadow-nav">
       
-      <!-- Left side: App Icons + Text -->
-      <div class="flex items-start sm:items-center gap-4 sm:gap-5 md:gap-6">
-        
-        <!-- Overlapping App Icon Cluster -->
-        <div class="flex items-center shrink-0 pt-0.5 sm:pt-0">
-          
-          <!-- Icon 1: Claude (Anthropic) -->
-          <div class="w-[48px] h-[48px] sm:w-[52px] sm:h-[52px] rounded-[16px] bg-white border border-[#e4e4e7] shadow-[0_4px_12px_rgba(0,0,0,0.05),0_1px_2px_rgba(0,0,0,0.02)] flex items-center justify-center relative z-10">
-            <svg class="w-[28px] h-[28px]" viewBox="0 0 100 100" fill="#D97757">
-              <path d="m19.6 66.5 19.7-11 .3-1-.3-.5h-1l-3.3-.2-11.2-.3L14 53l-9.5-.5-2.4-.5L0 49l.2-1.5 2-1.3 2.9.2 6.3.5 9.5.6 6.9.4L38 49.1h1.6l.2-.7-.5-.4-.4-.4L29 41l-10.6-7-5.6-4.1-3-2-1.5-2-.6-4.2 2.7-3 3.7.3.9.2 3.7 2.9 8 6.1L37 36l1.5 1.2.6-.4.1-.3-.7-1.1L33 25l-6-10.4-2.7-4.3-.7-2.6c-.3-1-.4-2-.4-3l3-4.2L28 0l4.2.6L33.8 2l2.6 6 4.1 9.3L47 29.9l2 3.8 1 3.4.3 1h.7v-.5l.5-7.2 1-8.7 1-11.2.3-3.2 1.6-3.8 3-2L61 2.6l2 2.9-.3 1.8-1.1 7.7L59 27.1l-1.5 8.2h.9l1-1.1 4.1-5.4 6.9-8.6 3-3.5L77 13l2.3-1.8h4.3l3.1 4.7-1.4 4.9-4.4 5.6-3.7 4.7-5.3 7.1-3.2 5.7.3.4h.7l12-2.6 6.4-1.1 7.6-1.3 3.5 1.6.4 1.6-1.4 3.4-8.2 2-9.6 2-14.3 3.3-.2.1.2.3 6.4.6 2.8.2h6.8l12.6 1 3.3 2 1.9 2.7-.3 2-5.1 2.6-6.8-1.6-16-3.8-5.4-1.3h-.8v.4l4.6 4.5 8.3 7.5L89 80.1l.5 2.4-1.3 2-1.4-.2-9.2-7-3.6-3-8-6.8h-.5v.7l1.8 2.7 9.8 14.7.5 4.5-.7 1.4-2.6 1-2.7-.6-5.8-8-6-9-4.7-8.2-.5.4-2.9 30.2-1.3 1.5-3 1.2-2.5-2-1.4-3 1.4-6.2 1.6-8 1.3-6.4 1.2-7.9.7-2.6v-.2H49L43 72l-9 12.3-7.2 7.6-1.7.7-3-1.5.3-2.8L24 86l10-12.8 6-7.9 4-4.6-.1-.5h-.3L17.2 77.4l-4.7.6-2-2 .2-3 1-1 8-5.5Z"/>
-            </svg>
-          </div>
-
-          <!-- Icon 2: ChatGPT (OpenAI) -->
-          <div class="w-[48px] h-[48px] sm:w-[52px] sm:h-[52px] rounded-[16px] bg-white border border-[#e4e4e7] shadow-[0_4px_12px_rgba(0,0,0,0.05),0_1px_2px_rgba(0,0,0,0.02)] flex items-center justify-center -ml-4 sm:-ml-4.5 relative z-20">
-            <svg class="w-[26px] h-[26px] text-black" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/>
-            </svg>
-          </div>
-
-          <!-- Icon 3: Cursor -->
-          <div class="w-[48px] h-[48px] sm:w-[52px] sm:h-[52px] rounded-[16px] bg-white border border-[#e4e4e7] shadow-[0_4px_12px_rgba(0,0,0,0.05),0_1px_2px_rgba(0,0,0,0.02)] flex items-center justify-center -ml-4 sm:-ml-4.5 relative z-30">
-            <svg class="w-[24px] h-[24px] text-black" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M11.503.131 1.891 5.678a.84.84 0 0 0-.42.726v11.188c0 .3.162.575.42.724l9.609 5.55a1 1 0 0 0 .998 0l9.61-5.55a.84.84 0 0 0 .42-.724V6.404a.84.84 0 0 0-.42-.726L12.497.131a1.01 1.01 0 0 0-.996 0M2.657 6.338h18.55c.263 0 .43.287.297.515L12.23 22.918c-.062.107-.229.064-.229-.06V12.335a.59.59 0 0 0-.295-.51l-9.11-5.257c-.109-.063-.064-.23.061-.23"/>
-            </svg>
-          </div>
-
+      <!-- Brand Logo -->
+      <a href="index.html" class="flex items-center gap-2 pl-0.5 group">
+        <div class="w-5 h-5 sm:w-[22px] sm:h-[22px] bg-black rounded-[5px] flex items-center justify-center text-white shrink-0 transition-transform group-hover:scale-105">
+          <svg class="w-3 h-3.5 sm:w-3 sm:h-3.5 fill-current" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 4h9c5.523 0 10 4.477 10 10s-4.477 10-10 10H4V4zm5.5 4.5v11h3.5c3.038 0 5.5-2.462 5.5-5.5s-2.462-5.5-5.5-5.5H9.5z"/>
+          </svg>
         </div>
+        <span class="font-bold text-[15.5px] sm:text-[16px] tracking-[-0.02em] text-black">DansUGC</span>
+      </a>
 
-        <!-- Text Content -->
-        <div>
-          <h3 class="text-[17.5px] sm:text-[19px] md:text-[20px] font-bold text-[#111827] tracking-[-0.025em] leading-[1.25]">
-            Use SideShift in your AI tool of choice.
-          </h3>
-          <p class="text-[13.5px] sm:text-[14.5px] text-[#6b7280] font-normal leading-[1.45] mt-1">
-            Connect your account to find creators, review results and manage campaigns from chat.
-          </p>
-        </div>
-
+      <!-- Center Nav Links -->
+      <div class="hidden md:flex items-center gap-6 lg:gap-7 text-[14px] text-[#374151] font-medium">
+        <a href="index.html#library" class="hover:text-black transition-colors">Library</a>
+        <a href="index.html#reelclaw" class="flex items-center gap-1.5 hover:text-black transition-colors">
+          <span>ReelClaw</span>
+          <span class="bg-[#e9ebff] text-[#5e54f3] text-[9.5px] font-bold px-1.5 py-[1px] rounded-full uppercase tracking-wider">NEW</span>
+        </a>
+        <a href="index.html#custom-orders" class="hover:text-black transition-colors">Custom orders</a>
+        <a href="pricing.html" class="hover:text-black transition-colors">Pricing</a>
+        <a href="index.html#results" class="hover:text-black transition-colors">Results</a>
       </div>
 
-      <!-- Right side: CTA Link -->
-      <div class="shrink-0 flex items-center self-start md:self-center pt-2 md:pt-0">
-        <a href="#learn-more" class="inline-flex items-center gap-1.5 text-[14px] sm:text-[15px] font-semibold text-[#111827] hover:text-black transition-colors group">
+      <!-- Right Buttons -->
+      <div class="flex items-center gap-3.5 sm:gap-4 pr-0.5">
+        <a href="index.html#login" class="text-[14px] text-[#222222] font-medium hover:text-black transition-colors px-1">Log in</a>
+        <a href="index.html#signup" class="bg-[#111111] hover:bg-black text-white text-[13px] sm:text-[13.5px] font-semibold pl-4 pr-3.5 py-1.5 sm:py-2 rounded-full flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]">
+          <span>Start free</span>
+          <svg class="w-3.5 h-3.5 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </a>
+      </div>
+
+    </nav>
+  </header>
+
+  <!-- 2. MAIN HERO SECTION (Scaled to match Landing Page Hero) -->
+  <main class="w-full max-w-[910px] mx-auto flex flex-col items-center text-center my-auto py-4 sm:py-8">
+    
+    <!-- Top Subtitle / Category Badge -->
+    <div class="text-[12px] sm:text-[13.5px] font-[500] text-[#61666e] tracking-[-0.01em] leading-none mb-5 sm:mb-6">
+      SideShift for AI · Beta
+    </div>
+
+    <!-- Main Headline -->
+    <h1 class="hero-heading text-[42px] sm:text-[54px] md:text-[62px] lg:text-[68px] max-w-4xl mx-auto mb-5 sm:mb-6">
+      <span class="block">
+        Scale your brand from
+      </span>
+      <span class="block mt-0.5 sm:mt-1">
+        your favorite AI assistant
+      </span>
+    </h1>
+
+    <!-- Description -->
+    <p class="text-[14.5px] sm:text-[16px] md:text-[17px] font-[400] text-[#555e6d] tracking-[-0.01em] leading-[1.55] max-w-[620px] mb-7 sm:mb-9">
+      Connect SideShift to the AI assistant you already use. Find creators, plan<br class="hidden sm:inline"> campaigns and review results in the same conversation.
+    </p>
+
+    <!-- Action Row (Button & Documentation Link) -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 mb-9 sm:mb-12">
+      
+      <!-- Primary Pill Button -->
+      <a href="index.html" class="btn-connect-pill inline-flex items-center justify-center gap-2 h-[42px] sm:h-[46px] px-6 sm:px-7 rounded-full text-white text-[13.5px] sm:text-[14.5px] font-bold tracking-[-0.02em] text-decoration-none">
+        <span>Connect your assistant</span>
+        <span class="text-[14px] leading-none -translate-y-[0.5px]">→</span>
+      </a>
+
+      <!-- Secondary Documentation Link -->
+      <a href="index.html" class="text-[13.5px] sm:text-[14.5px] font-[400] text-[#1f2328] underline decoration-[#8e95a5] underline-offset-[4px] decoration-1 hover:text-black tracking-[-0.005em] transition-colors py-1.5 px-2">
+        See documentation
+      </a>
+
+    </div>
+
+    <!-- Tool Logos Row -->
+    <div class="flex flex-wrap items-center justify-center gap-x-6 sm:gap-x-7 md:gap-x-8 gap-y-3 text-[#555e6d] text-[12.5px] sm:text-[14px] font-[450] tracking-[-0.005em] mb-4 sm:mb-5">
+      
+      <!-- Claude -->
+      <div class="flex items-center gap-2">
+        <svg class="w-[14px] h-[14px] sm:w-[15.5px] sm:h-[15.5px] shrink-0 text-[#555e6d]" viewBox="0 0 100 100" fill="currentColor">
+          <path d="m19.6 66.5 19.7-11 .3-1-.3-.5h-1l-3.3-.2-11.2-.3L14 53l-9.5-.5-2.4-.5L0 49l.2-1.5 2-1.3 2.9.2 6.3.5 9.5.6 6.9.4L38 49.1h1.6l.2-.7-.5-.4-.4-.4L29 41l-10.6-7-5.6-4.1-3-2-1.5-2-.6-4.2 2.7-3 3.7.3.9.2 3.7 2.9 8 6.1L37 36l1.5 1.2.6-.4.1-.3-.7-1.1L33 25l-6-10.4-2.7-4.3-.7-2.6c-.3-1-.4-2-.4-3l3-4.2L28 0l4.2.6L33.8 2l2.6 6 4.1 9.3L47 29.9l2 3.8 1 3.4.3 1h.7v-.5l.5-7.2 1-8.7 1-11.2.3-3.2 1.6-3.8 3-2L61 2.6l2 2.9-.3 1.8-1.1 7.7L59 27.1l-1.5 8.2h.9l1-1.1 4.1-5.4 6.9-8.6 3-3.5L77 13l2.3-1.8h4.3l3.1 4.7-1.4 4.9-4.4 5.6-3.7 4.7-5.3 7.1-3.2 5.7.3.4h.7l12-2.6 6.4-1.1 7.6-1.3 3.5 1.6.4 1.6-1.4 3.4-8.2 2-9.6 2-14.3 3.3-.2.1.2.3 6.4.6 2.8.2h6.8l12.6 1 3.3 2 1.9 2.7-.3 2-5.1 2.6-6.8-1.6-16-3.8-5.4-1.3h-.8v.4l4.6 4.5 8.3 7.5L89 80.1l.5 2.4-1.3 2-1.4-.2-9.2-7-3.6-3-8-6.8h-.5v.7l1.8 2.7 9.8 14.7.5 4.5-.7 1.4-2.6 1-2.7-.6-5.8-8-6-9-4.7-8.2-.5.4-2.9 30.2-1.3 1.5-3 1.2-2.5-2-1.4-3 1.4-6.2 1.6-8 1.3-6.4 1.2-7.9.7-2.6v-.2H49L43 72l-9 12.3-7.2 7.6-1.7.7-3-1.5.3-2.8L24 86l10-12.8 6-7.9 4-4.6-.1-.5h-.3L17.2 77.4l-4.7.6-2-2 .2-3 1-1 8-5.5Z"/>
+        </svg>
+        <span>Claude</span>
+      </div>
+
+      <!-- Cursor -->
+      <div class="flex items-center gap-2">
+        <svg class="w-[13px] h-[13px] sm:w-[14.5px] sm:h-[14.5px] shrink-0 text-[#555e6d]" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M11.503.131 1.891 5.678a.84.84 0 0 0-.42.726v11.188c0 .3.162.575.42.724l9.609 5.55a1 1 0 0 0 .998 0l9.61-5.55a.84.84 0 0 0 .42-.724V6.404a.84.84 0 0 0-.42-.726L12.497.131a1.01 1.01 0 0 0-.996 0M2.657 6.338h18.55c.263 0 .43.287.297.515L12.23 22.918c-.062.107-.229.064-.229-.06V12.335a.59.59 0 0 0-.295-.51l-9.11-5.257c-.109-.063-.064-.23.061-.23"/>
+        </svg>
+        <span>Cursor</span>
+      </div>
+
+      <!-- Codex -->
+      <div class="flex items-center gap-2">
+        <svg class="w-[14px] h-[14px] sm:w-[15.5px] sm:h-[15.5px] shrink-0 text-[#555e6d]" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/>
+        </svg>
+        <span>Codex</span>
+      </div>
+
+      <!-- VS Code -->
+      <div class="flex items-center gap-2">
+        <svg class="w-[14px] h-[14px] sm:w-[15.5px] sm:h-[15.5px] shrink-0 text-[#555e6d]" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L3.899 12 .326 15.26a1 1 0 0 0 .001 1.479L1.65 17.94a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.492 1.492 0 0 0 1.704.29l4.942-2.377A1.5 1.5 0 0 0 24 20.06V3.939a1.5 1.5 0 0 0-.85-1.352zm-5.146 14.861L10.826 12l7.178-5.448v10.896z"/>
+        </svg>
+        <span>VS Code</span>
+      </div>
+
+    </div>
+
+    <!-- Footer Note -->
+    <div class="text-[11.5px] sm:text-[13px] font-[400] text-[#71717a] tracking-[-0.01em] leading-none">
+      Your SideShift account. The access you choose.
+    </div>
+
+  </main>
+
+  <!-- ================= 3. FEATURES SECTION (PIXEL-PERFECT FINANCIAL SUCCESS COPY) ================= -->
+  <section class="w-full max-w-[910px] mx-auto flex flex-col items-center text-center pt-20 sm:pt-28 md:pt-32 pb-16 sm:pb-24 border-t border-[#f0f0f2]">
+    
+    <!-- 1. Top Pill Badge -->
+    <div class="inline-flex items-center gap-[5.5px] px-[13px] py-[3.5px] rounded-full bg-[#f4f4f6] border border-[#e2e2e7] shadow-[0_1px_1px_rgba(0,0,0,0.02)] mb-[24px]">
+      <!-- Blue 5-Point Star -->
+      <svg class="w-[9.5px] h-[9.5px] text-[#0d62fe] fill-current shrink-0" viewBox="0 0 24 24">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+      <span class="text-[10px] font-[600] tracking-[0.14em] text-[#3c4049] uppercase leading-none mt-[0.5px]">
+        FEATURES
+      </span>
+    </div>
+
+    <!-- 2. Main Title -->
+    <h2 class="hero-heading text-[38px] sm:text-[48px] md:text-[54px] lg:text-[58px] max-w-4xl mx-auto mb-5 sm:mb-6">
+      <span class="block">
+        Empowering and <span class="italic">strengthening</span>
+      </span>
+      <span class="block mt-0.5 sm:mt-1">
+        your financial success
+      </span>
+    </h2>
+
+    <!-- 3. Subtitle Description -->
+    <p class="font-sansBody text-[12px] sm:text-[13px] md:text-[13.5px] text-[#606773] font-normal leading-[1.5] max-w-[510px] mx-auto mb-[54px] sm:mb-[60px]">
+      Our platform provides advanced tools and insights to help you manage,<br class="hidden sm:inline">
+      grow, and secure your financial assets.
+    </p>
+
+    <!-- 4. Three Feature Columns -->
+    <div class="w-full max-w-[780px] grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-4 items-start justify-items-center mx-auto">
+      
+      <!-- Column 1: Intuitive user interface -->
+      <div class="w-full max-w-[235px] flex flex-col items-center text-center">
+        <!-- Circle Icon -->
+        <div class="w-[44px] h-[44px] rounded-full bg-[#f1f3f6] flex items-center justify-center mb-[20px] transition-transform hover:scale-105">
+          <svg class="w-[12.5px] h-[12.5px] text-[#0d62fe] fill-current" viewBox="0 0 24 24">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+        <!-- Title -->
+        <h3 class="font-serif text-[20px] sm:text-[21px] font-normal text-[#111111] leading-[1.2] mb-[7px]">
+          Intuitive user interface
+        </h3>
+        <!-- Description -->
+        <p class="font-sans text-[12px] sm:text-[12.5px] text-[#606773] font-normal leading-[1.45] max-w-[210px] mb-[18px]">
+          User-friendly design for effortless navigation and usability
+        </p>
+        <!-- Link -->
+        <a href="#" class="inline-flex items-center gap-[4px] font-sans text-[12px] sm:text-[12.5px] font-[450] text-[#111111] hover:text-black transition-colors group">
           <span>Learn more</span>
-          <span class="text-[17px] leading-none transition-transform group-hover:translate-x-0.5">→</span>
+          <span class="text-[11px] leading-none transition-transform group-hover:translate-x-[1.5px] group-hover:-translate-y-[1.5px]">↗</span>
+        </a>
+      </div>
+
+      <!-- Column 2: Automated processes -->
+      <div class="w-full max-w-[235px] flex flex-col items-center text-center">
+        <!-- Circle Icon -->
+        <div class="w-[44px] h-[44px] rounded-full bg-[#f1f3f6] flex items-center justify-center mb-[20px] transition-transform hover:scale-105">
+          <svg class="w-[12.5px] h-[12.5px] text-[#0d62fe] fill-current" viewBox="0 0 24 24">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+        <!-- Title -->
+        <h3 class="font-serif text-[20px] sm:text-[21px] font-normal text-[#111111] leading-[1.2] mb-[7px]">
+          Automated processes
+        </h3>
+        <!-- Description -->
+        <p class="font-sans text-[12px] sm:text-[12.5px] text-[#606773] font-normal leading-[1.45] max-w-[210px] mb-[18px]">
+          Streamlined workflows to increase efficiency and reduce manual tasks
+        </p>
+        <!-- Link -->
+        <a href="#" class="inline-flex items-center gap-[4px] font-sans text-[12px] sm:text-[12.5px] font-[450] text-[#111111] hover:text-black transition-colors group">
+          <span>Learn more</span>
+          <span class="text-[11px] leading-none transition-transform group-hover:translate-x-[1.5px] group-hover:-translate-y-[1.5px]">↗</span>
+        </a>
+      </div>
+
+      <!-- Column 3: Secure transactions -->
+      <div class="w-full max-w-[235px] flex flex-col items-center text-center">
+        <!-- Circle Icon -->
+        <div class="w-[44px] h-[44px] rounded-full bg-[#f1f3f6] flex items-center justify-center mb-[20px] transition-transform hover:scale-105">
+          <svg class="w-[12.5px] h-[12.5px] text-[#0d62fe] fill-current" viewBox="0 0 24 24">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+        <!-- Title -->
+        <h3 class="font-serif text-[20px] sm:text-[21px] font-normal text-[#111111] leading-[1.2] mb-[7px]">
+          Secure transactions
+        </h3>
+        <!-- Description -->
+        <p class="font-sans text-[12px] sm:text-[12.5px] text-[#606773] font-normal leading-[1.45] max-w-[210px] mb-[18px]">
+          Safeguard your purchases with encrypted transactions and fraud detection
+        </p>
+        <!-- Link -->
+        <a href="#" class="inline-flex items-center gap-[4px] font-sans text-[12px] sm:text-[12.5px] font-[450] text-[#111111] hover:text-black transition-colors group">
+          <span>Learn more</span>
+          <span class="text-[11px] leading-none transition-transform group-hover:translate-x-[1.5px] group-hover:-translate-y-[1.5px]">↗</span>
         </a>
       </div>
 
     </div>
 
   </section>
+
+  <!-- 4. Simple Footer Space -->
+  <footer class="w-full max-w-[910px] text-center pt-8 text-[12px] text-[#9ca3af]">
+    © DansUGC · All rights reserved.
+  </footer>
 
 </body>
 </html>
