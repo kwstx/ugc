@@ -306,10 +306,302 @@
 
   </section>
 
-  <!-- 4. Simple Footer Space -->
+  <!-- ================= 4. START WITH THE ASSISTANT YOU USE SECTION (PIXEL-PERFECT COPY) ================= -->
+  <section class="w-full max-w-[920px] mx-auto flex flex-col items-center text-center pt-16 sm:pt-24 md:pt-28 pb-20 sm:pb-28 border-t border-[#f0f0f2] relative">
+    
+    <!-- Section Heading -->
+    <h2 class="text-[32px] sm:text-[40px] md:text-[44px] font-bold text-[#111827] tracking-[-0.03em] leading-[1.15] mb-2.5 sm:mb-3">
+      Start with the assistant you use.
+    </h2>
+
+    <!-- Section Subtitle -->
+    <p class="text-[14.5px] sm:text-[15.5px] text-[#64748b] font-normal leading-relaxed max-w-[560px] mb-8 sm:mb-10">
+      Choose your assistant. Add SideShift. You’re ready to ask.
+    </p>
+
+    <!-- Main Container Card -->
+    <div class="w-full bg-white border border-[#e5e7eb] rounded-[24px] sm:rounded-[28px] shadow-[0_4px_24px_rgba(0,0,0,0.03),0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden text-left transition-all">
+      
+      <!-- Top Assistant Switcher Bar -->
+      <div class="bg-[#f8fafc] border-b border-[#edf0f4] px-6 sm:px-8 pt-5 pb-5">
+        <span class="text-[12px] font-medium text-[#64748b] tracking-[-0.01em] block mb-3">
+          Your assistant
+        </span>
+
+        <!-- Tab List -->
+        <div class="flex items-center justify-between gap-2 overflow-x-auto no-scrollbar pb-0.5" id="assistantTabs">
+          
+          <!-- 1. Claude Code -->
+          <button 
+            type="button"
+            onclick="switchAssistant('claude-code')" 
+            id="tab-claude-code"
+            class="tab-btn flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-[12px] text-[13.5px] sm:text-[14px] font-medium text-[#475569] hover:text-[#0f172a] hover:bg-white/60 transition-all cursor-pointer whitespace-nowrap"
+          >
+            <svg class="w-4 h-4 text-[#334155] shrink-0" viewBox="0 0 100 100" fill="currentColor">
+              <path d="m19.6 66.5 19.7-11 .3-1-.3-.5h-1l-3.3-.2-11.2-.3L14 53l-9.5-.5-2.4-.5L0 49l.2-1.5 2-1.3 2.9.2 6.3.5 9.5.6 6.9.4L38 49.1h1.6l.2-.7-.5-.4-.4-.4L29 41l-10.6-7-5.6-4.1-3-2-1.5-2-.6-4.2 2.7-3 3.7.3.9.2 3.7 2.9 8 6.1L37 36l1.5 1.2.6-.4.1-.3-.7-1.1L33 25l-6-10.4-2.7-4.3-.7-2.6c-.3-1-.4-2-.4-3l3-4.2L28 0l4.2.6L33.8 2l2.6 6 4.1 9.3L47 29.9l2 3.8 1 3.4.3 1h.7v-.5l.5-7.2 1-8.7 1-11.2.3-3.2 1.6-3.8 3-2L61 2.6l2 2.9-.3 1.8-1.1 7.7L59 27.1l-1.5 8.2h.9l1-1.1 4.1-5.4 6.9-8.6 3-3.5L77 13l2.3-1.8h4.3l3.1 4.7-1.4 4.9-4.4 5.6-3.7 4.7-5.3 7.1-3.2 5.7.3.4h.7l12-2.6 6.4-1.1 7.6-1.3 3.5 1.6.4 1.6-1.4 3.4-8.2 2-9.6 2-14.3 3.3-.2.1.2.3 6.4.6 2.8.2h6.8l12.6 1 3.3 2 1.9 2.7-.3 2-5.1 2.6-6.8-1.6-16-3.8-5.4-1.3h-.8v.4l4.6 4.5 8.3 7.5L89 80.1l.5 2.4-1.3 2-1.4-.2-9.2-7-3.6-3-8-6.8h-.5v.7l1.8 2.7 9.8 14.7.5 4.5-.7 1.4-2.6 1-2.7-.6-5.8-8-6-9-4.7-8.2-.5.4-2.9 30.2-1.3 1.5-3 1.2-2.5-2-1.4-3 1.4-6.2 1.6-8 1.3-6.4 1.2-7.9.7-2.6v-.2H49L43 72l-9 12.3-7.2 7.6-1.7.7-3-1.5.3-2.8L24 86l10-12.8 6-7.9 4-4.6-.1-.5h-.3L17.2 77.4l-4.7.6-2-2 .2-3 1-1 8-5.5Z"/>
+            </svg>
+            <span>Claude Code</span>
+            <span class="tab-check hidden"><svg class="w-3.5 h-3.5 text-[#475569]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span>
+          </button>
+
+          <!-- 2. Claude Desktop -->
+          <button 
+            type="button"
+            onclick="switchAssistant('claude-desktop')" 
+            id="tab-claude-desktop"
+            class="tab-btn flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-[12px] text-[13.5px] sm:text-[14px] font-medium text-[#475569] hover:text-[#0f172a] hover:bg-white/60 transition-all cursor-pointer whitespace-nowrap"
+          >
+            <svg class="w-4 h-4 text-[#334155] shrink-0" viewBox="0 0 100 100" fill="currentColor">
+              <path d="m19.6 66.5 19.7-11 .3-1-.3-.5h-1l-3.3-.2-11.2-.3L14 53l-9.5-.5-2.4-.5L0 49l.2-1.5 2-1.3 2.9.2 6.3.5 9.5.6 6.9.4L38 49.1h1.6l.2-.7-.5-.4-.4-.4L29 41l-10.6-7-5.6-4.1-3-2-1.5-2-.6-4.2 2.7-3 3.7.3.9.2 3.7 2.9 8 6.1L37 36l1.5 1.2.6-.4.1-.3-.7-1.1L33 25l-6-10.4-2.7-4.3-.7-2.6c-.3-1-.4-2-.4-3l3-4.2L28 0l4.2.6L33.8 2l2.6 6 4.1 9.3L47 29.9l2 3.8 1 3.4.3 1h.7v-.5l.5-7.2 1-8.7 1-11.2.3-3.2 1.6-3.8 3-2L61 2.6l2 2.9-.3 1.8-1.1 7.7L59 27.1l-1.5 8.2h.9l1-1.1 4.1-5.4 6.9-8.6 3-3.5L77 13l2.3-1.8h4.3l3.1 4.7-1.4 4.9-4.4 5.6-3.7 4.7-5.3 7.1-3.2 5.7.3.4h.7l12-2.6 6.4-1.1 7.6-1.3 3.5 1.6.4 1.6-1.4 3.4-8.2 2-9.6 2-14.3 3.3-.2.1.2.3 6.4.6 2.8.2h6.8l12.6 1 3.3 2 1.9 2.7-.3 2-5.1 2.6-6.8-1.6-16-3.8-5.4-1.3h-.8v.4l4.6 4.5 8.3 7.5L89 80.1l.5 2.4-1.3 2-1.4-.2-9.2-7-3.6-3-8-6.8h-.5v.7l1.8 2.7 9.8 14.7.5 4.5-.7 1.4-2.6 1-2.7-.6-5.8-8-6-9-4.7-8.2-.5.4-2.9 30.2-1.3 1.5-3 1.2-2.5-2-1.4-3 1.4-6.2 1.6-8 1.3-6.4 1.2-7.9.7-2.6v-.2H49L43 72l-9 12.3-7.2 7.6-1.7.7-3-1.5.3-2.8L24 86l10-12.8 6-7.9 4-4.6-.1-.5h-.3L17.2 77.4l-4.7.6-2-2 .2-3 1-1 8-5.5Z"/>
+            </svg>
+            <span>Claude Desktop</span>
+            <span class="tab-check hidden"><svg class="w-3.5 h-3.5 text-[#475569]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span>
+          </button>
+
+          <!-- 3. Cursor -->
+          <button 
+            type="button"
+            onclick="switchAssistant('cursor')" 
+            id="tab-cursor"
+            class="tab-btn flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-[12px] text-[13.5px] sm:text-[14px] font-medium text-[#475569] hover:text-[#0f172a] hover:bg-white/60 transition-all cursor-pointer whitespace-nowrap"
+          >
+            <svg class="w-4 h-4 text-[#334155] shrink-0" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11.503.131 1.891 5.678a.84.84 0 0 0-.42.726v11.188c0 .3.162.575.42.724l9.609 5.55a1 1 0 0 0 .998 0l9.61-5.55a.84.84 0 0 0 .42-.724V6.404a.84.84 0 0 0-.42-.726L12.497.131a1.01 1.01 0 0 0-.996 0M2.657 6.338h18.55c.263 0 .43.287.297.515L12.23 22.918c-.062.107-.229.064-.229-.06V12.335a.59.59 0 0 0-.295-.51l-9.11-5.257c-.109-.063-.064-.23.061-.23"/>
+            </svg>
+            <span>Cursor</span>
+            <span class="tab-check hidden"><svg class="w-3.5 h-3.5 text-[#475569]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span>
+          </button>
+
+          <!-- 4. Codex (Active Default) -->
+          <button 
+            type="button"
+            onclick="switchAssistant('codex')" 
+            id="tab-codex"
+            class="tab-btn flex items-center gap-2.5 px-4 sm:px-5 py-2.5 rounded-[14px] bg-white border border-[#e2e8f0] shadow-[0_1px_3px_rgba(0,0,0,0.06),0_1px_2px_rgba(0,0,0,0.03)] text-[13.5px] sm:text-[14px] font-semibold text-[#0f172a] transition-all cursor-pointer whitespace-nowrap"
+          >
+            <svg class="w-4 h-4 text-[#0f172a] shrink-0" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/>
+            </svg>
+            <span>Codex</span>
+            <span class="tab-check"><svg class="w-3.5 h-3.5 text-[#475569]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span>
+          </button>
+
+          <!-- 5. VS Code -->
+          <button 
+            type="button"
+            onclick="switchAssistant('vscode')" 
+            id="tab-vscode"
+            class="tab-btn flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-[12px] text-[13.5px] sm:text-[14px] font-medium text-[#475569] hover:text-[#0f172a] hover:bg-white/60 transition-all cursor-pointer whitespace-nowrap"
+          >
+            <svg class="w-4 h-4 text-[#334155] shrink-0" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L3.899 12 .326 15.26a1 1 0 0 0 .001 1.479L1.65 17.94a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.492 1.492 0 0 0 1.704.29l4.942-2.377A1.5 1.5 0 0 0 24 20.06V3.939a1.5 1.5 0 0 0-.85-1.352zm-5.146 14.861L10.826 12l7.178-5.448v10.896z"/>
+            </svg>
+            <span>VS Code</span>
+            <span class="tab-check hidden"><svg class="w-3.5 h-3.5 text-[#475569]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Card Inner Body Content -->
+      <div class="p-6 sm:p-9 md:p-10">
+        
+        <!-- Assistant Title -->
+        <h3 id="assistantTitle" class="text-[22px] sm:text-[25px] font-bold text-[#111827] tracking-[-0.025em] mb-1.5">
+          Add SideShift to Codex
+        </h3>
+
+        <!-- Assistant Subtitle -->
+        <p id="assistantDesc" class="text-[14px] sm:text-[15px] text-[#64748b] font-normal leading-relaxed mb-6 sm:mb-7">
+          Add the server, then sign in to SideShift in the browser window that opens.
+        </p>
+
+        <!-- Terminal Box Container -->
+        <div class="bg-[#f8fafc] border border-[#e2e8f0] rounded-[16px] sm:rounded-[18px] p-4 sm:p-5 mb-4">
+          
+          <!-- Terminal Header -->
+          <div class="flex items-center justify-between mb-3.5 sm:mb-4">
+            <span class="text-[12.5px] font-mono font-medium text-[#64748b]">
+              Terminal
+            </span>
+            
+            <!-- Copy setup button -->
+            <button 
+              type="button"
+              onclick="copyTerminalSetup()" 
+              id="copySetupBtn"
+              class="bg-white hover:bg-slate-50 active:bg-slate-100 border border-[#e2e8f0] rounded-[9px] px-3 py-1.5 text-[12px] font-medium text-[#334155] shadow-[0_1px_2px_rgba(0,0,0,0.04)] flex items-center gap-1.5 transition-all cursor-pointer"
+            >
+              <svg id="copyIcon" class="w-3.5 h-3.5 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+              </svg>
+              <span id="copyText">Copy setup</span>
+            </button>
+          </div>
+
+          <!-- Terminal Commands Content -->
+          <div id="terminalCode" class="font-mono text-[12.5px] sm:text-[13.5px] text-[#1e293b] leading-[1.8] sm:leading-[1.9] select-all overflow-x-auto whitespace-pre">codex mcp add sideshift --url https://app.sideshift.app/api/mcp
+codex mcp login sideshift</div>
+        </div>
+
+        <!-- Helper Prompt text -->
+        <p id="helperPromptText" class="text-[13.5px] sm:text-[14px] text-[#64748b] font-normal mb-8 sm:mb-10">
+          Sign in with your SideShift account when prompted.
+        </p>
+
+        <!-- Try your first request Subsection -->
+        <div class="pt-2">
+          <h4 class="text-[16px] sm:text-[17px] font-bold text-[#111827] tracking-[-0.015em] mb-1">
+            Try your first request
+          </h4>
+          <p id="firstRequestDesc" class="text-[13.5px] sm:text-[14px] text-[#64748b] font-normal mb-3.5">
+            Once connected, paste this into Codex.
+          </p>
+
+          <!-- Prompt Box -->
+          <div class="bg-[#f8fafc] border border-[#e2e8f0] rounded-[14px] p-3.5 sm:p-4 flex items-center justify-between gap-3">
+            <span id="promptExample" class="font-mono text-[12.5px] sm:text-[13px] text-[#334155] select-all truncate sm:whitespace-normal">Find 5 authentic creator reaction clips for a fintech mobile app launching on TikTok.</span>
+            <button 
+              type="button"
+              onclick="copyPrompt()" 
+              id="copyPromptBtn"
+              class="shrink-0 bg-white hover:bg-slate-50 border border-[#e2e8f0] rounded-[8px] px-2.5 py-1 text-[11.5px] font-medium text-[#334155] shadow-sm flex items-center gap-1 transition-all cursor-pointer"
+            >
+              <svg class="w-3 h-3 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+              </svg>
+              <span id="copyPromptText">Copy</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- 5. Simple Footer Space -->
   <footer class="w-full max-w-[910px] text-center pt-8 text-[12px] text-[#9ca3af]">
     © DansUGC · All rights reserved.
   </footer>
 
+  <!-- Floating Calendar Action Button (Bottom Right) -->
+  <div class="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50">
+    <button 
+      type="button"
+      onclick="alert('Booking calendar is opening...')"
+      class="w-[48px] h-[48px] rounded-full bg-[#111827] hover:bg-black text-white flex items-center justify-center shadow-[0_8px_24px_rgba(0,0,0,0.25)] hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+      aria-label="Book a call"
+      title="Book a call"
+    >
+      <svg class="w-5 h-5 fill-none stroke-current stroke-[2]" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+    </button>
+  </div>
+
+  <script>
+    const assistantData = {
+      'claude-code': {
+        title: 'Add SideShift to Claude Code',
+        desc: 'Add the server, then sign in to SideShift in the browser window that opens.',
+        terminal: 'claude mcp add sideshift --url https://app.sideshift.app/api/mcp\\nclaude mcp login sideshift',
+        helper: 'Sign in with your SideShift account when prompted.',
+        firstReq: 'Once connected, paste this into Claude Code.',
+        prompt: 'Find 5 authentic creator reaction clips for a fintech mobile app launching on TikTok.'
+      },
+      'claude-desktop': {
+        title: 'Add SideShift to Claude Desktop',
+        desc: 'Add the server configuration to your Claude Desktop config file.',
+        terminal: 'claude desktop mcp add sideshift --url https://app.sideshift.app/api/mcp',
+        helper: 'Restart Claude Desktop to activate the SideShift tools.',
+        firstReq: 'Once connected, paste this into Claude Desktop.',
+        prompt: 'Find 5 authentic creator reaction clips for a fintech mobile app launching on TikTok.'
+      },
+      'cursor': {
+        title: 'Add SideShift to Cursor',
+        desc: 'Add SideShift MCP server in Cursor Settings → Features → MCP.',
+        terminal: 'cursor mcp add sideshift --url https://app.sideshift.app/api/mcp',
+        helper: 'Save settings and authenticate with your SideShift account.',
+        firstReq: 'Once connected, paste this into Cursor.',
+        prompt: 'Find 5 authentic creator reaction clips for a fintech mobile app launching on TikTok.'
+      },
+      'codex': {
+        title: 'Add SideShift to Codex',
+        desc: 'Add the server, then sign in to SideShift in the browser window that opens.',
+        terminal: 'codex mcp add sideshift --url https://app.sideshift.app/api/mcp\\ncodex mcp login sideshift',
+        helper: 'Sign in with your SideShift account when prompted.',
+        firstReq: 'Once connected, paste this into Codex.',
+        prompt: 'Find 5 authentic creator reaction clips for a fintech mobile app launching on TikTok.'
+      },
+      'vscode': {
+        title: 'Add SideShift to VS Code',
+        desc: 'Add the SideShift extension or MCP server to VS Code.',
+        terminal: 'code --install-extension sideshift.sideshift-mcp\\ncode mcp add sideshift --url https://app.sideshift.app/api/mcp',
+        helper: 'Sign in with your SideShift account when prompted.',
+        firstReq: 'Once connected, paste this into VS Code.',
+        prompt: 'Find 5 authentic creator reaction clips for a fintech mobile app launching on TikTok.'
+      }
+    };
+
+    let currentAssistant = 'codex';
+
+    function switchAssistant(id) {
+      currentAssistant = id;
+      const data = assistantData[id];
+      if (!data) return;
+
+      document.getElementById('assistantTitle').textContent = data.title;
+      document.getElementById('assistantDesc').textContent = data.desc;
+      document.getElementById('terminalCode').textContent = data.terminal.replace(/\\\\n/g, '\\n');
+      document.getElementById('helperPromptText').textContent = data.helper;
+      document.getElementById('firstRequestDesc').textContent = data.firstReq;
+      document.getElementById('promptExample').textContent = data.prompt;
+
+      document.getElementById('copyText').textContent = 'Copy setup';
+
+      const tabs = ['claude-code', 'claude-desktop', 'cursor', 'codex', 'vscode'];
+      tabs.forEach(t => {
+        const btn = document.getElementById('tab-' + t);
+        const check = btn.querySelector('.tab-check');
+        if (t === id) {
+          btn.className = 'tab-btn flex items-center gap-2.5 px-4 sm:px-5 py-2.5 rounded-[14px] bg-white border border-[#e2e8f0] shadow-[0_1px_3px_rgba(0,0,0,0.06),0_1px_2px_rgba(0,0,0,0.03)] text-[13.5px] sm:text-[14px] font-semibold text-[#0f172a] transition-all cursor-pointer whitespace-nowrap';
+          if (check) check.classList.remove('hidden');
+        } else {
+          btn.className = 'tab-btn flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-[12px] text-[13.5px] sm:text-[14px] font-medium text-[#475569] hover:text-[#0f172a] hover:bg-white/60 transition-all cursor-pointer whitespace-nowrap';
+          if (check) check.classList.add('hidden');
+        }
+      });
+    }
+
+    function copyTerminalSetup() {
+      const code = document.getElementById('terminalCode').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        const text = document.getElementById('copyText');
+        text.textContent = 'Copied!';
+        setTimeout(() => {
+          text.textContent = 'Copy setup';
+        }, 2000);
+      });
+    }
+
+    function copyPrompt() {
+      const promptText = document.getElementById('promptExample').textContent.trim();
+      navigator.clipboard.writeText(promptText).then(() => {
+        const text = document.getElementById('copyPromptText');
+        text.textContent = 'Copied!';
+        setTimeout(() => {
+          text.textContent = 'Copy';
+        }, 2000);
+      });
+    }
+  </script>
 </body>
 </html>
