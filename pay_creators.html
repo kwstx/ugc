@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>05 Pay creators · DansUGC</title>
+  <title>04 Pay creators · DansUGC</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -47,10 +47,61 @@
       margin: 0 auto;
     }
 
-    /* ================= LEFT CONTENT SECTION ================= */
-    .left-content {
+    /* ================= LEFT VISUAL SECTION ================= */
+    .left-visual-container {
       position: absolute;
-      left: 135px;
+      left: 104px;
+      top: 0;
+      width: 420px;
+      height: 310px;
+      z-index: 10;
+    }
+
+    /* Background Grid Pattern */
+    .grid-pattern {
+      position: absolute;
+      top: 15px;
+      left: 10px;
+      width: 380px;
+      height: 280px;
+      background-image: 
+        linear-gradient(to right, rgba(216, 226, 238, 0.45) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(216, 226, 238, 0.45) 1px, transparent 1px);
+      background-size: 22.5px 22.5px;
+      background-position: 0px 0px;
+      mask-image: radial-gradient(circle at 50% 50%, black 28%, transparent 80%);
+      -webkit-mask-image: radial-gradient(circle at 50% 50%, black 28%, transparent 80%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Soft Ambient Glow behind Cards */
+    .ambient-glow {
+      position: absolute;
+      top: 30px;
+      left: 20px;
+      width: 340px;
+      height: 250px;
+      background: radial-gradient(circle at 50% 50%, rgba(225, 239, 255, 0.85) 0%, rgba(240, 247, 255, 0.35) 55%, transparent 75%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Payout Cards Stack */
+    .cards-stack {
+      position: absolute;
+      left: 33px;
+      top: 61px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    /* ================= RIGHT CONTENT SECTION ================= */
+    .right-content {
+      position: absolute;
+      left: 540px;
       top: 0;
       width: 380px;
       height: 310px;
@@ -61,7 +112,7 @@
       z-index: 10;
     }
 
-    /* 05 Pay creators -> */
+    /* 04 Pay creators -> */
     .tag-text {
       position: absolute;
       left: 0;
@@ -115,57 +166,6 @@
       letter-spacing: -0.01em;
       max-width: 310px;
       user-select: none;
-    }
-
-    /* ================= RIGHT VISUAL SECTION ================= */
-    .right-visual-container {
-      position: absolute;
-      left: 500px;
-      top: 0;
-      width: 420px;
-      height: 310px;
-      z-index: 10;
-    }
-
-    /* Background Grid Pattern */
-    .grid-pattern {
-      position: absolute;
-      top: 15px;
-      left: 10px;
-      width: 380px;
-      height: 280px;
-      background-image: 
-        linear-gradient(to right, rgba(216, 226, 238, 0.45) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(216, 226, 238, 0.45) 1px, transparent 1px);
-      background-size: 22.5px 22.5px;
-      background-position: 0px 0px;
-      mask-image: radial-gradient(circle at 60% 50%, black 28%, transparent 80%);
-      -webkit-mask-image: radial-gradient(circle at 60% 50%, black 28%, transparent 80%);
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* Soft Ambient Glow behind Cards */
-    .ambient-glow {
-      position: absolute;
-      top: 30px;
-      left: 20px;
-      width: 340px;
-      height: 250px;
-      background: radial-gradient(circle at 55% 45%, rgba(225, 239, 255, 0.85) 0%, rgba(240, 247, 255, 0.35) 55%, transparent 75%);
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* Payout Cards Stack */
-    .cards-stack {
-      position: absolute;
-      left: 33px;
-      top: 61px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      z-index: 10;
     }
 
     .payout-card {
@@ -264,30 +264,8 @@
   <!-- Viewport Canvas (1024x310 reference) -->
   <div class="viewport-canvas">
     
-    <!-- LEFT CONTENT: Tag, Headline, Paragraph -->
-    <div class="left-content">
-      
-      <!-- Tag -->
-      <div class="tag-text">
-        <span>05</span>
-        <span>Pay creators</span>
-        <span class="tag-arrow">&rarr;</span>
-      </div>
-
-      <!-- Main Headline -->
-      <h2 class="headline-text">
-        Pay your creators<br>in one click
-      </h2>
-
-      <!-- Description Body -->
-      <p class="paragraph-text">
-        Handle approvals, contracts, and creator payouts from<br>one protected platform.
-      </p>
-
-    </div>
-
-    <!-- RIGHT VISUAL: Grid, Glow, 3 Creator Payout Cards -->
-    <div class="right-visual-container">
+    <!-- LEFT VISUAL: Grid, Glow, 3 Creator Payout Cards -->
+    <div class="left-visual-container">
       
       <!-- Background Grid & Glow -->
       <div class="grid-pattern"></div>
@@ -345,6 +323,28 @@
         </div>
 
       </div>
+
+    </div>
+
+    <!-- RIGHT CONTENT: Tag, Headline, Paragraph -->
+    <div class="right-content">
+      
+      <!-- Tag -->
+      <div class="tag-text">
+        <span>04</span>
+        <span>Pay creators</span>
+        <span class="tag-arrow">&rarr;</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h2 class="headline-text">
+        Pay your creators<br>in one click
+      </h2>
+
+      <!-- Description Body -->
+      <p class="paragraph-text">
+        Handle approvals, contracts, and creator payouts from<br>one protected platform.
+      </p>
 
     </div>
 
