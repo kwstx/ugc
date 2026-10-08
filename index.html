@@ -136,6 +136,69 @@
       }
     }
 
+    /* Pay Creators Cards Entrance Animation (Top to Bottom) */
+    .payout-card-anim {
+      opacity: 0;
+      transform: translateY(22px) scale(0.96);
+      transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .pay-creators-active .payout-card-anim:nth-child(1) {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transition-delay: 0.12s;
+    }
+
+    .pay-creators-active .payout-card-anim:nth-child(2) {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transition-delay: 0.38s;
+    }
+
+    .pay-creators-active .payout-card-anim:nth-child(3) {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transition-delay: 0.64s;
+    }
+
+    /* Paid badge pop animation */
+    .paid-badge-anim {
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      will-change: opacity, transform;
+    }
+
+    .pay-creators-active .payout-card-anim:nth-child(1) .paid-badge-anim {
+      opacity: 1;
+      transform: scale(1);
+      transition-delay: 0.28s;
+    }
+
+    .pay-creators-active .payout-card-anim:nth-child(2) .paid-badge-anim {
+      opacity: 1;
+      transform: scale(1);
+      transition-delay: 0.54s;
+    }
+
+    .pay-creators-active .payout-card-anim:nth-child(3) .paid-badge-anim {
+      opacity: 1;
+      transform: scale(1);
+      transition-delay: 0.80s;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .payout-card-anim,
+      .paid-badge-anim {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+
     /* Blue blinking cursor */
     @keyframes cursorBlink {
       0%, 100% { opacity: 1; }
@@ -748,12 +811,12 @@
         <div class="relative flex flex-col gap-2.5 sm:gap-3 w-full max-w-[340px] z-10">
           
           <!-- 1. Maya C. -->
-          <div class="w-full h-[58px] sm:h-[62px] bg-white rounded-[20px] border border-[#eaecf0] shadow-[0_4px_16px_-2px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] flex items-center justify-between px-5 sm:px-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-2px_rgba(0,0,0,0.08)] cursor-pointer">
+          <div class="payout-card-anim w-full h-[58px] sm:h-[62px] bg-white rounded-[20px] border border-[#eaecf0] shadow-[0_4px_16px_-2px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] flex items-center justify-between px-5 sm:px-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-2px_rgba(0,0,0,0.08)] cursor-pointer">
             <div class="flex flex-col items-start">
               <span class="text-[13.5px] font-semibold text-[#0f172a] tracking-[-0.01em] leading-tight">Maya C.</span>
               <span class="text-[11px] font-normal text-[#64748b] tracking-[-0.01em] leading-tight mt-0.5">$182.49</span>
             </div>
-            <div class="inline-flex items-center gap-1.5 bg-[#22c55e] text-white rounded-full h-[22px] px-2.5 shadow-[0_1px_2px_rgba(34,197,94,0.2)]">
+            <div class="paid-badge-anim inline-flex items-center gap-1.5 bg-[#22c55e] text-white rounded-full h-[22px] px-2.5 shadow-[0_1px_2px_rgba(34,197,94,0.2)]">
               <div class="w-[11px] h-[11px] rounded-full bg-white flex items-center justify-center text-[#22c55e] shrink-0">
                 <svg class="w-[7px] h-[7px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="20 6 9 17 4 12"></polyline>
@@ -764,12 +827,12 @@
           </div>
 
           <!-- 2. Robert V. -->
-          <div class="w-full h-[58px] sm:h-[62px] bg-white rounded-[20px] border border-[#eaecf0] shadow-[0_4px_16px_-2px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] flex items-center justify-between px-5 sm:px-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-2px_rgba(0,0,0,0.08)] cursor-pointer">
+          <div class="payout-card-anim w-full h-[58px] sm:h-[62px] bg-white rounded-[20px] border border-[#eaecf0] shadow-[0_4px_16px_-2px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] flex items-center justify-between px-5 sm:px-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-2px_rgba(0,0,0,0.08)] cursor-pointer">
             <div class="flex flex-col items-start">
               <span class="text-[13.5px] font-semibold text-[#0f172a] tracking-[-0.01em] leading-tight">Robert V.</span>
               <span class="text-[11px] font-normal text-[#64748b] tracking-[-0.01em] leading-tight mt-0.5">$2,981.18</span>
             </div>
-            <div class="inline-flex items-center gap-1.5 bg-[#22c55e] text-white rounded-full h-[22px] px-2.5 shadow-[0_1px_2px_rgba(34,197,94,0.2)]">
+            <div class="paid-badge-anim inline-flex items-center gap-1.5 bg-[#22c55e] text-white rounded-full h-[22px] px-2.5 shadow-[0_1px_2px_rgba(34,197,94,0.2)]">
               <div class="w-[11px] h-[11px] rounded-full bg-white flex items-center justify-center text-[#22c55e] shrink-0">
                 <svg class="w-[7px] h-[7px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="20 6 9 17 4 12"></polyline>
@@ -780,12 +843,12 @@
           </div>
 
           <!-- 3. Sarah L. -->
-          <div class="w-full h-[58px] sm:h-[62px] bg-white rounded-[20px] border border-[#eaecf0] shadow-[0_4px_16px_-2px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] flex items-center justify-between px-5 sm:px-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-2px_rgba(0,0,0,0.08)] cursor-pointer">
+          <div class="payout-card-anim w-full h-[58px] sm:h-[62px] bg-white rounded-[20px] border border-[#eaecf0] shadow-[0_4px_16px_-2px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] flex items-center justify-between px-5 sm:px-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-2px_rgba(0,0,0,0.08)] cursor-pointer">
             <div class="flex flex-col items-start">
               <span class="text-[13.5px] font-semibold text-[#0f172a] tracking-[-0.01em] leading-tight">Sarah L.</span>
               <span class="text-[11px] font-normal text-[#64748b] tracking-[-0.01em] leading-tight mt-0.5">$182.49</span>
             </div>
-            <div class="inline-flex items-center gap-1.5 bg-[#22c55e] text-white rounded-full h-[22px] px-2.5 shadow-[0_1px_2px_rgba(34,197,94,0.2)]">
+            <div class="paid-badge-anim inline-flex items-center gap-1.5 bg-[#22c55e] text-white rounded-full h-[22px] px-2.5 shadow-[0_1px_2px_rgba(34,197,94,0.2)]">
               <div class="w-[11px] h-[11px] rounded-full bg-white flex items-center justify-center text-[#22c55e] shrink-0">
                 <svg class="w-[7px] h-[7px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="20 6 9 17 4 12"></polyline>
@@ -1978,6 +2041,32 @@
       document.addEventListener('DOMContentLoaded', initStatementLetterReveal);
     } else {
       initStatementLetterReveal();
+    }
+
+    // Pay Creators Section Cards Reveal Animation (Top to Bottom)
+    function initPayCreatorsAnimation() {
+      const section = document.getElementById('payCreatorsSection');
+      if (!section) return;
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              section.classList.add('pay-creators-active');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        observer.observe(section);
+      } else {
+        section.classList.add('pay-creators-active');
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initPayCreatorsAnimation);
+    } else {
+      initPayCreatorsAnimation();
     }
   </script>
 
