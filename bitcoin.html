@@ -52,6 +52,33 @@
       text-align: center;
       user-select: none;
     }
+
+    /* Statement Section Letter Reveal Animation */
+    .char-reveal {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(10px) scale(0.96);
+      filter: blur(4px);
+      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                  filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform, filter;
+    }
+
+    .reveal-active .char-reveal {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .char-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        transition: none !important;
+      }
+    }
   </style>
 </head>
 <body class="bg-white flex flex-col items-center">
@@ -59,9 +86,9 @@
   <!-- ================= 1. STATEMENT HERO ================= -->
   <section class="w-full bg-white py-20 sm:py-28 md:py-32 px-4 sm:px-6 text-center select-none flex flex-col items-center justify-center">
     <div class="max-w-[1200px] w-full mx-auto flex flex-col items-center justify-center text-center">
-      <h1 class="hero-heading text-[24px] sm:text-[34px] md:text-[44px] lg:text-[52px] w-full text-center flex flex-col items-center justify-center">
-        <span class="block w-full text-center text-[#111111] whitespace-normal md:whitespace-nowrap">Everything you need to make people stop scrolling.</span>
-        <span class="block w-full text-center text-[#111111]/50 whitespace-normal md:whitespace-nowrap mt-1 sm:mt-1.5">Nothing you need to fake.</span>
+      <h1 id="statementHeading" class="hero-heading text-[24px] sm:text-[34px] md:text-[44px] lg:text-[52px] w-full text-center flex flex-col items-center justify-center">
+        <span class="statement-line block w-full text-center text-[#111111] whitespace-normal md:whitespace-nowrap">Everything you need to make people stop scrolling.</span>
+        <span class="statement-line block w-full text-center text-[#111111]/50 whitespace-normal md:whitespace-nowrap mt-1 sm:mt-1.5">Nothing you need to fake.</span>
       </h1>
     </div>
   </section>
@@ -828,6 +855,76 @@
         if (scalePrice) scalePrice.textContent = '$2,980';
         if (scaleSubtext) scaleSubtext.textContent = 'Billed monthly · cancel anytime';
       }
+    }
+
+    // Statement Section Letter Reveal Animation
+    function initStatementLetterReveal() {
+      const container = document.getElementById('statementHeading');
+      if (!container) return;
+
+      const lines = container.querySelectorAll('.statement-line');
+      if (!lines.length) return;
+
+      let globalIndex = 0;
+      const charDelay = 22; // ms per letter
+      const linePause = 80; // ms pause between lines
+
+      lines.forEach((line, lineIdx) => {
+        const text = line.textContent.trim();
+        line.setAttribute('aria-label', text);
+        line.innerHTML = '';
+
+        if (lineIdx > 0) {
+          globalIndex += Math.round(linePause / charDelay);
+        }
+
+        const words = text.split(/\s+/);
+        words.forEach((word, wordIdx) => {
+          const wordSpan = document.createElement('span');
+          wordSpan.className = 'inline-block whitespace-nowrap';
+          wordSpan.setAttribute('aria-hidden', 'true');
+
+          for (let i = 0; i < word.length; i++) {
+            const charSpan = document.createElement('span');
+            charSpan.className = 'char-reveal';
+            charSpan.textContent = word[i];
+            charSpan.style.transitionDelay = `${globalIndex * charDelay}ms`;
+            wordSpan.appendChild(charSpan);
+            globalIndex++;
+          }
+
+          line.appendChild(wordSpan);
+
+          if (wordIdx < words.length - 1) {
+            const spaceSpan = document.createElement('span');
+            spaceSpan.className = 'inline-block';
+            spaceSpan.innerHTML = '&nbsp;';
+            spaceSpan.setAttribute('aria-hidden', 'true');
+            line.appendChild(spaceSpan);
+            globalIndex++;
+          }
+        });
+      });
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              container.classList.add('reveal-active');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        observer.observe(container);
+      } else {
+        container.classList.add('reveal-active');
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initStatementLetterReveal);
+    } else {
+      initStatementLetterReveal();
     }
   </script>
 

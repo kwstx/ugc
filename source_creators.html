@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02 Source creators · Get hundreds of creator applications overnight</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #fafafa;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #111111;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Fixed Viewport Canvas matching 1024x360 reference */
+    .viewport-canvas {
+      position: relative;
+      width: 1024px;
+      height: 360px;
+      background: #fafafa;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    /* LEFT VISUAL SECTION */
+    .left-section {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 520px;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+    }
+
+    /* RIGHT CONTENT SECTION */
+    .right-section {
+      position: absolute;
+      left: 572px;
+      top: 0;
+      width: 420px;
+      height: 360px;
+      pointer-events: auto;
+    }
+
+    /* 02 Source creators */
+    .tag-text {
+      position: absolute;
+      left: 0;
+      top: 98px;
+      font-size: 10.8px;
+      font-weight: 500;
+      color: #73767d;
+      letter-spacing: -0.015em;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      gap: 5.5px;
+      user-select: none;
+    }
+
+    .tag-number {
+      color: #73767d;
+    }
+
+    /* Headline: Fresh Faces, Real Reactions */
+    .headline-text {
+      position: absolute;
+      left: 0;
+      top: 129px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #1c1d20;
+      letter-spacing: -0.026em;
+      line-height: 1.16;
+      max-width: 380px;
+      user-select: none;
+    }
+
+    /* Description paragraph */
+    .paragraph-text {
+      position: absolute;
+      left: 0;
+      top: 210px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      color: #73767d;
+      line-height: 1.55;
+      letter-spacing: -0.01em;
+      max-width: 360px;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Viewport Canvas (1024x360 reference) -->
+  <div class="viewport-canvas">
+    
+    <!-- LEFT VISUAL SECTION -->
+    <div class="left-section">
+      <div class="w-[440px] h-[260px] bg-white rounded-[20px] flex flex-col items-center justify-center border border-dashed border-zinc-200">
+        <svg class="w-10 h-10 text-zinc-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+          <circle cx="9" cy="9" r="2"></circle>
+          <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+        </svg>
+        <span class="text-xs sm:text-[13px] font-medium text-zinc-400 mt-2">Image placeholder</span>
+      </div>
+    </div>
+
+    <!-- RIGHT TEXT SECTION -->
+    <div class="right-section">
+      
+      <!-- Tag -->
+      <div class="tag-text">
+        <span class="tag-number">02</span>
+        <span>Source creators</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h2 class="headline-text">
+        Fresh Faces,<br>Real Reactions
+      </h2>
+
+      <!-- Description Body -->
+      <p class="paragraph-text">
+        Discover a constantly growing pool of creators with different personalities, styles, demographics, and perspectives.
+      </p>
+
+    </div>
+
+  </div>
+
+</body>
+</html>

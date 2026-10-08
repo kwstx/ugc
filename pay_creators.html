@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05 Pay creators · DansUGC</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Inter, Newsreader, Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #fafafa;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #111111;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Fixed Viewport Canvas matching 1024x310 reference */
+    .viewport-canvas {
+      position: relative;
+      width: 1024px;
+      height: 310px;
+      background: #fafafa;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    /* ================= LEFT CONTENT SECTION ================= */
+    .left-content {
+      position: absolute;
+      left: 135px;
+      top: 0;
+      width: 380px;
+      height: 310px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      z-index: 10;
+    }
+
+    /* 05 Pay creators -> */
+    .tag-text {
+      position: absolute;
+      left: 0;
+      top: 71px;
+      font-size: 11px;
+      font-weight: 500;
+      color: #7b838f;
+      letter-spacing: -0.01em;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      user-select: none;
+    }
+
+    .tag-arrow {
+      font-size: 11px;
+      color: #7b838f;
+      transition: transform 0.2s ease;
+    }
+
+    .tag-text:hover .tag-arrow {
+      transform: translateX(3px);
+    }
+
+    /* Headline: Pay your creators / in one click */
+    .headline-text {
+      position: absolute;
+      left: 0;
+      top: 101px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #1c1d20;
+      letter-spacing: -0.03em;
+      line-height: 1.16;
+      max-width: 320px;
+      user-select: none;
+    }
+
+    /* Description body */
+    .paragraph-text {
+      position: absolute;
+      left: 0;
+      top: 183px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      color: #7b838f;
+      line-height: 1.55;
+      letter-spacing: -0.01em;
+      max-width: 310px;
+      user-select: none;
+    }
+
+    /* ================= RIGHT VISUAL SECTION ================= */
+    .right-visual-container {
+      position: absolute;
+      left: 500px;
+      top: 0;
+      width: 420px;
+      height: 310px;
+      z-index: 10;
+    }
+
+    /* Background Grid Pattern */
+    .grid-pattern {
+      position: absolute;
+      top: 15px;
+      left: 10px;
+      width: 380px;
+      height: 280px;
+      background-image: 
+        linear-gradient(to right, rgba(216, 226, 238, 0.45) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(216, 226, 238, 0.45) 1px, transparent 1px);
+      background-size: 22.5px 22.5px;
+      background-position: 0px 0px;
+      mask-image: radial-gradient(circle at 60% 50%, black 28%, transparent 80%);
+      -webkit-mask-image: radial-gradient(circle at 60% 50%, black 28%, transparent 80%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Soft Ambient Glow behind Cards */
+    .ambient-glow {
+      position: absolute;
+      top: 30px;
+      left: 20px;
+      width: 340px;
+      height: 250px;
+      background: radial-gradient(circle at 55% 45%, rgba(225, 239, 255, 0.85) 0%, rgba(240, 247, 255, 0.35) 55%, transparent 75%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Payout Cards Stack */
+    .cards-stack {
+      position: absolute;
+      left: 33px;
+      top: 61px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    .payout-card {
+      width: 298px;
+      height: 52px;
+      background: #ffffff;
+      border: 1px solid rgba(226, 232, 240, 0.85);
+      border-radius: 20px;
+      box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px 0 11px;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .payout-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px -2px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+
+    .card-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 9999px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .card-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5px;
+    }
+
+    .card-name {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #0f172a;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+    }
+
+    .card-amount {
+      font-size: 9.8px;
+      font-weight: 400;
+      color: #64748b;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+    }
+
+    .paid-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background-color: #22c55e;
+      color: #ffffff;
+      border-radius: 9999px;
+      height: 20px;
+      padding: 0 8.5px 0 6.5px;
+      box-shadow: 0 1px 2px rgba(34, 197, 94, 0.2);
+    }
+
+    .paid-check-circle {
+      width: 10px;
+      height: 10px;
+      border-radius: 9999px;
+      background-color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #22c55e;
+      flex-shrink: 0;
+    }
+
+    .paid-text {
+      font-size: 9.5px;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Viewport Canvas (1024x310 reference) -->
+  <div class="viewport-canvas">
+    
+    <!-- LEFT CONTENT: Tag, Headline, Paragraph -->
+    <div class="left-content">
+      
+      <!-- Tag -->
+      <div class="tag-text">
+        <span>05</span>
+        <span>Pay creators</span>
+        <span class="tag-arrow">&rarr;</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h2 class="headline-text">
+        Pay your creators<br>in one click
+      </h2>
+
+      <!-- Description Body -->
+      <p class="paragraph-text">
+        Handle approvals, contracts, and creator payouts from<br>one protected platform.
+      </p>
+
+    </div>
+
+    <!-- RIGHT VISUAL: Grid, Glow, 3 Creator Payout Cards -->
+    <div class="right-visual-container">
+      
+      <!-- Background Grid & Glow -->
+      <div class="grid-pattern"></div>
+      <div class="ambient-glow"></div>
+
+      <!-- 3 Payout Cards Stack -->
+      <div class="cards-stack">
+        
+        <!-- 1. Maya C. -->
+        <div class="payout-card" style="padding: 0 16px 0 16px;">
+          <div class="card-info">
+            <span class="card-name">Maya C.</span>
+            <span class="card-amount">$182.49</span>
+          </div>
+          <div class="paid-pill">
+            <div class="paid-check-circle">
+              <svg class="w-[6.5px] h-[6.5px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span class="paid-text">Paid</span>
+          </div>
+        </div>
+
+        <!-- 2. Robert V. -->
+        <div class="payout-card" style="padding: 0 16px 0 16px;">
+          <div class="card-info">
+            <span class="card-name">Robert V.</span>
+            <span class="card-amount">$2,981.18</span>
+          </div>
+          <div class="paid-pill">
+            <div class="paid-check-circle">
+              <svg class="w-[6.5px] h-[6.5px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span class="paid-text">Paid</span>
+          </div>
+        </div>
+
+        <!-- 3. Sarah L. -->
+        <div class="payout-card" style="padding: 0 16px 0 16px;">
+          <div class="card-info">
+            <span class="card-name">Sarah L.</span>
+            <span class="card-amount">$182.49</span>
+          </div>
+          <div class="paid-pill">
+            <div class="paid-check-circle">
+              <svg class="w-[6.5px] h-[6.5px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span class="paid-text">Paid</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>

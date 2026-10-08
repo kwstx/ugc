@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Why Choose Us Section Wireframe</title>
+  <title>Reactions in Hours, Not Weeks</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -11,20 +11,7 @@
   <!-- Google Fonts: Newsreader, Playfair Display, Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-  
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            serif: ['Newsreader', 'Playfair Display', 'Georgia', 'serif'],
-            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 
   <style>
     *, *::before, *::after {
@@ -32,114 +19,430 @@
       margin: 0;
       padding: 0;
     }
-    body {
-      background: #ffffff;
+    
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       color: #111111;
-      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 40px 20px;
-      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Scaled up notch bigger canvas */
+    .viewport-canvas {
+      position: relative;
+      width: 1180px;
+      height: 336px;
+      background: #ffffff;
+      overflow: hidden;
+      margin: 0 auto;
+      transform-origin: center center;
+    }
+
+    /* Right side background grid pattern */
+    .grid-pattern {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 580px;
+      height: 336px;
+      background-image: 
+        linear-gradient(to right, rgba(216, 226, 238, 0.45) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(216, 226, 238, 0.45) 1px, transparent 1px);
+      background-size: 22.5px 22.5px;
+      background-position: 10px 10px;
+      mask-image: radial-gradient(circle at 62% 48%, black 32%, transparent 82%);
+      -webkit-mask-image: radial-gradient(circle at 62% 48%, black 32%, transparent 82%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Ambient soft blue/cyan glow */
+    .ambient-glow {
+      position: absolute;
+      top: 18px;
+      right: 60px;
+      width: 480px;
+      height: 300px;
+      background: radial-gradient(circle at 55% 45%, rgba(225, 239, 255, 0.85) 0%, rgba(240, 247, 255, 0.35) 55%, transparent 75%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ================= LEFT SECTION ================= */
+    .left-content {
+      position: absolute;
+      left: 155px;
+      top: 60px;
+      width: 400px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tag-text {
+      font-size: 14.5px;
+      font-weight: 450;
+      color: #1a1a1a;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+
+    .headline-text {
+      font-family: 'Newsreader', 'Playfair Display', Georgia, serif;
+      font-size: 38px;
+      font-weight: 400;
+      color: #111111;
+      letter-spacing: -0.028em;
+      line-height: 1.12;
+      margin-bottom: 22px;
+    }
+
+    .paragraph-text {
+      font-size: 14px;
+      font-weight: 400;
+      color: #333333;
+      line-height: 1.54;
+      letter-spacing: -0.012em;
+      width: 390px;
+    }
+
+    /* ================= RIGHT SECTION ================= */
+    .right-content {
+      position: absolute;
+      left: 670px;
+      top: 61px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 1. URL Bar */
+    .url-bar {
+      width: 258px;
+      height: 49px;
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid rgba(226, 232, 240, 0.85);
+      box-shadow: 0 4px 16px -1px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 15px;
+      margin-bottom: 12px;
+    }
+
+    .url-globe-icon {
+      width: 16px;
+      height: 16px;
+      color: #64748b;
+      flex-shrink: 0;
+    }
+
+    .url-text {
+      font-size: 16px;
+      font-weight: 450;
+      color: #0f172a;
+      letter-spacing: -0.015em;
+    }
+
+    /* 2. Identify topics & matches */
+    .identify-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.8px;
+      font-weight: 500;
+      color: #334155;
+      letter-spacing: -0.01em;
+      margin-bottom: 7px;
+      padding-left: 1px;
+    }
+
+    /* 3. Green Pill */
+    .green-pill {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 6.5px;
+      background-color: #22a84d;
+      border-radius: 9999px;
+      height: 21px;
+      padding: 0 9.5px 0 6px;
+      margin-bottom: 8px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    .check-circle {
+      width: 11px;
+      height: 11px;
+      border-radius: 9999px;
+      background-color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #22a84d;
+      flex-shrink: 0;
+    }
+
+    .green-pill-text {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+
+    /* 4. Creator Matches Card */
+    .creators-card {
+      width: 340px;
+      height: 126px;
+      background: #ffffff;
+      border-radius: 22px;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 9px 28px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+      padding: 13px 13px 13px 13px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateY(12px) scale(0.97);
+      pointer-events: none;
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .creators-card.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .creators-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+      margin-bottom: 8.5px;
+      line-height: 1.2;
+    }
+
+    .creators-grid {
+      display: flex;
+      gap: 6.5px;
+    }
+
+    .creator-box {
+      width: 100px;
+      height: 77px;
+      background: #ffffff;
+      border-radius: 13px;
+      border: 1px solid #e5e7eb;
+      padding: 7px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      flex-shrink: 0;
+    }
+
+    .creator-avatar {
+      width: 23px;
+      height: 23px;
+      border-radius: 9999px;
+      object-fit: cover;
+      margin-bottom: 5px;
+      flex-shrink: 0;
+    }
+
+    .creator-name {
+      font-size: 9.5px;
+      font-weight: 600;
+      color: #0f172a;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+      margin-bottom: 2.5px;
+      white-space: nowrap;
+    }
+
+    .creator-tagline {
+      font-size: 7.8px;
+      font-weight: 400;
+      color: #64748b;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+      white-space: nowrap;
+    }
+
+    .cursor-blink {
+      display: inline-block;
+      color: #1e293b;
+      font-weight: 300;
+      margin-left: 1.5px;
+      animation: cursorBlink 0.9s infinite;
+    }
+
+    @keyframes cursorBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
     }
   </style>
 </head>
-<body class="bg-white">
+<body>
 
-  <!-- Section Header -->
-  <div class="flex flex-col items-center text-center mb-10 sm:mb-14">
-    <h1 class="font-serif text-[30px] sm:text-[38px] md:text-[44px] lg:text-[48px] font-normal text-[#111111] tracking-[-0.028em] leading-tight mb-2.5 sm:mb-3">
-      Built for Speed. Made for Creative.
-    </h1>
-    <p class="text-[14.5px] sm:text-[16px] text-[#4b5563] max-w-[580px] mx-auto font-normal leading-relaxed">
-      Get authentic reactions without the waiting, back-and-forth, and complexity of traditional UGC.
-    </p>
-  </div>
+  <!-- Viewport Canvas (Scaled up notch bigger) -->
+  <div class="viewport-canvas">
+    
+    <!-- Background grid & soft ambient glow -->
+    <div class="grid-pattern"></div>
+    <div class="ambient-glow"></div>
 
-  <!-- 4 Cards Container -->
-  <div class="w-full max-w-[960px] relative">
-
-    <!-- Cards Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 lg:gap-4.5 w-full">
-      
-      <!-- Card 1 -->
-      <div class="bg-[#ededed] hover:bg-[#e8e8e8] transition-colors rounded-[18px] sm:rounded-[20px] p-5 sm:p-5 flex flex-col justify-between min-h-[225px] sm:min-h-[240px]">
-        <div class="w-8 h-8 sm:w-8.5 sm:h-8.5 bg-white rounded-[9px] flex items-center justify-center text-[#222222] shadow-[0_1px_3px_rgba(0,0,0,0.06)] shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
-          </svg>
-        </div>
-        <div class="flex flex-col gap-1.5 mt-auto pt-6">
-          <h2 class="font-serif text-[18px] sm:text-[19px] md:text-[20px] font-normal text-[#111111] tracking-[-0.025em] leading-snug">
-            Reactions in Hours, Not Weeks
-          </h2>
-          <p class="text-[12px] sm:text-[12.5px] text-[#666666] font-normal leading-relaxed">
-            Get authentic creator reactions delivered in as little as a day.
-          </p>
-        </div>
+    <!-- LEFT COLUMN -->
+    <div class="left-content">
+      <!-- Category Tag -->
+      <div class="tag-text">
+        01 Launch campaigns
       </div>
 
-      <!-- Card 2 -->
-      <div class="bg-[#ededed] hover:bg-[#e8e8e8] transition-colors rounded-[18px] sm:rounded-[20px] p-5 sm:p-5 flex flex-col justify-between min-h-[225px] sm:min-h-[240px]">
-        <div class="w-8 h-8 sm:w-8.5 sm:h-8.5 bg-white rounded-[9px] flex items-center justify-center text-[#222222] shadow-[0_1px_3px_rgba(0,0,0,0.06)] shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Heading -->
+      <h1 class="headline-text">
+        Reactions in Hours,<br>Not Weeks
+      </h1>
+
+      <!-- Description -->
+      <p class="paragraph-text">
+        Find the reaction you need and get campaign-ready UGC dramatically faster than traditional creator sourcing.
+      </p>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="right-content">
+      
+      <!-- 1. URL Search Card -->
+      <div class="url-bar">
+        <svg class="url-globe-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+        <span class="url-text flex items-center">
+          <span id="typingSearchText"></span><span class="cursor-blink">|</span>
+        </span>
+      </div>
+
+      <!-- 2. Identify topics & matches -->
+      <div class="identify-label">
+        <svg class="w-3.5 h-3.5 text-[#334155] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <span>Identify topics &amp; matches</span>
+      </div>
+
+      <!-- 3. Green Pill -->
+      <div class="green-pill">
+        <div class="check-circle">
+          <svg class="w-[7px] h-[7px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
         </div>
-        <div class="flex flex-col gap-1.5 mt-auto pt-6">
-          <h2 class="font-serif text-[18px] sm:text-[19px] md:text-[20px] font-normal text-[#111111] tracking-[-0.025em] leading-snug">
-            One Click.<br />Paid. Done.
-          </h2>
-          <p class="text-[12px] sm:text-[12.5px] text-[#666666] font-normal leading-relaxed">
-            Pick your reaction, select usage rights, and pay in seconds.
-          </p>
-        </div>
+        <span class="green-pill-text">Complete</span>
+
+        <!-- Speed Lightning -->
+        <svg class="w-3 h-3 text-white shrink-0 ml-0.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="2" y1="8" x2="5.5" y2="8"></line>
+          <line x1="1" y1="12" x2="4.5" y2="12"></line>
+          <path d="M11 2L7 10H12L9 18L17 8H12L14 2H11Z"></path>
+        </svg>
+        <span class="green-pill-text">Get Matches FAST</span>
       </div>
 
-      <!-- Card 3 -->
-      <div class="bg-[#ededed] hover:bg-[#e8e8e8] transition-colors rounded-[18px] sm:rounded-[20px] p-5 sm:p-5 flex flex-col justify-between min-h-[225px] sm:min-h-[240px]">
-        <div class="w-8 h-8 sm:w-8.5 sm:h-8.5 bg-white rounded-[9px] flex items-center justify-center text-[#222222] shadow-[0_1px_3px_rgba(0,0,0,0.06)] shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-            <circle cx="9" cy="7" r="4"></circle>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-          </svg>
+      <!-- 4. Creators Card -->
+      <div id="creatorsMatchesCard" class="creators-card">
+        <div class="creators-title">
+          Instant Creator Matches
         </div>
-        <div class="flex flex-col gap-1.5 mt-auto pt-6">
-          <h2 class="font-serif text-[18px] sm:text-[19px] md:text-[20px] font-normal text-[#111111] tracking-[-0.025em] leading-snug">
-            Fresh Faces, Real Reactions
-          </h2>
-          <p class="text-[12px] sm:text-[12.5px] text-[#666666] font-normal leading-relaxed">
-            Choose from diverse faces, personalities, niches, and demographics.
-          </p>
-        </div>
-      </div>
 
-      <!-- Card 4 -->
-      <div class="bg-[#ededed] hover:bg-[#e8e8e8] transition-colors rounded-[18px] sm:rounded-[20px] p-5 sm:p-5 flex flex-col justify-between min-h-[225px] sm:min-h-[240px]">
-        <div class="w-8 h-8 sm:w-8.5 sm:h-8.5 bg-white rounded-[9px] flex items-center justify-center text-[#222222] shadow-[0_1px_3px_rgba(0,0,0,0.06)] shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-            <polyline points="17 6 23 6 23 12"></polyline>
-          </svg>
-        </div>
-        <div class="flex flex-col gap-1.5 mt-auto pt-6">
-          <h2 class="font-serif text-[18px] sm:text-[19px] md:text-[20px] font-normal text-[#111111] tracking-[-0.025em] leading-snug">
-            Test More.<br />Learn Faster.
-          </h2>
-          <p class="text-[12px] sm:text-[12.5px] text-[#666666] font-normal leading-relaxed">
-            Compare multiple reactions and creative angles before committing to an ad.
-          </p>
+        <div class="creators-grid">
+          
+          <!-- Alex -->
+          <div class="creator-box">
+            <img src="assets/creators/alex.png" alt="Creative Alex" class="creator-avatar">
+            <div class="creator-name">Creative Alex</div>
+            <div class="creator-tagline">Tech Gadget Reviews</div>
+          </div>
+
+          <!-- Sound Sculptor -->
+          <div class="creator-box">
+            <img src="assets/creators/sound.png" alt="Sound Sculptor" class="creator-avatar">
+            <div class="creator-name">Sound Sculptor</div>
+            <div class="creator-tagline">Audio Production Tips</div>
+          </div>
+
+          <!-- Growth Hacker -->
+          <div class="creator-box">
+            <img src="assets/creators/growth.png" alt="Growth Hacker" class="creator-avatar">
+            <div class="creator-name">Growth Hacker</div>
+            <div class="creator-tagline">Viral Tech Content</div>
+          </div>
+
         </div>
       </div>
 
     </div>
 
-  </div>
+  <script>
+    (function() {
+      const phrase = "guy laughing at";
+      const el = document.getElementById("typingSearchText");
+      const card = document.getElementById("creatorsMatchesCard");
+      if (!el) return;
+
+      let index = 0;
+      let isDeleting = false;
+
+      function type() {
+        if (!isDeleting) {
+          el.textContent = phrase.slice(0, index + 1);
+          index++;
+          if (index === phrase.length) {
+            // Typing has finished: smoothly reveal the card
+            setTimeout(() => {
+              if (card) card.classList.add("is-visible");
+            }, 120);
+
+            // Hold card visible for 3.8 seconds
+            setTimeout(() => {
+              if (card) card.classList.remove("is-visible");
+              setTimeout(() => {
+                isDeleting = true;
+                type();
+              }, 400);
+            }, 3800);
+            return;
+          }
+          setTimeout(type, 85 + Math.random() * 35);
+        } else {
+          el.textContent = phrase.slice(0, index - 1);
+          index--;
+          if (index === 0) {
+            isDeleting = false;
+            setTimeout(type, 900);
+            return;
+          }
+          setTimeout(type, 45);
+        }
+      }
+
+      // Initial delay before typing starts
+      setTimeout(type, 500);
+    })();
+  </script>
 
 </body>
 </html>

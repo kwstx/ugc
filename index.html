@@ -76,6 +76,66 @@
       line-height: 1.6;
     }
 
+    /* Hero Heading Fade In Up Animation */
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-title-line-1 {
+      opacity: 0;
+      animation: fadeInUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.05s forwards;
+      will-change: transform, opacity;
+    }
+
+    .hero-title-line-2 {
+      opacity: 0;
+      animation: fadeInUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.22s forwards;
+      will-change: transform, opacity;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-title-line-1,
+      .hero-title-line-2 {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+      }
+    }
+
+    /* Statement Section Letter Reveal Animation */
+    .char-reveal {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(10px) scale(0.96);
+      filter: blur(4px);
+      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                  filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform, filter;
+    }
+
+    .reveal-active .char-reveal {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .char-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        transition: none !important;
+      }
+    }
+
     /* Blue blinking cursor */
     @keyframes cursorBlink {
       0%, 100% { opacity: 1; }
@@ -200,12 +260,12 @@
     <!-- 3. HERO HEADLINE -->
     <h1 class="hero-heading text-[42px] sm:text-[54px] md:text-[62px] lg:text-[68px] max-w-4xl mx-auto mb-4 sm:mb-5">
       <!-- Line 1: Real human reactions, -->
-      <span class="block">
+      <span class="block hero-title-line-1">
         Real human reactions,
       </span>
       
       <!-- Line 2: for ads that go viral. -->
-      <span class="block mt-0.5 sm:mt-1">
+      <span class="block mt-0.5 sm:mt-1 hero-title-line-2">
         for ads that go 
         <span class="relative inline-block whitespace-nowrap">
           viral.
@@ -314,11 +374,11 @@
   <!-- ================= 6.5. STATEMENT SECTION ================= -->
   <section class="w-full bg-white py-20 sm:py-28 md:py-36 lg:py-44 px-4 sm:px-6 text-center select-none overflow-hidden transition-colors flex flex-col items-center justify-center">
     <div class="w-full max-w-[1280px] mx-auto flex flex-col items-center justify-center text-center">
-      <h2 class="hero-heading text-[24px] sm:text-[34px] md:text-[44px] lg:text-[52px] w-full max-w-6xl mx-auto leading-[1.14] text-center flex flex-col items-center justify-center">
-        <span class="block w-full text-center text-[#111111] whitespace-normal md:whitespace-nowrap">
+      <h2 id="statementHeading" class="hero-heading text-[24px] sm:text-[34px] md:text-[44px] lg:text-[52px] w-full max-w-6xl mx-auto leading-[1.14] text-center flex flex-col items-center justify-center">
+        <span class="statement-line block w-full text-center text-[#111111] whitespace-normal md:whitespace-nowrap">
           Everything you need to make people stop scrolling.
         </span>
-        <span class="block w-full text-center text-[#111111]/50 whitespace-normal md:whitespace-nowrap mt-1 sm:mt-1.5">
+        <span class="statement-line block w-full text-center text-[#111111]/50 whitespace-normal md:whitespace-nowrap mt-1 sm:mt-1.5">
           Nothing you need to fake.
         </span>
       </h2>
@@ -424,96 +484,372 @@
   </section>
 
 
-  <!-- ================= 6.9. WHY CHOOSE US SECTION (BUILT FOR SPEED. MADE FOR CREATIVE.) ================= -->
-  <section id="whyChooseUsSection" class="w-full bg-white pt-6 pb-28 sm:pb-36 px-4 sm:px-6 md:px-8 flex flex-col items-center select-none overflow-hidden">
+  <!-- ================= 6.9. WHY CHOOSE US SECTION (GET UGC REACTIONS IN HOURS, NOT WEEKS.) ================= -->
+  <section id="whyChooseUsSection" class="w-full bg-white py-20 sm:py-24 px-4 sm:px-6 md:px-8 flex items-center justify-center select-none overflow-hidden">
     
-    <!-- Section Header -->
-    <div class="flex flex-col items-center text-center mb-10 sm:mb-14">
-      <h2 class="font-serif text-[30px] sm:text-[38px] md:text-[44px] lg:text-[48px] font-normal text-[#111111] tracking-[-0.028em] leading-tight mb-2.5 sm:mb-3">
-        Built for Speed. Made for Creative.
-      </h2>
-      <p class="text-[14.5px] sm:text-[16px] text-[#4b5563] max-w-[580px] mx-auto font-normal leading-relaxed">
-        Get authentic reactions without the waiting, back-and-forth, and complexity of traditional UGC.
-      </p>
-    </div>
+    <div class="relative w-full max-w-[1180px] min-h-[336px] flex items-center justify-between mx-auto flex-col lg:flex-row gap-12 lg:gap-0 lg:px-[80px]">
+      
+      <!-- Right Side Background Grid & Soft Glow -->
+      <div class="absolute top-0 right-0 w-full lg:w-[560px] h-full pointer-events-none opacity-80" style="background-image: linear-gradient(to right, rgba(216, 226, 238, 0.45) 1px, transparent 1px), linear-gradient(to bottom, rgba(216, 226, 238, 0.45) 1px, transparent 1px); background-size: 22.5px 22.5px; mask-image: radial-gradient(circle at 62% 48%, black 32%, transparent 82%); -webkit-mask-image: radial-gradient(circle at 62% 48%, black 32%, transparent 82%);"></div>
+      <div class="absolute top-4 right-8 w-[480px] h-[300px] pointer-events-none" style="background: radial-gradient(circle at 55% 45%, rgba(225, 239, 255, 0.85) 0%, rgba(240, 247, 255, 0.35) 55%, transparent 75%);"></div>
 
-    <!-- 4 Cards Container -->
-    <div class="w-full max-w-[960px] relative">
+      <!-- LEFT SECTION -->
+      <div class="relative z-10 w-full max-w-[400px] flex flex-col items-start text-left">
+        <!-- Tag -->
+        <span class="text-[14.5px] font-[450] text-[#1a1a1a] tracking-[-0.01em] mb-[24px]">
+          01 Launch campaigns
+        </span>
 
-      <!-- Cards Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 lg:gap-4.5 w-full">
+        <!-- Heading -->
+        <h2 class="font-serif text-[34px] sm:text-[38px] md:text-[42px] font-normal text-[#111111] tracking-[-0.028em] leading-[1.12] mb-[22px]">
+          Reactions in Hours,<br>Not Weeks
+        </h2>
+
+        <!-- Description -->
+        <p class="text-[14px] font-normal text-[#333333] leading-[1.54] tracking-[-0.012em] max-w-[390px]">
+          Find the reaction you need and get campaign-ready UGC dramatically faster than traditional creator sourcing.
+        </p>
+      </div>
+
+      <!-- RIGHT SECTION -->
+      <div class="relative z-10 w-full max-w-[350px] flex flex-col items-start">
         
-        <!-- Card 1 -->
-        <div class="bg-[#ededed] hover:bg-[#e8e8e8] transition-colors rounded-[18px] sm:rounded-[20px] p-5 sm:p-5 flex flex-col justify-between min-h-[225px] sm:min-h-[240px]">
-          <div class="w-8 h-8 sm:w-8.5 sm:h-8.5 bg-white rounded-[9px] flex items-center justify-center text-[#222222] shadow-[0_1px_3px_rgba(0,0,0,0.06)] shrink-0">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="12 6 12 12 16 14"></polyline>
-            </svg>
-          </div>
-          <div class="flex flex-col gap-1.5 mt-auto pt-6">
-            <h3 class="font-serif text-[18px] sm:text-[19px] md:text-[20px] font-normal text-[#111111] tracking-[-0.025em] leading-snug">
-              Reactions in Hours, Not Weeks
-            </h3>
-            <p class="text-[12px] sm:text-[12.5px] text-[#666666] font-normal leading-relaxed">
-              Get authentic creator reactions delivered in as little as a day.
-            </p>
-          </div>
+        <!-- 1. URL Search Card -->
+        <div class="w-[258px] h-[49px] bg-white rounded-[16px] border border-[#eaecf0] shadow-[0_4px_16px_-1px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] flex items-center gap-[9px] px-[15px] mb-[12px]">
+          <svg class="w-[16px] h-[16px] text-[#64748b] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <span class="text-[16px] font-[450] text-[#0f172a] tracking-[-0.015em] flex items-center">
+            <span id="whyUsTypingSearchText"></span><span class="inline-block text-slate-800 font-light ml-[1.5px] animate-pulse">|</span>
+          </span>
         </div>
 
-        <!-- Card 2 -->
-        <div class="bg-[#ededed] hover:bg-[#e8e8e8] transition-colors rounded-[18px] sm:rounded-[20px] p-5 sm:p-5 flex flex-col justify-between min-h-[225px] sm:min-h-[240px]">
-          <div class="w-8 h-8 sm:w-8.5 sm:h-8.5 bg-white rounded-[9px] flex items-center justify-center text-[#222222] shadow-[0_1px_3px_rgba(0,0,0,0.06)] shrink-0">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <!-- 2. Identify topics & matches -->
+        <div class="flex items-center gap-[6px] text-[11.8px] font-medium text-[#334155] tracking-[-0.01em] mb-[7px] pl-[1px]">
+          <svg class="w-[14px] h-[14px] text-[#334155] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span>Identify topics &amp; matches</span>
+        </div>
+
+        <!-- 3. Green Pill -->
+        <div class="self-start inline-flex items-center gap-[6.5px] bg-[#22a84d] rounded-full h-[21px] px-[9.5px] pl-[6px] mb-[8px] shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+          <div class="w-[11px] h-[11px] rounded-full bg-white flex items-center justify-center text-[#22a84d] shrink-0">
+            <svg class="w-[7px] h-[7px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
           </div>
-          <div class="flex flex-col gap-1.5 mt-auto pt-6">
-            <h3 class="font-serif text-[18px] sm:text-[19px] md:text-[20px] font-normal text-[#111111] tracking-[-0.025em] leading-snug">
-              One Click.<br />Paid. Done.
-            </h3>
-            <p class="text-[12px] sm:text-[12.5px] text-[#666666] font-normal leading-relaxed">
-              Pick your reaction, select usage rights, and pay in seconds.
-            </p>
+          <span class="text-[10.5px] font-medium text-white tracking-[-0.01em] leading-none">Complete</span>
+
+          <!-- Speed Lightning -->
+          <svg class="w-[12px] h-[12px] text-white shrink-0 ml-[2px]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="2" y1="8" x2="5.5" y2="8"></line>
+            <line x1="1" y1="12" x2="4.5" y2="12"></line>
+            <path d="M11 2L7 10H12L9 18L17 8H12L14 2H11Z"></path>
+          </svg>
+          <span class="text-[10.5px] font-medium text-white tracking-[-0.01em] leading-none">Get Matches FAST</span>
+        </div>
+
+        <!-- 4. Creators Card -->
+        <div id="whyUsCreatorsMatchesCard" class="w-[340px] h-[126px] bg-white rounded-[22px] border border-[#eaecf0] shadow-[0_9px_28px_-2px_rgba(0,0,0,0.05),0_2px_6px_-1px_rgba(0,0,0,0.02)] p-[13px] flex flex-col opacity-0 translate-y-3 scale-[0.97] pointer-events-none transition-all duration-500 ease-out">
+          <div class="text-[14px] font-semibold text-[#0f172a] tracking-[-0.02em] mb-[8.5px] leading-tight">
+            Instant Creator Matches
+          </div>
+
+          <div class="flex gap-[6.5px]">
+            <!-- Alex -->
+            <div class="w-[100px] h-[77px] bg-white rounded-[13px] border border-[#e5e7eb] p-[7px_8px] flex flex-col items-start shrink-0">
+              <img src="assets/creators/alex.png" alt="Creative Alex" class="w-[23px] h-[23px] rounded-full object-cover mb-[5px] shrink-0">
+              <div class="text-[9.5px] font-semibold text-[#0f172a] tracking-[-0.01em] leading-[1.15] mb-[2.5px] whitespace-nowrap">Creative Alex</div>
+              <div class="text-[7.8px] font-normal text-[#64748b] tracking-[-0.01em] leading-[1.15] whitespace-nowrap">Tech Gadget Reviews</div>
+            </div>
+
+            <!-- Sound Sculptor -->
+            <div class="w-[100px] h-[77px] bg-white rounded-[13px] border border-[#e5e7eb] p-[7px_8px] flex flex-col items-start shrink-0">
+              <img src="assets/creators/sound.png" alt="Sound Sculptor" class="w-[23px] h-[23px] rounded-full object-cover mb-[5px] shrink-0">
+              <div class="text-[9.5px] font-semibold text-[#0f172a] tracking-[-0.01em] leading-[1.15] mb-[2.5px] whitespace-nowrap">Sound Sculptor</div>
+              <div class="text-[7.8px] font-normal text-[#64748b] tracking-[-0.01em] leading-[1.15] whitespace-nowrap">Audio Production Tips</div>
+            </div>
+
+            <!-- Growth Hacker -->
+            <div class="w-[100px] h-[77px] bg-white rounded-[13px] border border-[#e5e7eb] p-[7px_8px] flex flex-col items-start shrink-0">
+              <img src="assets/creators/growth.png" alt="Growth Hacker" class="w-[23px] h-[23px] rounded-full object-cover mb-[5px] shrink-0">
+              <div class="text-[9.5px] font-semibold text-[#0f172a] tracking-[-0.01em] leading-[1.15] mb-[2.5px] whitespace-nowrap">Growth Hacker</div>
+              <div class="text-[7.8px] font-normal text-[#64748b] tracking-[-0.01em] leading-[1.15] whitespace-nowrap">Viral Tech Content</div>
+            </div>
           </div>
         </div>
 
-        <!-- Card 3 -->
-        <div class="bg-[#ededed] hover:bg-[#e8e8e8] transition-colors rounded-[18px] sm:rounded-[20px] p-5 sm:p-5 flex flex-col justify-between min-h-[225px] sm:min-h-[240px]">
-          <div class="w-8 h-8 sm:w-8.5 sm:h-8.5 bg-white rounded-[9px] flex items-center justify-center text-[#222222] shadow-[0_1px_3px_rgba(0,0,0,0.06)] shrink-0">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
-          </div>
-          <div class="flex flex-col gap-1.5 mt-auto pt-6">
-            <h3 class="font-serif text-[18px] sm:text-[19px] md:text-[20px] font-normal text-[#111111] tracking-[-0.025em] leading-snug">
-              Fresh Faces, Real Reactions
-            </h3>
-            <p class="text-[12px] sm:text-[12.5px] text-[#666666] font-normal leading-relaxed">
-              Choose from diverse faces, personalities, niches, and demographics.
-            </p>
-          </div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= 6.9.2. SOURCE CREATORS SECTION (02 SOURCE CREATORS) ================= -->
+  <section id="sourceCreatorsSection" class="w-full bg-white py-16 sm:py-24 px-4 sm:px-6 md:px-8 flex items-center justify-center select-none overflow-hidden">
+    
+    <div class="relative w-full max-w-[1180px] min-h-[336px] flex items-center justify-between mx-auto flex-col-reverse lg:flex-row gap-12 lg:gap-0 lg:px-[80px]">
+      
+      <!-- LEFT SECTION: Image Placeholder -->
+      <div class="relative z-10 w-full max-w-[500px] h-[300px] sm:h-[336px] flex items-center justify-center shrink-0">
+        
+        <div class="w-full max-w-[480px] h-[270px] sm:h-[300px] bg-white rounded-[20px] sm:rounded-[24px] flex flex-col items-center justify-center border border-dashed border-zinc-200 shadow-sm">
+          <svg class="w-10 h-10 sm:w-12 sm:h-12 text-zinc-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+            <circle cx="9" cy="9" r="2"></circle>
+            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+          </svg>
+          <span class="text-xs sm:text-[13px] font-medium text-zinc-400 mt-2">Image placeholder</span>
         </div>
 
-        <!-- Card 4 -->
-        <div class="bg-[#ededed] hover:bg-[#e8e8e8] transition-colors rounded-[18px] sm:rounded-[20px] p-5 sm:p-5 flex flex-col justify-between min-h-[225px] sm:min-h-[240px]">
-          <div class="w-8 h-8 sm:w-8.5 sm:h-8.5 bg-white rounded-[9px] flex items-center justify-center text-[#222222] shadow-[0_1px_3px_rgba(0,0,0,0.06)] shrink-0">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-              <polyline points="17 6 23 6 23 12"></polyline>
+      </div>
+
+      <!-- RIGHT SECTION: Tag, Heading, Description -->
+      <div class="relative z-10 w-full max-w-[400px] flex flex-col items-start text-left">
+        <!-- Tag -->
+        <span class="text-[14.5px] font-[450] text-[#1a1a1a] tracking-[-0.01em] mb-[24px]">
+          02 Source creators
+        </span>
+
+        <!-- Heading -->
+        <h2 class="font-serif text-[34px] sm:text-[38px] md:text-[42px] font-normal text-[#111111] tracking-[-0.028em] leading-[1.12] mb-[22px]">
+          Fresh Faces,<br>Real Reactions
+        </h2>
+
+        <!-- Description -->
+        <p class="text-[14px] font-normal text-[#333333] leading-[1.54] tracking-[-0.012em] max-w-[390px]">
+          Discover a constantly growing pool of creators with different personalities, styles, demographics, and perspectives.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= 6.9.3. TRACK RESULTS SECTION (03 TRACK RESULTS) ================= -->
+  <section id="trackResultsSection" class="w-full bg-white py-16 sm:py-24 px-4 sm:px-6 md:px-8 flex items-center justify-center select-none overflow-hidden">
+    
+    <div class="relative w-full max-w-[1180px] min-h-[336px] flex items-center justify-between mx-auto flex-col lg:flex-row gap-12 lg:gap-0 lg:px-[80px]">
+      
+      <!-- LEFT SECTION: Tag, Heading, Description -->
+      <div class="relative z-10 w-full max-w-[400px] flex flex-col items-start text-left">
+        <!-- Tag -->
+        <span class="text-[14.5px] font-[450] text-[#1a1a1a] tracking-[-0.01em] mb-[24px]">
+          03 Track results
+        </span>
+
+        <!-- Heading -->
+        <h2 class="font-serif text-[34px] sm:text-[38px] md:text-[42px] font-normal text-[#111111] tracking-[-0.028em] leading-[1.12] mb-[22px]">
+          Test More.<br>Learn Faster.
+        </h2>
+
+        <!-- Description -->
+        <p class="text-[14px] font-normal text-[#333333] leading-[1.54] tracking-[-0.012em] max-w-[390px]">
+          Get multiple reactions to the same product or concept and quickly discover which creative angles actually connect.
+        </p>
+      </div>
+
+      <!-- RIGHT SECTION: Metrics & Growth Curve -->
+      <div class="relative z-10 w-full max-w-[480px] h-[300px] sm:h-[336px] flex items-center justify-center shrink-0">
+        
+        <!-- Right Side Background Grid & Soft Glow -->
+        <div class="absolute inset-0 w-full h-full pointer-events-none opacity-85" style="background-image: linear-gradient(to right, rgba(216, 226, 238, 0.45) 1px, transparent 1px), linear-gradient(to bottom, rgba(216, 226, 238, 0.45) 1px, transparent 1px); background-size: 22.5px 22.5px; mask-image: radial-gradient(circle at 62% 48%, black 32%, transparent 82%); -webkit-mask-image: radial-gradient(circle at 62% 48%, black 32%, transparent 82%);"></div>
+        <div class="absolute top-2 right-4 w-[420px] h-[280px] pointer-events-none" style="background: radial-gradient(circle at 55% 45%, rgba(225, 239, 255, 0.9) 0%, rgba(240, 247, 255, 0.35) 55%, transparent 75%);"></div>
+
+        <!-- Visual Box with Metrics & SVG Chart -->
+        <div class="relative w-full max-w-[420px] h-[260px] flex flex-col justify-between p-4 z-10">
+          
+          <!-- Top Area: Example Campaign & Metrics -->
+          <div class="flex flex-col items-start w-full">
+            <span class="text-[12px] font-medium text-[#64748b] tracking-[-0.01em] mb-3">Example campaign</span>
+            
+            <div class="flex items-center gap-8 sm:gap-10">
+              <!-- Views -->
+              <div class="flex flex-col items-start">
+                <span class="text-[11.5px] font-[450] text-[#64748b] tracking-[-0.01em] mb-1">Views</span>
+                <span class="text-[20px] sm:text-[22px] font-bold text-[#111111] tracking-[-0.025em] leading-none">12.4M</span>
+              </div>
+              
+              <!-- Creator spend -->
+              <div class="flex flex-col items-start">
+                <span class="text-[11.5px] font-[450] text-[#64748b] tracking-[-0.01em] mb-1">Creator spend</span>
+                <span class="text-[20px] sm:text-[22px] font-bold text-[#111111] tracking-[-0.025em] leading-none">$40.5K</span>
+              </div>
+              
+              <!-- CPM -->
+              <div class="flex flex-col items-start">
+                <span class="text-[11.5px] font-[450] text-[#64748b] tracking-[-0.01em] mb-1">CPM</span>
+                <span class="text-[20px] sm:text-[22px] font-bold text-[#111111] tracking-[-0.025em] leading-none">$3.27</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Area: Growth Curve SVG -->
+          <div class="relative w-full h-[120px] mt-2">
+            <svg class="w-full h-full overflow-visible" viewBox="0 0 340 120" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="trackAreaGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25" />
+                  <stop offset="65%" stop-color="#3b82f6" stop-opacity="0.06" />
+                  <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0" />
+                </linearGradient>
+                <filter id="trackGlow" x="-10%" y="-10%" width="120%" height="120%">
+                  <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#3b82f6" flood-opacity="0.25" />
+                </filter>
+              </defs>
+
+              <!-- Gradient Fill Under Curve -->
+              <path d="M 0 85 C 120 80, 210 18, 335 4.5 L 335 120 L 0 120 Z" fill="url(#trackAreaGradient)" />
+
+              <!-- Blue Curve Line -->
+              <path d="M 0 85 C 120 80, 210 18, 335 4.5" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" filter="url(#trackGlow)" />
+
+              <!-- Endpoint Dot -->
+              <circle cx="335" cy="4.5" r="5" fill="#3b82f6" />
+              <circle cx="335" cy="4.5" r="2.2" fill="#ffffff" />
             </svg>
           </div>
-          <div class="flex flex-col gap-1.5 mt-auto pt-6">
-            <h3 class="font-serif text-[18px] sm:text-[19px] md:text-[20px] font-normal text-[#111111] tracking-[-0.025em] leading-snug">
-              Test More.<br />Learn Faster.
-            </h3>
-            <p class="text-[12px] sm:text-[12.5px] text-[#666666] font-normal leading-relaxed">
-              Compare multiple reactions and creative angles before committing to an ad.
-            </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= 6.9.4. RUN ADS SECTION (04 RUN ADS) ================= -->
+  <section id="runAdsSection" class="w-full bg-white py-16 sm:py-24 px-4 sm:px-6 md:px-8 flex items-center justify-center select-none overflow-hidden">
+    
+    <div class="relative w-full max-w-[1180px] min-h-[336px] flex items-center justify-between mx-auto flex-col-reverse lg:flex-row gap-12 lg:gap-0 lg:px-[80px]">
+      
+      <!-- LEFT SECTION: Image Placeholder -->
+      <div class="relative z-10 w-full max-w-[500px] h-[300px] sm:h-[336px] flex items-center justify-center shrink-0">
+        
+        <div class="w-full max-w-[480px] h-[270px] sm:h-[300px] bg-white rounded-[20px] sm:rounded-[24px] flex flex-col items-center justify-center border border-dashed border-zinc-200 shadow-sm">
+          <svg class="w-10 h-10 sm:w-12 sm:h-12 text-zinc-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+            <circle cx="9" cy="9" r="2"></circle>
+            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+          </svg>
+          <span class="text-xs sm:text-[13px] font-medium text-zinc-400 mt-2">Image placeholder</span>
+        </div>
+
+      </div>
+
+      <!-- RIGHT SECTION: Tag, Heading, Description -->
+      <div class="relative z-10 w-full max-w-[400px] flex flex-col items-start text-left">
+        <!-- Tag -->
+        <div class="flex items-center gap-2 text-[14.5px] font-[450] text-[#1a1a1a] tracking-[-0.01em] mb-[24px]">
+          <span>04 Run ads</span>
+          <span class="text-[14.5px] text-[#1a1a1a]">&rarr;</span>
+        </div>
+
+        <!-- Heading -->
+        <h2 class="font-serif text-[34px] sm:text-[38px] md:text-[42px] font-normal text-[#111111] tracking-[-0.028em] leading-[1.12] mb-[22px]">
+          Fresh Faces,<br>Real Reactions
+        </h2>
+
+        <!-- Description -->
+        <p class="text-[14px] font-normal text-[#333333] leading-[1.54] tracking-[-0.012em] max-w-[390px]">
+          Discover a constantly growing pool of creators with different personalities, styles, demographics, and perspectives.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= 6.9.5. PAY CREATORS SECTION (05 PAY CREATORS) ================= -->
+  <section id="payCreatorsSection" class="w-full bg-white py-16 sm:py-24 px-4 sm:px-6 md:px-8 flex items-center justify-center select-none overflow-hidden">
+    
+    <div class="relative w-full max-w-[1180px] min-h-[336px] flex items-center justify-between mx-auto flex-col lg:flex-row gap-12 lg:gap-0 lg:px-[80px]">
+      
+      <!-- LEFT SECTION: Tag, Heading, Description -->
+      <div class="relative z-10 w-full max-w-[400px] flex flex-col items-start text-left">
+        <!-- Tag -->
+        <div class="flex items-center gap-2 text-[14.5px] font-[450] text-[#1a1a1a] tracking-[-0.01em] mb-[24px]">
+          <span>05 Pay creators</span>
+          <span class="text-[14.5px] text-[#1a1a1a]">&rarr;</span>
+        </div>
+
+        <!-- Heading -->
+        <h2 class="font-serif text-[34px] sm:text-[38px] md:text-[42px] font-normal text-[#111111] tracking-[-0.028em] leading-[1.12] mb-[22px]">
+          Pay your creators<br>in one click
+        </h2>
+
+        <!-- Description -->
+        <p class="text-[14px] font-normal text-[#333333] leading-[1.54] tracking-[-0.012em] max-w-[390px]">
+          Handle approvals, contracts, and creator payouts from one protected platform.
+        </p>
+      </div>
+
+      <!-- RIGHT SECTION: 3 Creator Payout Cards & Background Grid/Glow -->
+      <div class="relative z-10 w-full max-w-[480px] h-[300px] sm:h-[336px] flex items-center justify-center shrink-0">
+        
+        <!-- Right Side Background Grid & Soft Glow -->
+        <div class="absolute inset-0 w-full h-full pointer-events-none opacity-85" style="background-image: linear-gradient(to right, rgba(216, 226, 238, 0.45) 1px, transparent 1px), linear-gradient(to bottom, rgba(216, 226, 238, 0.45) 1px, transparent 1px); background-size: 22.5px 22.5px; mask-image: radial-gradient(circle at 62% 48%, black 32%, transparent 82%); -webkit-mask-image: radial-gradient(circle at 62% 48%, black 32%, transparent 82%);"></div>
+        <div class="absolute top-2 right-4 w-[420px] h-[280px] pointer-events-none" style="background: radial-gradient(circle at 55% 45%, rgba(225, 239, 255, 0.9) 0%, rgba(240, 247, 255, 0.35) 55%, transparent 75%);"></div>
+
+        <!-- Payout Cards Stack -->
+        <div class="relative flex flex-col gap-2.5 sm:gap-3 w-full max-w-[340px] z-10">
+          
+          <!-- 1. Maya C. -->
+          <div class="w-full h-[58px] sm:h-[62px] bg-white rounded-[20px] border border-[#eaecf0] shadow-[0_4px_16px_-2px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] flex items-center justify-between px-5 sm:px-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-2px_rgba(0,0,0,0.08)] cursor-pointer">
+            <div class="flex flex-col items-start">
+              <span class="text-[13.5px] font-semibold text-[#0f172a] tracking-[-0.01em] leading-tight">Maya C.</span>
+              <span class="text-[11px] font-normal text-[#64748b] tracking-[-0.01em] leading-tight mt-0.5">$182.49</span>
+            </div>
+            <div class="inline-flex items-center gap-1.5 bg-[#22c55e] text-white rounded-full h-[22px] px-2.5 shadow-[0_1px_2px_rgba(34,197,94,0.2)]">
+              <div class="w-[11px] h-[11px] rounded-full bg-white flex items-center justify-center text-[#22c55e] shrink-0">
+                <svg class="w-[7px] h-[7px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <span class="text-[10.5px] font-semibold text-white tracking-[-0.01em] leading-none">Paid</span>
+            </div>
           </div>
+
+          <!-- 2. Robert V. -->
+          <div class="w-full h-[58px] sm:h-[62px] bg-white rounded-[20px] border border-[#eaecf0] shadow-[0_4px_16px_-2px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] flex items-center justify-between px-5 sm:px-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-2px_rgba(0,0,0,0.08)] cursor-pointer">
+            <div class="flex flex-col items-start">
+              <span class="text-[13.5px] font-semibold text-[#0f172a] tracking-[-0.01em] leading-tight">Robert V.</span>
+              <span class="text-[11px] font-normal text-[#64748b] tracking-[-0.01em] leading-tight mt-0.5">$2,981.18</span>
+            </div>
+            <div class="inline-flex items-center gap-1.5 bg-[#22c55e] text-white rounded-full h-[22px] px-2.5 shadow-[0_1px_2px_rgba(34,197,94,0.2)]">
+              <div class="w-[11px] h-[11px] rounded-full bg-white flex items-center justify-center text-[#22c55e] shrink-0">
+                <svg class="w-[7px] h-[7px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <span class="text-[10.5px] font-semibold text-white tracking-[-0.01em] leading-none">Paid</span>
+            </div>
+          </div>
+
+          <!-- 3. Sarah L. -->
+          <div class="w-full h-[58px] sm:h-[62px] bg-white rounded-[20px] border border-[#eaecf0] shadow-[0_4px_16px_-2px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] flex items-center justify-between px-5 sm:px-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-2px_rgba(0,0,0,0.08)] cursor-pointer">
+            <div class="flex flex-col items-start">
+              <span class="text-[13.5px] font-semibold text-[#0f172a] tracking-[-0.01em] leading-tight">Sarah L.</span>
+              <span class="text-[11px] font-normal text-[#64748b] tracking-[-0.01em] leading-tight mt-0.5">$182.49</span>
+            </div>
+            <div class="inline-flex items-center gap-1.5 bg-[#22c55e] text-white rounded-full h-[22px] px-2.5 shadow-[0_1px_2px_rgba(34,197,94,0.2)]">
+              <div class="w-[11px] h-[11px] rounded-full bg-white flex items-center justify-center text-[#22c55e] shrink-0">
+                <svg class="w-[7px] h-[7px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <span class="text-[10.5px] font-semibold text-white tracking-[-0.01em] leading-none">Paid</span>
+            </div>
+          </div>
+
         </div>
 
       </div>
@@ -1558,11 +1894,127 @@
     searchInput.addEventListener('focus', () => {
       cursorBar.style.display = 'none';
     });
-    searchInput.addEventListener('blur', () => {
-      if (searchInput.value === 'guy laughing at') {
-        cursorBar.style.display = 'inline-block';
+    // Why Choose Us Section typing animation and card reveal
+    (function() {
+      const phrase = "guy laughing at";
+      const el = document.getElementById("whyUsTypingSearchText");
+      const card = document.getElementById("whyUsCreatorsMatchesCard");
+      if (!el) return;
+
+      let index = 0;
+      let isDeleting = false;
+
+      function type() {
+        if (!isDeleting) {
+          el.textContent = phrase.slice(0, index + 1);
+          index++;
+          if (index === phrase.length) {
+            // Typing has finished: reveal the matches card
+            setTimeout(() => {
+              if (card) {
+                card.classList.remove("opacity-0", "translate-y-3", "scale-[0.97]", "pointer-events-none");
+                card.classList.add("opacity-100", "translate-y-0", "scale-100", "pointer-events-auto");
+              }
+            }, 120);
+
+            // Hold card visible for 3.8 seconds
+            setTimeout(() => {
+              if (card) {
+                card.classList.remove("opacity-100", "translate-y-0", "scale-100", "pointer-events-auto");
+                card.classList.add("opacity-0", "translate-y-3", "scale-[0.97]", "pointer-events-none");
+              }
+              setTimeout(() => {
+                isDeleting = true;
+                type();
+              }, 400);
+            }, 3800);
+            return;
+          }
+          setTimeout(type, 85 + Math.random() * 35);
+        } else {
+          el.textContent = phrase.slice(0, index - 1);
+          index--;
+          if (index === 0) {
+            isDeleting = false;
+            setTimeout(type, 900);
+            return;
+          }
+          setTimeout(type, 45);
+        }
       }
-    });
+
+      setTimeout(type, 500);
+    })();
+
+    // Statement Section Letter Reveal Animation
+    function initStatementLetterReveal() {
+      const container = document.getElementById('statementHeading');
+      if (!container) return;
+
+      const lines = container.querySelectorAll('.statement-line');
+      if (!lines.length) return;
+
+      let globalIndex = 0;
+      const charDelay = 22; // ms per letter
+      const linePause = 80; // ms pause between lines
+
+      lines.forEach((line, lineIdx) => {
+        const text = line.textContent.trim();
+        line.setAttribute('aria-label', text);
+        line.innerHTML = '';
+
+        if (lineIdx > 0) {
+          globalIndex += Math.round(linePause / charDelay);
+        }
+
+        const words = text.split(/\s+/);
+        words.forEach((word, wordIdx) => {
+          const wordSpan = document.createElement('span');
+          wordSpan.className = 'inline-block whitespace-nowrap';
+          wordSpan.setAttribute('aria-hidden', 'true');
+
+          for (let i = 0; i < word.length; i++) {
+            const charSpan = document.createElement('span');
+            charSpan.className = 'char-reveal';
+            charSpan.textContent = word[i];
+            charSpan.style.transitionDelay = `${globalIndex * charDelay}ms`;
+            wordSpan.appendChild(charSpan);
+            globalIndex++;
+          }
+
+          line.appendChild(wordSpan);
+
+          if (wordIdx < words.length - 1) {
+            const spaceSpan = document.createElement('span');
+            spaceSpan.className = 'inline-block';
+            spaceSpan.innerHTML = '&nbsp;';
+            spaceSpan.setAttribute('aria-hidden', 'true');
+            line.appendChild(spaceSpan);
+            globalIndex++;
+          }
+        });
+      });
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              container.classList.add('reveal-active');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        observer.observe(container);
+      } else {
+        container.classList.add('reveal-active');
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initStatementLetterReveal);
+    } else {
+      initStatementLetterReveal();
+    }
   </script>
 
 </body>
