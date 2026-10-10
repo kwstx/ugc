@@ -102,10 +102,15 @@
 
     @media (prefers-reduced-motion: reduce) {
       .hero-title-line-1,
-      .hero-title-line-2 {
+      .hero-title-line-2,
+      .reactions-fade-text,
+      .fresh-faces-fade-text,
+      .test-more-fade-text,
+      .pay-creators-fade-text {
         opacity: 1 !important;
         transform: none !important;
         animation: none !important;
+        transition: none !important;
       }
     }
 
@@ -699,9 +704,23 @@
         </span>
 
         <!-- Heading -->
-        <h2 class="font-serif text-[34px] sm:text-[38px] md:text-[42px] font-normal text-[#111111] tracking-[-0.028em] leading-[1.12] mb-[22px]">
+        <h2 class="fresh-faces-fade-text font-serif text-[34px] sm:text-[38px] md:text-[42px] font-normal text-[#111111] tracking-[-0.028em] leading-[1.12] mb-[22px] opacity-0 translate-x-8 transition-all duration-700 ease-out">
           Fresh Faces,<br>Real Reactions
         </h2>
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            const els = document.querySelectorAll('.fresh-faces-fade-text');
+            els.forEach(el => {
+              const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                  el.classList.remove('opacity-0', 'translate-x-8');
+                  observer.disconnect();
+                }
+              }, { threshold: 0.1 });
+              observer.observe(el);
+            });
+          });
+        </script>
 
         <!-- Description -->
         <p class="text-[14px] font-normal text-[#333333] leading-[1.54] tracking-[-0.012em] max-w-[390px]">
@@ -727,9 +746,23 @@
         </span>
 
         <!-- Heading -->
-        <h2 class="font-serif text-[34px] sm:text-[38px] md:text-[42px] font-normal text-[#111111] tracking-[-0.028em] leading-[1.12] mb-[22px]">
+        <h2 class="test-more-fade-text font-serif text-[34px] sm:text-[38px] md:text-[42px] font-normal text-[#111111] tracking-[-0.028em] leading-[1.12] mb-[22px] opacity-0 -translate-x-8 transition-all duration-700 ease-out">
           Test More.<br>Learn Faster.
         </h2>
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            const els = document.querySelectorAll('.test-more-fade-text');
+            els.forEach(el => {
+              const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                  el.classList.remove('opacity-0', '-translate-x-8');
+                  observer.disconnect();
+                }
+              }, { threshold: 0.1 });
+              observer.observe(el);
+            });
+          });
+        </script>
 
         <!-- Description -->
         <p class="text-[14px] font-normal text-[#333333] leading-[1.54] tracking-[-0.012em] max-w-[390px]">
@@ -883,9 +916,23 @@
         </div>
 
         <!-- Heading -->
-        <h2 class="font-serif text-[34px] sm:text-[38px] md:text-[42px] font-normal text-[#111111] tracking-[-0.028em] leading-[1.12] mb-[22px]">
+        <h2 class="pay-creators-fade-text font-serif text-[34px] sm:text-[38px] md:text-[42px] font-normal text-[#111111] tracking-[-0.028em] leading-[1.12] mb-[22px] opacity-0 translate-x-8 transition-all duration-700 ease-out">
           Pay your creators<br>in one click
         </h2>
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            const els = document.querySelectorAll('.pay-creators-fade-text');
+            els.forEach(el => {
+              const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                  el.classList.remove('opacity-0', 'translate-x-8');
+                  observer.disconnect();
+                }
+              }, { threshold: 0.1 });
+              observer.observe(el);
+            });
+          });
+        </script>
 
         <!-- Description -->
         <p class="text-[14px] font-normal text-[#333333] leading-[1.54] tracking-[-0.012em] max-w-[390px]">
