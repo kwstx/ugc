@@ -1,2 +1,3 @@
-2026/10/08-21:47:25.279 1e38 Creating DB C:\Users\galan\ugc\temp_chrome_profile\Default\Local Storage\leveldb since it was missing.
-2026/10/08-21:47:25.312 1e38 Reusing MANIFEST C:\Users\galan\ugc\temp_chrome_profile\Default\Local Storage\leveldb/MANIFEST-000001
+2026/10/09-20:16:53.235 75e0 Reusing MANIFEST C:\Users\galan\ugc\temp_chrome_profile\Default\Local Storage\leveldb/MANIFEST-000001
+2026/10/09-20:16:53.236 75e0 Recovering log #3
+2026/10/09-20:16:53.248 75e0 Reusing old log C:\Users\galan\ugc\temp_chrome_profile\Default\Local Storage\leveldb/000003.log 

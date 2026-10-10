@@ -60,6 +60,27 @@
       border-radius: 9999px;
       z-index: -1;
     }
+
+    /* Pricing Characteristics Swipe Animation */
+    .pricing-swipe-viewport {
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+    }
+    .pricing-swipe-track {
+      display: flex;
+      width: 200%;
+      transform: translate3d(0, 0, 0);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+    .pricing-slide-monthly,
+    .pricing-slide-yearly {
+      width: 50%;
+      flex-shrink: 0;
+      transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
   </style>
 </head>
 <body class="bg-white min-h-screen flex flex-col items-center justify-center py-16 sm:py-20 px-4 sm:px-6 md:px-8">
@@ -76,18 +97,24 @@
     </div>
 
     <!-- Billing Toggle Pill -->
-    <div class="inline-flex items-center p-1 bg-[#ede0cb]/65 backdrop-blur-md rounded-full border border-[#e4d4be]/80 shadow-[inset_0_1px_3px_rgba(0,0,0,0.06)] mb-10 sm:mb-14">
+    <div id="billingToggleContainer" class="relative inline-flex items-center p-1 bg-[#ede0cb]/65 backdrop-blur-md rounded-full border border-[#e4d4be]/80 shadow-[inset_0_1px_3px_rgba(0,0,0,0.06)] mb-10 sm:mb-14 select-none">
+      <!-- Animated Glider Pill -->
+      <div 
+        id="billingGlider"
+        class="absolute top-1 bottom-1 left-1 rounded-full bg-white shadow-sm transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-none"
+        style="width: 106px; transform: translateX(0px);"
+      ></div>
       <button 
         id="billMonthlyBtn" 
         onclick="setBilling('monthly')"
-        class="flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-white text-[#18181b] text-[12px] sm:text-[13px] font-semibold shadow-sm transition-all cursor-pointer"
+        class="relative z-10 flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full text-[#18181b] text-[12px] sm:text-[13px] font-semibold transition-colors duration-200 cursor-pointer"
       >
         <span>Bill monthly</span>
       </button>
       <button 
         id="billYearlyBtn" 
         onclick="setBilling('yearly')"
-        class="flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full text-[#6b655c] hover:text-[#18181b] text-[12px] sm:text-[13px] font-medium transition-all cursor-pointer"
+        class="relative z-10 flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full text-[#6b655c] hover:text-[#18181b] text-[12px] sm:text-[13px] font-medium transition-colors duration-200 cursor-pointer"
       >
         <span>Bill yearly</span>
         <span 
@@ -112,14 +139,41 @@
             Your first viral test
           </p>
           
-          <div class="flex items-baseline gap-1 mb-0.5">
-            <span id="starter-old-price" class="text-[#a1a1aa] line-through text-[18px] sm:text-[20px] font-normal" style="display: none;">$280</span>
-            <span id="starter-price" class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$280</span>
-            <span class="text-[#71717a] text-[13px] sm:text-[14px] font-normal">/mo</span>
+          <!-- Swipable Price & Characteristics Viewport -->
+          <div class="pricing-swipe-viewport overflow-hidden relative w-full mb-0">
+            <div class="pricing-swipe-track flex w-[200%] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" style="transform: translateX(0%);">
+              
+              <!-- Monthly Slide -->
+              <div class="pricing-slide-monthly w-1/2 shrink-0 pr-1 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-100 scale-100">
+                <div class="flex items-baseline gap-1 mb-0.5">
+                  <span class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$280</span>
+                  <span class="text-[#71717a] text-[13px] sm:text-[14px] font-normal">/mo</span>
+                </div>
+                <p class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5">
+                  Billed monthly · cancel anytime
+                </p>
+              </div>
+
+              <!-- Yearly Slide -->
+              <div class="pricing-slide-yearly w-1/2 shrink-0 pr-1 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-0 scale-95 pointer-events-none">
+                <div class="flex items-baseline gap-1.5 mb-0.5 flex-wrap">
+                  <span id="starter-old-price" class="text-[#a1a1aa] line-through text-[18px] sm:text-[20px] font-normal">$280</span>
+                  <span id="starter-price" class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$224</span>
+                  <span class="text-[#71717a] text-[13px] sm:text-[14px] font-normal">/mo</span>
+                  <span 
+                    style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);"
+                    class="text-white font-bold text-[10px] px-2 py-0.5 rounded-full tracking-tight shadow-xs ml-1"
+                  >
+                    Save 20%
+                  </span>
+                </div>
+                <p id="starter-subtext" class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5">
+                  Billed yearly · cancel anytime
+                </p>
+              </div>
+
+            </div>
           </div>
-          <p id="starter-subtext" class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5">
-            Billed monthly · cancel anytime
-          </p>
 
           <!-- Credits & Clips box -->
           <div class="p-3 sm:p-3.5 bg-[#faf8f5] rounded-[14px] border border-[#eee5d8] mb-6">
@@ -187,14 +241,41 @@
               For teams shipping ads every week
             </p>
 
-            <div class="flex items-baseline gap-1 mb-0.5">
-              <span id="growth-old-price" class="text-[#a1a1aa] line-through text-[18px] sm:text-[20px] font-normal" style="display: none;">$880</span>
-              <span id="growth-price" class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$880</span>
-              <span class="text-[#71717a] text-[13px] sm:text-[14px] font-normal">/mo</span>
+            <!-- Swipable Price & Characteristics Viewport -->
+            <div class="pricing-swipe-viewport overflow-hidden relative w-full mb-0">
+              <div class="pricing-swipe-track flex w-[200%] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" style="transform: translateX(0%);">
+                
+                <!-- Monthly Slide -->
+                <div class="pricing-slide-monthly w-1/2 shrink-0 pr-1 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-100 scale-100">
+                  <div class="flex items-baseline gap-1 mb-0.5">
+                    <span class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$880</span>
+                    <span class="text-[#71717a] text-[13px] sm:text-[14px] font-normal">/mo</span>
+                  </div>
+                  <p class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5">
+                    Billed monthly · cancel anytime
+                  </p>
+                </div>
+
+                <!-- Yearly Slide -->
+                <div class="pricing-slide-yearly w-1/2 shrink-0 pr-1 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-0 scale-95 pointer-events-none">
+                  <div class="flex items-baseline gap-1.5 mb-0.5 flex-wrap">
+                    <span id="growth-old-price" class="text-[#a1a1aa] line-through text-[18px] sm:text-[20px] font-normal">$880</span>
+                    <span id="growth-price" class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$704</span>
+                    <span class="text-[#71717a] text-[13px] sm:text-[14px] font-normal">/mo</span>
+                    <span 
+                      style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);"
+                      class="text-white font-bold text-[10px] px-2 py-0.5 rounded-full tracking-tight shadow-xs ml-1"
+                    >
+                      Save 20%
+                    </span>
+                  </div>
+                  <p id="growth-subtext" class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5">
+                    Billed yearly · cancel anytime
+                  </p>
+                </div>
+
+              </div>
             </div>
-            <p id="growth-subtext" class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5">
-              Billed monthly · cancel anytime
-            </p>
 
             <!-- Credits & Clips box -->
             <div class="p-3 sm:p-3.5 bg-white/90 backdrop-blur-xs rounded-[14px] border border-[#dbe4ff] shadow-xs mb-6">
@@ -262,14 +343,41 @@
             For studios and agencies
           </p>
 
-          <div class="flex items-baseline gap-1 mb-0.5">
-            <span id="scale-old-price" class="text-[#a1a1aa] line-through text-[18px] sm:text-[20px] font-normal" style="display: none;">$2,980</span>
-            <span id="scale-price" class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$2,980</span>
-            <span class="text-[#71717a] text-[13px] sm:text-[14px] font-normal">/mo</span>
+          <!-- Swipable Price & Characteristics Viewport -->
+          <div class="pricing-swipe-viewport overflow-hidden relative w-full mb-0">
+            <div class="pricing-swipe-track flex w-[200%] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" style="transform: translateX(0%);">
+              
+              <!-- Monthly Slide -->
+              <div class="pricing-slide-monthly w-1/2 shrink-0 pr-1 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-100 scale-100">
+                <div class="flex items-baseline gap-1 mb-0.5">
+                  <span class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$2,980</span>
+                  <span class="text-[#71717a] text-[13px] sm:text-[14px] font-normal">/mo</span>
+                </div>
+                <p class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5">
+                  Billed monthly · cancel anytime
+                </p>
+              </div>
+
+              <!-- Yearly Slide -->
+              <div class="pricing-slide-yearly w-1/2 shrink-0 pr-1 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-0 scale-95 pointer-events-none">
+                <div class="flex items-baseline gap-1.5 mb-0.5 flex-wrap">
+                  <span id="scale-old-price" class="text-[#a1a1aa] line-through text-[18px] sm:text-[20px] font-normal">$2,980</span>
+                  <span id="scale-price" class="text-[#111111] text-[34px] sm:text-[38px] font-bold tracking-tight">$2,384</span>
+                  <span class="text-[#71717a] text-[13px] sm:text-[14px] font-normal">/mo</span>
+                  <span 
+                    style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);"
+                    class="text-white font-bold text-[10px] px-2 py-0.5 rounded-full tracking-tight shadow-xs ml-1"
+                  >
+                    Save 20%
+                  </span>
+                </div>
+                <p id="scale-subtext" class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5">
+                  Billed yearly · cancel anytime
+                </p>
+              </div>
+
+            </div>
           </div>
-          <p id="scale-subtext" class="text-[#71717a] text-[11px] sm:text-[11.5px] font-normal mb-5">
-            Billed monthly · cancel anytime
-          </p>
 
           <!-- Credits & Clips box -->
           <div class="p-3 sm:p-3.5 bg-[#faf8f5] rounded-[14px] border border-[#eee5d8] mb-6">
@@ -609,53 +717,124 @@
   </section>
 
   <script>
+    // Pricing Billing Toggle with Swipe Animation
+    let currentBillingMode = 'monthly';
+
     function setBilling(mode) {
+      if (mode === currentBillingMode) return;
+      currentBillingMode = mode;
+
       const yearlyBtn = document.getElementById('billYearlyBtn');
       const monthlyBtn = document.getElementById('billMonthlyBtn');
+      const glider = document.getElementById('billingGlider');
       
-      const starterOldPrice = document.getElementById('starter-old-price');
-      const starterPrice = document.getElementById('starter-price');
-      const starterSubtext = document.getElementById('starter-subtext');
-      
-      const growthOldPrice = document.getElementById('growth-old-price');
-      const growthPrice = document.getElementById('growth-price');
-      const growthSubtext = document.getElementById('growth-subtext');
-      
-      const scaleOldPrice = document.getElementById('scale-old-price');
-      const scalePrice = document.getElementById('scale-price');
-      const scaleSubtext = document.getElementById('scale-subtext');
+      const tracks = document.querySelectorAll('.pricing-swipe-track');
+      const monthlySlides = document.querySelectorAll('.pricing-slide-monthly');
+      const yearlySlides = document.querySelectorAll('.pricing-slide-yearly');
 
       if (mode === 'yearly') {
-        yearlyBtn.className = 'flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-white text-[#18181b] text-[12px] sm:text-[13px] font-semibold shadow-sm transition-all cursor-pointer';
-        monthlyBtn.className = 'px-3.5 sm:px-4 py-1.5 rounded-full text-[#6b655c] hover:text-[#18181b] text-[12px] sm:text-[13px] font-medium transition-all cursor-pointer';
-        
-        if (starterOldPrice) starterOldPrice.style.display = 'inline';
-        if (starterPrice) starterPrice.textContent = '$224';
-        if (starterSubtext) starterSubtext.textContent = 'Billed yearly · cancel anytime';
-        
-        if (growthOldPrice) growthOldPrice.style.display = 'inline';
-        if (growthPrice) growthPrice.textContent = '$704';
-        if (growthSubtext) growthSubtext.textContent = 'Billed yearly · cancel anytime';
+        // Glider Pill Animation
+        if (glider && yearlyBtn && monthlyBtn) {
+          glider.style.transform = `translateX(${yearlyBtn.offsetLeft - monthlyBtn.offsetLeft}px)`;
+          glider.style.width = yearlyBtn.offsetWidth + 'px';
+        }
+        if (yearlyBtn) {
+          yearlyBtn.classList.remove('text-[#6b655c]', 'font-medium');
+          yearlyBtn.classList.add('text-[#18181b]', 'font-semibold');
+        }
+        if (monthlyBtn) {
+          monthlyBtn.classList.remove('text-[#18181b]', 'font-semibold');
+          monthlyBtn.classList.add('text-[#6b655c]', 'font-medium');
+        }
 
-        if (scaleOldPrice) scaleOldPrice.style.display = 'inline';
-        if (scalePrice) scalePrice.textContent = '$2,384';
-        if (scaleSubtext) scaleSubtext.textContent = 'Billed yearly · cancel anytime';
+        // Swipe Cards to Yearly (-50%) with staggered cascading wave
+        tracks.forEach((track, idx) => {
+          track.style.transitionDelay = (idx * 50) + 'ms';
+          track.style.transform = 'translate3d(-50%, 0, 0)';
+        });
+
+        // Cross-fade opacity and subtle scale
+        monthlySlides.forEach((slide) => {
+          slide.classList.remove('opacity-100', 'scale-100');
+          slide.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+        });
+        yearlySlides.forEach((slide) => {
+          slide.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+          slide.classList.add('opacity-100', 'scale-100');
+        });
+
       } else {
-        monthlyBtn.className = 'flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-white text-[#18181b] text-[12px] sm:text-[13px] font-semibold shadow-sm transition-all cursor-pointer';
-        yearlyBtn.className = 'flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full text-[#6b655c] hover:text-[#18181b] text-[12px] sm:text-[13px] font-medium transition-all cursor-pointer';
-        
-        if (starterOldPrice) starterOldPrice.style.display = 'none';
-        if (starterPrice) starterPrice.textContent = '$280';
-        if (starterSubtext) starterSubtext.textContent = 'Billed monthly · cancel anytime';
-        
-        if (growthOldPrice) growthOldPrice.style.display = 'none';
-        if (growthPrice) growthPrice.textContent = '$880';
-        if (growthSubtext) growthSubtext.textContent = 'Billed monthly · cancel anytime';
+        // Glider Pill Animation
+        if (glider && monthlyBtn) {
+          glider.style.transform = 'translate3d(0, 0, 0)';
+          glider.style.width = monthlyBtn.offsetWidth + 'px';
+        }
+        if (monthlyBtn) {
+          monthlyBtn.classList.remove('text-[#6b655c]', 'font-medium');
+          monthlyBtn.classList.add('text-[#18181b]', 'font-semibold');
+        }
+        if (yearlyBtn) {
+          yearlyBtn.classList.remove('text-[#18181b]', 'font-semibold');
+          yearlyBtn.classList.add('text-[#6b655c]', 'font-medium');
+        }
 
-        if (scaleOldPrice) scaleOldPrice.style.display = 'none';
-        if (scalePrice) scalePrice.textContent = '$2,980';
-        if (scaleSubtext) scaleSubtext.textContent = 'Billed monthly · cancel anytime';
+        // Swipe Cards back to Monthly (0%) with reverse stagger
+        tracks.forEach((track, idx) => {
+          track.style.transitionDelay = ((2 - idx) * 50) + 'ms';
+          track.style.transform = 'translate3d(0, 0, 0)';
+        });
+
+        // Cross-fade opacity and subtle scale
+        yearlySlides.forEach((slide) => {
+          slide.classList.remove('opacity-100', 'scale-100');
+          slide.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+        });
+        monthlySlides.forEach((slide) => {
+          slide.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+          slide.classList.add('opacity-100', 'scale-100');
+        });
       }
+    }
+
+    function initBillingGlider() {
+      const glider = document.getElementById('billingGlider');
+      const monthlyBtn = document.getElementById('billMonthlyBtn');
+      const yearlyBtn = document.getElementById('billYearlyBtn');
+      if (!glider || !monthlyBtn || !yearlyBtn) return;
+      if (currentBillingMode === 'yearly') {
+        glider.style.transform = `translateX(${yearlyBtn.offsetLeft - monthlyBtn.offsetLeft}px)`;
+        glider.style.width = yearlyBtn.offsetWidth + 'px';
+      } else {
+        glider.style.transform = 'translate3d(0, 0, 0)';
+        glider.style.width = monthlyBtn.offsetWidth + 'px';
+      }
+    }
+
+    window.addEventListener('load', initBillingGlider);
+    window.addEventListener('resize', initBillingGlider);
+    document.addEventListener('DOMContentLoaded', initBillingGlider);
+    setTimeout(initBillingGlider, 100);
+
+    // Touch swipe support for mobile
+    const pricingGrid = document.querySelector('.pricing-swipe-viewport')?.closest('.grid');
+    if (pricingGrid) {
+      let touchStartX = 0;
+      let touchStartY = 0;
+      pricingGrid.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+      }, { passive: true });
+      pricingGrid.addEventListener('touchend', (e) => {
+        const diffX = e.changedTouches[0].screenX - touchStartX;
+        const diffY = e.changedTouches[0].screenY - touchStartY;
+        if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+          if (diffX < 0) {
+            setBilling('yearly');
+          } else {
+            setBilling('monthly');
+          }
+        }
+      }, { passive: true });
     }
   </script>
 
