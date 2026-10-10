@@ -234,7 +234,7 @@
             </svg>
           </div>
           <div class="flex flex-col gap-1.5 mt-auto pt-6">
-            <h3 class="font-serif text-[18px] sm:text-[19px] md:text-[20px] font-normal text-[#111111] tracking-[-0.025em] leading-snug">
+            <h3 class="reactions-fade-text font-serif text-[18px] sm:text-[19px] md:text-[20px] font-normal text-[#111111] tracking-[-0.025em] leading-snug opacity-0 -translate-x-8 transition-all duration-700 ease-out">
               Reactions in Hours, Not Weeks
             </h3>
             <p class="text-[12px] sm:text-[12.5px] text-[#666666] font-normal leading-relaxed">
@@ -1100,5 +1100,19 @@
     }
   </script>
 
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const els = document.querySelectorAll('.reactions-fade-text');
+      els.forEach(el => {
+        const observer = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) {
+            el.classList.remove('opacity-0', '-translate-x-8');
+            observer.disconnect();
+          }
+        }, { threshold: 0.1 });
+        observer.observe(el);
+      });
+    });
+  </script>
 </body>
 </html>

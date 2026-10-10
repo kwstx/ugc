@@ -104,6 +104,13 @@
       letter-spacing: -0.028em;
       line-height: 1.12;
       margin-bottom: 22px;
+      opacity: 0;
+      transform: translateX(-32px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+    .headline-text.is-visible {
+      opacity: 1;
+      transform: translateX(0);
     }
 
     .paragraph-text {
@@ -441,6 +448,12 @@
 
       // Initial delay before typing starts
       setTimeout(type, 500);
+
+      // Reveal headline text
+      setTimeout(() => {
+        const headline = document.querySelector('.headline-text');
+        if (headline) headline.classList.add('is-visible');
+      }, 100);
     })();
   </script>
 

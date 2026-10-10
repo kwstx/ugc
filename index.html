@@ -310,7 +310,6 @@
           </a>
           <a href="#custom-orders" onclick="document.getElementById('custom-orders')?.scrollIntoView({ behavior: 'smooth' })" class="hover:text-black transition-colors">Custom orders</a>
           <a href="#pricingSection" onclick="document.getElementById('pricingSection')?.scrollIntoView({ behavior: 'smooth' })" class="hover:text-black transition-colors">Pricing</a>
-          <a href="#results" class="hover:text-black transition-colors">Results</a>
         </div>
 
         <!-- Right Buttons -->
@@ -335,7 +334,7 @@
         LIVE
       </span>
       <span class="text-[13px] text-[#4b5563] font-medium">
-        5,000+ real-human reactions · 0 made by AI
+        Real-human reactions · 0 made by AI
       </span>
     </div>
 
@@ -364,7 +363,7 @@
 
     <!-- 4. SUBTITLE COPY -->
     <p class="hero-subtitle text-[14.5px] sm:text-[16px] max-w-[580px] mx-auto mb-7 sm:mb-9 font-normal">
-      Search 5,000+ raw reaction clips from real creators. Download in seconds,<br class="hidden sm:inline" />
+      Search raw reaction clips from real creators. Download in seconds,<br class="hidden sm:inline" />
       drop in your app demo, and ship the ad today.
     </p>
 
@@ -577,9 +576,23 @@
         </span>
 
         <!-- Heading -->
-        <h2 class="font-serif text-[34px] sm:text-[38px] md:text-[42px] font-normal text-[#111111] tracking-[-0.028em] leading-[1.12] mb-[22px]">
+        <h2 class="reactions-fade-text font-serif text-[34px] sm:text-[38px] md:text-[42px] font-normal text-[#111111] tracking-[-0.028em] leading-[1.12] mb-[22px] opacity-0 -translate-x-8 transition-all duration-700 ease-out">
           Reactions in Hours,<br>Not Weeks
         </h2>
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            const els = document.querySelectorAll('.reactions-fade-text');
+            els.forEach(el => {
+              const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                  el.classList.remove('opacity-0', '-translate-x-8');
+                  observer.disconnect();
+                }
+              }, { threshold: 0.1 });
+              observer.observe(el);
+            });
+          });
+        </script>
 
         <!-- Description -->
         <p class="text-[14px] font-normal text-[#333333] leading-[1.54] tracking-[-0.012em] max-w-[390px]">
