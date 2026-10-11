@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sofia - Real Human UGC Reactions</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Inter and Newsreader / Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: #ffffff;
+      color: #111827;
+    }
+
+    .font-serif-heading {
+      font-family: 'Newsreader', Georgia, Cambria, serif;
+      font-weight: 400;
+      letter-spacing: -0.015em;
+    }
+
+    /* Hide scrollbar for category pills container */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-white min-h-screen text-gray-900 antialiased selection:bg-indigo-100 selection:text-indigo-900">
+
+  <!-- ================= TOP HEADER / NAVBAR ================= -->
+  <header class="w-full border-b border-[#f0f0f0] bg-white sticky top-0 z-40">
+    <div class="max-w-[1140px] mx-auto px-5 sm:px-8 h-[54px] flex items-center justify-between">
+      
+      <!-- Logo Left -->
+      <a href="index.html" class="flex items-center group">
+        <span class="font-bold text-[15.5px] sm:text-[16px] tracking-[-0.02em] text-black">Sofia</span>
+      </a>
+
+      <!-- Right Nav Actions -->
+      <div class="flex items-center gap-5 sm:gap-6 text-[13.5px]">
+        <span class="text-[#71717a] hidden sm:inline-block">Real humans. Never AI.</span>
+        <a href="#login" class="text-[#18181b] font-normal hover:text-black transition-colors">Log in</a>
+        
+        <!-- Shopping Cart Icon -->
+        <a href="#cart" class="text-[#27272a] hover:text-black transition-colors" title="Cart">
+          <svg class="w-[18px] h-[18px] stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.7 2.45-6.19a1.125 1.125 0 00-1.09-1.385H5.106M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+          </svg>
+        </a>
+
+        <!-- Get started button -->
+        <a href="#get-started" class="bg-[#4f46e5] hover:bg-[#4338ca] text-white text-[13px] font-medium px-4 py-2 rounded-full inline-flex items-center gap-1.5 transition-colors shadow-sm">
+          <span>Get started</span>
+          <svg class="w-3.5 h-3.5 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <main class="max-w-[1140px] mx-auto px-5 sm:px-8 pt-7 pb-14">
+    
+    <!-- HERO SECTION: 2 COLUMNS (LEFT CONTENT, RIGHT CARDS) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start mb-7">
+      
+      <!-- LEFT HERO COLUMN (Headline, Intro text, Search bar, Prompts) -->
+      <div class="lg:col-span-7 pr-0 lg:pr-3">
+        <!-- Headline -->
+        <h1 class="font-serif-heading text-[36px] sm:text-[42px] leading-[1.12] text-black mb-3.5">
+          Real human UGC reactions for<br>
+          ads. <span class="text-[#78716c]">Powered by real creators.</span>
+        </h1>
+
+        <!-- Explanatory Subtext -->
+        <p class="text-[13px] sm:text-[13.5px] leading-relaxed text-[#4b5563] mb-4 max-w-[580px]">
+          6,000+ ready-to-run reaction clips filmed by realhumans. Guest clips start at $15.00. Subscribers use their account credits and discounts. Select clips to see your bundle price.
+        </p>
+
+        <!-- Search Bar -->
+        <div class="relative w-full max-w-[550px] mb-3">
+          <div class="flex items-center w-full bg-[#f4f5f6] border border-[#e5e7eb] rounded-[14px] px-4 py-3 shadow-none focus-within:border-gray-400 focus-within:bg-white transition-all">
+            <svg class="w-4 h-4 text-[#9ca3af] mr-3 shrink-0 stroke-[2]" style="width: 17px; height: 17px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+            </svg>
+            <input 
+              type="text" 
+              placeholder="Describe a clip or paste an Instagram / TikTok link" 
+              class="w-full bg-transparent text-[13.5px] text-gray-800 placeholder-[#6b7280] focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <!-- Help Text & Trending Tags -->
+        <div class="space-y-1.5 text-[11.5px] sm:text-[12px] text-[#6b7280]">
+          <p>Paste a public Instagram or TikTok link, then press Enter to match its first 2 seconds.</p>
+          <p>
+            <span class="text-[#4b5563] font-medium">Trending:</span> shocked reaction, mind blown, girl laughing, crying, gym, pointing at screen
+          </p>
+        </div>
+      </div>
+
+      <!-- RIGHT HERO COLUMN (2 CARDS: MCP & COLLECTIONS) -->
+      <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch">
+        
+        <!-- CARD 1: MCP CLAUDE CODE CARD -->
+        <div class="bg-white border border-[#e5e7eb] rounded-[18px] p-3.5 flex flex-col justify-between hover:shadow-sm transition-shadow">
+          <div>
+            <h2 class="font-bold text-[13.5px] leading-[1.3] text-black">
+              One demo in.<br>
+              Ready-to-edit video variations out.
+            </h2>
+            <p class="text-[11px] text-[#71717a] mt-1 mb-3 leading-snug">
+              The DansUGC MCP makes Claude Code your video editor
+            </p>
+          </div>
+
+          <!-- MCP Graphic Area -->
+          <div class="w-full bg-[#f9fafb] rounded-[12px] overflow-hidden border border-[#f0f0f0] p-2 flex items-center justify-center">
+            <img 
+              src="assets/library/mcp_graphic.png" 
+              alt="DansUGC MCP Claude Code Video Editor Graphic" 
+              class="w-full h-auto object-contain max-h-[115px] rounded-[8px]"
+            />
+          </div>
+        </div>
+
+        <!-- CARD 2: COLLECTIONS CARD -->
+        <div class="bg-white border border-[#e5e7eb] rounded-[18px] p-3.5 flex flex-col justify-between hover:shadow-sm transition-shadow">
+          <div>
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-2.5">
+              <h2 class="font-bold text-[13.5px] text-black">Collections</h2>
+              <a href="#see-all" class="text-[11.5px] text-[#71717a] hover:text-black transition-colors">See all</a>
+            </div>
+
+            <!-- List Items -->
+            <div class="space-y-2">
+              
+              <!-- Item 1: Face Reaction -->
+              <div class="flex items-center gap-2.5 p-0.5 group cursor-pointer hover:bg-gray-50 rounded-[8px] transition-colors">
+                <img src="assets/library/col_face.png" alt="Face Reaction" class="w-9 h-9 rounded-[9px] object-cover shrink-0 border border-gray-100" />
+                <div class="min-w-0">
+                  <div class="text-[12px] font-semibold text-black leading-tight truncate">Face Reaction</div>
+                  <div class="text-[10.5px] text-[#71717a]">1,014 clips</div>
+                </div>
+              </div>
+
+              <!-- Item 2: Product Demo -->
+              <div class="flex items-center gap-2.5 p-0.5 group cursor-pointer hover:bg-gray-50 rounded-[8px] transition-colors">
+                <img src="assets/library/col_product.png" alt="Product Demo" class="w-9 h-9 rounded-[9px] object-cover shrink-0 border border-gray-100" />
+                <div class="min-w-0">
+                  <div class="text-[12px] font-semibold text-black leading-tight truncate">Product Demo</div>
+                  <div class="text-[10.5px] text-[#71717a]">446 clips</div>
+                </div>
+              </div>
+
+              <!-- Item 3: Outfit Of The Day -->
+              <div class="flex items-center gap-2.5 p-0.5 group cursor-pointer hover:bg-gray-50 rounded-[8px] transition-colors">
+                <img src="assets/library/col_outfit.png" alt="Outfit Of The Day" class="w-9 h-9 rounded-[9px] object-cover shrink-0 border border-gray-100" />
+                <div class="min-w-0">
+                  <div class="text-[12px] font-semibold text-black leading-tight truncate">Outfit Of The Day</div>
+                  <div class="text-[10.5px] text-[#71717a]">321 clips</div>
+                </div>
+              </div>
+
+              <!-- Item 4: Chore -->
+              <div class="flex items-center gap-2.5 p-0.5 group cursor-pointer hover:bg-gray-50 rounded-[8px] transition-colors">
+                <img src="assets/library/col_chore.png" alt="Chore" class="w-9 h-9 rounded-[9px] object-cover shrink-0 border border-gray-100" />
+                <div class="min-w-0">
+                  <div class="text-[12px] font-semibold text-black leading-tight truncate">Chore</div>
+                  <div class="text-[10.5px] text-[#71717a]">297 clips</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ================= CATEGORY FILTER PILLS ROW ================= -->
+    <div class="flex items-center justify-between gap-2 overflow-x-auto no-scrollbar pb-1.5 mb-3.5 pt-1.5 border-t border-[#f4f4f5]">
+      
+      <!-- Category Pills List -->
+      <div class="flex items-center gap-2 shrink-0">
+        <!-- Active: All clips -->
+        <button class="bg-black text-white text-[12px] font-medium px-3.5 py-1.5 rounded-full shrink-0 shadow-sm">
+          All clips
+        </button>
+
+        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+          Health & Fitness
+        </button>
+
+        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+          Nutrition & Food
+        </button>
+
+        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+          Women's Health
+        </button>
+
+        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+          Gut Health
+        </button>
+
+        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+          Sleep & Wellness
+        </button>
+
+        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+          Productivity & Work
+        </button>
+
+        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+          Education & Study
+        </button>
+
+        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+          Dating
+        </button>
+
+        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+          Relationships
+        </button>
+      </div>
+
+      <!-- Right Controls: Filters, All creators, Most purchased -->
+      <div class="flex items-center gap-2 shrink-0 pl-2">
+        <!-- Filters Button -->
+        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full inline-flex items-center gap-1.5 shrink-0 transition-colors">
+          <svg class="w-3.5 h-3.5 stroke-[2] text-[#4b5563]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"/>
+          </svg>
+          <span>Filters</span>
+          <svg class="w-2.5 h-2.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <!-- All Creators Dropdown -->
+        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full inline-flex items-center gap-1.5 shrink-0 transition-colors">
+          <span>All creators</span>
+          <svg class="w-2.5 h-2.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <!-- Most Purchased Dropdown -->
+        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full inline-flex items-center gap-1.5 shrink-0 transition-colors">
+          <span>Most purchased</span>
+          <svg class="w-2.5 h-2.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ================= LAVENDER / LIGHT BLUE NOTICE BANNER ================= -->
+    <div id="selectionBanner" class="bg-[#f6f6fe] border border-[#e0e7ff] rounded-[14px] px-4 py-2.5 mb-2.5 flex items-center justify-between text-[#374151] text-[12px] transition-all">
+      <div class="flex items-center gap-2.5">
+        <svg class="w-4 h-4 text-[#6366f1] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" stroke-width="1.8" />
+          <path stroke-width="2" stroke-linecap="round" d="M12 16v-4m0-4h.01" />
+        </svg>
+        <span>
+          Click a clip to select it. Shift-click picks a range, Select all takes the page. The <span class="font-medium text-[#4f46e5]">ⓘ</span> in a clip's corner opens its details.
+        </span>
+      </div>
+      <button onclick="document.getElementById('selectionBanner').style.display='none'" class="text-[#9ca3af] hover:text-[#4b5563] ml-3 text-base leading-none transition-colors" title="Dismiss">
+        &times;
+      </button>
+    </div>
+
+    <!-- ================= EMPTY STATE ================= -->
+    <div class="py-20 sm:py-28 flex flex-col items-center justify-center text-center">
+      <p class="text-[16px] sm:text-[18px] font-medium text-gray-500">No clips yet!</p>
+    </div>
+
+  </main>
+
+  <!-- ================= FLOATING CHAT WIDGET (BOTTOM RIGHT) ================= -->
+  <div class="fixed bottom-4 right-5 z-50">
+    <button class="w-[32px] h-[32px] sm:w-[34px] sm:h-[34px] rounded-full bg-[#0084ff] hover:bg-[#0070da] text-white flex items-center justify-center shadow-md transition-transform hover:scale-110 active:scale-95" title="Support Chat">
+      <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+        <path d="M12 2C6.477 2 2 6.145 2 11.258c0 2.913 1.455 5.518 3.734 7.185V22l3.418-1.875c.915.253 1.884.391 2.848.391 5.523 0 10-4.145 10-9.258C22 6.145 17.523 2 12 2z"/>
+      </svg>
+    </button>
+  </div>
+
+</body>
+</html>
