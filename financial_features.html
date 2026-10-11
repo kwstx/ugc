@@ -50,6 +50,33 @@
       color: #111111;
       text-align: center;
     }
+
+    /* Features Heading Letter Reveal Animation */
+    .char-reveal {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+      filter: blur(3px);
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                  filter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform, filter;
+    }
+
+    .reveal-active .char-reveal {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .char-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        transition: none !important;
+      }
+    }
   </style>
 </head>
 <body class="w-full min-h-screen bg-white flex flex-col items-center justify-center px-4 sm:px-6 py-16 md:py-20 select-text">
@@ -69,11 +96,11 @@
     </div>
 
     <!-- 2. Main Title -->
-    <h2 class="hero-heading text-[38px] sm:text-[48px] md:text-[54px] lg:text-[58px] max-w-4xl mx-auto mb-10 sm:mb-14">
-      <span class="block">
+    <h2 id="featuresHeading" class="hero-heading text-[38px] sm:text-[48px] md:text-[54px] lg:text-[58px] max-w-4xl mx-auto mb-10 sm:mb-14">
+      <span class="features-title-line block">
         Your AI agent for
       </span>
-      <span class="block mt-0.5 sm:mt-1">
+      <span class="features-title-line block mt-0.5 sm:mt-1">
         smarter creator campaigns
       </span>
     </h2>
@@ -154,5 +181,74 @@
 
   </section>
 
+  <script>
+    // Features Section Letter-by-Letter Reveal Animation (Starting from top-left)
+    function initFeaturesLetterReveal() {
+      const container = document.getElementById('featuresHeading');
+      if (!container) return;
+
+      const lines = container.querySelectorAll('.features-title-line');
+      let globalIndex = 0;
+      const charDelay = 22; // ms per letter
+      const linePause = 75; // ms pause between lines
+
+      lines.forEach((line, lineIdx) => {
+        const text = line.textContent.trim();
+        line.setAttribute('aria-label', text);
+        line.innerHTML = '';
+
+        if (lineIdx > 0) {
+          globalIndex += Math.round(linePause / charDelay);
+        }
+
+        const words = text.split(' ');
+        words.forEach((word, wordIdx) => {
+          const wordSpan = document.createElement('span');
+          wordSpan.className = 'inline-block whitespace-nowrap';
+          wordSpan.setAttribute('aria-hidden', 'true');
+
+          for (let i = 0; i < word.length; i++) {
+            const charSpan = document.createElement('span');
+            charSpan.className = 'char-reveal';
+            charSpan.textContent = word[i];
+            charSpan.style.transitionDelay = `${globalIndex * charDelay}ms`;
+            wordSpan.appendChild(charSpan);
+            globalIndex++;
+          }
+
+          line.appendChild(wordSpan);
+
+          if (wordIdx < words.length - 1) {
+            const spaceSpan = document.createElement('span');
+            spaceSpan.className = 'inline-block';
+            spaceSpan.innerHTML = '&nbsp;';
+            spaceSpan.setAttribute('aria-hidden', 'true');
+            line.appendChild(spaceSpan);
+            globalIndex++;
+          }
+        });
+      });
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              container.classList.add('reveal-active');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        observer.observe(container);
+      } else {
+        container.classList.add('reveal-active');
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initFeaturesLetterReveal);
+    } else {
+      initFeaturesLetterReveal();
+    }
+  </script>
 </body>
 </html>

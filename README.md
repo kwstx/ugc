@@ -1,6 +1,6 @@
-# DansUGC Landing Page
+# Sofia Landing Page
 
-A pixel-perfect, responsive replica of the DansUGC landing page with interactive search, category tags, creator reaction clips catalog, and concierge support chat.
+A pixel-perfect, responsive replica of the Sofia landing page with interactive search, category tags, creator reaction clips catalog, and concierge support chat.
 
 ## 🚀 Features
 

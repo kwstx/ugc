@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SideShift for AI · Scale your brand from your favorite AI assistant</title>
+  <title>Sofia for AI · Scale your brand from your favorite AI assistant</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -64,6 +64,75 @@
       text-align: center;
     }
 
+    /* Hero Heading Fade In Up Animation */
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-title-line-1 {
+      opacity: 0;
+      animation: fadeInUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.05s forwards;
+      will-change: transform, opacity;
+    }
+
+    .hero-title-line-2 {
+      opacity: 0;
+      animation: fadeInUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.22s forwards;
+      will-change: transform, opacity;
+    }
+
+    /* Features Heading Letter Reveal Animation */
+    .char-reveal {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+      filter: blur(3px);
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                  filter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform, filter;
+    }
+
+    .reveal-active .char-reveal {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+
+    /* Scroll Fade In Up Animation */
+    .fade-in-up-scroll {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .fade-in-up-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-title-line-1,
+      .hero-title-line-2,
+      .char-reveal,
+      .fade-in-up-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
     .btn-connect-pill {
       background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);
       box-shadow: 0 3px 12px rgba(33, 58, 231, 0.25);
@@ -94,13 +163,13 @@
             <path fill-rule="evenodd" clip-rule="evenodd" d="M4 4h9c5.523 0 10 4.477 10 10s-4.477 10-10 10H4V4zm5.5 4.5v11h3.5c3.038 0 5.5-2.462 5.5-5.5s-2.462-5.5-5.5-5.5H9.5z"/>
           </svg>
         </div>
-        <span class="font-bold text-[15.5px] sm:text-[16px] tracking-[-0.02em] text-black">DansUGC</span>
+        <span class="font-bold text-[15.5px] sm:text-[16px] tracking-[-0.02em] text-black">Sofia</span>
       </a>
 
       <!-- Center Nav Links -->
       <div class="hidden md:flex items-center gap-6 lg:gap-7 text-[14px] text-[#374151] font-medium">
         <a href="index.html#library" class="hover:text-black transition-colors">Library</a>
-        <a href="sideshift.html" class="flex items-center gap-1.5 hover:text-black transition-colors">
+        <a href="sofia.html" class="flex items-center gap-1.5 hover:text-black transition-colors">
           <span>AI agents</span>
           <span class="bg-[#e9ebff] text-[#5e54f3] text-[9.5px] font-bold px-1.5 py-[1px] rounded-full uppercase tracking-wider">NEW</span>
         </a>
@@ -128,22 +197,22 @@
     
     <!-- Top Subtitle / Category Badge -->
     <div class="text-[12px] sm:text-[13.5px] font-[500] text-[#61666e] tracking-[-0.01em] leading-none mb-5 sm:mb-6">
-      SideShift for AI · Beta
+      Sofia for AI · Beta
     </div>
 
     <!-- Main Headline -->
     <h1 class="hero-heading text-[42px] sm:text-[54px] md:text-[62px] lg:text-[68px] max-w-4xl mx-auto mb-5 sm:mb-6">
-      <span class="block">
+      <span class="block hero-title-line-1">
         Scale your brand from
       </span>
-      <span class="block mt-0.5 sm:mt-1">
+      <span class="block mt-0.5 sm:mt-1 hero-title-line-2">
         your favorite AI assistant
       </span>
     </h1>
 
     <!-- Description -->
     <p class="text-[14.5px] sm:text-[16px] md:text-[17px] font-[400] text-[#555e6d] tracking-[-0.01em] leading-[1.55] max-w-[620px] mb-7 sm:mb-9">
-      Connect SideShift to the AI assistant you already use. Find creators, plan<br class="hidden sm:inline"> campaigns and review results in the same conversation.
+      Connect Sofia to the AI assistant you already use. Find creators, plan<br class="hidden sm:inline"> campaigns and review results in the same conversation.
     </p>
 
     <!-- Action Row (Button & Documentation Link) -->
@@ -201,7 +270,7 @@
 
     <!-- Footer Note -->
     <div class="text-[11.5px] sm:text-[13px] font-[400] text-[#71717a] tracking-[-0.01em] leading-none">
-      Your SideShift account. The access you choose.
+      Your Sofia account. The access you choose.
     </div>
 
   </main>
@@ -221,11 +290,11 @@
     </div>
 
     <!-- 2. Main Title -->
-    <h2 class="hero-heading text-[38px] sm:text-[48px] md:text-[54px] lg:text-[58px] max-w-4xl mx-auto mb-10 sm:mb-14">
-      <span class="block">
+    <h2 id="featuresHeading" class="hero-heading text-[38px] sm:text-[48px] md:text-[54px] lg:text-[58px] max-w-4xl mx-auto mb-10 sm:mb-14">
+      <span class="features-title-line block">
         Your AI agent for
       </span>
-      <span class="block mt-0.5 sm:mt-1">
+      <span class="features-title-line block mt-0.5 sm:mt-1">
         smarter creator campaigns
       </span>
     </h2>
@@ -310,13 +379,13 @@
   <section class="w-full max-w-[920px] mx-auto flex flex-col items-center text-center pt-16 sm:pt-24 md:pt-28 pb-20 sm:pb-28 border-t border-[#f0f0f2] relative">
     
     <!-- Section Heading -->
-    <h2 class="hero-heading text-[38px] sm:text-[48px] md:text-[54px] lg:text-[58px] max-w-4xl mx-auto mb-3 sm:mb-4">
+    <h2 class="hero-heading text-[38px] sm:text-[48px] md:text-[54px] lg:text-[58px] max-w-4xl mx-auto mb-3 sm:mb-4 fade-in-up-scroll">
       Start with the assistant you use.
     </h2>
 
     <!-- Section Subtitle -->
     <p class="text-[14.5px] sm:text-[16px] font-normal text-[#555e6d] leading-relaxed max-w-[560px] mb-8 sm:mb-10">
-      Choose your assistant. Add SideShift. You’re ready to ask.
+      Choose your assistant. Add Sofia. You’re ready to ask.
     </p>
 
     <!-- Main Container Card -->
@@ -409,12 +478,12 @@
         
         <!-- Assistant Title -->
         <h3 id="assistantTitle" class="text-[22px] sm:text-[25px] font-bold text-[#111827] tracking-[-0.025em] mb-1.5">
-          Add SideShift to Codex
+          Add Sofia to Codex
         </h3>
 
         <!-- Assistant Subtitle -->
         <p id="assistantDesc" class="text-[14px] sm:text-[15px] text-[#64748b] font-normal leading-relaxed mb-6 sm:mb-7">
-          Add the server, then sign in to SideShift in the browser window that opens.
+          Add the server, then sign in to Sofia in the browser window that opens.
         </p>
 
         <!-- Terminal Box Container -->
@@ -442,13 +511,13 @@
           </div>
 
           <!-- Terminal Commands Content -->
-          <div id="terminalCode" class="font-mono text-[12.5px] sm:text-[13.5px] text-[#1e293b] leading-[1.8] sm:leading-[1.9] select-all overflow-x-auto whitespace-pre">codex mcp add sideshift --url https://app.sideshift.app/api/mcp
-codex mcp login sideshift</div>
+          <div id="terminalCode" class="font-mono text-[12.5px] sm:text-[13.5px] text-[#1e293b] leading-[1.8] sm:leading-[1.9] select-all overflow-x-auto whitespace-pre">codex mcp add sofia --url https://app.sofia.app/api/mcp
+codex mcp login sofia</div>
         </div>
 
         <!-- Helper Prompt text -->
         <p id="helperPromptText" class="text-[13.5px] sm:text-[14px] text-[#64748b] font-normal mb-8 sm:mb-10">
-          Sign in with your SideShift account when prompted.
+          Sign in with your Sofia account when prompted.
         </p>
 
         <!-- Try your first request Subsection -->
@@ -486,7 +555,7 @@ codex mcp login sideshift</div>
 
   <!-- 5. Simple Footer Space -->
   <footer class="w-full max-w-[910px] text-center pt-8 text-[12px] text-[#9ca3af]">
-    © DansUGC · All rights reserved.
+    © Sofia · All rights reserved.
   </footer>
 
   <!-- Floating Calendar Action Button (Bottom Right) -->
@@ -510,42 +579,42 @@ codex mcp login sideshift</div>
   <script>
     const assistantData = {
       'claude-code': {
-        title: 'Add SideShift to Claude Code',
-        desc: 'Add the server, then sign in to SideShift in the browser window that opens.',
-        terminal: 'claude mcp add sideshift --url https://app.sideshift.app/api/mcp\\nclaude mcp login sideshift',
-        helper: 'Sign in with your SideShift account when prompted.',
+        title: 'Add Sofia to Claude Code',
+        desc: 'Add the server, then sign in to Sofia in the browser window that opens.',
+        terminal: 'claude mcp add sofia --url https://app.sofia.app/api/mcp\\nclaude mcp login sofia',
+        helper: 'Sign in with your Sofia account when prompted.',
         firstReq: 'Once connected, paste this into Claude Code.',
         prompt: 'Find 5 authentic creator reaction clips for a fintech mobile app launching on TikTok.'
       },
       'claude-desktop': {
-        title: 'Add SideShift to Claude Desktop',
+        title: 'Add Sofia to Claude Desktop',
         desc: 'Add the server configuration to your Claude Desktop config file.',
-        terminal: 'claude desktop mcp add sideshift --url https://app.sideshift.app/api/mcp',
-        helper: 'Restart Claude Desktop to activate the SideShift tools.',
+        terminal: 'claude desktop mcp add sofia --url https://app.sofia.app/api/mcp',
+        helper: 'Restart Claude Desktop to activate the Sofia tools.',
         firstReq: 'Once connected, paste this into Claude Desktop.',
         prompt: 'Find 5 authentic creator reaction clips for a fintech mobile app launching on TikTok.'
       },
       'cursor': {
-        title: 'Add SideShift to Cursor',
-        desc: 'Add SideShift MCP server in Cursor Settings → Features → MCP.',
-        terminal: 'cursor mcp add sideshift --url https://app.sideshift.app/api/mcp',
-        helper: 'Save settings and authenticate with your SideShift account.',
+        title: 'Add Sofia to Cursor',
+        desc: 'Add Sofia MCP server in Cursor Settings → Features → MCP.',
+        terminal: 'cursor mcp add sofia --url https://app.sofia.app/api/mcp',
+        helper: 'Save settings and authenticate with your Sofia account.',
         firstReq: 'Once connected, paste this into Cursor.',
         prompt: 'Find 5 authentic creator reaction clips for a fintech mobile app launching on TikTok.'
       },
       'codex': {
-        title: 'Add SideShift to Codex',
-        desc: 'Add the server, then sign in to SideShift in the browser window that opens.',
-        terminal: 'codex mcp add sideshift --url https://app.sideshift.app/api/mcp\\ncodex mcp login sideshift',
-        helper: 'Sign in with your SideShift account when prompted.',
+        title: 'Add Sofia to Codex',
+        desc: 'Add the server, then sign in to Sofia in the browser window that opens.',
+        terminal: 'codex mcp add sofia --url https://app.sofia.app/api/mcp\\ncodex mcp login sofia',
+        helper: 'Sign in with your Sofia account when prompted.',
         firstReq: 'Once connected, paste this into Codex.',
         prompt: 'Find 5 authentic creator reaction clips for a fintech mobile app launching on TikTok.'
       },
       'vscode': {
-        title: 'Add SideShift to VS Code',
-        desc: 'Add the SideShift extension or MCP server to VS Code.',
-        terminal: 'code --install-extension sideshift.sideshift-mcp\\ncode mcp add sideshift --url https://app.sideshift.app/api/mcp',
-        helper: 'Sign in with your SideShift account when prompted.',
+        title: 'Add Sofia to VS Code',
+        desc: 'Add the Sofia extension or MCP server to VS Code.',
+        terminal: 'code --install-extension sofia.sofia-mcp\\ncode mcp add sofia --url https://app.sofia.app/api/mcp',
+        helper: 'Sign in with your Sofia account when prompted.',
         firstReq: 'Once connected, paste this into VS Code.',
         prompt: 'Find 5 authentic creator reaction clips for a fintech mobile app launching on TikTok.'
       }
@@ -601,6 +670,99 @@ codex mcp login sideshift</div>
           text.textContent = 'Copy';
         }, 2000);
       });
+    }
+
+    // Features Section Letter-by-Letter Reveal Animation (Starting from top-left)
+    function initFeaturesLetterReveal() {
+      const container = document.getElementById('featuresHeading');
+      if (!container) return;
+
+      const lines = container.querySelectorAll('.features-title-line');
+      let globalIndex = 0;
+      const charDelay = 22; // ms per letter
+      const linePause = 75; // ms pause between lines
+
+      lines.forEach((line, lineIdx) => {
+        const text = line.textContent.trim();
+        line.setAttribute('aria-label', text);
+        line.innerHTML = '';
+
+        if (lineIdx > 0) {
+          globalIndex += Math.round(linePause / charDelay);
+        }
+
+        const words = text.split(' ');
+        words.forEach((word, wordIdx) => {
+          const wordSpan = document.createElement('span');
+          wordSpan.className = 'inline-block whitespace-nowrap';
+          wordSpan.setAttribute('aria-hidden', 'true');
+
+          for (let i = 0; i < word.length; i++) {
+            const charSpan = document.createElement('span');
+            charSpan.className = 'char-reveal';
+            charSpan.textContent = word[i];
+            charSpan.style.transitionDelay = `${globalIndex * charDelay}ms`;
+            wordSpan.appendChild(charSpan);
+            globalIndex++;
+          }
+
+          line.appendChild(wordSpan);
+
+          if (wordIdx < words.length - 1) {
+            const spaceSpan = document.createElement('span');
+            spaceSpan.className = 'inline-block';
+            spaceSpan.innerHTML = '&nbsp;';
+            spaceSpan.setAttribute('aria-hidden', 'true');
+            line.appendChild(spaceSpan);
+            globalIndex++;
+          }
+        });
+      });
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              container.classList.add('reveal-active');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        observer.observe(container);
+      } else {
+        container.classList.add('reveal-active');
+      }
+    }
+
+    // Scroll Fade In Up Animation for Sections
+    function initScrollFadeAnimations() {
+      const elements = document.querySelectorAll('.fade-in-up-scroll');
+      if (!elements.length) return;
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -20px 0px' });
+
+        elements.forEach(el => observer.observe(el));
+      } else {
+        elements.forEach(el => el.classList.add('visible'));
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        initFeaturesLetterReveal();
+        initScrollFadeAnimations();
+      });
+    } else {
+      initFeaturesLetterReveal();
+      initScrollFadeAnimations();
     }
   </script>
 </body>
