@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-white scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sofia MCP Server · Developer Documentation</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Inter, Newsreader, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            serif: ['Newsreader', 'Georgia', 'serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+          },
+          colors: {
+            sofia: {
+              50: '#f5f7ff',
+              100: '#ebedff',
+              500: '#3b5bfd',
+              600: '#213ae7',
+              700: '#1a2eb8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      color: #0f172a;
+      background-color: #ffffff;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .docs-prose p {
+      margin-bottom: 1.15rem;
+      line-height: 1.7;
+      color: #334155;
+      font-size: 0.95rem;
+    }
+    .docs-prose ul {
+      list-style-type: none;
+      padding-left: 0;
+      margin-bottom: 1.35rem;
+      color: #334155;
+      font-size: 0.95rem;
+    }
+    .docs-prose ul li {
+      position: relative;
+      padding-left: 1.4rem;
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+    }
+    .docs-prose ul li::before {
+      content: "";
+      position: absolute;
+      left: 0.25rem;
+      top: 0.6rem;
+      width: 0.35rem;
+      height: 0.35rem;
+      border-radius: 9999px;
+      background-color: #6366f1;
+    }
+    .docs-table th {
+      background-color: #f8fafc;
+      font-weight: 600;
+      color: #1e293b;
+      text-align: left;
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 0.8125rem;
+      letter-spacing: 0.01em;
+    }
+    .docs-table td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.875rem;
+      color: #334155;
+      vertical-align: top;
+      line-height: 1.55;
+    }
+    .docs-table tr:hover td {
+      background-color: #f8faff;
+    }
+    code:not(pre code) {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.825em;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      padding: 0.15rem 0.35rem;
+      border-radius: 0.25rem;
+      border: 1px solid #e2e8f0;
+    }
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f8fafc;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-indigo-100 selection:text-indigo-900">
+
+  <!-- TOP APP HEADER -->
+  <header class="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-[#e5e7eb]">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+      
+      <!-- Brand & Section Breadcrumb -->
+      <div class="flex items-center gap-3 sm:gap-4">
+        <a href="sofia.html" class="flex items-center group">
+          <span class="font-bold text-[16px] tracking-[-0.02em] text-[#0f172a]">Sofia</span>
+        </a>
+        <div class="h-4 w-[1px] bg-slate-200"></div>
+        <div class="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+          <a href="sofia.html" class="hover:text-black transition-colors">AI Agents</a>
+          <span class="text-slate-300">/</span>
+          <span class="text-slate-900 font-semibold">MCP Server Docs</span>
+        </div>
+      </div>
+
+      <!-- Action Controls -->
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <!-- Live Search Input -->
+        <div class="relative hidden sm:block w-48 lg:w-64">
+          <input 
+            type="text" 
+            id="docsSearch"
+            placeholder="Quick search tools, skills..." 
+            class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 hover:bg-slate-100 focus:bg-white border border-slate-200 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-800 placeholder-slate-400"
+            onkeyup="filterDocs(this.value)"
+          />
+          <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+          </svg>
+        </div>
+
+        <!-- 1-Click Copy Page Link -->
+        <button 
+          onclick="copyPageUrl()" 
+          id="copyPageBtn"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 active:scale-95 shadow-xs transition-all cursor-pointer"
+          title="Copy documentation link"
+        >
+          <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+          </svg>
+          <span id="copyPageText">Copy page</span>
+        </button>
+
+        <!-- Exit to Sofia for AI -->
+        <a 
+          href="sofia.html" 
+          class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-white bg-[#111111] hover:bg-black active:scale-95 transition-all shadow-xs"
+        >
+          <span>← Back to Sofia for AI</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER WITH THREE-COLUMN LAYOUT -->
+  <div class="max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="hidden lg:block w-64 shrink-0 py-8 pr-6 border-r border-[#f1f5f9] sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto">
+      <div class="space-y-6 text-xs">
+        <div>
+          <div class="font-semibold text-slate-400 tracking-wider uppercase text-[10px] mb-2.5">
+            Architecture
+          </div>
+          <ul class="space-y-1 font-medium text-slate-600">
+            <li><a href="#overview" class="block py-1.5 px-2.5 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors text-indigo-600 font-semibold bg-indigo-50/70">Overview & Capabilities</a></li>
+            <li><a href="#what-you-get" class="block py-1.5 px-2.5 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors">What Sofia Exposes</a></li>
+            <li><a href="#prerequisites" class="block py-1.5 px-2.5 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors">Prerequisites & Auth</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="font-semibold text-slate-400 tracking-wider uppercase text-[10px] mb-2.5">
+            Setup & Clients
+          </div>
+          <ul class="space-y-1 font-medium text-slate-600">
+            <li><a href="#connect-a-client" class="block py-1.5 px-2.5 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors">Quickstart Setup</a></li>
+            <li><a href="#using-the-tools" class="block py-1.5 px-2.5 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors">Agent Prompts & Scopes</a></li>
+            <li><a href="#agency-delegation" class="block py-1.5 px-2.5 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors">Agency & Sub-Accounts</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="font-semibold text-slate-400 tracking-wider uppercase text-[10px] mb-2.5">
+            Workflows & Skills
+          </div>
+          <ul class="space-y-1 font-medium text-slate-600">
+            <li><a href="#finding-tools" class="block py-1.5 px-2.5 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors">Intent Discovery</a></li>
+            <li><a href="#marketplace-jobs" class="block py-1.5 px-2.5 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors">Creator Jobs</a></li>
+            <li><a href="#named-skills" class="block py-1.5 px-2.5 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors">16 Curated Skills</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="font-semibold text-slate-400 tracking-wider uppercase text-[10px] mb-2.5">
+            Reference & Security
+          </div>
+          <ul class="space-y-1 font-medium text-slate-600">
+            <li><a href="#tool-catalog" class="block py-1.5 px-2.5 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors">Tool Catalog (45+)</a></li>
+            <li><a href="#native-messaging" class="block py-1.5 px-2.5 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors">Native Messaging</a></li>
+            <li><a href="#safety-rules" class="block py-1.5 px-2.5 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors">Safety & Idempotency</a></li>
+            <li><a href="#error-matrix" class="block py-1.5 px-2.5 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors">Actionable Errors</a></li>
+            <li><a href="#docs-server" class="block py-1.5 px-2.5 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors">Public Docs Endpoint</a></li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER CONTENT -->
+    <main class="flex-1 max-w-[940px] py-8 lg:py-10 lg:pl-10 lg:pr-8 min-w-0 docs-prose">
+      
+      <!-- HEADER BADGES -->
+      <div id="overview" class="flex flex-wrap items-center gap-2 mb-4">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+          Sofia Protocol 2.0
+        </span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+          Remote Streamable HTTP
+        </span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+          OAuth 2.1 with PKCE
+        </span>
+      </div>
+
+      <!-- PAGE TITLE -->
+      <h1 class="font-serif text-3xl sm:text-4xl lg:text-[46px] font-normal tracking-[-0.025em] text-[#0f172a] mb-4 leading-[1.12]">
+        Sofia MCP Server
+      </h1>
+
+      <p class="text-lg sm:text-[20px] text-slate-600 font-normal leading-relaxed mb-8">
+        Allow autonomous AI assistants to operate your Sofia creator marketing engine through the open Model Context Protocol.
+      </p>
+
+      <!-- HERO HIGHLIGHT BOX -->
+      <div class="relative overflow-hidden p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-[#f8faff] via-white to-[#f5f7ff] border border-indigo-100 shadow-[0_4px_20px_-4px_rgba(59,91,253,0.08)] mb-12">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="font-semibold text-slate-900 text-base mb-1.5 flex items-center gap-2">
+              <span>Zero client installation required</span>
+              <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            </h3>
+            <p class="text-sm text-slate-600 mb-0 leading-relaxed max-w-xl">
+              Sofia hosts a live, high-throughput Model Context Protocol server. An AI model can discover creators, negotiate terms, sign contracts, review videos, and execute payouts directly through natural conversation — no custom HTTP integrations or glue code needed.
+            </p>
+          </div>
+          <div class="shrink-0 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 shadow-xs">
+            <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">Live Remote Endpoint</span>
+            <code class="text-xs font-semibold text-indigo-600">https://app.sofia.com/api/mcp</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: WHAT YOU GET -->
+      <section id="what-you-get" class="scroll-mt-20 pt-4 mb-16 border-t border-slate-100">
+        <h2 class="text-2xl font-bold text-slate-900 mb-4 tracking-tight flex items-center gap-2 group">
+          <span>What Sofia exposes to your agent</span>
+          <a href="#what-you-get" class="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">#</a>
+        </h2>
+        
+        <p>
+          The Sofia MCP server maps 1:1 with Sofia’s battle-tested REST API, protected by granular OAuth 2.1 capability scopes. Every capability is exposed as a typed, structured MCP tool, alongside a foundational <code class="font-semibold">whoami</code> tool for real-time verification of tenant identity, permission boundaries, and sub-account access.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="font-semibold text-slate-900 text-sm mb-1.5 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              Read-Only Safety
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed mb-0">
+              Read scopes reveal idempotent, query-only tools that cannot mutate account state or spend campaign capital.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="font-semibold text-slate-900 text-sm mb-1.5 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              State Guardrails
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed mb-0">
+              Write tools mutate Sofia state reversibly, carrying full confirmation guardrails in their schema descriptions.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="font-semibold text-slate-900 text-sm mb-1.5 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+              Financial Safeguards
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed mb-0">
+              Sensitive operations (contract signing, wallet transfers, payout runs) enforce dry-run validations before execution.
+            </p>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-500">
+          The quick-pay claim link facility is directly accessible to agents via <code class="text-indigo-600">create_quickpay_claim_link</code>.
+        </p>
+      </section>
+
+      <!-- SECTION: PREREQUISITES & AUTH -->
+      <section id="prerequisites" class="scroll-mt-20 pt-4 mb-16 border-t border-slate-100">
+        <h2 class="text-2xl font-bold text-slate-900 mb-4 tracking-tight flex items-center gap-2 group">
+          <span>Prerequisites & Security Architecture</span>
+          <a href="#prerequisites" class="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">#</a>
+        </h2>
+        
+        <p class="text-slate-600 mb-6 font-medium">To connect an AI assistant, you need three components:</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+          
+          <!-- Card 1 -->
+          <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 font-bold flex items-center justify-center text-sm mb-3">
+                1
+              </div>
+              <h3 class="font-semibold text-slate-900 text-sm mb-2">MCP-Enabled Client</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-0">
+                Claude Code, Claude Desktop, Cursor, VS Code (Copilot/Cline), or any assistant speaking MCP over Streamable HTTP.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 font-bold flex items-center justify-center text-sm mb-3">
+                2
+              </div>
+              <h3 class="font-semibold text-slate-900 text-sm mb-2">OAuth 2.1 Client</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-0">
+                Sofia MCP uses standard OAuth 2.1 with Dynamic Client Registration (RFC 7591) to mint client IDs with no manual API key rotation.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 font-bold flex items-center justify-center text-sm mb-3">
+                3
+              </div>
+              <h3 class="font-semibold text-slate-900 text-sm mb-2">Bearer Token (PKCE)</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-0">
+                Authorized via PKCE (S256). Sofia tokens are multi-audience: the same credential validates for both REST API and MCP endpoints.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Automatic Discovery Callout -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-indigo-50/50 border border-indigo-100 text-slate-700 text-xs sm:text-sm leading-relaxed flex items-start gap-3.5">
+          <svg class="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <div>
+            <strong class="text-slate-900 font-semibold block mb-0.5">Zero-Configuration Discovery (RFC 9728):</strong>
+            When an unauthorized client connects, Sofia returns an HTTP <code>401</code> with a <code>WWW-Authenticate</code> challenge containing protected-resource metadata. Compliant tools discover the authorization server dynamically, enabling complete zero-click setup from the URL alone.
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: CONNECT A CLIENT -->
+      <section id="connect-a-client" class="scroll-mt-20 pt-4 mb-16 border-t border-slate-100">
+        <h2 class="text-2xl font-bold text-slate-900 mb-4 tracking-tight flex items-center gap-2 group">
+          <span>Connect your assistant in 60 seconds</span>
+          <a href="#connect-a-client" class="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">#</a>
+        </h2>
+        
+        <!-- Tabbed Snippet Box -->
+        <div class="border border-slate-200 rounded-2xl overflow-hidden mb-6 bg-slate-900 shadow-md">
+          <div class="bg-slate-950 px-4 py-3 flex items-center justify-between border-b border-slate-800">
+            <div class="flex items-center gap-1.5" id="clientTabs">
+              <button onclick="selectClientTab('claude-code')" id="tab-btn-claude-code" class="client-tab-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-indigo-600 text-white transition-colors cursor-pointer">Claude Code</button>
+              <button onclick="selectClientTab('claude-desktop')" id="tab-btn-claude-desktop" class="client-tab-btn px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white transition-colors cursor-pointer">Claude Desktop</button>
+              <button onclick="selectClientTab('cursor')" id="tab-btn-cursor" class="client-tab-btn px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white transition-colors cursor-pointer">Cursor</button>
+              <button onclick="selectClientTab('vscode')" id="tab-btn-vscode" class="client-tab-btn px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white transition-colors cursor-pointer">VS Code</button>
+            </div>
+            <button onclick="copyCurrentSnippet()" class="text-xs text-slate-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer px-2 py-1 rounded hover:bg-slate-800">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              <span id="copySnippetLabel">Copy snippet</span>
+            </button>
+          </div>
+
+          <div class="p-4 sm:p-5 font-mono text-xs sm:text-[13px] text-slate-200 overflow-x-auto" id="snippetContainer">
+            <code>claude mcp add --transport http sofia https://app.sofia.com/api/mcp</code>
+          </div>
+        </div>
+
+        <p class="text-sm text-slate-600 mb-6">
+          Claude Code will initiate the browser-based OAuth authentication flow automatically on its first execution.
+        </p>
+
+        <!-- Sofia Connectors vs External Connectors -->
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-700 space-y-3.5">
+          <div class="font-semibold text-slate-900 text-sm">Understanding Sofia Connectors:</div>
+          <p>
+            Two distinct configurations use the term <em>Connectors</em>:
+          </p>
+          <ul class="space-y-2 mb-2">
+            <li>
+              <strong>Incoming Assistant Connectors:</strong> Your client’s settings (such as Claude Desktop’s <em>Settings → Connectors</em>) point an external assistant into your Sofia brand workspace. This documentation covers this flow.
+            </li>
+            <li>
+              <strong>Outgoing Sofia Connectors:</strong> Inside the Sofia dashboard under <em>Settings → Sofia Connectors</em>, Sofia itself connects outward to third-party data providers and e-commerce platforms.
+            </li>
+          </ul>
+          <p>
+            <strong>Role-Based Permission Ceilings:</strong> A user’s consented scope array acts as a strict ceiling. If a user later has their permissions adjusted by a workspace administrator, subsequent token refreshes narrow the accessible tool capabilities immediately, ensuring AI actions never bypass organizational roles.
+          </p>
+        </div>
+      </section>
+
+      <!-- SECTION: USING THE TOOLS -->
+      <section id="using-the-tools" class="scroll-mt-20 pt-4 mb-16 border-t border-slate-100">
+        <h2 class="text-2xl font-bold text-slate-900 mb-4 tracking-tight flex items-center gap-2 group">
+          <span>Interacting with Sofia in natural language</span>
+          <a href="#using-the-tools" class="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">#</a>
+        </h2>
+        
+        <p>
+          Once your client is connected, instruct your assistant to verify its active tenant context before initiating operations:
+        </p>
+        
+        <!-- Prompt Box 1 -->
+        <div class="p-4 rounded-xl bg-slate-900 text-slate-100 font-mono text-xs sm:text-sm mb-4 flex items-center justify-between shadow-xs">
+          <span>"Call whoami to confirm which Sofia workspace and permissions are currently connected."</span>
+          <span class="text-[10px] text-indigo-400 uppercase tracking-wider font-sans font-semibold bg-indigo-950 px-2 py-0.5 rounded border border-indigo-800">Verification</span>
+        </div>
+
+        <p>You can then command complex operations in plain language:</p>
+
+        <!-- Prompt Box 2 -->
+        <div class="p-4 rounded-xl bg-slate-900 text-slate-100 font-mono text-xs sm:text-sm mb-6 flex items-center justify-between shadow-xs">
+          <span>"List my active Sofia campaigns, show creator applicant counts, and draft offer terms for the top 3 candidates."</span>
+          <span class="text-[10px] text-emerald-400 uppercase tracking-wider font-sans font-semibold bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">Workflow</span>
+        </div>
+
+        <p>
+          Every invocation is cryptographically bound to the authenticated workspace. Requesting actions beyond granted scopes yields an actionable reauthorization prompt rather than an ambiguous error.
+        </p>
+
+        <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200 text-amber-950 text-xs sm:text-sm leading-relaxed">
+          <strong>Workspace Switching:</strong> Modifying the active workspace in the Sofia web browser does not automatically alter an established MCP session. To point your agent at another company, disconnect the client and authorize again with the desired workspace selected.
+        </div>
+      </section>
+
+      <!-- SECTION: AGENCY SUB-ACCOUNT DELEGATION -->
+      <section id="agency-delegation" class="scroll-mt-20 pt-4 mb-16 border-t border-slate-100">
+        <h2 class="text-2xl font-bold text-slate-900 mb-4 tracking-tight flex items-center gap-2 group">
+          <span>Agency Sub-Account Delegation</span>
+          <a href="#agency-delegation" class="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">#</a>
+        </h2>
+        
+        <p>
+          Agencies managing multiple client brands on Sofia can grant their AI agents global or scoped sub-account access during OAuth consent.
+        </p>
+        
+        <ul class="space-y-2 mb-4">
+          <li>The <code>whoami</code> response includes a <code>subaccountAccess</code> property: <code>null</code> (single workspace), <code>"all"</code> (entire client portfolio), or an explicit array of client workspace IDs.</li>
+          <li>All business tools support an optional <code class="font-semibold text-indigo-600">act_as_subaccount_id</code> parameter. Pass the client workspace ID (discovered via <code>list_companies</code>) to execute actions directly on that brand’s behalf.</li>
+          <li>Under the hood, Sofia routes the request with an <code>X-Act-As-Company</code> tenant header, rigorously verifying parent-child relationships and live permission ceilings on every call.</li>
+        </ul>
+      </section>
+
+      <!-- SECTION: FINDING THE RIGHT TOOL -->
+      <section id="finding-tools" class="scroll-mt-20 pt-4 mb-16 border-t border-slate-100">
+        <h2 class="text-2xl font-bold text-slate-900 mb-4 tracking-tight flex items-center gap-2 group">
+          <span>Intent-Driven Capability Discovery</span>
+          <a href="#finding-tools" class="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">#</a>
+        </h2>
+        
+        <p>
+          Because some AI client environments enforce strict limits on total tool schema size, Sofia implements a <strong>two-stage discovery pipeline</strong>. Core discovery tools are registered first so models never drop critical capabilities:
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider block mb-1">Step 1 · Semantic Search</span>
+            <h4 class="font-semibold text-slate-900 text-sm mb-1">Intent Resolution</h4>
+            <p class="text-xs text-slate-600 mb-0">
+              The agent calls <code>find_capability</code> with an English description of the desired task to locate candidate tools.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider block mb-1">Step 2 · Schema Inspection</span>
+            <h4 class="font-semibold text-slate-900 text-sm mb-1">On-Demand Schemas</h4>
+            <p class="text-xs text-slate-600 mb-0">
+              The agent loads the exact JSON input schema via <code>catalog_get_schema</code> right before dispatching data.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider block mb-1">Step 3 · Confirmation</span>
+            <h4 class="font-semibold text-slate-900 text-sm mb-1">Parameter Review</h4>
+            <p class="text-xs text-slate-600 mb-0">
+              The agent presents resolved enum values, budget amounts, and parameters to the user for explicit confirmation.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider block mb-1">Step 4 · Safe Execution</span>
+            <h4 class="font-semibold text-slate-900 text-sm mb-1">Gated Invocation</h4>
+            <p class="text-xs text-slate-600 mb-0">
+              The agent dispatches via <code>catalog_invoke_read</code>, <code>catalog_invoke_write</code>, or <code>catalog_invoke_sensitive</code>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: WORKING WITH MARKETPLACE JOBS -->
+      <section id="marketplace-jobs" class="scroll-mt-20 pt-4 mb-16 border-t border-slate-100">
+        <h2 class="text-2xl font-bold text-slate-900 mb-4 tracking-tight flex items-center gap-2 group">
+          <span>Creator Marketplace Operations</span>
+          <a href="#marketplace-jobs" class="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">#</a>
+        </h2>
+
+        <div class="border border-slate-200 rounded-xl overflow-hidden shadow-xs mb-4 overflow-x-auto">
+          <table class="w-full docs-table text-left border-collapse">
+            <thead>
+              <tr>
+                <th class="w-1/4">Workflow</th>
+                <th class="w-1/4">Sofia MCP Tool</th>
+                <th class="w-1/2">Operational Guidelines</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="font-medium text-slate-900">Post Creator Job</td>
+                <td><code class="text-indigo-600 font-semibold">create_job</code></td>
+                <td>Compiles title, brief, compensation model (fixed retainer, per-post fee, or hybrid), and screener questions. Debits one posting credit; confirmation required.</td>
+              </tr>
+              <tr>
+                <td class="font-medium text-slate-900">Update Active Job</td>
+                <td><code class="text-indigo-600 font-semibold">update_job</code></td>
+                <td>Patch specific fields without consuming posting credits. Modifying payout structures requires supplying the complete updated configuration block.</td>
+              </tr>
+              <tr>
+                <td class="font-medium text-slate-900">Archive / Close Job</td>
+                <td><code class="text-indigo-600 font-semibold">update_job_status</code></td>
+                <td>Safely removes listings from public discovery, preserving applicant audit trails and credit balances.</td>
+              </tr>
+              <tr>
+                <td class="font-medium text-slate-900">Review Applications</td>
+                <td><code class="text-indigo-600 font-semibold">list_applicants_advanced</code></td>
+                <td>Access applicant profiles, screener questionnaire answers, portfolio clips, and social metrics.</td>
+              </tr>
+              <tr>
+                <td class="font-medium text-slate-900">Link Campaign to Market</td>
+                <td><code class="text-indigo-600 font-semibold">create_job(programId)</code></td>
+                <td>Binds the public marketplace listing directly to a private Sofia campaign container.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION: 16 NAMED SKILLS -->
+      <section id="named-skills" class="scroll-mt-20 pt-4 mb-16 border-t border-slate-100">
+        <h2 class="text-2xl font-bold text-slate-900 mb-4 tracking-tight flex items-center gap-2 group">
+          <span>The 16 Curated Sofia Skills</span>
+          <a href="#named-skills" class="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">#</a>
+        </h2>
+        
+        <p>
+          Sofia packages multi-step creator procedures as <strong>Named Skills</strong>. Assistants can execute them via MCP slash prompts or programmatic invocation through <code class="text-indigo-600">invoke_skill</code>:
+        </p>
+
+        <div class="border border-slate-200 rounded-xl overflow-hidden shadow-xs overflow-x-auto">
+          <table class="w-full docs-table text-left border-collapse">
+            <thead>
+              <tr>
+                <th class="w-36">Skill Handle</th>
+                <th class="w-40">Procedure</th>
+                <th>Intended Agent Context</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code class="text-indigo-600 font-semibold">boost-post</code></td>
+                <td class="font-medium text-slate-900">Boost Winning Post</td>
+                <td>Converts high-converting organic creator content into TikTok Spark or Meta whitelist ad units. Enforces spend authorization before launching.</td>
+              </tr>
+              <tr>
+                <td><code class="text-indigo-600 font-semibold">create-campaign</code></td>
+                <td class="font-medium text-slate-900">Launch Campaign</td>
+                <td>Architects full creator campaigns from Sofia benchmark templates, setting objectives, timelines, and deliverables.</td>
+              </tr>
+              <tr>
+                <td><code class="text-indigo-600 font-semibold">find-creators</code></td>
+                <td class="font-medium text-slate-900">Discover Talent</td>
+                <td>Queries Sofia's verified creator roster by audience demographics, niche, engagement rates, and platform.</td>
+              </tr>
+              <tr>
+                <td><code class="text-indigo-600 font-semibold">fund-wallet</code></td>
+                <td class="font-medium text-slate-900">Manage Balance</td>
+                <td>Checks escrow balances, estimates required campaign capital, and generates secure payment checkout links.</td>
+              </tr>
+              <tr>
+                <td><code class="text-indigo-600 font-semibold">grill-my-brief</code></td>
+                <td class="font-medium text-slate-900">Audit Brief</td>
+                <td>Critiques creative hooks, compliance constraints, and production clarity against viral ad benchmarks.</td>
+              </tr>
+              <tr>
+                <td><code class="text-indigo-600 font-semibold">hire-creator</code></td>
+                <td class="font-medium text-slate-900">Contract Talent</td>
+                <td>Generates custom usage agreements, dispatches e-signatures, and onboards creators to active campaigns.</td>
+              </tr>
+              <tr>
+                <td><code class="text-indigo-600 font-semibold">invoice-client</code></td>
+                <td class="font-medium text-slate-900">Client Billing</td>
+                <td>Generates client-facing invoices, tracks receivables, and issues receipts for agency services.</td>
+              </tr>
+              <tr>
+                <td><code class="text-indigo-600 font-semibold">message-creators</code></td>
+                <td class="font-medium text-slate-900">Roster Broadcast</td>
+                <td>Transmits reminders, production updates, or briefing adjustments across individual or cohort creator chats.</td>
+              </tr>
+              <tr>
+                <td><code class="text-indigo-600 font-semibold">performance-report</code></td>
+                <td class="font-medium text-slate-900">Executive Summary</td>
+                <td>Synthesizes video views, CTRs, creator pacing, and blended CAC into weekly or monthly performance reports.</td>
+              </tr>
+              <tr>
+                <td><code class="text-indigo-600 font-semibold">post-job</code></td>
+                <td class="font-medium text-slate-900">Publish Listing</td>
+                <td>Finalizes and launches creator opportunities to Sofia's marketplace with pre-flight verification.</td>
+              </tr>
+              <tr>
+                <td><code class="text-indigo-600 font-semibold">quickpay</code></td>
+                <td class="font-medium text-slate-900">Direct Remittance</td>
+                <td>Issues one-off creator compensation outside standard contracts via email claims or instant bank rail.</td>
+              </tr>
+              <tr>
+                <td><code class="text-indigo-600 font-semibold">resolve-dispute</code></td>
+                <td class="font-medium text-slate-900">Dispute Settlement</td>
+                <td>Evaluates deliverable milestones and evidence, recommending amicable escrow releases or adjustments.</td>
+              </tr>
+              <tr>
+                <td><code class="text-indigo-600 font-semibold">review-applicants</code></td>
+                <td class="font-medium text-slate-900">Triage Backlog</td>
+                <td>Ranks applicants by past ad performance and screener responses, queuing acceptance contracts.</td>
+              </tr>
+              <tr>
+                <td><code class="text-indigo-600 font-semibold">review-content</code></td>
+                <td class="font-medium text-slate-900">Quality Review</td>
+                <td>Reviews submitted raw footage or drafts, approving posts or generating structured revision notes.</td>
+              </tr>
+              <tr>
+                <td><code class="text-indigo-600 font-semibold">run-payouts</code></td>
+                <td class="font-medium text-slate-900">Execute Payouts</td>
+                <td>Calculates pending payments, runs dry-run ledger verification, and releases creator funds upon user sign-off.</td>
+              </tr>
+              <tr>
+                <td><code class="text-indigo-600 font-semibold">write-brief</code></td>
+                <td class="font-medium text-slate-900">Draft Creative Brief</td>
+                <td>Authors high-converting UGC briefs tailored to brand identity, visual style, and target audience hooks.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION: COMPLETE TOOL CATALOG -->
+      <section id="tool-catalog" class="scroll-mt-20 pt-4 mb-16 border-t border-slate-100">
+        <h2 class="text-2xl font-bold text-slate-900 mb-4 tracking-tight flex items-center gap-2 group">
+          <span>Complete Tool Catalog</span>
+          <a href="#tool-catalog" class="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">#</a>
+        </h2>
+        
+        <p>
+          High-performance tools exposed by the Sofia MCP server, categorized by security risk:
+        </p>
+
+        <div class="flex flex-wrap items-center gap-2 mb-4 text-xs">
+          <span class="font-semibold text-slate-700">Legend:</span>
+          <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-medium border border-emerald-200">Read (Non-mutating)</span>
+          <span class="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 font-medium border border-blue-200">Write (Reversible state)</span>
+          <span class="px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 font-medium border border-rose-200">Sensitive (Real money / outward messaging)</span>
+        </div>
+
+        <div class="border border-slate-200 rounded-xl overflow-hidden shadow-xs overflow-x-auto max-h-[640px] overflow-y-auto">
+          <table class="w-full docs-table text-left border-collapse" id="toolsTable">
+            <thead class="sticky top-0 bg-slate-50 z-10">
+              <tr>
+                <th class="w-48">Tool Name</th>
+                <th class="w-36">Required Scope</th>
+                <th class="w-24">Risk</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>whoami</code></td><td>-</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Inspect connected Sofia workspace ID, granted scopes, client ID, and agency sub-accounts.</td></tr>
+              <tr><td><code>find_capability</code></td><td>-</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Locate the matching Sofia capability using natural-language intent.</td></tr>
+              <tr><td><code>catalog_search</code></td><td>-</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Search the full Sofia capability index.</td></tr>
+              <tr><td><code>catalog_get_schema</code></td><td>-</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Retrieve the JSON schema for any discovered tool.</td></tr>
+              <tr><td><code>catalog_invoke_read</code></td><td>dynamic</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Safely execute discovered read queries.</td></tr>
+              <tr><td><code>catalog_invoke_write</code></td><td>dynamic</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Execute confirmed configuration mutations.</td></tr>
+              <tr><td><code>catalog_invoke_sensitive</code></td><td>dynamic</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-rose-50 text-rose-700 border border-rose-200">sensitive</span></td><td>Execute sensitive money and contractual operations with confirmation safeguards.</td></tr>
+              <tr><td><code>invoke_skill</code></td><td>campaigns:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Load one of Sofia's 16 curated procedure skills into conversational context.</td></tr>
+              <tr><td><code>list_campaigns</code></td><td>campaigns:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Filter and list active, draft, or archived Sofia campaigns.</td></tr>
+              <tr><td><code>get_campaign</code></td><td>campaigns:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Retrieve details, goals, and roster status for a specific campaign.</td></tr>
+              <tr><td><code>create_campaign</code></td><td>campaigns:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Initialize a new campaign container with target metrics and briefs.</td></tr>
+              <tr><td><code>update_campaign</code></td><td>campaigns:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Update campaign name, instructions, branding emoji, and timelines.</td></tr>
+              <tr><td><code>archive_campaign</code></td><td>campaigns:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Archive an ended campaign, preventing new submissions while saving reports.</td></tr>
+              <tr><td><code>duplicate_campaign</code></td><td>campaigns:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Clone an existing campaign’s settings and briefs into a fresh run.</td></tr>
+              <tr><td><code>add_campaign_ghost_handle</code></td><td>campaigns:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Track an untracked creator handle within a campaign.</td></tr>
+              <tr><td><code>bulk_add_campaign_ghost_handles</code></td><td>campaigns:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Batch-import up to 500 creator handles for campaign analytics.</td></tr>
+              <tr><td><code>add_campaign_ghost_video</code></td><td>campaigns:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Attach a tracked video link directly to a campaign ledger.</td></tr>
+              <tr><td><code>bulk_add_campaign_ghost_videos</code></td><td>campaigns:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Batch-import up to 500 video links for automated metric tracking.</td></tr>
+              <tr><td><code>import_campaign_analytics_history</code></td><td>campaigns:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Ingest historical video analytics prior to Sofia tracking onset.</td></tr>
+              <tr><td><code>get_payment_structure</code></td><td>campaigns:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Inspect payout terms, performance bonuses, and usage rights.</td></tr>
+              <tr><td><code>create_job</code></td><td>jobs:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Publish an open job listing to the Sofia Creator Marketplace.</td></tr>
+              <tr><td><code>update_job</code></td><td>jobs:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Modify marketplace job requirements and creative directions.</td></tr>
+              <tr><td><code>list_jobs</code></td><td>jobs:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>List all marketplace job postings owned by your workspace.</td></tr>
+              <tr><td><code>get_job</code></td><td>jobs:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Retrieve full job specifications and application criteria.</td></tr>
+              <tr><td><code>list_applications</code></td><td>applications:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>List incoming creator applications for review.</td></tr>
+              <tr><td><code>get_application</code></td><td>applications:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Inspect creator answers, rates, and past sample videos.</td></tr>
+              <tr><td><code>update_application_status</code></td><td>applications:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Approve or decline an applicant; approvals advance to contract drafting.</td></tr>
+              <tr><td><code>list_creators</code></td><td>creators:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Search Sofia’s creator database by follower range, platform, and category.</td></tr>
+              <tr><td><code>get_creator</code></td><td>creators:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Fetch verified engagement stats, past viral videos, and audience reach.</td></tr>
+              <tr><td><code>list_creator_collections</code></td><td>creators:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>View saved bookmarks and talent shortlists.</td></tr>
+              <tr><td><code>create_creator_collection</code></td><td>creators:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Create a named talent shortlist.</td></tr>
+              <tr><td><code>create_campaign_invite</code></td><td>creators:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Generate a direct VIP invite link for specific creators.</td></tr>
+              <tr><td><code>list_contracts</code></td><td>contracts:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Review active, pending, and signed legal agreements.</td></tr>
+              <tr><td><code>get_contract</code></td><td>contracts:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Retrieve terms, deliverable deadlines, and compensation details.</td></tr>
+              <tr><td><code>create_contract</code></td><td>contracts:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Draft and dispatch a creator partnership agreement.</td></tr>
+              <tr><td><code>update_contract</code></td><td>contracts:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-rose-50 text-rose-700 border border-rose-200">sensitive</span></td><td>Modify retainers or platform usage rights; regenerates PDF agreement.</td></tr>
+              <tr><td><code>cancel_contract</code></td><td>contracts:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Void an unsigned contract.</td></tr>
+              <tr><td><code>save_contract_signature</code></td><td>contracts:sign</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-rose-50 text-rose-700 border border-rose-200">sensitive</span></td><td>Execute and timestamp an e-signature onto a Sofia contract.</td></tr>
+              <tr><td><code>list_posts</code></td><td>posts:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>List all tracked creator videos with live metrics across platforms.</td></tr>
+              <tr><td><code>get_post</code></td><td>posts:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Inspect video view counts, watch time, shares, and comment sentiment.</td></tr>
+              <tr><td><code>get_post_metrics</code></td><td>posts:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Retrieve daily time-series performance data for attribution models.</td></tr>
+              <tr><td><code>export_posts</code></td><td>posts:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Generate CSV exports of campaign video statistics.</td></tr>
+              <tr><td><code>get_analytics_accounts</code></td><td>analytics:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Read authorized brand channel analytics.</td></tr>
+              <tr><td><code>list_payouts</code></td><td>payouts:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>View historical payout ledger entries.</td></tr>
+              <tr><td><code>list_pending_payouts</code></td><td>payouts:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Inspect pending amounts owed to creators for approved milestones.</td></tr>
+              <tr><td><code>get_payout_stats</code></td><td>payouts:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Read current Sofia wallet balance and cumulative disbursement totals.</td></tr>
+              <tr><td><code>execute_payouts</code></td><td>payouts:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-rose-50 text-rose-700 border border-rose-200">sensitive</span></td><td>Disburse pending payouts. Supports <code>dry_run: true</code> for preview verification.</td></tr>
+              <tr><td><code>quick_pay</code></td><td>payouts:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-rose-50 text-rose-700 border border-rose-200">sensitive</span></td><td>Release an instantaneous compensation transfer directly to a creator.</td></tr>
+              <tr><td><code>list_invoices</code></td><td>invoices:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Filter invoices issued to agency clients.</td></tr>
+              <tr><td><code>get_invoice</code></td><td>invoices:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Retrieve invoice payment status and itemized line items.</td></tr>
+              <tr><td><code>create_invoice</code></td><td>invoices:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-rose-50 text-rose-700 border border-rose-200">sensitive</span></td><td>Generate an itemized billing invoice for client approval.</td></tr>
+              <tr><td><code>send_invoice</code></td><td>invoices:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-rose-50 text-rose-700 border border-rose-200">sensitive</span></td><td>Email an active invoice payment link directly to the customer.</td></tr>
+              <tr><td><code>void_invoice</code></td><td>invoices:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-rose-50 text-rose-700 border border-rose-200">sensitive</span></td><td>Cancel and void an unpaid invoice.</td></tr>
+              <tr><td><code>list_inbox</code></td><td>messages:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Unified creator communications inbox across all campaigns.</td></tr>
+              <tr><td><code>list_conversations</code></td><td>messages:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Fetch 1:1 creator direct message threads.</td></tr>
+              <tr><td><code>get_messages</code></td><td>messages:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Read historical messages in a chat thread.</td></tr>
+              <tr><td><code>list_support_channels</code></td><td>messages:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>List campaign deliverable help and approval channels.</td></tr>
+              <tr><td><code>get_support_channel_messages</code></td><td>messages:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Read message stream within a support channel.</td></tr>
+              <tr><td><code>create_conversation</code></td><td>messages:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-rose-50 text-rose-700 border border-rose-200">sensitive</span></td><td>Open a new chat room with one or more creators.</td></tr>
+              <tr><td><code>send_message</code></td><td>messages:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-rose-50 text-rose-700 border border-rose-200">sensitive</span></td><td>Send direct message text into a conversation.</td></tr>
+              <tr><td><code>send_support_channel_message</code></td><td>messages:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-rose-50 text-rose-700 border border-rose-200">sensitive</span></td><td>Transmit guidance or revision requests in a campaign channel.</td></tr>
+              <tr><td><code>react_to_message</code></td><td>messages:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-rose-50 text-rose-700 border border-rose-200">sensitive</span></td><td>Add an emoji reaction to creator feedback.</td></tr>
+              <tr><td><code>get_settings</code></td><td>settings:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Read workspace defaults and currency configurations.</td></tr>
+              <tr><td><code>get_company</code></td><td>settings:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Retrieve public brand profile details and logo assets.</td></tr>
+              <tr><td><code>update_settings</code></td><td>settings:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-rose-50 text-rose-700 border border-rose-200">sensitive</span></td><td>Update allowable company configurations and defaults.</td></tr>
+              <tr><td><code>list_invites</code></td><td>creators:read</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">read</span></td><td>Inspect active campaign invite URLs.</td></tr>
+              <tr><td><code>revoke_invite</code></td><td>creators:write</td><td><span class="px-2 py-0.5 rounded-full text-[11px] bg-blue-50 text-blue-700 border border-blue-200">write</span></td><td>Deactivate an invite URL immediately.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION: NATIVE MESSAGING -->
+      <section id="native-messaging" class="scroll-mt-20 pt-4 mb-16 border-t border-slate-100">
+        <h2 class="text-2xl font-bold text-slate-900 mb-4 tracking-tight flex items-center gap-2 group">
+          <span>Sofia Native Messaging Architecture</span>
+          <a href="#native-messaging" class="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">#</a>
+        </h2>
+        
+        <p>
+          Sofia operates its own high-concurrency native chat network. When interacting with creator conversation streams through MCP:
+        </p>
+
+        <ul class="space-y-2 mb-4">
+          <li>All channels, threads, and individual messages utilize RFC 4122 UUID identifiers.</li>
+          <li>Payload objects report <code>chatType: "native"</code>, <code>source: "native"</code>, and route responses over the <code>native</code> delivery lane.</li>
+          <li>During scheduled workspace database maintenance, tools return a graceful HTTP <code>409 Conflict</code> with <code>meta.reason: "messaging_migrating"</code>. Agents are instructed to pause and retry after 60 seconds.</li>
+        </ul>
+      </section>
+
+      <!-- SECTION: SAFETY & IDEMPOTENCY -->
+      <section id="safety-rules" class="scroll-mt-20 pt-4 mb-16 border-t border-slate-100">
+        <h2 class="text-2xl font-bold text-slate-900 mb-4 tracking-tight flex items-center gap-2 group">
+          <span>Safety Engine & Idempotency</span>
+          <a href="#safety-rules" class="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">#</a>
+        </h2>
+        
+        <p class="text-slate-600 mb-4">
+          Enforced strictly at the protocol kernel layer, not on the client:
+        </p>
+
+        <div class="border border-slate-200 rounded-xl overflow-hidden shadow-xs mb-4 overflow-x-auto">
+          <table class="w-full docs-table text-left border-collapse">
+            <thead>
+              <tr>
+                <th class="w-1/3">Security Rule</th>
+                <th class="w-2/3">Kernel Behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="font-medium text-slate-900">Sandbox Isolation</td>
+                <td>Sensitive tools (financial transfers or outbound communications) are rejected immediately when operating on sandbox or staging credentials.</td>
+              </tr>
+              <tr>
+                <td class="font-medium text-slate-900">Kill Switch (Safe Mode)</td>
+                <td>The <code>MCP_SAFE_MODE</code> environment flag instantly deactivates all sensitive tools across the workspace without interrupting read queries.</td>
+              </tr>
+              <tr>
+                <td class="font-medium text-slate-900">Idempotency Locks</td>
+                <td>All money-moving and contract actions require an <code>Idempotency-Key</code> header, ensuring network retries never trigger duplicate payouts.</td>
+              </tr>
+              <tr>
+                <td class="font-medium text-slate-900">Strict Tenant Binding</td>
+                <td>Every call is locked to one verified company context, preventing cross-tenant data leakage.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION: ACTIONABLE ERROR MATRIX -->
+      <section id="error-matrix" class="scroll-mt-20 pt-4 mb-16 border-t border-slate-100">
+        <h2 class="text-2xl font-bold text-slate-900 mb-4 tracking-tight flex items-center gap-2 group">
+          <span>Actionable Error Handling</span>
+          <a href="#error-matrix" class="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">#</a>
+        </h2>
+        
+        <p class="text-slate-600 mb-4">
+          Sofia transforms raw HTTP status codes into self-healing instructions for the calling LLM:
+        </p>
+
+        <div class="border border-slate-200 rounded-xl overflow-hidden shadow-xs overflow-x-auto mb-4">
+          <table class="w-full docs-table text-left border-collapse">
+            <thead>
+              <tr>
+                <th class="w-1/3">Trigger Condition</th>
+                <th class="w-2/3">Protocol Response & Agent Recovery</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="font-medium text-slate-900">Missing Scope</td>
+                <td>Returns descriptive <code>requires 'X:write' scope</code> accompanied by the full cumulative OAuth challenge for the user to re-consent seamlessly.</td>
+              </tr>
+              <tr>
+                <td class="font-medium text-slate-900">Cross-Tenant ID</td>
+                <td>Returns <code>Not found or not visible to this Sofia workspace</code>, preventing guesswork.</td>
+              </tr>
+              <tr>
+                <td class="font-medium text-slate-900">Sensitive Sandbox Call</td>
+                <td>Returns <code>Action performs real irreversible side-effects; disabled on sandbox token</code>.</td>
+              </tr>
+              <tr>
+                <td class="font-medium text-slate-900">Safe Mode Active</td>
+                <td>Returns <code>Operation disabled: Sofia server running under MCP_SAFE_MODE</code>.</td>
+              </tr>
+              <tr>
+                <td class="font-medium text-slate-900">Rate Throttled</td>
+                <td>Returns <code>Rate limit exceeded: back off and retry in N seconds</code> with standard headers.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION: PUBLIC DOCS ENDPOINT -->
+      <section id="docs-server" class="scroll-mt-20 pt-4 mb-16 border-t border-slate-100">
+        <h2 class="text-2xl font-bold text-slate-900 mb-4 tracking-tight flex items-center gap-2 group">
+          <span>Public Documentation MCP Endpoint</span>
+          <a href="#docs-server" class="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">#</a>
+        </h2>
+        
+        <p>
+          In addition to the authenticated product server above, Sofia hosts an unauthenticated documentation MCP endpoint so any coding assistant can query these technical specifications on the fly:
+        </p>
+        
+        <div class="p-4 rounded-xl bg-slate-900 text-indigo-300 font-mono text-xs sm:text-sm mb-4 shadow-xs">
+          https://docs.sofia.com/mcp
+        </div>
+
+        <div class="border border-slate-200 rounded-xl overflow-hidden shadow-xs overflow-x-auto">
+          <table class="w-full docs-table text-left border-collapse">
+            <thead>
+              <tr>
+                <th class="w-1/4">Dimension</th>
+                <th class="w-3/8">Sofia Product Server</th>
+                <th class="w-3/8">Sofia Docs Server</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="font-medium text-slate-900">URL Endpoint</td>
+                <td><code>app.sofia.com/api/mcp</code></td>
+                <td><code>docs.sofia.com/mcp</code></td>
+              </tr>
+              <tr>
+                <td class="font-medium text-slate-900">Authentication</td>
+                <td>OAuth 2.1 (PKCE) with Scopes</td>
+                <td><span class="text-emerald-600 font-medium">None (Public)</span></td>
+              </tr>
+              <tr>
+                <td class="font-medium text-slate-900">Capabilities</td>
+                <td>Operate brand workspace & escrow</td>
+                <td>Read and search Sofia documentation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="pt-8 pb-12 mt-12 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div>
+          © 2026 Sofia Protocol · All Rights Reserved.
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="sofia.html" class="hover:text-black transition-colors">Sofia for AI</a>
+          <a href="library.html" class="hover:text-black transition-colors">Library</a>
+          <a href="pricing.html" class="hover:text-black transition-colors">Pricing</a>
+          <a href="index.html" class="hover:text-black transition-colors">Home</a>
+        </div>
+      </footer>
+
+    </main>
+
+    <!-- RIGHT TABLE OF CONTENTS -->
+    <aside class="hidden xl:block w-60 shrink-0 py-8 pl-6 border-l border-[#f1f5f9] sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto">
+      <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3">
+        On this page
+      </div>
+      <nav class="space-y-1 text-xs text-slate-600">
+        <a href="#overview" class="block hover:text-indigo-600 transition-colors py-1">Overview</a>
+        <a href="#what-you-get" class="block hover:text-indigo-600 transition-colors py-1">What Sofia Exposes</a>
+        <a href="#prerequisites" class="block hover:text-indigo-600 transition-colors py-1">Prerequisites & Auth</a>
+        <a href="#connect-a-client" class="block hover:text-indigo-600 transition-colors py-1">Quickstart Setup</a>
+        <a href="#using-the-tools" class="block hover:text-indigo-600 transition-colors py-1">Agent Prompts</a>
+        <a href="#agency-delegation" class="block hover:text-indigo-600 transition-colors py-1">Agency Delegation</a>
+        <a href="#finding-tools" class="block hover:text-indigo-600 transition-colors py-1">Intent Discovery</a>
+        <a href="#marketplace-jobs" class="block hover:text-indigo-600 transition-colors py-1">Marketplace Jobs</a>
+        <a href="#named-skills" class="block hover:text-indigo-600 transition-colors py-1">16 Curated Skills</a>
+        <a href="#tool-catalog" class="block hover:text-indigo-600 transition-colors py-1">Complete Tool Catalog</a>
+        <a href="#native-messaging" class="block hover:text-indigo-600 transition-colors py-1">Native Messaging</a>
+        <a href="#safety-rules" class="block hover:text-indigo-600 transition-colors py-1">Safety & Idempotency</a>
+        <a href="#error-matrix" class="block hover:text-indigo-600 transition-colors py-1">Actionable Errors</a>
+        <a href="#docs-server" class="block hover:text-indigo-600 transition-colors py-1">Docs Server</a>
+      </nav>
+    </aside>
+
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white text-xs px-4 py-2.5 rounded-xl shadow-lg border border-slate-700 opacity-0 pointer-events-none transition-opacity duration-200">
+    Copied to clipboard!
+  </div>
+
+  <!-- CLIENT TAB SWITCHER & LIVE FILTER -->
+  <script>
+    const clientSnippets = {
+      'claude-code': 'claude mcp add --transport http sofia https://app.sofia.com/api/mcp',
+      'claude-desktop': '{\n  "mcpServers": {\n    "sofia": {\n      "url": "https://app.sofia.com/api/mcp"\n    }\n  }\n}',
+      'cursor': 'Name: Sofia\nType: SSE / Streamable HTTP\nURL: https://app.sofia.com/api/mcp',
+      'vscode': '{\n  "servers": {\n    "sofia": {\n      "type": "http",\n      "url": "https://app.sofia.com/api/mcp"\n    }\n  }\n}'
+    };
+
+    let activeClient = 'claude-code';
+
+    function selectClientTab(client) {
+      activeClient = client;
+      const snippetEl = document.getElementById('snippetContainer');
+      if (snippetEl) {
+        snippetEl.innerHTML = `<pre class="whitespace-pre"><code>${clientSnippets[client]}</code></pre>`;
+      }
+
+      document.querySelectorAll('.client-tab-btn').forEach(btn => {
+        btn.classList.remove('bg-indigo-600', 'text-white', 'font-semibold');
+        btn.classList.add('text-slate-400', 'font-medium');
+      });
+
+      const activeBtn = document.getElementById(`tab-btn-${client}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-indigo-600', 'text-white', 'font-semibold');
+        activeBtn.classList.remove('text-slate-400', 'font-medium');
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      if (toast) {
+        toast.textContent = msg || 'Copied to clipboard!';
+        toast.classList.remove('opacity-0', 'pointer-events-none');
+        setTimeout(() => {
+          toast.classList.add('opacity-0', 'pointer-events-none');
+        }, 2200);
+      }
+    }
+
+    function copyCurrentSnippet() {
+      const code = clientSnippets[activeClient] || clientSnippets['claude-code'];
+      navigator.clipboard.writeText(code).then(() => {
+        const label = document.getElementById('copySnippetLabel');
+        if (label) {
+          const prev = label.textContent;
+          label.textContent = 'Copied!';
+          setTimeout(() => label.textContent = prev, 1500);
+        }
+        showToast('Configuration snippet copied!');
+      });
+    }
+
+    function copyPageUrl() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        const btnText = document.getElementById('copyPageText');
+        if (btnText) {
+          const prev = btnText.textContent;
+          btnText.textContent = 'Copied!';
+          setTimeout(() => btnText.textContent = prev, 1800);
+        }
+        showToast('Documentation link copied to clipboard!');
+      });
+    }
+
+    function filterDocs(query) {
+      const q = query.toLowerCase().trim();
+      const rows = document.querySelectorAll('#toolsTable tbody tr');
+      if (!rows.length) return;
+      rows.forEach(r => {
+        const text = r.textContent.toLowerCase();
+        r.style.display = (!q || text.includes(q)) ? '' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>

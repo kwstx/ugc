@@ -148,13 +148,58 @@
     .btn-connect-pill:active {
       transform: translateY(0px) scale(0.98);
     }
+
+    /* Mobile Menu Card Fade In Animation */
+    @keyframes cardFadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-16px) scale(0.96);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .mobile-menu-card-anim {
+      animation: cardFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+      will-change: opacity, transform;
+    }
+
+    @keyframes backdropFadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .mobile-backdrop-anim {
+      animation: backdropFadeIn 0.3s ease-out both !important;
+      will-change: opacity;
+    }
   </style>
 </head>
 <body class="flex flex-col items-center justify-between min-h-screen px-4 sm:px-6 pt-5 md:pt-7 pb-12 select-text">
 
-  <!-- 1. FLOATING NAVIGATION BAR (Matches Landing Page) -->
+  <!-- 1. FLOATING NAVIGATION BAR -->
   <header class="w-full max-w-[910px] mb-8 sm:mb-12 md:mb-16">
-    <nav class="w-full bg-white border border-[#eaeaea] rounded-full px-4 sm:px-5 py-2 sm:py-2.5 flex items-center justify-between shadow-nav">
+    
+    <!-- Mobile: Sofia on top-left, Hamburger icon on top-right -->
+    <div class="flex md:hidden items-center justify-between w-full">
+      <a href="index.html" class="flex items-center pl-1 group">
+        <span class="font-bold text-[17px] tracking-[-0.02em] text-black">Sofia</span>
+      </a>
+      <button id="mobileMenuBtn" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu" class="w-10 h-10 bg-white border border-[#eaeaea] rounded-full flex flex-col items-center justify-center gap-[4.5px] shadow-nav hover:bg-zinc-50 active:scale-95 transition-all">
+        <span class="w-[18px] h-[2px] bg-[#111111] rounded-full"></span>
+        <span class="w-[18px] h-[2px] bg-[#111111] rounded-full"></span>
+        <span class="w-[18px] h-[2px] bg-[#111111] rounded-full"></span>
+      </button>
+    </div>
+
+    <!-- Desktop: Full floating navbar -->
+    <nav class="hidden md:flex w-full bg-white border border-[#eaeaea] rounded-full px-4 sm:px-5 py-2 sm:py-2.5 items-center justify-between shadow-nav">
       
       <!-- Brand Logo -->
       <a href="index.html" class="flex items-center pl-0.5 group">
@@ -162,7 +207,7 @@
       </a>
 
       <!-- Center Nav Links -->
-      <div class="hidden md:flex items-center gap-6 lg:gap-7 text-[14px] text-[#374151] font-medium">
+      <div class="flex items-center gap-6 lg:gap-7 text-[14px] text-[#374151] font-medium">
         <a href="library.html" class="hover:text-black transition-colors">Library</a>
         <a href="sofia.html" class="flex items-center gap-1.5 hover:text-black transition-colors">
           <span>AI agents</span>
@@ -185,6 +230,58 @@
 
     </nav>
   </header>
+
+  <!-- Mobile Menu Drawer / Overlay -->
+  <div id="mobileMenuDrawer" class="hidden fixed inset-0 z-50 md:hidden">
+    <!-- Backdrop -->
+    <div id="mobileMenuBackdrop" onclick="closeMobileMenu()" class="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity mobile-backdrop-anim"></div>
+    
+    <!-- Dropdown Panel -->
+    <div id="mobileMenuCard" class="fixed top-4 right-4 left-4 bg-white rounded-3xl p-6 shadow-2xl border border-zinc-100 flex flex-col gap-5 z-10 mobile-menu-card-anim">
+      <!-- Header with close button -->
+      <div class="flex justify-end">
+        <button onclick="closeMobileMenu()" aria-label="Close menu" class="w-8 h-8 rounded-full bg-zinc-100 text-zinc-600 hover:text-black hover:bg-zinc-200 flex items-center justify-center text-sm font-semibold transition-colors">
+          ✕
+        </button>
+      </div>
+
+      <!-- Links -->
+      <div class="flex flex-col gap-3.5 text-[15px] font-medium text-[#222222]">
+        <a href="library.html" onclick="closeMobileMenu()" class="py-1 hover:text-black transition-colors flex items-center justify-between">
+          <span>Library</span>
+          <span class="text-xs text-zinc-400">→</span>
+        </a>
+        <a href="sofia.html" onclick="closeMobileMenu()" class="py-1 hover:text-black transition-colors flex items-center justify-between">
+          <span class="flex items-center gap-2">
+            <span>AI agents</span>
+            <span class="bg-[#e9ebff] text-[#5e54f3] text-[9.5px] font-bold px-1.5 py-[1px] rounded-full uppercase tracking-wider">NEW</span>
+          </span>
+          <span class="text-xs text-zinc-400">→</span>
+        </a>
+        <a href="index.html#custom-orders" onclick="closeMobileMenu()" class="py-1 hover:text-black transition-colors flex items-center justify-between">
+          <span>Custom orders</span>
+          <span class="text-xs text-zinc-400">→</span>
+        </a>
+        <a href="pricing.html" onclick="closeMobileMenu()" class="py-1 hover:text-black transition-colors flex items-center justify-between">
+          <span>Pricing</span>
+          <span class="text-xs text-zinc-400">→</span>
+        </a>
+      </div>
+
+      <!-- Buttons -->
+      <div class="pt-3 border-t border-zinc-100 flex flex-col gap-2.5">
+        <a href="index.html#login" onclick="closeMobileMenu()" class="w-full text-center py-2.5 rounded-full border border-zinc-200 text-[14px] font-medium text-zinc-800 hover:bg-zinc-50 transition-colors">
+          Log in
+        </a>
+        <a href="index.html#signup" onclick="closeMobileMenu()" class="w-full bg-[#111111] hover:bg-black text-white text-[14px] font-semibold py-2.5 rounded-full flex items-center justify-center gap-2 shadow-sm transition-transform active:scale-[0.98]">
+          <span>Start free</span>
+          <svg class="w-3.5 h-3.5 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
 
   <!-- 2. MAIN HERO SECTION (Scaled to match Landing Page Hero) -->
   <main class="w-full max-w-[910px] mx-auto flex flex-col items-center text-center my-auto py-4 sm:py-8">
@@ -219,7 +316,7 @@
       </a>
 
       <!-- Secondary Documentation Link -->
-      <a href="index.html" class="text-[13.5px] sm:text-[14.5px] font-[400] text-[#1f2328] underline decoration-[#8e95a5] underline-offset-[4px] decoration-1 hover:text-black tracking-[-0.005em] transition-colors py-1.5 px-2">
+      <a href="documentation.html" class="text-[13.5px] sm:text-[14.5px] font-[400] text-[#1f2328] underline decoration-[#8e95a5] underline-offset-[4px] decoration-1 hover:text-black tracking-[-0.005em] transition-colors py-1.5 px-2">
         See documentation
       </a>
 
@@ -748,6 +845,46 @@ codex mcp login sofia</div>
         elements.forEach(el => el.classList.add('visible'));
       }
     }
+
+    // Mobile Menu
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobileMenuDrawer');
+      if (drawer) {
+        const isHidden = drawer.classList.contains('hidden');
+        if (isHidden) {
+          drawer.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+          const card = document.getElementById('mobileMenuCard');
+          const backdrop = document.getElementById('mobileMenuBackdrop');
+          if (card) {
+            card.classList.remove('mobile-menu-card-anim');
+            void card.offsetWidth; // force reflow to replay animation
+            card.classList.add('mobile-menu-card-anim');
+          }
+          if (backdrop) {
+            backdrop.classList.remove('mobile-backdrop-anim');
+            void backdrop.offsetWidth;
+            backdrop.classList.add('mobile-backdrop-anim');
+          }
+        } else {
+          closeMobileMenu();
+        }
+      }
+    }
+
+    function closeMobileMenu() {
+      const drawer = document.getElementById('mobileMenuDrawer');
+      if (drawer) {
+        drawer.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeMobileMenu();
+      }
+    });
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => {
