@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DansUGC - Edit your brief</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Inter Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
+</head>
+<body class="bg-[#fafafa] text-[#18181b] min-h-screen flex flex-col">
+
+  <!-- Top Header / Navigation -->
+  <header class="w-full bg-white border-b border-[#f1f1f4] px-6 sm:px-12 h-[58px] flex items-center justify-between sticky top-0 z-30">
+    <!-- Brand Logo -->
+    <a href="index.html" class="flex items-center gap-1 text-[16px] font-bold text-[#111827] tracking-tight hover:opacity-85 transition-opacity">
+      <span>DansUGC</span>
+    </a>
+
+    <!-- Stepper Navigation -->
+    <nav class="flex items-center gap-6 sm:gap-7 text-[12.5px]">
+      <!-- Step 1: Format (Completed) -->
+      <a href="order.html" class="flex items-center gap-2 text-[#9ca3af] font-normal hover:text-[#18181b] transition-colors cursor-pointer">
+        <svg class="w-3.5 h-3.5 text-[#9ca3af]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+        <span>Format</span>
+      </a>
+
+      <!-- Step 2: Creators (Completed) -->
+      <a href="creators.html" class="flex items-center gap-2 text-[#9ca3af] font-normal hover:text-[#18181b] transition-colors cursor-pointer">
+        <svg class="w-3.5 h-3.5 text-[#9ca3af]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+        <span>Creators</span>
+      </a>
+
+      <!-- Step 3: Brief & order (Active) -->
+      <div class="flex items-center gap-2 text-[#9fa2fb] font-semibold cursor-default">
+        <span class="w-[20px] h-[20px] rounded-full bg-[#9fa2fb] text-white flex items-center justify-center text-[11px] font-bold">3</span>
+        <span>Brief & order</span>
+      </div>
+    </nav>
+
+    <!-- Cancel editing -->
+    <a href="brief.html" class="text-[12.5px] font-medium text-[#4b5563] hover:text-black transition-colors">
+      Cancel editing
+    </a>
+  </header>
+
+  <!-- Page Container -->
+  <main class="w-full max-w-[1080px] mx-auto px-6 pt-10 pb-24 flex-1">
+    
+    <!-- Title & Subtitle -->
+    <div class="mb-6">
+      <h1 class="text-[28px] font-bold text-[#111827] tracking-[-0.02em] leading-tight mb-2">
+        Edit your brief
+      </h1>
+      <p class="text-[13px] text-[#71717a] font-normal leading-normal">
+        Make it sound like your brand. We'll update the duration and price as you edit each script.
+      </p>
+    </div>
+
+    <!-- Alert / Banner -->
+    <div class="w-full bg-[#fef2f2] border border-[#fecaca] rounded-[10px] px-4 py-2.5 mb-6 text-[12px] text-[#dc2626]">
+      Complete the brand details, each video and the filming instructions.
+    </div>
+
+    <!-- Tier / Quantity Selector Bar -->
+    <div class="w-full bg-white border border-[#e5e7eb] rounded-[14px] p-5 mb-8">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-3">
+        <div>
+          <h2 class="text-[13px] font-bold text-[#111827] leading-tight">More videos. Better value.</h2>
+          <p class="text-[11.5px] text-[#71717a] mt-0.5">6 videos · 3 per creator</p>
+        </div>
+
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <!-- Option 1: 6 videos (Selected) -->
+          <button type="button" class="border border-[#7c66ff] bg-[#f5f3ff] rounded-[9px] px-3 py-1.5 text-center min-w-[76px] transition-all">
+            <div class="text-[11.5px] font-bold text-[#6366f1] leading-tight">6 videos</div>
+            <div class="text-[9.5px] text-[#6366f1] font-medium mt-0.5">Starter order</div>
+          </button>
+
+          <!-- Option 2: 10 videos -->
+          <button type="button" class="border border-[#e5e7eb] bg-white hover:border-gray-300 rounded-[9px] px-3 py-1.5 text-center min-w-[76px] transition-all">
+            <div class="text-[11.5px] font-bold text-[#18181b] leading-tight">10 videos</div>
+            <div class="text-[9.5px] text-[#71717a] mt-0.5">Save 8.3% / video</div>
+          </button>
+
+          <!-- Option 3: 20 videos -->
+          <button type="button" class="border border-[#e5e7eb] bg-white hover:border-gray-300 rounded-[9px] px-3 py-1.5 text-center min-w-[76px] transition-all">
+            <div class="text-[11.5px] font-bold text-[#18181b] leading-tight">20 videos</div>
+            <div class="text-[9.5px] text-[#71717a] mt-0.5">Save 16.7% / video</div>
+          </button>
+
+          <!-- Option 4: +6 videos -->
+          <button type="button" class="border border-[#e5e7eb] bg-white hover:border-gray-300 rounded-[9px] px-3 py-1.5 text-center min-w-[76px] transition-all">
+            <div class="text-[11.5px] font-bold text-[#18181b] leading-tight">+6 videos</div>
+            <div class="text-[9.5px] text-[#71717a] mt-0.5">Add more</div>
+          </button>
+        </div>
+      </div>
+      <p class="text-[11px] text-[#71717a]">
+        Savings compared with the 5–9 video rate. Quantities are shared evenly across creators; your scripts stay the same.
+      </p>
+    </div>
+
+    <!-- Main 2-Column Content Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Left Column (Form) -->
+      <div class="lg:col-span-8 flex flex-col gap-6">
+        
+        <!-- Header row for Brief Details -->
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="block text-[10px] font-bold tracking-wider text-[#9ca3af] uppercase mb-0.5">BRIEF DETAILS</span>
+            <h2 class="text-[18px] font-bold text-[#111827] tracking-tight">Your brand · Reaction Video</h2>
+          </div>
+          <span class="px-2.5 py-1 rounded-[6px] bg-[#f4f4f5] text-[11px] font-medium text-[#71717a]">
+            Unsaved changes
+          </span>
+        </div>
+
+        <!-- Brand Name Input -->
+        <div class="flex flex-col">
+          <label class="text-[12px] font-bold text-[#111827] mb-1.5">Brand name</label>
+          <input 
+            type="text" 
+            value="Your brand"
+            class="w-full bg-white border border-[#e5e7eb] rounded-[10px] px-3.5 py-2.5 text-[13px] text-[#18181b] focus:outline-none focus:border-[#7c66ff] shadow-sm"
+          />
+        </div>
+
+        <!-- About the brand Input -->
+        <div class="flex flex-col">
+          <label class="text-[12px] font-bold text-[#111827] mb-1.5">About the brand</label>
+          <textarea 
+            rows="5" 
+            class="w-full bg-white border border-[#e5e7eb] rounded-[10px] p-3.5 text-[13px] text-[#18181b] focus:outline-none focus:border-[#7c66ff] shadow-sm resize-y min-h-[110px]"
+          ></textarea>
+        </div>
+
+        <!-- Order details Box -->
+        <div class="flex flex-col">
+          <label class="text-[12px] font-bold text-[#111827] mb-1.5">Order details</label>
+          <div class="w-full bg-[#f9fafb] border border-[#f3f4f6] rounded-[10px] p-4 text-[12px] text-[#4b5563] leading-relaxed">
+            <p class="font-normal text-[#18181b]">6 videos · 2 creators · 1 concept</p>
+            <p class="text-[#71717a] mt-0.5">Each creator films the quantities listed below.</p>
+          </div>
+        </div>
+
+        <!-- Section: Your videos -->
+        <div class="pt-2">
+          <h3 class="text-[13px] font-bold text-[#111827] mb-4">Your videos</h3>
+
+          <!-- Concept 1 Card / Block -->
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-[13.5px] font-bold text-[#111827]">Concept 1</span>
+                <p class="text-[11px] text-[#71717a] mt-0.5">Reaction Video · Reaction / footage</p>
+              </div>
+              <span class="text-[12px] font-bold text-[#111827]">$30.00 / video</span>
+            </div>
+
+            <!-- Fields: Recommended video type & Per creator -->
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+              <div class="sm:col-span-10">
+                <label class="block text-[11.5px] font-semibold text-[#374151] mb-1.5">Recommended video type</label>
+                <div class="relative">
+                  <select class="w-full appearance-none bg-white border border-[#c7d2fe] rounded-[8px] px-3.5 py-2 text-[12.5px] text-[#4f46e5] font-medium focus:outline-none pr-8 cursor-pointer shadow-sm">
+                    <option selected>Reaction / footage</option>
+                  </select>
+                  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-[#6366f1]">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sm:col-span-2">
+                <label class="block text-[11.5px] font-semibold text-[#374151] mb-1.5 text-left sm:text-center">Per creator</label>
+                <input 
+                  type="text" 
+                  value="3" 
+                  class="w-full bg-white border border-[#e5e7eb] rounded-[8px] py-2 text-center text-[12.5px] text-[#18181b] font-medium focus:outline-none focus:border-[#7c66ff] shadow-sm"
+                />
+              </div>
+            </div>
+
+            <!-- Hint under type -->
+            <div class="flex items-center gap-1.5 text-[11px] text-[#71717a]">
+              <svg class="w-3.5 h-3.5 text-[#9ca3af]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <span>Suggested for your brief. You can change it.</span>
+            </div>
+
+            <!-- Script / Concept Textarea -->
+            <div class="relative mt-1">
+              <textarea 
+                rows="6" 
+                class="w-full bg-white border border-[#e5e7eb] rounded-[10px] p-3.5 text-[13px] text-[#18181b] focus:outline-none focus:border-[#7c66ff] shadow-sm resize-y min-h-[140px]"
+              ></textarea>
+            </div>
+
+            <!-- Concept Footer details -->
+            <div class="flex items-center justify-between text-[11px] text-[#71717a] px-0.5">
+              <span>Delivered unedited</span>
+              <span>6 videos · $180.00</span>
+            </div>
+
+            <!-- Add another video concept button -->
+            <button 
+              type="button" 
+              class="w-full mt-2 py-2.5 bg-white border border-[#e5e7eb] rounded-[10px] text-[12px] font-semibold text-[#18181b] hover:bg-gray-50 flex items-center justify-center gap-1.5 shadow-sm transition-colors cursor-pointer"
+            >
+              <span class="text-[14px] leading-none">+</span>
+              <span>Add another video concept</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Section: Filming Instructions -->
+        <div class="pt-4 flex flex-col">
+          <label class="text-[12px] font-bold text-[#111827] mb-1.5">Filming instructions</label>
+          <textarea 
+            rows="3" 
+            class="w-full bg-white border border-[#e5e7eb] rounded-[10px] p-3.5 text-[12.5px] text-[#374151] focus:outline-none focus:border-[#7c66ff] shadow-sm resize-y min-h-[75px]"
+          >Film vertically with natural light. Deliver unedited footage.</textarea>
+        </div>
+
+        <!-- Cancel and return to review bottom link -->
+        <div class="pt-6 pb-12 flex justify-center">
+          <a href="brief.html" class="flex items-center gap-1.5 text-[12px] font-medium text-[#4b5563] hover:text-black transition-colors">
+            <span class="text-[13px] leading-none">&larr;</span>
+            <span>Cancel and return to review</span>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Right Column (Sticky Live estimate Card) -->
+      <div class="lg:col-span-4 sticky top-[78px]">
+        <div class="w-full bg-white border border-[#e5e7eb] rounded-[16px] p-6 shadow-sm flex flex-col">
+          <h3 class="text-[15px] font-bold text-[#111827] mb-4">Live estimate</h3>
+
+          <!-- Estimate Item -->
+          <div class="mb-4">
+            <div class="text-[13px] font-bold text-[#111827]">Reaction Video</div>
+            <div class="text-[11.5px] text-[#71717a]">6 videos · 1 concepts</div>
+          </div>
+
+          <!-- Selected Creators Avatars & Video counts -->
+          <div class="flex flex-col gap-3 pt-1 pb-4">
+            <!-- Creator 1: Franci -->
+            <div class="flex items-center gap-3">
+              <img src="assets/creators_page/franci.png" alt="Franci" class="w-8 h-8 rounded-full object-cover" />
+              <div>
+                <div class="text-[12px] font-bold text-[#18181b] leading-tight">Franci</div>
+                <div class="text-[11px] text-[#71717a]">3 videos</div>
+              </div>
+            </div>
+
+            <!-- Creator 2: Emilia -->
+            <div class="flex items-center gap-3">
+              <img src="assets/creators_page/emilia.png" alt="Emilia" class="w-8 h-8 rounded-full object-cover" />
+              <div>
+                <div class="text-[12px] font-bold text-[#18181b] leading-tight">Emilia</div>
+                <div class="text-[11px] text-[#71717a]">3 videos</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Calculation Line -->
+          <div class="pt-3 pb-5 border-t border-[#f3f4f6] flex items-center justify-between text-[11.5px] text-[#4b5563]">
+            <span>6 videos &times; $30.00</span>
+            <span class="text-[#18181b] font-medium">= $180.00</span>
+          </div>
+
+          <!-- Estimated Total -->
+          <div class="pt-1 pb-5 border-t border-[#f3f4f6] flex items-center justify-between">
+            <span class="text-[12.5px] font-bold text-[#111827]">Estimated total</span>
+            <span class="text-[20px] font-bold text-[#111827] tracking-tight">$180.00</span>
+          </div>
+
+          <!-- Primary Action Button -->
+          <button 
+            type="button" 
+            class="w-full bg-[#9fa2fb] hover:bg-[#8e91f9] active:scale-[0.99] text-white text-[12.5px] font-semibold py-3 px-4 rounded-[12px] flex items-center justify-center gap-1.5 transition-all shadow-sm cursor-pointer mb-2.5"
+          >
+            <span>Save changes & review</span>
+            <span class="text-[14px] leading-none">&rarr;</span>
+          </button>
+
+          <!-- Disclaimer under button -->
+          <p class="text-[10.5px] text-[#71717a] text-center mb-4">
+            You'll approve the updated brief before payment.
+          </p>
+
+          <!-- Discard changes link -->
+          <div class="text-center">
+            <a href="brief.html" class="text-[11.5px] font-medium text-[#4b5563] hover:text-black transition-colors">
+              Discard changes
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Floating bottom pill bar (matching screenshot 1) -->
+    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-white border border-[#e5e7eb] rounded-[16px] px-3.5 py-2.5 shadow-[0_4px_20px_rgba(0,0,0,0.08)] flex items-center gap-3">
+      <button type="button" class="text-[#71717a] hover:text-[#18181b] p-1 transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+      </button>
+      <div class="text-left pr-2">
+        <div class="text-[12px] font-bold text-[#111827] leading-tight">6 videos · $180.00</div>
+        <div class="text-[10px] text-[#71717a] leading-tight mt-0.5">Review before you pay</div>
+      </div>
+      <button 
+        type="button"
+        class="bg-[#9fa2fb] hover:bg-[#8e91f9] text-white text-[12px] font-semibold px-4 py-2 rounded-[10px] flex items-center gap-1.5 transition-all"
+      >
+        <span>Save & review</span>
+        <span class="text-[13px] leading-none">&rarr;</span>
+      </button>
+    </div>
+
+  </main>
+
+</body>
+</html>
