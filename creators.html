@@ -8,10 +8,10 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Fonts: Playfair Display for editorial serif headline, Inter for UI -->
+  <!-- Fonts: Newsreader & Playfair Display for editorial serif headline (matching index.html hero), Inter for UI -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   
   <style>
     * {
@@ -22,7 +22,9 @@
     }
 
     .font-serif-title {
-      font-family: 'Playfair Display', Georgia, serif;
+      font-family: 'Newsreader', 'Playfair Display', Georgia, serif;
+      letter-spacing: -0.028em;
+      line-height: 1.12;
     }
 
     /* Outlines exactly matching reference image */
@@ -147,7 +149,7 @@
     <!-- Title and Format Badge Row -->
     <div class="flex items-start justify-between mt-2 mb-4">
       <div>
-        <h1 class="text-[34px] sm:text-[36px] font-bold text-[#111827] tracking-tight leading-none font-serif-title">
+        <h1 class="text-[34px] sm:text-[38px] font-normal text-[#111111] font-serif-title">
           Find your creators
         </h1>
         <p class="text-[12.5px] text-[#716f6a] font-normal mt-1.5">
