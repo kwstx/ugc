@@ -52,6 +52,32 @@
       box-shadow: 0 0 0 1px rgba(0, 96, 223, 0.2);
     }
 
+    /* Plus button on top right of unselected cards */
+    .plus-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 24px;
+      height: 24px;
+      border-radius: 9999px;
+      background-color: #ffffff;
+      color: #18181b;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      line-height: 1;
+      font-weight: 400;
+      z-index: 20;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
+    }
+
+    .card-frame.selected .plus-btn {
+      display: none !important;
+    }
+
     /* Custom corner ribbon checkmark */
     .corner-check {
       clip-path: polygon(100% 0, 0 100%, 100% 100%);
@@ -227,11 +253,12 @@
     <!-- Creators Grid Row 1 (Pixel-perfect outlines all around cards matching reference image) -->
     <div class="grid grid-cols-5 gap-3.5 w-full mt-7 mb-3.5">
       
-      <!-- Card 1: Kris (Unselected outline all around) -->
+      <!-- Card 1: Kris (Unselected outline with plus button) -->
       <div onclick="toggleCreator('kris')" id="creator-kris" class="cursor-pointer flex flex-col group">
         <div id="frame-kris" class="card-frame unselected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
-            <img src="assets/creators_page/kris.png" alt="Kris" class="w-full h-full object-cover pointer-events-none" />
+            <img id="img-kris" src="assets/creators_page/kris.png" alt="Kris" class="w-full h-full object-cover pointer-events-none" />
+            <div id="plus-kris" class="plus-btn">+</div>
           </div>
         </div>
         <div class="mt-2 text-left">
@@ -243,11 +270,12 @@
         </div>
       </div>
 
-      <!-- Card 2: Angelika (Unselected outline all around) -->
+      <!-- Card 2: Angelika (Unselected outline with plus button) -->
       <div onclick="toggleCreator('angelika')" id="creator-angelika" class="cursor-pointer flex flex-col group">
         <div id="frame-angelika" class="card-frame unselected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
-            <img src="assets/creators_page/angelika.png" alt="Angelika" class="w-full h-full object-cover pointer-events-none" />
+            <img id="img-angelika" src="assets/creators_page/angelika.png" alt="Angelika" class="w-full h-full object-cover pointer-events-none" />
+            <div id="plus-angelika" class="plus-btn">+</div>
           </div>
         </div>
         <div class="mt-2 text-left">
@@ -259,11 +287,12 @@
         </div>
       </div>
 
-      <!-- Card 3: Franci (Selected outline all around with blue border & corner check) -->
+      <!-- Card 3: Franci (Selected outline with blue border & corner check, NO plus button) -->
       <div onclick="toggleCreator('franci')" id="creator-franci" class="cursor-pointer flex flex-col group">
         <div id="frame-franci" class="card-frame selected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
-            <img src="assets/creators_page/franci.png" alt="Franci" class="w-full h-full object-cover pointer-events-none" />
+            <img id="img-franci" src="assets/creators_page/inner_franci.png" alt="Franci" class="w-full h-full object-cover pointer-events-none" />
+            <div id="plus-franci" class="plus-btn" style="display: none;">+</div>
             <div id="check-franci" class="absolute bottom-0 right-0 w-[34px] h-[34px] bg-[#0060df] rounded-br-[15px] corner-check flex items-end justify-end p-1 z-10 pointer-events-none">
               <svg class="w-3.5 h-3.5 text-white stroke-[3.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
@@ -280,11 +309,12 @@
         </div>
       </div>
 
-      <!-- Card 4: Emilia (Selected outline all around with blue border & corner check) -->
+      <!-- Card 4: Emilia (Selected outline with blue border & corner check, NO plus button) -->
       <div onclick="toggleCreator('emilia')" id="creator-emilia" class="cursor-pointer flex flex-col group">
         <div id="frame-emilia" class="card-frame selected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
-            <img src="assets/creators_page/emilia.png" alt="Emilia" class="w-full h-full object-cover pointer-events-none" />
+            <img id="img-emilia" src="assets/creators_page/inner_emilia.png" alt="Emilia" class="w-full h-full object-cover pointer-events-none" />
+            <div id="plus-emilia" class="plus-btn" style="display: none;">+</div>
             <div id="check-emilia" class="absolute bottom-0 right-0 w-[34px] h-[34px] bg-[#0060df] rounded-br-[15px] corner-check flex items-end justify-end p-1 z-10 pointer-events-none">
               <svg class="w-3.5 h-3.5 text-white stroke-[3.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
@@ -301,11 +331,12 @@
         </div>
       </div>
 
-      <!-- Card 5: Andrea (Unselected outline all around) -->
+      <!-- Card 5: Andrea (Unselected outline with plus button) -->
       <div onclick="toggleCreator('andrea')" id="creator-andrea" class="cursor-pointer flex flex-col group">
         <div id="frame-andrea" class="card-frame unselected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
-            <img src="assets/creators_page/andrea.png" alt="Andrea" class="w-full h-full object-cover pointer-events-none" />
+            <img id="img-andrea" src="assets/creators_page/andrea.png" alt="Andrea" class="w-full h-full object-cover pointer-events-none" />
+            <div id="plus-andrea" class="plus-btn">+</div>
           </div>
         </div>
         <div class="mt-2 text-left">
@@ -372,20 +403,52 @@
   </div>
 
   <script>
-    const selectedCreators = new Set(['franci', 'emilia']);
+    const creatorState = {
+      kris: {
+        selected: false,
+        imgUnselected: 'assets/creators_page/kris.png',
+        imgSelected: 'assets/creators_page/inner_kris.png'
+      },
+      angelika: {
+        selected: false,
+        imgUnselected: 'assets/creators_page/angelika.png',
+        imgSelected: 'assets/creators_page/inner_angelika.png'
+      },
+      franci: {
+        selected: true,
+        imgUnselected: 'assets/creators_page/franci.png',
+        imgSelected: 'assets/creators_page/inner_franci.png'
+      },
+      emilia: {
+        selected: true,
+        imgUnselected: 'assets/creators_page/emilia.png',
+        imgSelected: 'assets/creators_page/inner_emilia.png'
+      },
+      andrea: {
+        selected: false,
+        imgUnselected: 'assets/creators_page/andrea.png',
+        imgSelected: 'assets/creators_page/inner_andrea.png'
+      }
+    };
 
     function toggleCreator(id) {
+      const state = creatorState[id];
+      if (!state) return;
+
+      state.selected = !state.selected;
+
       const frame = document.getElementById(`frame-${id}`);
       const inner = frame.querySelector('div');
+      const img = document.getElementById(`img-${id}`);
+      const plus = document.getElementById(`plus-${id}`);
       let check = document.getElementById(`check-${id}`);
 
-      if (selectedCreators.has(id)) {
-        selectedCreators.delete(id);
-        frame.className = "card-frame unselected";
-        if (check) check.remove();
-      } else {
-        selectedCreators.add(id);
+      if (state.selected) {
+        // SELECTED: Blue border, remove plus button, add corner checkmark
         frame.className = "card-frame selected";
+        if (img) img.src = state.imgSelected;
+        if (plus) plus.style.display = "none";
+        
         if (!check) {
           const checkDiv = document.createElement('div');
           checkDiv.id = `check-${id}`;
@@ -393,10 +456,16 @@
           checkDiv.innerHTML = `<svg class="w-3.5 h-3.5 text-white stroke-[3.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`;
           inner.appendChild(checkDiv);
         }
+      } else {
+        // UNSELECTED: Neutral outline, restore plus button, remove corner checkmark
+        frame.className = "card-frame unselected";
+        if (img) img.src = state.imgUnselected;
+        if (plus) plus.style.display = "flex";
+        if (check) check.remove();
       }
 
-      // Count selected
-      const totalSelected = selectedCreators.size;
+      // Update counter in bottom floating dock
+      const totalSelected = Object.values(creatorState).filter(c => c.selected).length;
       const counterEl = document.getElementById('dock-counter');
       if (counterEl) {
         counterEl.innerText = `${totalSelected} creator${totalSelected === 1 ? '' : 's'} selected`;
