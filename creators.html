@@ -8,10 +8,10 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Inter Google Font -->
+  <!-- Fonts: Playfair Display for editorial serif headline, Inter for UI -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
   
   <style>
     * {
@@ -21,7 +21,43 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Custom scrollbar hiding for horizontal tabs */
+    .font-serif-title {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+
+    /* Outlines exactly matching reference image */
+    .card-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 143 / 208;
+      border-radius: 20px;
+      background-color: #ffffff;
+      transition: all 0.15s ease-in-out;
+    }
+
+    .card-frame.unselected {
+      border: 1.5px solid #dcd9d0;
+      padding: 3.5px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .card-frame.unselected:hover {
+      border-color: #c8c5bc;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-frame.selected {
+      border: 2.5px solid #0060df;
+      padding: 2.5px;
+      box-shadow: 0 0 0 1px rgba(0, 96, 223, 0.2);
+    }
+
+    /* Custom corner ribbon checkmark */
+    .corner-check {
+      clip-path: polygon(100% 0, 0 100%, 100% 100%);
+    }
+
+    /* Scrollbar hiding */
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
@@ -31,354 +67,340 @@
     }
   </style>
 </head>
-<body class="bg-white text-[#18181b] min-h-screen flex flex-col select-none relative overflow-x-hidden">
+<body class="bg-[#F8F7F2] text-[#18181b] min-h-screen flex flex-col select-none relative overflow-x-hidden">
 
-  <!-- Top Header / Navigation -->
-  <header class="w-full bg-white border-b border-[#f1f1f4] px-6 sm:px-10 h-[58px] flex items-center justify-between sticky top-0 z-40">
-    <!-- Brand Logo -->
-    <a href="index.html" class="flex items-center gap-1 text-[17px] font-bold text-[#111827] tracking-tight hover:opacity-85 transition-opacity">
-      <span>DansUGC</span>
-    </a>
+  <!-- Container for standard full width content alignment (774px canvas matching reference) -->
+  <div class="w-full max-w-[774px] mx-auto px-4 flex-1 flex flex-col">
 
-    <!-- Stepper Navigation -->
-    <nav class="flex items-center gap-6 sm:gap-7 text-[12.5px]">
-      <!-- Step 1: Format (Completed) -->
-      <a href="order.html" class="flex items-center gap-2 text-[#6b7280] font-normal hover:text-[#18181b] transition-colors cursor-pointer">
-        <span class="w-[20px] h-[20px] rounded-full bg-[#f3f4f6] text-[#6b7280] flex items-center justify-center text-[10px]">
-          <svg class="w-3 h-3 text-[#6b7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
-        </span>
-        <span>Format</span>
+    <!-- Top Header / Navigation -->
+    <header class="w-full pt-6 pb-7 flex items-center justify-between">
+      <!-- Brand Logo -->
+      <a href="index.html" class="flex items-center gap-1.5 text-[15px] font-bold text-[#111827] tracking-tight hover:opacity-85 transition-opacity">
+        <span>DansUGC</span>
+        <span class="w-[9px] h-[3.5px] bg-[#d5d3cc] rounded-full inline-block mt-0.5"></span>
       </a>
 
-      <!-- Step 2: Creators (Active) -->
-      <div class="flex items-center gap-2 text-[#5b5af7] font-semibold cursor-default">
-        <span class="w-[20px] h-[20px] rounded-full bg-[#5b5af7] text-white flex items-center justify-center text-[11px] font-bold">2</span>
-        <span>Creators</span>
-      </div>
+      <!-- Stepper Navigation -->
+      <nav class="flex items-center gap-2 text-[11.5px]">
+        <!-- Step 1: Format -->
+        <a href="order.html" class="flex items-center gap-1.5 text-[#555] font-normal hover:text-black transition-colors cursor-pointer">
+          <span class="w-[17px] h-[17px] rounded-full border border-[#d2d0c8] text-[#555] flex items-center justify-center text-[10px]">1</span>
+          <span>Format</span>
+        </a>
 
-      <!-- Step 3: Brief & order (Upcoming) -->
-      <a href="brief.html" class="flex items-center gap-2 text-[#9ca3af] font-normal hover:text-[#18181b] transition-colors cursor-pointer">
-        <span class="w-[20px] h-[20px] rounded-full bg-[#f3f4f6] text-[#9ca3af] flex items-center justify-center text-[11px] font-normal">3</span>
-        <span>Brief & order</span>
+        <!-- Divider Line -->
+        <div class="w-3.5 h-[1px] bg-[#dcdad2]"></div>
+
+        <!-- Step 2: Creators (Active) -->
+        <div class="flex items-center gap-1.5 text-[#0060df] font-medium cursor-default">
+          <span class="w-[17px] h-[17px] rounded-full bg-[#0060df] text-white flex items-center justify-center text-[10px] font-semibold">2</span>
+          <span>Creators</span>
+        </div>
+
+        <!-- Divider Line -->
+        <div class="w-3.5 h-[1px] bg-[#dcdad2]"></div>
+
+        <!-- Step 3: Brief & order -->
+        <a href="brief.html" class="flex items-center gap-1.5 text-[#888] font-normal hover:text-black transition-colors cursor-pointer">
+          <span class="w-[17px] h-[17px] rounded-full border border-[#d2d0c8] text-[#888] flex items-center justify-center text-[10px]">3</span>
+          <span>Brief & order</span>
+        </a>
+      </nav>
+
+      <!-- Save & Exit Button -->
+      <a href="index.html" class="px-2.5 py-1 rounded-[6px] bg-[#eae7e0] text-[#374151] hover:bg-[#e2ded6] transition-colors text-[11px] font-medium flex items-center gap-1.5 shadow-[0_1px_1px_rgba(0,0,0,0.03)]">
+        <span>Save & exit</span>
+        <svg class="w-3 h-3 text-[#4b5563]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
       </a>
-    </nav>
-
-    <!-- Save & Exit -->
-    <a href="index.html" class="text-[12.5px] font-medium text-[#4b5563] hover:text-black transition-colors">
-      Save & exit
-    </a>
-  </header>
-
-  <!-- Main Content Page -->
-  <main class="w-full max-w-[850px] mx-auto px-4 sm:px-6 pt-9 pb-24 flex-1 flex flex-col justify-start">
+    </header>
 
     <!-- Title and Format Badge Row -->
-    <div class="flex items-start justify-between mb-5">
+    <div class="flex items-start justify-between mt-2 mb-4">
       <div>
-        <h1 class="text-[28px] sm:text-[31px] font-bold text-[#111827] tracking-[-0.025em] leading-tight mb-1">
+        <h1 class="text-[34px] sm:text-[36px] font-bold text-[#111827] tracking-tight leading-none font-serif-title">
           Find your creators
         </h1>
-        <p class="text-[13.5px] text-[#71717a] font-normal">
+        <p class="text-[12.5px] text-[#716f6a] font-normal mt-1.5">
           Great videos start with the right people.
         </p>
       </div>
 
       <!-- Format Change Pill -->
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#e5e7eb] bg-white text-[12.5px] shadow-sm shrink-0 mt-1">
-        <span class="font-medium text-[#18181b]">Reaction Video</span>
-        <a href="order.html" class="text-[#71717a] hover:text-[#5b5af7] transition-colors">Change</a>
+      <div class="flex flex-col items-end">
+        <span class="text-[10px] text-[#8e8d88] font-normal mb-1">Selected format</span>
+        <a href="order.html" class="border border-[#dedcd4] bg-[#f8f7f2] hover:bg-white rounded-[8px] px-3 py-1.5 flex items-center gap-2 text-[12px] font-medium text-[#18181b] shadow-[0_1px_2px_rgba(0,0,0,0.02)] transition-colors">
+          <span>Reaction Video</span>
+          <svg class="w-3.5 h-3.5 text-[#4b5563]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+        </a>
       </div>
     </div>
 
-    <!-- Category Tabs & Filters Container Card -->
-    <div class="w-full rounded-[20px] border border-[#ebebee] bg-white p-4 mb-4.5 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
-      
-      <!-- Top Row: Category Tabs -->
-      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-3.5">
-        <!-- Tab 1: All creators (Active) -->
-        <button class="bg-[#eef0fe] text-[#5b5af7] font-semibold text-[12.5px] px-4 py-2 rounded-lg flex items-center gap-2 shrink-0 transition-colors">
-          <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-            <path stroke-linecap="round" stroke-linejoin="round" d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
-          <span>All creators</span>
-          <span class="opacity-90">59</span>
-        </button>
+    <!-- Category Tabs Row -->
+    <div class="flex items-end gap-7 pt-4 pb-2.5">
+      <!-- Tab 1: All creators (Active) -->
+      <button class="flex items-end gap-1.5 cursor-pointer pb-1 border-b-[2.5px] border-black transition-all">
+        <span class="w-[2.5px] h-[21px] bg-black inline-block mr-1 mb-0.5"></span>
+        <span class="text-[25px] font-bold text-black lowercase leading-none tracking-tight">all</span>
+        <sup class="text-[11px] font-semibold text-black -top-2 relative">59</sup>
+      </button>
 
-        <!-- Tab 2: Top creators -->
-        <button class="text-[#6b7280] hover:text-[#18181b] hover:bg-gray-50 text-[12.5px] font-medium px-4 py-2 rounded-lg flex items-center gap-2 shrink-0 transition-colors">
-          <svg class="w-4 h-4 text-[#6b7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.45 1-1 1H7M14 14.66V17c0 .55.45 1 1 1h2M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
-          </svg>
-          <span>Top creators</span>
-          <span class="opacity-80">12</span>
-        </button>
+      <!-- Tab 2: Top creators -->
+      <button class="flex items-end gap-0.5 cursor-pointer pb-1 border-b-[2.5px] border-transparent hover:opacity-80 transition-all">
+        <span class="text-[25px] font-bold text-black lowercase leading-none tracking-tight">top</span>
+        <sup class="text-[11px] font-semibold text-black -top-2 relative">12</sup>
+      </button>
 
-        <!-- Tab 3: New creators -->
-        <button class="text-[#6b7280] hover:text-[#18181b] hover:bg-gray-50 text-[12.5px] font-medium px-4 py-2 rounded-lg flex items-center gap-2 shrink-0 transition-colors">
-          <svg class="w-4 h-4 text-[#6b7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3Z"/>
-          </svg>
-          <span>New creators</span>
-          <span class="opacity-80">18</span>
-        </button>
+      <!-- Tab 3: New creators -->
+      <button class="flex items-end gap-0.5 cursor-pointer pb-1 border-b-[2.5px] border-transparent hover:opacity-80 transition-all">
+        <span class="text-[25px] font-bold text-black lowercase leading-none tracking-tight">new</span>
+        <sup class="text-[11px] font-semibold text-black -top-2 relative">18</sup>
+      </button>
 
-        <!-- Tab 4: Featured creators -->
-        <button class="text-[#6b7280] hover:text-[#18181b] hover:bg-gray-50 text-[12.5px] font-medium px-4 py-2 rounded-lg flex items-center gap-2 shrink-0 transition-colors">
-          <svg class="w-4 h-4 text-[#6b7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <polygon stroke-linecap="round" stroke-linejoin="round" points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-          </svg>
-          <span>Featured creators</span>
-          <span class="opacity-80">32</span>
-        </button>
-      </div>
-
-      <!-- Bottom Row: Search Box & Dropdowns -->
-      <div class="flex items-center justify-between gap-3 pt-1">
-        <!-- Search by name -->
-        <div class="relative flex-1">
-          <svg class="w-4 h-4 absolute left-1 top-1/2 -translate-y-1/2 text-[#9ca3af]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-            <circle cx="11" cy="11" r="8"/>
-            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.3-4.3"/>
-          </svg>
-          <input type="text" placeholder="Search by name..." class="w-full pl-7 pr-3 py-1 text-[12.5px] bg-transparent placeholder-[#9ca3af] focus:outline-none text-[#18181b]" />
-        </div>
-
-        <!-- Filter Dropdown Pills -->
-        <div class="flex items-center gap-2 shrink-0">
-          <!-- Adjustments icon -->
-          <button class="p-1.5 text-[#6b7280] hover:text-black transition-colors" title="Filters">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>
-            </svg>
-          </button>
-
-          <!-- Dropdown: All countries -->
-          <button class="px-3 py-1.5 rounded-lg border border-[#e5e7eb] bg-white text-[12px] text-[#374151] hover:bg-gray-50 flex items-center gap-1.5 transition-colors">
-            <span>All countries</span>
-            <svg class="w-2.5 h-2.5 text-[#9ca3af]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
-            </svg>
-          </button>
-
-          <!-- Dropdown: All languages -->
-          <button class="px-3 py-1.5 rounded-lg border border-[#e5e7eb] bg-white text-[12px] text-[#374151] hover:bg-gray-50 flex items-center gap-1.5 transition-colors">
-            <span>All languages</span>
-            <svg class="w-2.5 h-2.5 text-[#9ca3af]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
-            </svg>
-          </button>
-
-          <!-- Dropdown: All genders -->
-          <button class="px-3 py-1.5 rounded-lg border border-[#e5e7eb] bg-white text-[12px] text-[#374151] hover:bg-gray-50 flex items-center gap-1.5 transition-colors">
-            <span>All genders</span>
-            <svg class="w-2.5 h-2.5 text-[#9ca3af]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
-            </svg>
-          </button>
-
-          <!-- Dropdown: All creator types -->
-          <button class="px-3 py-1.5 rounded-lg border border-[#e5e7eb] bg-white text-[12px] text-[#374151] hover:bg-gray-50 flex items-center gap-1.5 transition-colors">
-            <span>All creator types</span>
-            <svg class="w-2.5 h-2.5 text-[#9ca3af]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
-            </svg>
-          </button>
-        </div>
-      </div>
+      <!-- Tab 4: Featured creators -->
+      <button class="flex items-end gap-0.5 cursor-pointer pb-1 border-b-[2.5px] border-transparent hover:opacity-80 transition-all">
+        <span class="text-[25px] font-bold text-black lowercase leading-none tracking-tight">featured</span>
+        <sup class="text-[11px] font-semibold text-black -top-2 relative">32</sup>
+      </button>
     </div>
 
-    <!-- Results Count & Selection Status Row -->
-    <div class="flex items-center justify-between mb-4 text-[12.5px]">
-      <div class="text-[#71717a] font-normal">
-        <span class="font-medium text-[#18181b]">59 creators</span>
-        <span class="text-[#9ca3af] mx-0.5">·</span>
-        <span>Top earners first</span>
-      </div>
-
-      <!-- Right: Selected Count Pill -->
-      <div id="selected-badge" class="px-3.5 py-1 rounded-lg border border-[#e5e7eb] bg-white text-[#71717a] text-[12px] flex items-center gap-1.5 shadow-sm transition-colors">
-        <svg class="w-3.5 h-3.5 text-[#9ca3af]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+    <!-- Filter Bar Card -->
+    <div class="w-full rounded-[14px] border border-[#dedcd4] bg-[#f9f8f4] px-2.5 py-1.5 flex items-center justify-between gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+      <!-- Search Input Pill -->
+      <div class="relative flex items-center border border-[#d6d4cb] bg-transparent rounded-full px-3 py-1 w-[165px] shrink-0">
+        <svg class="w-3.5 h-3.5 text-[#9ca3af] shrink-0 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
         </svg>
-        <span id="selected-badge-text">0 selected</span>
+        <input type="text" placeholder="search by name" class="w-full bg-transparent text-[11.5px] text-[#18181b] placeholder-[#9ca3af] focus:outline-none" />
       </div>
+
+      <!-- Filter: From All countries -->
+      <span class="text-[11px] text-[#787671] shrink-0">From</span>
+      <button class="border border-[#d6d4cb] bg-[#f9f8f4] hover:bg-white rounded-full px-2.5 py-1 text-[11px] text-[#222] flex items-center gap-1 shrink-0 transition-colors">
+        <span>All countries</span>
+        <svg class="w-2.5 h-2.5 text-[#666]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+        </svg>
+      </button>
+
+      <!-- Filter: speaking All languages -->
+      <span class="text-[11px] text-[#787671] shrink-0">, speaking</span>
+      <button class="border border-[#d6d4cb] bg-[#f9f8f4] hover:bg-white rounded-full px-2.5 py-1 text-[11px] text-[#222] flex items-center gap-1 shrink-0 transition-colors">
+        <span>All languages</span>
+        <svg class="w-2.5 h-2.5 text-[#666]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+        </svg>
+      </button>
+
+      <!-- Filter: All languages (dialect/secondary) -->
+      <button class="border border-[#d6d4cb] bg-[#f9f8f4] hover:bg-white rounded-full px-2.5 py-1 text-[11px] text-[#222] flex items-center gap-1 shrink-0 transition-colors">
+        <span>All languages</span>
+        <svg class="w-2.5 h-2.5 text-[#666]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+        </svg>
+      </button>
+
+      <!-- Filter: All genders -->
+      <button class="border border-[#d6d4cb] bg-[#f9f8f4] hover:bg-white rounded-full px-2.5 py-1 text-[11px] text-[#222] flex items-center gap-1 shrink-0 transition-colors">
+        <span>All genders</span>
+        <svg class="w-2.5 h-2.5 text-[#666]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+        </svg>
+      </button>
+
+      <!-- Filter: All creator types -->
+      <button class="border border-[#d6d4cb] bg-[#f9f8f4] hover:bg-white rounded-full px-2.5 py-1 text-[11px] text-[#222] flex items-center gap-1 shrink-0 transition-colors">
+        <span>All creator types</span>
+        <svg class="w-2.5 h-2.5 text-[#666]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+        </svg>
+      </button>
     </div>
 
-    <!-- Creators Grid -->
-    <div class="grid grid-cols-5 gap-4 sm:gap-4.5 w-full mb-3.5">
+    <!-- Creators Grid Row 1 (Pixel-perfect outlines all around cards matching reference image) -->
+    <div class="grid grid-cols-5 gap-3.5 w-full mt-7 mb-3.5">
       
-      <!-- Card 1: Kris -->
-      <div onclick="toggleCreator('kris')" id="card-kris" class="group cursor-pointer flex flex-col">
-        <div id="thumb-kris" class="relative aspect-[126/179] rounded-[15px] overflow-hidden bg-gray-100 transition-all shadow-sm hover:shadow-md">
-          <img src="assets/creators_page/kris.png" alt="Kris" class="w-full h-full object-cover pointer-events-none" />
-          <div id="btn-kris" class="absolute top-2.5 right-2.5 w-[24px] h-[24px] rounded-full bg-white/95 text-[#18181b] shadow-sm flex items-center justify-center text-[16px] font-normal leading-none select-none transition-all">
-            +
+      <!-- Card 1: Kris (Unselected outline all around) -->
+      <div onclick="toggleCreator('kris')" id="creator-kris" class="cursor-pointer flex flex-col group">
+        <div id="frame-kris" class="card-frame unselected">
+          <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
+            <img src="assets/creators_page/kris.png" alt="Kris" class="w-full h-full object-cover pointer-events-none" />
           </div>
         </div>
         <div class="mt-2 text-left">
-          <h3 class="text-[13.5px] font-bold text-[#18181b] leading-tight">Kris</h3>
-          <p class="text-[11.5px] text-[#71717a] font-normal leading-tight mt-0.5 truncate">Latvia · English, Latvian</p>
+          <div class="flex items-center gap-1">
+            <span class="text-[13px] font-bold text-[#111827] leading-tight">Kris</span>
+            <span class="bg-[#ebeae5] text-[#706e68] text-[9.5px] font-semibold px-1.5 py-0.2 rounded-[4px] leading-tight">LV</span>
+          </div>
+          <p class="text-[10.5px] text-[#787671] font-normal leading-tight mt-0.5 truncate">Latvia · English, Latvian</p>
         </div>
       </div>
 
-      <!-- Card 2: Angelika -->
-      <div onclick="toggleCreator('angelika')" id="card-angelika" class="group cursor-pointer flex flex-col">
-        <div id="thumb-angelika" class="relative aspect-[126/179] rounded-[15px] overflow-hidden bg-gray-100 transition-all shadow-sm hover:shadow-md">
-          <img src="assets/creators_page/angelika.png" alt="Angelika" class="w-full h-full object-cover pointer-events-none" />
-          <div id="btn-angelika" class="absolute top-2.5 right-2.5 w-[24px] h-[24px] rounded-full bg-white/95 text-[#18181b] shadow-sm flex items-center justify-center text-[16px] font-normal leading-none select-none transition-all">
-            +
+      <!-- Card 2: Angelika (Unselected outline all around) -->
+      <div onclick="toggleCreator('angelika')" id="creator-angelika" class="cursor-pointer flex flex-col group">
+        <div id="frame-angelika" class="card-frame unselected">
+          <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
+            <img src="assets/creators_page/angelika.png" alt="Angelika" class="w-full h-full object-cover pointer-events-none" />
           </div>
         </div>
         <div class="mt-2 text-left">
-          <h3 class="text-[13.5px] font-bold text-[#18181b] leading-tight">Angelika</h3>
-          <p class="text-[11.5px] text-[#71717a] font-normal leading-tight mt-0.5 truncate">Romania · English, Ro...</p>
+          <div class="flex items-center gap-1">
+            <span class="text-[13px] font-bold text-[#111827] leading-tight">Angelika</span>
+            <span class="bg-[#ebeae5] text-[#706e68] text-[9.5px] font-semibold px-1.5 py-0.2 rounded-[4px] leading-tight flex items-center gap-0.5">🇷🇴 RO</span>
+          </div>
+          <p class="text-[10.5px] text-[#787671] font-normal leading-tight mt-0.5 truncate">Romania · English, Romanian</p>
         </div>
       </div>
 
-      <!-- Card 3: Franci -->
-      <div onclick="toggleCreator('franci')" id="card-franci" class="group cursor-pointer flex flex-col">
-        <div id="thumb-franci" class="relative aspect-[126/179] rounded-[15px] overflow-hidden bg-gray-100 transition-all shadow-sm hover:shadow-md">
-          <img src="assets/creators_page/franci.png" alt="Franci" class="w-full h-full object-cover pointer-events-none" />
-          <div id="btn-franci" class="absolute top-2.5 right-2.5 w-[24px] h-[24px] rounded-full bg-white/95 text-[#18181b] shadow-sm flex items-center justify-center text-[16px] font-normal leading-none select-none transition-all">
-            +
+      <!-- Card 3: Franci (Selected outline all around with blue border & corner check) -->
+      <div onclick="toggleCreator('franci')" id="creator-franci" class="cursor-pointer flex flex-col group">
+        <div id="frame-franci" class="card-frame selected">
+          <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
+            <img src="assets/creators_page/franci.png" alt="Franci" class="w-full h-full object-cover pointer-events-none" />
+            <div id="check-franci" class="absolute bottom-0 right-0 w-[34px] h-[34px] bg-[#0060df] rounded-br-[15px] corner-check flex items-end justify-end p-1 z-10 pointer-events-none">
+              <svg class="w-3.5 h-3.5 text-white stroke-[3.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
           </div>
         </div>
         <div class="mt-2 text-left">
-          <h3 class="text-[13.5px] font-bold text-[#18181b] leading-tight">Franci</h3>
-          <p class="text-[11.5px] text-[#71717a] font-normal leading-tight mt-0.5 truncate">Latvia · English</p>
+          <div class="flex items-center gap-1">
+            <span class="text-[13px] font-bold text-[#111827] leading-tight">Franci</span>
+            <span class="bg-[#ebeae5] text-[#706e68] text-[9.5px] font-semibold px-1.5 py-0.2 rounded-[4px] leading-tight flex items-center gap-0.5">🇱🇻 LV</span>
+          </div>
+          <p class="text-[10.5px] text-[#787671] font-normal leading-tight mt-0.5 truncate">Latvia · English</p>
         </div>
       </div>
 
-      <!-- Card 4: Emilia -->
-      <div onclick="toggleCreator('emilia')" id="card-emilia" class="group cursor-pointer flex flex-col">
-        <div id="thumb-emilia" class="relative aspect-[126/179] rounded-[15px] overflow-hidden bg-gray-100 transition-all shadow-sm hover:shadow-md">
-          <img src="assets/creators_page/emilia.png" alt="Emilia" class="w-full h-full object-cover pointer-events-none" />
-          <div id="btn-emilia" class="absolute top-2.5 right-2.5 w-[24px] h-[24px] rounded-full bg-white/95 text-[#18181b] shadow-sm flex items-center justify-center text-[16px] font-normal leading-none select-none transition-all">
-            +
+      <!-- Card 4: Emilia (Selected outline all around with blue border & corner check) -->
+      <div onclick="toggleCreator('emilia')" id="creator-emilia" class="cursor-pointer flex flex-col group">
+        <div id="frame-emilia" class="card-frame selected">
+          <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
+            <img src="assets/creators_page/emilia.png" alt="Emilia" class="w-full h-full object-cover pointer-events-none" />
+            <div id="check-emilia" class="absolute bottom-0 right-0 w-[34px] h-[34px] bg-[#0060df] rounded-br-[15px] corner-check flex items-end justify-end p-1 z-10 pointer-events-none">
+              <svg class="w-3.5 h-3.5 text-white stroke-[3.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
           </div>
         </div>
         <div class="mt-2 text-left">
-          <h3 class="text-[13.5px] font-bold text-[#18181b] leading-tight">Emilia</h3>
-          <p class="text-[11.5px] text-[#71717a] font-normal leading-tight mt-0.5 truncate">Poland · English, Latvian</p>
+          <div class="flex items-center gap-1">
+            <span class="text-[13px] font-bold text-[#111827] leading-tight">Emilia</span>
+            <span class="bg-[#ebeae5] text-[#706e68] text-[9.5px] font-semibold px-1.5 py-0.2 rounded-[4px] leading-tight flex items-center gap-0.5">LA</span>
+          </div>
+          <p class="text-[10.5px] text-[#787671] font-normal leading-tight mt-0.5 truncate">Poland · English, Latvian</p>
         </div>
       </div>
 
-      <!-- Card 5: Andrea -->
-      <div onclick="toggleCreator('andrea')" id="card-andrea" class="group cursor-pointer flex flex-col">
-        <div id="thumb-andrea" class="relative aspect-[126/179] rounded-[15px] overflow-hidden bg-gray-100 transition-all shadow-sm hover:shadow-md">
-          <img src="assets/creators_page/andrea.png" alt="Andrea" class="w-full h-full object-cover pointer-events-none" />
-          <div id="btn-andrea" class="absolute top-2.5 right-2.5 w-[24px] h-[24px] rounded-full bg-white/95 text-[#18181b] shadow-sm flex items-center justify-center text-[16px] font-normal leading-none select-none transition-all">
-            +
+      <!-- Card 5: Andrea (Unselected outline all around) -->
+      <div onclick="toggleCreator('andrea')" id="creator-andrea" class="cursor-pointer flex flex-col group">
+        <div id="frame-andrea" class="card-frame unselected">
+          <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
+            <img src="assets/creators_page/andrea.png" alt="Andrea" class="w-full h-full object-cover pointer-events-none" />
           </div>
         </div>
         <div class="mt-2 text-left">
-          <h3 class="text-[13.5px] font-bold text-[#18181b] leading-tight">Andrea</h3>
-          <p class="text-[11.5px] text-[#71717a] font-normal leading-tight mt-0.5 truncate">Austria · English, Romanian</p>
+          <div class="flex items-center gap-1">
+            <span class="text-[13px] font-bold text-[#111827] leading-tight">Andrea</span>
+            <span class="bg-[#ebeae5] text-[#706e68] text-[9.5px] font-semibold px-1.5 py-0.2 rounded-[4px] leading-tight flex items-center gap-0.5">🇷🇴 RO</span>
+          </div>
+          <p class="text-[10.5px] text-[#787671] font-normal leading-tight mt-0.5 truncate">Austria · English, Romanian</p>
         </div>
       </div>
 
     </div>
 
-    <!-- Row 2 (Partial peek matching reference image) -->
-    <div class="grid grid-cols-5 gap-4 sm:gap-4.5 w-full h-[38px] overflow-hidden pointer-events-none opacity-95">
-      <div class="rounded-t-[15px] overflow-hidden bg-gray-100">
-        <img src="assets/creators_page/r2_card_1.png" class="w-full h-full object-cover" />
+    <!-- Row 2 Partial Peek (Matching reference image exactly) -->
+    <div class="grid grid-cols-5 gap-3.5 w-full h-[37px] overflow-hidden pointer-events-none mb-12">
+      <div class="rounded-t-[20px] p-[3.5px] pb-0 bg-white border-t border-x border-[#dcd9d0]">
+        <div class="rounded-t-[16px] overflow-hidden h-[34px]">
+          <img src="assets/creators_page/pixel_r2_1.png" class="w-full h-full object-cover" />
+        </div>
       </div>
-      <div class="rounded-t-[15px] overflow-hidden bg-gray-100">
-        <img src="assets/creators_page/r2_card_2.png" class="w-full h-full object-cover" />
+      <div class="rounded-t-[20px] p-[3.5px] pb-0 bg-white border-t border-x border-[#dcd9d0]">
+        <div class="rounded-t-[16px] overflow-hidden h-[34px]">
+          <img src="assets/creators_page/pixel_r2_2.png" class="w-full h-full object-cover" />
+        </div>
       </div>
-      <div class="rounded-t-[15px] overflow-hidden bg-gray-100">
-        <img src="assets/creators_page/r2_card_3.png" class="w-full h-full object-cover" />
+      <div class="rounded-t-[20px] p-[3.5px] pb-0 bg-white border-t border-x border-[#dcd9d0]">
+        <div class="rounded-t-[16px] overflow-hidden h-[34px]">
+          <img src="assets/creators_page/pixel_r2_3.png" class="w-full h-full object-cover" />
+        </div>
       </div>
-      <div class="rounded-t-[15px] overflow-hidden bg-gray-100">
-        <img src="assets/creators_page/r2_card_4.png" class="w-full h-full object-cover" />
+      <div class="rounded-t-[20px] p-[3.5px] pb-0 bg-white border-t border-x border-[#dcd9d0]">
+        <div class="rounded-t-[16px] overflow-hidden h-[34px]">
+          <img src="assets/creators_page/pixel_r2_4.png" class="w-full h-full object-cover" />
+        </div>
       </div>
-      <div class="rounded-t-[15px] overflow-hidden bg-gray-100">
-        <img src="assets/creators_page/r2_card_5.png" class="w-full h-full object-cover" />
+      <div class="rounded-t-[20px] p-[3.5px] pb-0 bg-white border-t border-x border-[#dcd9d0]">
+        <div class="rounded-t-[16px] overflow-hidden h-[34px]">
+          <img src="assets/creators_page/pixel_r2_5.png" class="w-full h-full object-cover" />
+        </div>
       </div>
     </div>
 
-  </main>
+  </div>
 
   <!-- Floating Bottom Selection Bar -->
-  <div class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-white rounded-xl shadow-[0_4px_26px_rgba(0,0,0,0.15)] border border-[#e5e7eb] py-2 px-3 flex items-center gap-4">
-    <!-- Back arrow -->
-    <a href="order.html" class="w-7 h-7 rounded-lg hover:bg-gray-100 flex items-center justify-center text-[#4b5563] transition-colors cursor-pointer" title="Back to format">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-      </svg>
-    </a>
+  <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-white rounded-2xl shadow-[0_10px_35px_rgba(0,0,0,0.12)] border border-[#e5e3dc] py-1.5 px-3 flex items-center gap-3">
+    <!-- Overlapping Selected Avatars -->
+    <div id="dock-avatars" class="flex items-center -space-x-2">
+      <img src="assets/creators_page/dock_avatar1.png" alt="Creator" class="w-[26px] h-[26px] rounded-full object-cover border-[1.5px] border-white shadow-sm" />
+      <img src="assets/creators_page/dock_avatar2.png" alt="Creator" class="w-[26px] h-[26px] rounded-full object-cover border-[1.5px] border-white shadow-sm" />
+    </div>
 
-    <!-- Counter text -->
-    <div class="flex flex-col text-left pr-2">
-      <span id="dock-counter" class="text-[12.5px] font-bold text-[#18181b] leading-tight">0 creators selected</span>
-      <span class="text-[10.5px] text-[#71717a] font-normal leading-tight">Minimum 5 videos across your order</span>
+    <!-- Selection Status Text -->
+    <div class="flex flex-col text-left">
+      <span id="dock-counter" class="text-[12px] font-bold text-[#111827] leading-tight">2 creators selected</span>
+      <span class="text-[10px] text-[#716f6a] font-normal leading-tight mt-0.5">Minimum 5 videos across your order</span>
     </div>
 
     <!-- CTA Button -->
-    <button id="dock-btn" onclick="window.location.href='brief.html'" class="bg-[#b5b3fa] text-white text-[12.5px] font-medium px-4.5 py-2.5 rounded-lg flex items-center gap-1.5 transition-all shadow-sm cursor-pointer">
+    <button onclick="window.location.href='brief.html'" class="bg-[#0060df] hover:bg-[#0051bf] active:scale-[0.98] text-white text-[12px] font-medium px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all shadow-sm ml-1 cursor-pointer">
       <span>Write your brief</span>
       <span class="text-[13px] leading-none">&rarr;</span>
     </button>
   </div>
 
-  <!-- Interactive Selection Logic -->
   <script>
-    const selectedCreators = new Set();
-
-    function updateUI() {
-      const count = selectedCreators.size;
-      
-      // Update top right badge
-      const selectedBadgeText = document.getElementById('selected-badge-text');
-      const selectedBadge = document.getElementById('selected-badge');
-      if (count > 0) {
-        selectedBadgeText.innerText = `${count} selected`;
-        selectedBadge.className = "px-3.5 py-1 rounded-lg border border-[#e5e7eb] bg-white text-[#18181b] font-medium text-[12px] flex items-center gap-1.5 shadow-sm transition-colors";
-      } else {
-        selectedBadgeText.innerText = "0 selected";
-        selectedBadge.className = "px-3.5 py-1 rounded-lg border border-[#e5e7eb] bg-white text-[#71717a] text-[12px] flex items-center gap-1.5 shadow-sm transition-colors";
-      }
-
-      // Update bottom floating dock counter
-      const dockCounter = document.getElementById('dock-counter');
-      dockCounter.innerText = `${count} creator${count === 1 ? '' : 's'} selected`;
-
-      // Update bottom floating dock CTA button
-      const dockBtn = document.getElementById('dock-btn');
-      if (count > 0) {
-        dockBtn.className = "bg-[#5b5af7] hover:bg-[#4842db] active:scale-[0.98] text-white text-[12.5px] font-medium px-4.5 py-2.5 rounded-lg flex items-center gap-1.5 transition-all shadow-sm cursor-pointer";
-      } else {
-        dockBtn.className = "bg-[#b5b3fa] text-white text-[12.5px] font-medium px-4.5 py-2.5 rounded-lg flex items-center gap-1.5 transition-all shadow-sm cursor-not-allowed";
-      }
-    }
+    const selectedCreators = new Set(['franci', 'emilia']);
 
     function toggleCreator(id) {
-      const thumb = document.getElementById(`thumb-${id}`);
-      const btn = document.getElementById(`btn-${id}`);
+      const frame = document.getElementById(`frame-${id}`);
+      const inner = frame.querySelector('div');
+      let check = document.getElementById(`check-${id}`);
 
       if (selectedCreators.has(id)) {
         selectedCreators.delete(id);
-        // Reset card thumbnail outline
-        thumb.className = "relative aspect-[126/179] rounded-[15px] overflow-hidden bg-gray-100 transition-all shadow-sm hover:shadow-md";
-        // Reset plus icon
-        btn.className = "absolute top-2.5 right-2.5 w-[24px] h-[24px] rounded-full bg-white/95 text-[#18181b] shadow-sm flex items-center justify-center text-[16px] font-normal leading-none select-none transition-all";
-        btn.innerHTML = "+";
+        frame.className = "card-frame unselected";
+        if (check) check.remove();
       } else {
         selectedCreators.add(id);
-        // Active purple outline matching Image 2
-        thumb.className = "relative aspect-[126/179] rounded-[15px] overflow-hidden bg-gray-100 ring-2 ring-[#5b5af7] transition-all shadow-md";
-        // Purple circle with checkmark matching Image 2
-        btn.className = "absolute top-2.5 right-2.5 w-[24px] h-[24px] rounded-full bg-[#5b5af7] text-white shadow-sm flex items-center justify-center select-none transition-all";
-        btn.innerHTML = `<svg class="w-3.5 h-3.5 stroke-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`;
+        frame.className = "card-frame selected";
+        if (!check) {
+          const checkDiv = document.createElement('div');
+          checkDiv.id = `check-${id}`;
+          checkDiv.className = "absolute bottom-0 right-0 w-[34px] h-[34px] bg-[#0060df] rounded-br-[15px] corner-check flex items-end justify-end p-1 z-10 pointer-events-none";
+          checkDiv.innerHTML = `<svg class="w-3.5 h-3.5 text-white stroke-[3.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`;
+          inner.appendChild(checkDiv);
+        }
       }
 
-      updateUI();
+      // Count selected
+      const totalSelected = selectedCreators.size;
+      const counterEl = document.getElementById('dock-counter');
+      if (counterEl) {
+        counterEl.innerText = `${totalSelected} creator${totalSelected === 1 ? '' : 's'} selected`;
+      }
     }
   </script>
 
