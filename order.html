@@ -8,24 +8,36 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Inter Google Font -->
+  <!-- Google Fonts: Inter, Newsreader, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   
   <style>
     * {
       box-sizing: border-box;
+    }
+
+    body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Grand Editorial Serif Title */
+    .hero-heading,
+    .hero-heading * {
+      font-family: 'Newsreader', 'Playfair Display', Georgia, serif !important;
+      letter-spacing: -0.028em;
+      line-height: 1.14;
+      font-weight: 400;
     }
   </style>
 </head>
 <body class="bg-white text-[#18181b] min-h-screen flex flex-col select-none">
 
   <!-- Top Header / Navigation -->
-  <header class="w-full bg-white border-b border-[#f1f1f4] px-6 sm:px-10 h-[58px] flex items-center justify-between">
+  <header id="site-header" class="w-full bg-white border-b border-[#f1f1f4] px-6 sm:px-10 h-[58px] flex items-center justify-between">
     <!-- Brand Logo -->
     <a href="index.html" class="flex items-center gap-1 text-[17px] font-bold text-[#111827] tracking-tight hover:opacity-85 transition-opacity">
       <span>DansUGC</span>
@@ -59,14 +71,14 @@
   </header>
 
   <!-- Main Content Page -->
-  <main class="w-full max-w-[790px] mx-auto px-4 sm:px-6 pt-9 pb-16 flex-1 flex flex-col justify-start">
+  <main id="formats-main" class="w-full max-w-[790px] mx-auto px-4 sm:px-6 pt-9 pb-16 flex-1 flex flex-col justify-start">
     
     <!-- Headline Section -->
     <div class="mb-6 text-left">
       <div class="text-[11px] font-medium text-[#8e8e93] tracking-wide mb-1.5 uppercase">
         Real Human creators (Never AI SLOP)
       </div>
-      <h1 class="text-[25px] sm:text-[26px] font-bold text-[#111827] tracking-[-0.025em] leading-tight mb-1">
+      <h1 class="hero-heading text-[30px] sm:text-[36px] md:text-[42px] text-[#111111] leading-[1.14] mb-1">
         Exclusive UGC
       </h1>
       <p class="text-[13px] text-[#71717a] font-normal">
@@ -229,13 +241,16 @@
       <div class="flex flex-col items-end gap-2 shrink-0 self-end sm:self-auto">
         <div class="text-right mb-1">
           <span class="text-[11.5px] text-[#71717a] block leading-tight">Need something custom?</span>
-          <a href="#" class="text-[12px] font-semibold text-[#18181b] hover:text-[#5b5af7] transition-colors inline-flex items-center gap-1">
+          <a href="custom_order.html" id="request-custom-btn" onclick="openCustomView(event)" class="text-[12px] font-semibold text-[#18181b] hover:text-[#5b5af7] transition-colors inline-flex items-center gap-1 cursor-pointer">
             Request custom <span>&rarr;</span>
           </a>
         </div>
 
         <a href="creators.html" class="inline-block">
-          <button class="bg-[#554fe8] hover:bg-[#4842db] text-white text-[13px] font-medium px-5 h-[38px] rounded-[9px] flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.98] transition-all cursor-pointer">
+          <button
+            style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);"
+            class="text-white text-[13px] font-medium px-5 h-[38px] rounded-[9px] flex items-center justify-center gap-1.5 shadow-[0_3px_12px_rgba(33,58,231,0.25)] hover:shadow-[0_6px_20px_rgba(33,58,231,0.4)] hover:brightness-105 active:scale-[0.98] transition-all cursor-pointer"
+          >
             <span>Choose creators</span>
             <span class="text-[14px] leading-none">&rarr;</span>
           </button>
@@ -245,6 +260,193 @@
     </div>
 
   </main>
+
+  <!-- Custom Order Page View (appears on 'Request custom' click) -->
+  <div id="custom-order-view" class="hidden w-full max-w-[1040px] mx-auto px-6 sm:px-10 pt-9 pb-20">
+    
+    <!-- Top Back Link -->
+    <div class="mb-6">
+      <a href="order.html" onclick="backToFormats(event)" class="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#4f46e5] hover:text-[#4338ca] transition-colors cursor-pointer">
+        <span class="text-[14px] leading-none">&larr;</span>
+        <span>Back to formats</span>
+      </a>
+    </div>
+
+    <!-- Page Title & Subtitle -->
+    <div class="mb-8">
+      <h1 class="hero-heading text-[32px] sm:text-[35px] text-[#18181b] mb-1.5">
+        Want something custom?
+      </h1>
+      <p class="text-[13.5px] text-[#52525b] font-normal">
+        Post an open project and let creators join. You only pay for videos you approve.
+      </p>
+    </div>
+
+    <!-- Main Grid: Form (Left) & Summary Card (Right) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+      
+      <!-- Left Column: Form Fields -->
+      <div class="lg:col-span-7 flex flex-col gap-5">
+        
+        <!-- Field 1: What kind of video do you need? -->
+        <div>
+          <label class="block text-[13px] font-semibold text-[#18181b] mb-2">
+            What kind of video do you need?
+          </label>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <!-- Option 1: Raw Video (Selected by default) -->
+            <div id="card-raw" onclick="selectCustomVideoType('raw')" class="cursor-pointer rounded-[12px] p-4 border-[1.5px] border-[#5046e5] bg-[#fbfbfe] flex items-center gap-3 transition-all">
+              <div id="radio-raw" class="w-[18px] h-[18px] rounded-full border-[1.5px] border-[#5046e5] flex items-center justify-center shrink-0">
+                <div class="w-[8px] h-[8px] rounded-full bg-[#5046e5]"></div>
+              </div>
+              <div class="flex flex-col">
+                <span class="text-[13.5px] font-semibold text-[#18181b] leading-tight">Raw Footage</span>
+                <span class="text-[11.5px] text-[#71717a] font-normal leading-tight mt-1">Unedited, natural shots</span>
+              </div>
+            </div>
+
+            <!-- Option 2: Full UGC (Unselected by default) -->
+            <div id="card-full-ugc" onclick="selectCustomVideoType('full')" class="cursor-pointer rounded-[12px] p-4 border border-[#e5e7eb] bg-white flex items-center gap-3 hover:border-[#d1d5db] transition-all">
+              <div id="radio-full-ugc" class="w-[18px] h-[18px] rounded-full border border-[#d1d5db] bg-white shrink-0">
+              </div>
+              <div class="flex flex-col">
+                <span class="text-[13.5px] font-semibold text-[#18181b] leading-tight">Full UGC</span>
+                <span class="text-[11.5px] text-[#71717a] font-normal leading-tight mt-1">Fully edited video or app demo</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Field 2: Company name -->
+        <div>
+          <label class="block text-[13px] font-semibold text-[#18181b] mb-2">
+            Company name
+          </label>
+          <input
+            type="text"
+            id="company-name"
+            class="w-full h-[42px] px-3.5 rounded-[10px] border border-[#e5e7eb] text-[13.5px] text-[#18181b] focus:outline-none focus:border-[#5046e5] focus:ring-1 focus:ring-[#5046e5] bg-white transition-all"
+          />
+        </div>
+
+        <!-- Field 3: Give your order a title -->
+        <div>
+          <label class="block text-[13px] font-semibold text-[#18181b] mb-2">
+            Give your order a title
+          </label>
+          <input
+            type="text"
+            id="order-title"
+            placeholder="A bilingual café conversation"
+            class="w-full h-[42px] px-3.5 rounded-[10px] border border-[#e5e7eb] text-[13.5px] text-[#18181b] placeholder:text-[#a1a1aa] focus:outline-none focus:border-[#5046e5] focus:ring-1 focus:ring-[#5046e5] bg-white transition-all"
+          />
+        </div>
+
+        <!-- Field 4: Link to the format or example -->
+        <div>
+          <label class="block text-[13px] font-semibold text-[#18181b] mb-2">
+            Link to the format or example
+          </label>
+          <input
+            type="text"
+            id="format-link"
+            placeholder="https://..."
+            class="w-full h-[42px] px-3.5 rounded-[10px] border border-[#e5e7eb] text-[13.5px] text-[#18181b] placeholder:text-[#a1a1aa] focus:outline-none focus:border-[#5046e5] focus:ring-1 focus:ring-[#5046e5] bg-white transition-all"
+          />
+          <p class="text-[11.5px] text-[#71717a] font-normal mt-1.5">
+            Share a link that creators can open.
+          </p>
+        </div>
+
+        <!-- Field 5: What do you need? -->
+        <div>
+          <label class="block text-[13px] font-semibold text-[#18181b] mb-2">
+            What do you need?
+          </label>
+          <textarea
+            id="order-details"
+            rows="5"
+            placeholder="Describe the idea, script, length, language, setting and anything the creator should know."
+            class="w-full min-h-[140px] p-3.5 rounded-[10px] border border-[#e5e7eb] text-[13px] text-[#18181b] placeholder:text-[#a1a1aa] focus:outline-none focus:border-[#5046e5] focus:ring-1 focus:ring-[#5046e5] bg-white transition-all resize-y"
+          ></textarea>
+        </div>
+
+        <!-- Field 6: Creator pay per video (USD) -->
+        <div>
+          <label class="block text-[13px] font-semibold text-[#18181b] mb-2">
+            Creator pay per video (USD)
+          </label>
+          <input
+            type="number"
+            id="creator-pay"
+            value="25"
+            oninput="updateCustomPricingFromInput(this.value)"
+            class="w-full h-[42px] px-3.5 rounded-[10px] border border-[#e5e7eb] text-[13.5px] text-[#18181b] focus:outline-none focus:border-[#5046e5] focus:ring-1 focus:ring-[#5046e5] bg-white transition-all"
+          />
+        </div>
+
+      </div>
+
+      <!-- Right Column: How open orders work card -->
+      <div class="lg:col-span-5 w-full max-w-[370px]">
+        <div class="bg-[#f9fafb] rounded-[20px] p-6 sm:p-7 border border-[#f1f1f4]">
+          
+          <!-- Card Title -->
+          <h2 class="text-[16px] font-bold text-[#18181b] mb-4 tracking-[-0.01em]">
+            How open orders work
+          </h2>
+
+          <!-- Steps -->
+          <div class="space-y-3.5 mb-7 text-[12.5px] text-[#27272a] font-normal">
+            <p>1. Share your format, details and pay.</p>
+            <p>2. Creators join and make a video.</p>
+            <p>3. Review it, then approve and pay.</p>
+          </div>
+
+          <!-- Price Breakdown -->
+          <div class="space-y-2 mb-4 text-[12.5px]">
+            <div class="flex items-center justify-between">
+              <span class="text-[#374151]">Creator reward</span>
+              <span id="summary-creator-reward" class="font-bold text-[#18181b]">$25</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[#374151]">Platform fee · 20%</span>
+              <span id="summary-platform-fee" class="font-bold text-[#18181b]">$5</span>
+            </div>
+          </div>
+
+          <!-- Total Row -->
+          <div class="flex items-center justify-between pt-1 mb-4">
+            <span class="text-[13.5px] font-bold text-[#18181b]">Per approved video</span>
+            <span id="summary-total-fee" class="text-[14.5px] font-bold text-[#18181b]">$30</span>
+          </div>
+
+          <!-- Disclaimer -->
+          <p class="text-[11.5px] text-[#6b7280] leading-relaxed mb-6">
+            Charged to Personal Account only when you approve a video. Revisions and rejections have no charge.
+          </p>
+
+          <!-- Publish Button -->
+          <button
+            type="button"
+            class="w-full h-[44px] bg-[#5046e5] hover:bg-[#4338ca] text-white text-[13.5px] font-semibold rounded-[10px] flex items-center justify-center gap-1.5 transition-all shadow-sm active:scale-[0.99] cursor-pointer"
+          >
+            <span>Publish open order</span>
+            <span class="text-[14px] leading-none">&rarr;</span>
+          </button>
+
+          <!-- Note under button -->
+          <p class="text-[11.5px] text-[#6b7280] mt-3.5 text-left">
+            Your brief will be visible to creators in their studio.
+          </p>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
 
   <script>
     let currentSelection = 'reaction';
@@ -277,6 +479,100 @@
         checkReaction.className = "w-5 h-5 rounded-full border-[1.5px] border-[#d4d4d8] bg-white flex items-center justify-center";
         checkReaction.innerHTML = "";
       }
+    }
+
+    // Toggle to Custom Order View
+    function openCustomView(e) {
+      if (e) e.preventDefault();
+      document.getElementById('site-header').classList.add('hidden');
+      document.getElementById('formats-main').classList.add('hidden');
+      document.getElementById('custom-order-view').classList.remove('hidden');
+      window.scrollTo(0, 0);
+      try {
+        history.pushState({ view: 'custom' }, '', '#custom');
+      } catch (err) {}
+    }
+
+    // Back to Formats View
+    function backToFormats(e) {
+      if (e) e.preventDefault();
+      document.getElementById('custom-order-view').classList.add('hidden');
+      document.getElementById('site-header').classList.remove('hidden');
+      document.getElementById('formats-main').classList.remove('hidden');
+      window.scrollTo(0, 0);
+      try {
+        history.pushState({ view: 'formats' }, '', window.location.pathname.split('#')[0]);
+      } catch (err) {}
+    }
+
+    window.addEventListener('popstate', function() {
+      if (window.location.hash === '#custom') {
+        openCustomView();
+      } else {
+        backToFormats();
+      }
+    });
+
+    if (window.location.hash === '#custom') {
+      openCustomView();
+    }
+
+    // Custom Order form interactivity
+    let currentCustomType = 'raw';
+
+    function selectCustomVideoType(type) {
+      currentCustomType = type;
+      const cardRaw = document.getElementById('card-raw');
+      const cardFull = document.getElementById('card-full-ugc');
+      const radioRaw = document.getElementById('radio-raw');
+      const radioFull = document.getElementById('radio-full-ugc');
+      const creatorPayInput = document.getElementById('creator-pay');
+
+      if (type === 'raw') {
+        cardRaw.className = "cursor-pointer rounded-[12px] p-4 border-[1.5px] border-[#5046e5] bg-[#fbfbfe] flex items-center gap-3 transition-all";
+        radioRaw.className = "w-[18px] h-[18px] rounded-full border-[1.5px] border-[#5046e5] flex items-center justify-center shrink-0";
+        radioRaw.innerHTML = '<div class="w-[8px] h-[8px] rounded-full bg-[#5046e5]"></div>';
+
+        cardFull.className = "cursor-pointer rounded-[12px] p-4 border border-[#e5e7eb] bg-white flex items-center gap-3 hover:border-[#d1d5db] transition-all";
+        radioFull.className = "w-[18px] h-[18px] rounded-full border border-[#d1d5db] bg-white shrink-0";
+        radioFull.innerHTML = '';
+
+        if (creatorPayInput) {
+          creatorPayInput.value = 25;
+          calculateCustomPricing(25);
+        }
+      } else {
+        cardFull.className = "cursor-pointer rounded-[12px] p-4 border-[1.5px] border-[#5046e5] bg-[#fbfbfe] flex items-center gap-3 transition-all";
+        radioFull.className = "w-[18px] h-[18px] rounded-full border-[1.5px] border-[#5046e5] flex items-center justify-center shrink-0";
+        radioFull.innerHTML = '<div class="w-[8px] h-[8px] rounded-full bg-[#5046e5]"></div>';
+
+        cardRaw.className = "cursor-pointer rounded-[12px] p-4 border border-[#e5e7eb] bg-white flex items-center gap-3 hover:border-[#d1d5db] transition-all";
+        radioRaw.className = "w-[18px] h-[18px] rounded-full border border-[#d1d5db] bg-white shrink-0";
+        radioRaw.innerHTML = '';
+
+        if (creatorPayInput) {
+          creatorPayInput.value = 100;
+          calculateCustomPricing(100);
+        }
+      }
+    }
+
+    function updateCustomPricingFromInput(val) {
+      const amount = parseFloat(val) || 0;
+      calculateCustomPricing(amount);
+    }
+
+    function calculateCustomPricing(amount) {
+      const fee = Math.round(amount * 0.20);
+      const total = amount + fee;
+
+      const rewardEl = document.getElementById('summary-creator-reward');
+      const feeEl = document.getElementById('summary-platform-fee');
+      const totalEl = document.getElementById('summary-total-fee');
+
+      if (rewardEl) rewardEl.textContent = '$' + amount;
+      if (feeEl) feeEl.textContent = '$' + fee;
+      if (totalEl) totalEl.textContent = '$' + total;
     }
   </script>
 
