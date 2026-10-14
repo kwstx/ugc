@@ -2048,22 +2048,21 @@
       });
     }
 
-    // Search action
+    // Search action - navigates to library.html with search query
     function performSearch() {
       const searchBtn = document.getElementById('searchBtn');
       const input = document.getElementById('searchInput');
-      if (input && !input.value.trim()) {
-        if (window.heroSearchSetQuery) {
-          window.heroSearchSetQuery('guy laughing at his phone');
-        } else {
-          input.value = 'guy laughing at his phone';
-        }
+      let query = input ? input.value.trim() : '';
+      if (!query) {
+        query = 'guy laughing at his phone';
+        if (input) input.value = query;
       }
-      searchBtn.innerHTML = '<span>Searching...</span>';
+      if (searchBtn) {
+        searchBtn.innerHTML = '<span>Searching...</span>';
+      }
       setTimeout(() => {
-        searchBtn.innerHTML = '<span>Search</span>';
-        scrollToClips();
-      }, 300);
+        window.location.href = `library.html?q=${encodeURIComponent(query)}`;
+      }, 180);
     }
 
     // Scroll to clips

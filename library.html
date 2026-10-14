@@ -100,9 +100,17 @@
             </svg>
             <input 
               type="text" 
+              id="librarySearchInput"
               placeholder="Describe a clip or paste an Instagram / TikTok link" 
               class="w-full bg-transparent text-[13.5px] text-gray-800 placeholder-[#6b7280] focus:outline-none"
+              oninput="handleSearchInputChange(this.value)"
+              onkeydown="if(event.key==='Enter') executeLibrarySearch(this.value)"
             />
+            <button id="clearSearchBtn" onclick="clearLibrarySearch()" class="hidden text-gray-400 hover:text-gray-600 ml-2" title="Clear">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -110,7 +118,13 @@
         <div class="space-y-1.5 text-[11.5px] sm:text-[12px] text-[#6b7280]">
           <p>Paste a public Instagram or TikTok link, then press Enter to match its first 2 seconds.</p>
           <p>
-            <span class="text-[#4b5563] font-medium">Trending:</span> shocked reaction, mind blown, girl laughing, crying, gym, pointing at screen
+            <span class="text-[#4b5563] font-medium">Trending:</span> 
+            <button type="button" onclick="searchFor('shocked reaction')" class="hover:text-black underline cursor-pointer">shocked reaction</button>, 
+            <button type="button" onclick="searchFor('mind blown')" class="hover:text-black underline cursor-pointer">mind blown</button>, 
+            <button type="button" onclick="searchFor('girl laughing')" class="hover:text-black underline cursor-pointer">girl laughing</button>, 
+            <button type="button" onclick="searchFor('crying')" class="hover:text-black underline cursor-pointer">crying</button>, 
+            <button type="button" onclick="searchFor('gym')" class="hover:text-black underline cursor-pointer">gym</button>, 
+            <button type="button" onclick="searchFor('pointing at screen')" class="hover:text-black underline cursor-pointer">pointing at screen</button>
           </p>
         </div>
       </div>
@@ -153,7 +167,7 @@
             <div class="space-y-2">
               
               <!-- Item 1: Face Reaction -->
-              <div class="flex items-center gap-2.5 p-0.5 group cursor-pointer hover:bg-gray-50 rounded-[8px] transition-colors">
+              <div onclick="searchFor('Face Reaction')" class="flex items-center gap-2.5 p-0.5 group cursor-pointer hover:bg-gray-50 rounded-[8px] transition-colors">
                 <img src="assets/library/col_face.png" alt="Face Reaction" class="w-9 h-9 rounded-[9px] object-cover shrink-0 border border-gray-100" />
                 <div class="min-w-0">
                   <div class="text-[12px] font-semibold text-black leading-tight truncate">Face Reaction</div>
@@ -162,7 +176,7 @@
               </div>
 
               <!-- Item 2: Product Demo -->
-              <div class="flex items-center gap-2.5 p-0.5 group cursor-pointer hover:bg-gray-50 rounded-[8px] transition-colors">
+              <div onclick="searchFor('Product Demo')" class="flex items-center gap-2.5 p-0.5 group cursor-pointer hover:bg-gray-50 rounded-[8px] transition-colors">
                 <img src="assets/library/col_product.png" alt="Product Demo" class="w-9 h-9 rounded-[9px] object-cover shrink-0 border border-gray-100" />
                 <div class="min-w-0">
                   <div class="text-[12px] font-semibold text-black leading-tight truncate">Product Demo</div>
@@ -171,7 +185,7 @@
               </div>
 
               <!-- Item 3: Outfit Of The Day -->
-              <div class="flex items-center gap-2.5 p-0.5 group cursor-pointer hover:bg-gray-50 rounded-[8px] transition-colors">
+              <div onclick="searchFor('Outfit Of The Day')" class="flex items-center gap-2.5 p-0.5 group cursor-pointer hover:bg-gray-50 rounded-[8px] transition-colors">
                 <img src="assets/library/col_outfit.png" alt="Outfit Of The Day" class="w-9 h-9 rounded-[9px] object-cover shrink-0 border border-gray-100" />
                 <div class="min-w-0">
                   <div class="text-[12px] font-semibold text-black leading-tight truncate">Outfit Of The Day</div>
@@ -180,7 +194,7 @@
               </div>
 
               <!-- Item 4: Chore -->
-              <div class="flex items-center gap-2.5 p-0.5 group cursor-pointer hover:bg-gray-50 rounded-[8px] transition-colors">
+              <div onclick="searchFor('Chore')" class="flex items-center gap-2.5 p-0.5 group cursor-pointer hover:bg-gray-50 rounded-[8px] transition-colors">
                 <img src="assets/library/col_chore.png" alt="Chore" class="w-9 h-9 rounded-[9px] object-cover shrink-0 border border-gray-100" />
                 <div class="min-w-0">
                   <div class="text-[12px] font-semibold text-black leading-tight truncate">Chore</div>
@@ -200,45 +214,45 @@
     <div class="flex items-center justify-between gap-2 overflow-x-auto no-scrollbar pb-1.5 mb-3.5 pt-1.5 border-t border-[#f4f4f5]">
       
       <!-- Category Pills List -->
-      <div class="flex items-center gap-2 shrink-0">
+      <div id="categoryPillsList" class="flex items-center gap-2 shrink-0">
         <!-- Active: All clips -->
-        <button class="bg-black text-white text-[12px] font-medium px-3.5 py-1.5 rounded-full shrink-0 shadow-sm">
+        <button onclick="filterCategory('All clips')" class="cat-pill bg-black text-white text-[12px] font-medium px-3.5 py-1.5 rounded-full shrink-0 shadow-sm cursor-pointer transition-all">
           All clips
         </button>
 
-        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+        <button onclick="filterCategory('Health & Fitness')" class="cat-pill bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors cursor-pointer">
           Health & Fitness
         </button>
 
-        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+        <button onclick="filterCategory('Nutrition & Food')" class="cat-pill bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors cursor-pointer">
           Nutrition & Food
         </button>
 
-        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+        <button onclick="filterCategory('Women\'s Health')" class="cat-pill bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors cursor-pointer">
           Women's Health
         </button>
 
-        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+        <button onclick="filterCategory('Gut Health')" class="cat-pill bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors cursor-pointer">
           Gut Health
         </button>
 
-        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+        <button onclick="filterCategory('Sleep & Wellness')" class="cat-pill bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors cursor-pointer">
           Sleep & Wellness
         </button>
 
-        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+        <button onclick="filterCategory('Productivity & Work')" class="cat-pill bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors cursor-pointer">
           Productivity & Work
         </button>
 
-        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+        <button onclick="filterCategory('Education & Study')" class="cat-pill bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors cursor-pointer">
           Education & Study
         </button>
 
-        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+        <button onclick="filterCategory('Dating')" class="cat-pill bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors cursor-pointer">
           Dating
         </button>
 
-        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors">
+        <button onclick="filterCategory('Relationships')" class="cat-pill bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors cursor-pointer">
           Relationships
         </button>
       </div>
@@ -246,7 +260,7 @@
       <!-- Right Controls: Filters, All creators, Most purchased -->
       <div class="flex items-center gap-2 shrink-0 pl-2">
         <!-- Filters Button -->
-        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full inline-flex items-center gap-1.5 shrink-0 transition-colors">
+        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full inline-flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer">
           <svg class="w-3.5 h-3.5 stroke-[2] text-[#4b5563]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"/>
           </svg>
@@ -257,7 +271,7 @@
         </button>
 
         <!-- All Creators Dropdown -->
-        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full inline-flex items-center gap-1.5 shrink-0 transition-colors">
+        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full inline-flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer">
           <span>All creators</span>
           <svg class="w-2.5 h-2.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
@@ -265,7 +279,7 @@
         </button>
 
         <!-- Most Purchased Dropdown -->
-        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full inline-flex items-center gap-1.5 shrink-0 transition-colors">
+        <button class="bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full inline-flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer">
           <span>Most purchased</span>
           <svg class="w-2.5 h-2.5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
@@ -276,7 +290,7 @@
     </div>
 
     <!-- ================= LAVENDER / LIGHT BLUE NOTICE BANNER ================= -->
-    <div id="selectionBanner" class="bg-[#f6f6fe] border border-[#e0e7ff] rounded-[14px] px-4 py-2.5 mb-2.5 flex items-center justify-between text-[#374151] text-[12px] transition-all">
+    <div id="selectionBanner" class="bg-[#f6f6fe] border border-[#e0e7ff] rounded-[14px] px-4 py-2.5 mb-3 flex items-center justify-between text-[#374151] text-[12px] transition-all">
       <div class="flex items-center gap-2.5">
         <svg class="w-4 h-4 text-[#6366f1] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="10" stroke-width="1.8" />
@@ -291,12 +305,91 @@
       </button>
     </div>
 
-    <!-- ================= EMPTY STATE ================= -->
-    <div class="py-20 sm:py-28 flex flex-col items-center justify-center text-center">
-      <p class="text-[16px] sm:text-[18px] font-medium text-gray-500">No clips yet!</p>
+    <!-- ================= SEARCH RESULTS STATUS BAR ================= -->
+    <div id="searchMetaBar" class="flex items-center justify-between my-3 text-[12.5px] text-[#4b5563]">
+      <div class="flex items-center gap-2 flex-wrap">
+        <span id="resultsCountBadge" class="font-bold text-[#111827]">12 clips</span>
+        <span id="searchDescriptionText">available in library</span>
+      </div>
+      <button id="clearFilterBtn" onclick="clearAllFilters()" class="hidden text-[12px] font-semibold text-[#4f46e5] hover:underline cursor-pointer">
+        Reset to all clips
+      </button>
+    </div>
+
+    <!-- ================= CLIPS GRID ================= -->
+    <div id="clipsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3.5 sm:gap-4 mb-8">
+      <!-- Generated dynamically by JavaScript -->
+    </div>
+
+    <!-- ================= EMPTY RESULTS STATE ================= -->
+    <div id="noResultsState" class="hidden py-16 flex flex-col items-center justify-center text-center">
+      <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 mb-3">
+        <svg class="w-6 h-6 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+        </svg>
+      </div>
+      <h3 class="text-[15px] font-bold text-gray-800 mb-1">No matching clips found</h3>
+      <p class="text-[12.5px] text-gray-500 max-w-sm mb-4">We couldn't find any clips matching your exact search. Try another expression or check out all clips.</p>
+      <button onclick="clearAllFilters()" class="px-4 py-2 bg-black text-white rounded-full text-[12px] font-medium hover:bg-zinc-800 transition-colors cursor-pointer">
+        View all clips
+      </button>
     </div>
 
   </main>
+
+  <!-- ================= CLIP DETAIL MODAL ================= -->
+  <div id="clipDetailModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
+    <div class="bg-white rounded-[20px] max-w-[480px] w-full shadow-2xl border border-[#e5e7eb] overflow-hidden flex flex-col">
+      <div class="p-4 border-b border-[#f1f1f4] flex items-center justify-between">
+        <h3 id="modalClipTitle" class="font-bold text-[14px] text-[#111827]">Clip Preview</h3>
+        <button onclick="closeClipModal()" class="text-[#9ca3af] hover:text-[#111827] text-lg leading-none cursor-pointer p-1">&times;</button>
+      </div>
+      <div class="p-4 flex flex-col gap-3">
+        <div class="relative w-full aspect-[4/3] rounded-[14px] overflow-hidden bg-gray-100 flex items-center justify-center">
+          <img id="modalClipImg" src="" alt="Clip Preview" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+            <div class="w-12 h-12 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#111827]">
+              <svg class="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </div>
+          </div>
+          <span id="modalClipDuration" class="absolute bottom-2.5 right-2.5 bg-black/70 text-white text-[11px] px-2 py-0.5 rounded font-mono">0:04</span>
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <span id="modalClipCreator" class="font-bold text-[13.5px] text-[#111827]">Alex M.</span>
+            <span id="modalClipPrice" class="font-bold text-[15px] text-[#111827]">$15.00</span>
+          </div>
+          <p id="modalClipDesc" class="text-[12px] text-[#4b5563] leading-relaxed"></p>
+          <div id="modalClipTags" class="flex flex-wrap gap-1.5 mt-2.5"></div>
+        </div>
+      </div>
+      <div class="p-3.5 bg-[#f9fafb] border-t border-[#f1f1f4] flex items-center justify-end gap-2.5">
+        <button onclick="closeClipModal()" class="px-4 py-2 bg-white border border-[#e5e7eb] text-[#374151] rounded-full text-[12px] font-medium hover:bg-gray-50 transition-colors cursor-pointer">
+          Close
+        </button>
+        <button id="modalSelectBtn" onclick="toggleModalClipSelect()" style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);" class="px-5 py-2 text-white rounded-full text-[12px] font-medium shadow-sm hover:brightness-105 transition-all cursor-pointer">
+          Select this clip
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FLOATING SELECTION DOCK ================= -->
+  <div id="floatingSelectionDock" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-white/95 backdrop-blur-md border border-[#e5e7eb] rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.12)] px-5 py-2.5 items-center gap-4 transition-all">
+    <div class="flex items-center gap-2 text-[12.5px]">
+      <span id="dockSelectedCount" class="font-bold text-[#111827]">1 clip selected</span>
+      <span class="text-gray-300">|</span>
+      <span id="dockSelectedTotal" class="font-semibold text-[#059669]">$15.00</span>
+    </div>
+    <a href="order.html" style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);" class="text-white text-[12.5px] font-semibold px-4 py-1.5 rounded-full inline-flex items-center gap-1.5 shadow-sm hover:brightness-105 active:scale-95 transition-all cursor-pointer">
+      <span>Continue with clips</span>
+      <svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+      </svg>
+    </a>
+  </div>
 
   <!-- ================= FLOATING CHAT WIDGET (BOTTOM RIGHT) ================= -->
   <div class="fixed bottom-4 right-5 z-50">
@@ -307,5 +400,486 @@
     </button>
   </div>
 
+  <!-- ================= CLIPS DATA & SIMILARITY SEARCH SCRIPT ================= -->
+  <script>
+    const clipsData = [
+      {
+        id: 'clip-1',
+        title: 'Guy laughing uncontrollably at his phone',
+        creator: 'Alex M.',
+        handle: '@alex_ugc',
+        category: 'Productivity & Work',
+        emotion: 'Laughing',
+        tags: ['laughing', 'guy', 'phone', 'laughing at phone', 'funny', 'skits', 'amused', 'smile', 'happy'],
+        duration: '0:04',
+        price: 15.00,
+        thumbnail: 'assets/library/clip_1.png',
+        rating: '5.0 (42)'
+      },
+      {
+        id: 'clip-2',
+        title: 'Shocked mouth wide open disbelief reaction',
+        creator: 'Franci',
+        handle: '@franci_ugc',
+        category: 'Women\'s Health',
+        emotion: 'Shocked',
+        tags: ['shocked', 'disbelief', 'mouth open', 'reaction', 'surprised', 'viral', 'hook', 'omg', 'jaw drop'],
+        duration: '0:03',
+        price: 15.00,
+        thumbnail: 'assets/order/thumb_shocked.png',
+        rating: '4.9 (88)'
+      },
+      {
+        id: 'clip-3',
+        title: 'Emotional crying tears of relief reaction',
+        creator: 'Sarah T.',
+        handle: '@sarah_ugc',
+        category: 'Sleep & Wellness',
+        emotion: 'Crying',
+        tags: ['crying', 'emotional', 'tears', 'sad', 'touching', 'relief', 'reaction', 'female'],
+        duration: '0:05',
+        price: 15.00,
+        thumbnail: 'assets/book_creator/creator_crying.png',
+        rating: '5.0 (31)'
+      },
+      {
+        id: 'clip-4',
+        title: 'Girl laughing and pointing at phone screen',
+        creator: 'Emilia',
+        handle: '@emilia_ugc',
+        category: 'Nutrition & Food',
+        emotion: 'Laughing',
+        tags: ['laughing', 'girl', 'phone', 'pointing', 'funny', 'happy', 'screen', 'laughing at phone'],
+        duration: '0:04',
+        price: 15.00,
+        thumbnail: 'assets/library/clip_2.png',
+        rating: '4.9 (64)'
+      },
+      {
+        id: 'clip-5',
+        title: 'Mind blown head grab surprised expression',
+        creator: 'Kris',
+        handle: '@kris_creator',
+        category: 'Productivity & Work',
+        emotion: 'Surprised',
+        tags: ['mind blown', 'surprised', 'shocked', 'head grab', 'wow', 'disbelief', 'talking head'],
+        duration: '0:03',
+        price: 15.00,
+        thumbnail: 'assets/order/thumb_surprised.png',
+        rating: '4.8 (52)'
+      },
+      {
+        id: 'clip-6',
+        title: 'Talking head direct camera hook explanation',
+        creator: 'Andrea',
+        handle: '@andrea_ugc',
+        category: 'Health & Fitness',
+        emotion: 'Talking head',
+        tags: ['talking head', 'explanation', 'hook', 'speaking', 'direct camera', 'review', 'skits'],
+        duration: '0:07',
+        price: 15.00,
+        thumbnail: 'assets/book_creator/creator_tank.png',
+        rating: '5.0 (79)'
+      },
+      {
+        id: 'clip-7',
+        title: 'Couple funny banter and relationship reaction',
+        creator: 'Maya & Dan',
+        handle: '@maya_dan',
+        category: 'Relationships',
+        emotion: 'Couples',
+        tags: ['couples', 'skits', 'couple', 'banter', 'relationship', 'dating', 'funny', 'skit'],
+        duration: '0:06',
+        price: 15.00,
+        thumbnail: 'assets/library/clip_3.png',
+        rating: '4.9 (45)'
+      },
+      {
+        id: 'clip-8',
+        title: 'Excited happy celebration jumping with joy',
+        creator: 'Robert K.',
+        handle: '@robert_k',
+        category: 'Health & Fitness',
+        emotion: 'Happy',
+        tags: ['happy', 'excited', 'celebrate', 'joy', 'win', 'laughing', 'smile'],
+        duration: '0:04',
+        price: 15.00,
+        thumbnail: 'assets/order/thumb_happy.png',
+        rating: '5.0 (19)'
+      },
+      {
+        id: 'clip-9',
+        title: 'Sneaky curious peek looking over shoulder',
+        creator: 'Angelika',
+        handle: '@angelika_ugc',
+        category: 'Dating',
+        emotion: 'Skits',
+        tags: ['peek', 'skits', 'curious', 'looking', 'phone', 'sneaky', 'suspicious'],
+        duration: '0:04',
+        price: 15.00,
+        thumbnail: 'assets/book_creator/creator_peek.png',
+        rating: '4.9 (37)'
+      },
+      {
+        id: 'clip-10',
+        title: 'Gym workout routine & energy check',
+        creator: 'Marcus',
+        handle: '@marcus_fit',
+        category: 'Health & Fitness',
+        emotion: 'Talking head',
+        tags: ['gym', 'fitness', 'workout', 'health', 'body', 'energy', 'health & fitness'],
+        duration: '0:05',
+        price: 15.00,
+        thumbnail: 'assets/library/clip_4.png',
+        rating: '4.8 (26)'
+      },
+      {
+        id: 'clip-11',
+        title: 'Green screen product demo with gestures',
+        creator: 'Alex M.',
+        handle: '@alex_ugc',
+        category: 'Gut Health',
+        emotion: 'Talking head',
+        tags: ['greenscreen', 'green screen', 'product demo', 'pointing', 'review', 'demo', 'pointing at screen'],
+        duration: '0:06',
+        price: 15.00,
+        thumbnail: 'assets/order/thumb_greenscreen.png',
+        rating: '5.0 (61)'
+      },
+      {
+        id: 'clip-12',
+        title: 'App demo live mobile walkthrough reaction',
+        creator: 'Emilia',
+        handle: '@emilia_ugc',
+        category: 'Education & Study',
+        emotion: 'Talking head',
+        tags: ['app demo', 'mobile', 'phone', 'tech', 'walkthrough', 'talking head', 'skits'],
+        duration: '0:08',
+        price: 15.00,
+        thumbnail: 'assets/order/thumb_app_demo.png',
+        rating: '4.9 (43)'
+      }
+    ];
+
+    let currentSelectedCategory = 'All clips';
+    let currentSearchQuery = '';
+    const selectedClipIds = new Set();
+    let activeModalClip = null;
+
+    // Search similarity scoring algorithm
+    function searchClipsBySimilarity(query) {
+      if (!query || !query.trim()) {
+        return clipsData.map(c => ({ clip: c, score: 1 }));
+      }
+
+      const q = query.toLowerCase().trim();
+      const tokens = q.split(/[\s,._-]+/).filter(t => t.length > 1);
+
+      return clipsData.map(clip => {
+        let score = 0;
+        const title = clip.title.toLowerCase();
+        const emotion = clip.emotion.toLowerCase();
+        const cat = clip.category.toLowerCase();
+        const tags = clip.tags.map(t => t.toLowerCase());
+        const creator = clip.creator.toLowerCase();
+
+        // Exact full phrase match
+        if (title.includes(q)) score += 50;
+        if (emotion.includes(q)) score += 40;
+        if (cat.includes(q)) score += 30;
+
+        // Token matches
+        tokens.forEach(tok => {
+          if (title.includes(tok)) score += 18;
+          if (emotion === tok) score += 25;
+          else if (emotion.includes(tok)) score += 15;
+          if (cat.includes(tok)) score += 12;
+          if (creator.includes(tok)) score += 15;
+          tags.forEach(tag => {
+            if (tag === tok) score += 22;
+            else if (tag.includes(tok) || tok.includes(tag)) score += 10;
+          });
+        });
+
+        return { clip, score };
+      });
+    }
+
+    // Render clips into grid
+    function renderClips(items, isFilteredBySearch = false) {
+      const grid = document.getElementById('clipsGrid');
+      const noResults = document.getElementById('noResultsState');
+      const countBadge = document.getElementById('resultsCountBadge');
+      const descText = document.getElementById('searchDescriptionText');
+      const resetBtn = document.getElementById('clearFilterBtn');
+
+      if (!grid) return;
+
+      if (items.length === 0) {
+        grid.innerHTML = '';
+        noResults.classList.remove('hidden');
+        countBadge.innerText = '0 clips';
+        descText.innerText = currentSearchQuery ? `found for "${currentSearchQuery}"` : 'found in this category';
+        resetBtn.classList.remove('hidden');
+        return;
+      }
+
+      noResults.classList.add('hidden');
+      countBadge.innerText = `${items.length} ${items.length === 1 ? 'clip' : 'clips'}`;
+      
+      if (currentSearchQuery) {
+        descText.innerHTML = `similar to <span class="font-semibold text-[#111827]">"${escapeHtml(currentSearchQuery)}"</span>`;
+        resetBtn.classList.remove('hidden');
+      } else if (currentSelectedCategory !== 'All clips') {
+        descText.innerHTML = `in <span class="font-semibold text-[#111827]">${escapeHtml(currentSelectedCategory)}</span>`;
+        resetBtn.classList.remove('hidden');
+      } else {
+        descText.innerText = 'available in library';
+        resetBtn.classList.add('hidden');
+      }
+
+      grid.innerHTML = items.map(c => {
+        const isSelected = selectedClipIds.has(c.id);
+        return `
+          <div 
+            onclick="toggleClipSelection('${c.id}', event)"
+            class="group relative bg-white border ${isSelected ? 'border-[#4f46e5] ring-2 ring-[#4f46e5]/20 shadow-md' : 'border-[#e5e7eb] hover:border-gray-300 shadow-xs'} rounded-[16px] overflow-hidden flex flex-col transition-all cursor-pointer"
+          >
+            <!-- Video Thumbnail Frame -->
+            <div class="relative w-full aspect-[4/5] bg-gray-100 overflow-hidden">
+              <img src="${c.thumbnail}" alt="${escapeHtml(c.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              
+              <!-- Top Badges -->
+              <div class="absolute top-2 left-2 right-2 flex items-center justify-between z-10 pointer-events-none">
+                <span class="bg-black/60 backdrop-blur-xs text-white text-[10px] font-medium px-1.5 py-0.5 rounded shadow-xs">
+                  ${c.duration}
+                </span>
+                <span class="bg-white/90 backdrop-blur-xs text-[#111827] text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-xs">
+                  ${c.emotion}
+                </span>
+              </div>
+
+              <!-- Selection Indicator Checkbox Top Right -->
+              <div class="absolute bottom-2 right-2 z-10">
+                <div class="w-6 h-6 rounded-full ${isSelected ? 'bg-[#4f46e5] text-white border-white' : 'bg-white/80 border-gray-300 text-transparent group-hover:text-gray-300'} border flex items-center justify-center transition-all shadow-xs">
+                  <svg class="w-3.5 h-3.5 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Hover Play Button Overlay -->
+              <div class="absolute inset-0 bg-black/15 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                <div class="w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#111827] transform scale-90 group-hover:scale-100 transition-transform">
+                  <svg class="w-4 h-4 fill-current ml-0.5" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Info Button (ⓘ) in clip corner -->
+              <button 
+                onclick="event.stopPropagation(); openClipModal('${c.id}')"
+                class="absolute bottom-2 left-2 z-10 w-6 h-6 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center text-[11px] font-bold transition-colors cursor-pointer"
+                title="View clip details"
+              >
+                ⓘ
+              </button>
+            </div>
+
+            <!-- Clip Info Bottom -->
+            <div class="p-2.5 flex flex-col justify-between flex-1 gap-1">
+              <div class="text-[12px] font-medium text-[#111827] leading-tight line-clamp-2" title="${escapeHtml(c.title)}">
+                ${escapeHtml(c.title)}
+              </div>
+              
+              <div class="flex items-center justify-between text-[11px] text-[#71717a] mt-1 pt-1 border-t border-[#f1f1f4]">
+                <span class="truncate font-normal">${c.creator}</span>
+                <span class="font-bold text-[#111827] shrink-0">$${c.price.toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Apply filtering and search
+    function applyFilters() {
+      let scored = searchClipsBySimilarity(currentSearchQuery);
+
+      // If search query is entered, prioritize positive matches
+      let filtered;
+      if (currentSearchQuery && currentSearchQuery.trim()) {
+        const matches = scored.filter(item => item.score > 0).sort((a, b) => b.score - a.score).map(item => item.clip);
+        filtered = matches.length > 0 ? matches : clipsData;
+      } else {
+        filtered = clipsData;
+      }
+
+      // Apply category filter if not 'All clips'
+      if (currentSelectedCategory !== 'All clips') {
+        filtered = filtered.filter(c => c.category.toLowerCase() === currentSelectedCategory.toLowerCase());
+      }
+
+      renderClips(filtered, !!currentSearchQuery);
+    }
+
+    // Handle search input typing live
+    function handleSearchInputChange(val) {
+      currentSearchQuery = val;
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (clearBtn) {
+        if (val) clearBtn.classList.remove('hidden');
+        else clearBtn.classList.add('hidden');
+      }
+      applyFilters();
+    }
+
+    function executeLibrarySearch(val) {
+      currentSearchQuery = val;
+      applyFilters();
+    }
+
+    function searchFor(keyword) {
+      const input = document.getElementById('librarySearchInput');
+      if (input) {
+        input.value = keyword;
+        handleSearchInputChange(keyword);
+      }
+    }
+
+    function clearLibrarySearch() {
+      const input = document.getElementById('librarySearchInput');
+      if (input) input.value = '';
+      handleSearchInputChange('');
+    }
+
+    function clearAllFilters() {
+      currentSelectedCategory = 'All clips';
+      currentSearchQuery = '';
+      const input = document.getElementById('librarySearchInput');
+      if (input) input.value = '';
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (clearBtn) clearBtn.classList.add('hidden');
+
+      // Reset category pills active state
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        if (btn.innerText.trim() === 'All clips') {
+          btn.className = 'cat-pill bg-black text-white text-[12px] font-medium px-3.5 py-1.5 rounded-full shrink-0 shadow-sm cursor-pointer transition-all';
+        } else {
+          btn.className = 'cat-pill bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors cursor-pointer';
+        }
+      });
+
+      applyFilters();
+    }
+
+    function filterCategory(catName) {
+      currentSelectedCategory = catName;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        if (btn.innerText.trim() === catName) {
+          btn.className = 'cat-pill bg-black text-white text-[12px] font-medium px-3.5 py-1.5 rounded-full shrink-0 shadow-sm cursor-pointer transition-all';
+        } else {
+          btn.className = 'cat-pill bg-white border border-[#e5e7eb] hover:border-gray-400 text-[#374151] text-[12px] px-3 py-1.5 rounded-full shrink-0 transition-colors cursor-pointer';
+        }
+      });
+      applyFilters();
+    }
+
+    // Clip Selection Toggle
+    function toggleClipSelection(id, event) {
+      if (selectedClipIds.has(id)) {
+        selectedClipIds.delete(id);
+      } else {
+        selectedClipIds.add(id);
+      }
+      updateSelectionDock();
+      applyFilters();
+    }
+
+    function updateSelectionDock() {
+      const dock = document.getElementById('floatingSelectionDock');
+      const countSpan = document.getElementById('dockSelectedCount');
+      const totalSpan = document.getElementById('dockSelectedTotal');
+      
+      const count = selectedClipIds.size;
+      if (count > 0) {
+        dock.classList.remove('hidden');
+        dock.classList.add('flex');
+        countSpan.innerText = `${count} ${count === 1 ? 'clip' : 'clips'} selected`;
+        totalSpan.innerText = `$${(count * 15).toFixed(2)}`;
+      } else {
+        dock.classList.add('hidden');
+        dock.classList.remove('flex');
+      }
+    }
+
+    // Modal Details
+    function openClipModal(id) {
+      const clip = clipsData.find(c => c.id === id);
+      if (!clip) return;
+      activeModalClip = clip;
+
+      document.getElementById('modalClipTitle').innerText = clip.title;
+      document.getElementById('modalClipImg').src = clip.thumbnail;
+      document.getElementById('modalClipDuration').innerText = clip.duration;
+      document.getElementById('modalClipCreator').innerText = `${clip.creator} (${clip.handle})`;
+      document.getElementById('modalClipPrice').innerText = `$${clip.price.toFixed(2)}`;
+      document.getElementById('modalClipDesc').innerText = `Authentic human UGC reaction filmed for high-performing hooks. Category: ${clip.category} · Rating: ${clip.rating}`;
+
+      const tagsContainer = document.getElementById('modalClipTags');
+      tagsContainer.innerHTML = clip.tags.map(t => `<span class="bg-gray-100 text-gray-700 text-[10.5px] px-2 py-0.5 rounded-full">#${escapeHtml(t)}</span>`).join('');
+
+      const selectBtn = document.getElementById('modalSelectBtn');
+      if (selectedClipIds.has(clip.id)) {
+        selectBtn.innerText = 'Deselect clip';
+        selectBtn.style.background = '#6b7280';
+      } else {
+        selectBtn.innerText = 'Select this clip';
+        selectBtn.style.background = 'linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%)';
+      }
+
+      document.getElementById('clipDetailModal').classList.remove('hidden');
+    }
+
+    function closeClipModal() {
+      document.getElementById('clipDetailModal').classList.add('hidden');
+      activeModalClip = null;
+    }
+
+    function toggleModalClipSelect() {
+      if (!activeModalClip) return;
+      toggleClipSelection(activeModalClip.id);
+      openClipModal(activeModalClip.id);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Page initialization from URL parameters
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const query = urlParams.get('q') || urlParams.get('search') || '';
+      
+      if (query) {
+        const input = document.getElementById('librarySearchInput');
+        if (input) {
+          input.value = query;
+          const clearBtn = document.getElementById('clearSearchBtn');
+          if (clearBtn) clearBtn.classList.remove('hidden');
+        }
+        currentSearchQuery = query;
+      }
+
+      applyFilters();
+    });
+  </script>
 </body>
 </html>
