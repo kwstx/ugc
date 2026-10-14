@@ -114,15 +114,15 @@
           <div class="flex items-center justify-between mb-4 pb-3 border-b border-[#f3f4f6]">
             <div>
               <span class="text-[10.5px] font-bold tracking-wider text-[#9ca3af] uppercase block">ASSIGNED CREATORS</span>
-              <h2 class="text-[15px] font-bold text-[#111827]">2 Creators Selected</h2>
+              <h2 id="review-creators-count-heading" class="text-[15px] font-bold text-[#111827]">2 Creators Selected</h2>
             </div>
             <a href="creators.html" class="text-[12px] font-semibold text-[#4f46e5] hover:text-[#4338ca] transition-colors">
               Change creators
             </a>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <!-- Creator 1: Franci -->
+          <div id="review-creators-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Populated dynamically from saved creators -->
             <div class="flex items-center gap-3.5 p-3 rounded-[12px] border border-[#f1f1f4] bg-[#fafafa]">
               <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-200 shrink-0 border border-white shadow-xs">
                 <img src="assets/creators_page/franci.png" alt="Franci" class="w-full h-full object-cover">
@@ -133,11 +133,10 @@
                   <span class="text-[10px] text-[#4f46e5] bg-[#eef2ff] px-1.5 py-0.2 rounded font-medium">Verified</span>
                 </div>
                 <span class="text-[11.5px] text-[#71717a]">Reaction Video · English</span>
-                <span class="text-[11px] font-medium text-[#10b981] mt-0.5" id="franci-quota">3 videos assigned</span>
+                <span class="text-[11px] font-medium text-[#10b981] mt-0.5">3 videos assigned</span>
               </div>
             </div>
 
-            <!-- Creator 2: Emilia -->
             <div class="flex items-center gap-3.5 p-3 rounded-[12px] border border-[#f1f1f4] bg-[#fafafa]">
               <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-200 shrink-0 border border-white shadow-xs">
                 <img src="assets/creators_page/emilia.png" alt="Emilia" class="w-full h-full object-cover">
@@ -148,7 +147,7 @@
                   <span class="text-[10px] text-[#4f46e5] bg-[#eef2ff] px-1.5 py-0.2 rounded font-medium">Verified</span>
                 </div>
                 <span class="text-[11.5px] text-[#71717a]">Reaction Video · English</span>
-                <span class="text-[11px] font-medium text-[#10b981] mt-0.5" id="emilia-quota">3 videos assigned</span>
+                <span class="text-[11px] font-medium text-[#10b981] mt-0.5">3 videos assigned</span>
               </div>
             </div>
           </div>
@@ -311,7 +310,7 @@
       </p>
 
       <!-- Creators delivery status rows -->
-      <div class="flex flex-col gap-2.5 mb-5 text-left">
+      <div id="modal-creators-list" class="flex flex-col gap-2.5 mb-5 text-left">
         <!-- Creator 1 -->
         <div class="flex items-center justify-between p-3 rounded-[12px] bg-[#f9fafb] border border-[#f1f1f4]">
           <div class="flex items-center gap-3">
@@ -428,11 +427,76 @@
       document.getElementById('summary-qty').textContent = qtyText;
       document.getElementById('summary-rate').textContent = rateText;
       document.getElementById('summary-total').textContent = totalText;
-      document.getElementById('franci-quota').textContent = `${order.perCreator} videos assigned`;
-      document.getElementById('emilia-quota').textContent = `${order.perCreator} videos assigned`;
 
-      document.getElementById('modal-summary-text').textContent = `${order.qty} videos · 2 creators · ${order.concepts ? order.concepts.length : 1} concepts`;
+      // Load creators
+      let creators = order.selectedCreators;
+      if (!creators || !Array.isArray(creators) || creators.length === 0) {
+        try {
+          const raw = localStorage.getItem('selectedCreators');
+          if (raw) creators = JSON.parse(raw);
+        } catch (e) {}
+      }
+      if (!creators || !Array.isArray(creators) || creators.length === 0) {
+        creators = [
+          { id: 'franci', name: 'Franci', handle: '@franci_ugc', avatar: 'assets/creators_page/franci.png' },
+          { id: 'emilia', name: 'Emilia', handle: '@emilia_ugc', avatar: 'assets/creators_page/emilia.png' }
+        ];
+      }
+      currentOrder.selectedCreators = creators;
+
+      // Update creators count heading
+      const heading = document.getElementById('review-creators-count-heading');
+      if (heading) {
+        heading.textContent = `${creators.length} Creator${creators.length === 1 ? '' : 's'} Selected`;
+      }
+
+      // Render assigned creators grid
+      const creatorsGrid = document.getElementById('review-creators-grid');
+      if (creatorsGrid) {
+        creatorsGrid.innerHTML = creators.map(c => `
+          <div class="flex items-center gap-3.5 p-3 rounded-[12px] border border-[#f1f1f4] bg-[#fafafa]">
+            <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-200 shrink-0 border border-white shadow-xs">
+              <img src="${c.avatar}" alt="${c.name}" class="w-full h-full object-cover">
+            </div>
+            <div class="flex flex-col">
+              <div class="flex items-center gap-1.5">
+                <span class="text-[13.5px] font-bold text-[#111827]">${c.name}</span>
+                <span class="text-[10px] text-[#4f46e5] bg-[#eef2ff] px-1.5 py-0.2 rounded font-medium">Verified</span>
+              </div>
+              <span class="text-[11.5px] text-[#71717a]">Reaction Video · English</span>
+              <span class="text-[11px] font-medium text-[#10b981] mt-0.5">${order.perCreator} videos assigned</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Render modal summary and creators list
+      document.getElementById('modal-summary-text').textContent = `${order.qty} videos · ${creators.length} creator${creators.length === 1 ? '' : 's'} · ${order.concepts ? order.concepts.length : 1} concepts`;
       document.getElementById('modal-summary-total').textContent = totalText;
+
+      const modalCreatorsList = document.getElementById('modal-creators-list');
+      if (modalCreatorsList) {
+        const perCreatorCost = (order.perCreator * parseFloat(order.rate)).toFixed(2);
+        modalCreatorsList.innerHTML = creators.map(c => `
+          <div class="flex items-center justify-between p-3 rounded-[12px] bg-[#f9fafb] border border-[#f1f1f4]">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full overflow-hidden bg-gray-200 shrink-0 border border-white shadow-xs">
+                <img src="${c.avatar}" alt="${c.name}" class="w-full h-full object-cover">
+              </div>
+              <div>
+                <div class="text-[13px] font-bold text-[#111827]">${c.name}</div>
+                <div class="text-[11px] text-[#71717a]">${order.perCreator} videos assigned · $${perCreatorCost}</div>
+              </div>
+            </div>
+            <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-[#059669] bg-[#ecfdf5] px-2 py-0.5 rounded-md">
+              <svg class="w-3.5 h-3.5 text-[#10b981]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              Sent to inbox
+            </span>
+          </div>
+        `).join('');
+      }
 
       // Populate Concepts
       const conceptsContainer = document.getElementById('review-concepts-container');
@@ -494,57 +558,59 @@
         concepts: []
       };
 
-      const finalizedOrder = {
-        id: orderId,
-        type: 'exclusive_ugc',
-        format: 'Reaction Video',
-        status: 'Sent to creators',
-        deliveryStatus: 'Dispatched via Platform to chosen creators',
-        brandName: orderData.brandName,
-        aboutBrand: orderData.aboutBrand,
-        filmingInstructions: orderData.filmingInstructions,
-        qty: orderData.qty,
-        rate: orderData.rate,
-        total: orderData.total,
-        perCreator: orderData.perCreator,
-        concepts: orderData.concepts,
-        creators: [
-          { name: 'Franci', handle: '@franci_ugc', avatar: 'assets/creators_page/franci.png', quota: orderData.perCreator, status: 'Sent & Dispatched' },
-          { name: 'Emilia', handle: '@emilia_ugc', avatar: 'assets/creators_page/emilia.png', quota: orderData.perCreator, status: 'Sent & Dispatched' }
-        ],
-        createdAt: now
-      };
+        const chosenCreators = currentOrder?.selectedCreators || [
+          { name: 'Franci', handle: '@franci_ugc', avatar: 'assets/creators_page/franci.png' },
+          { name: 'Emilia', handle: '@emilia_ugc', avatar: 'assets/creators_page/emilia.png' }
+        ];
 
-      // Save to localStorage
-      try {
-        const existing = JSON.parse(localStorage.getItem('dansugc_orders') || '[]');
-        existing.unshift(finalizedOrder);
-        localStorage.setItem('dansugc_orders', JSON.stringify(existing));
-        localStorage.setItem('dansugc_last_finalized_order', JSON.stringify(finalizedOrder));
+        const finalizedOrder = {
+          id: orderId,
+          type: 'exclusive_ugc',
+          format: 'Reaction Video',
+          status: 'Sent to creators',
+          deliveryStatus: 'Dispatched via Platform to chosen creators',
+          brandName: orderData.brandName,
+          aboutBrand: orderData.aboutBrand,
+          filmingInstructions: orderData.filmingInstructions,
+          qty: orderData.qty,
+          rate: orderData.rate,
+          total: orderData.total,
+          perCreator: orderData.perCreator,
+          concepts: orderData.concepts,
+          creators: chosenCreators.map(c => ({
+            name: c.name,
+            handle: c.handle || `@${c.name.toLowerCase()}_ugc`,
+            avatar: c.avatar,
+            quota: orderData.perCreator,
+            status: 'Sent & Dispatched'
+          })),
+          createdAt: now
+        };
 
-        // Send via platform to Franci & Emilia's creator inboxes
-        localStorage.setItem('dansugc_creator_inbox_franci', JSON.stringify({
-          orderId: orderId,
-          brandName: finalizedOrder.brandName,
-          status: 'Brief Received',
-          quota: finalizedOrder.perCreator,
-          payout: (finalizedOrder.perCreator * parseFloat(finalizedOrder.rate)).toFixed(2),
-          concepts: finalizedOrder.concepts,
-          dispatchedAt: now
-        }));
+        // Save to localStorage
+        try {
+          const existing = JSON.parse(localStorage.getItem('dansugc_orders') || '[]');
+          existing.unshift(finalizedOrder);
+          localStorage.setItem('dansugc_orders', JSON.stringify(existing));
+          localStorage.setItem('dansugc_last_finalized_order', JSON.stringify(finalizedOrder));
 
-        localStorage.setItem('dansugc_creator_inbox_emilia', JSON.stringify({
-          orderId: orderId,
-          brandName: finalizedOrder.brandName,
-          status: 'Brief Received',
-          quota: finalizedOrder.perCreator,
-          payout: (finalizedOrder.perCreator * parseFloat(finalizedOrder.rate)).toFixed(2),
-          concepts: finalizedOrder.concepts,
-          dispatchedAt: now
-        }));
-      } catch (e) {
-        console.error(e);
-      }
+          // Send to each chosen creator's platform inbox
+          finalizedOrder.creators.forEach(c => {
+            const key = `dansugc_creator_inbox_${c.name.toLowerCase()}`;
+            localStorage.setItem(key, JSON.stringify({
+              orderId: orderId,
+              creatorName: c.name,
+              brandName: finalizedOrder.brandName,
+              status: 'Brief Received',
+              quota: finalizedOrder.perCreator,
+              payout: (finalizedOrder.perCreator * parseFloat(finalizedOrder.rate)).toFixed(2),
+              concepts: finalizedOrder.concepts,
+              dispatchedAt: now
+            }));
+          });
+        } catch (e) {
+          console.error(e);
+        }
 
       setTimeout(() => {
         if (btn) {

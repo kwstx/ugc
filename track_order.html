@@ -124,7 +124,7 @@
           </div>
           <div>
             <div class="text-[12.5px] font-bold text-[#1e1b4b]">2. Creator Review</div>
-            <div class="text-[11px] text-[#4338ca] font-medium mt-0.5">Franci & Emilia reviewing</div>
+            <div id="stepper-creator-review-text" class="text-[11px] text-[#4338ca] font-medium mt-0.5">Franci & Emilia reviewing</div>
             <div class="text-[10px] text-[#6366f1] mt-1">Active right now</div>
           </div>
         </div>
@@ -169,12 +169,12 @@
               <span class="text-[10.5px] font-bold tracking-wider text-[#9ca3af] uppercase block">ASSIGNED CREATORS</span>
               <h2 class="text-[15px] font-bold text-[#111827]">Live Creator Activities</h2>
             </div>
-            <span class="text-[11px] font-medium text-[#10b981] bg-[#ecfdf5] px-2 py-0.5 rounded-full">
+            <span id="tracker-online-count" class="text-[11px] font-medium text-[#10b981] bg-[#ecfdf5] px-2 py-0.5 rounded-full">
               2 of 2 Online
             </span>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div id="tracker-creators-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             
             <!-- Creator 1: Franci -->
             <div class="p-4 rounded-[14px] border border-[#e5e7eb] bg-[#fafafa] flex flex-col justify-between gap-3">
@@ -285,7 +285,7 @@
               <span class="w-2 h-2 rounded-full bg-[#10b981] mt-1.5 shrink-0"></span>
               <div class="flex-1 text-[12px]">
                 <div class="flex items-center justify-between">
-                  <span class="font-semibold text-[#111827]">Order Dispatched to Franci & Emilia</span>
+                  <span id="event-1-title" class="font-semibold text-[#111827]">Order Dispatched to Franci & Emilia</span>
                   <span class="text-[10.5px] text-[#9ca3af]">Just now</span>
                 </div>
                 <p class="text-[#52525b] mt-0.5">Brief and creative guidelines successfully routed to chosen creators' portal.</p>
@@ -343,7 +343,7 @@
             </svg>
             <span>Buyer Escrow Protection</span>
           </div>
-          <p class="text-[11.5px] text-[#475569] leading-relaxed mb-3">
+          <p id="escrow-creators-desc" class="text-[11.5px] text-[#475569] leading-relaxed mb-3">
             Your payment is held safely in escrow. Franci and Emilia will deliver unedited footage. You review everything before funds are released.
           </p>
           <div class="text-[11px] text-[#64748b] flex items-center justify-between border-t border-[#e2e8f0] pt-2.5">
@@ -455,8 +455,94 @@
       const rate = order.rate || '30.00';
       const perCreatorPayout = (perCreator * parseFloat(rate)).toFixed(2);
 
-      document.getElementById('franci-assigned-text').textContent = `${perCreator} videos ($${perCreatorPayout})`;
-      document.getElementById('emilia-assigned-text').textContent = `${perCreator} videos ($${perCreatorPayout})`;
+      // Load creators
+      let creators = order.creators || order.selectedCreators;
+      if (!creators || !Array.isArray(creators) || creators.length === 0) {
+        try {
+          const raw = localStorage.getItem('selectedCreators');
+          if (raw) creators = JSON.parse(raw);
+        } catch (e) {}
+      }
+      if (!creators || !Array.isArray(creators) || creators.length === 0) {
+        creators = [
+          { id: 'franci', name: 'Franci', handle: '@franci_ugc', avatar: 'assets/creators_page/franci.png' },
+          { id: 'emilia', name: 'Emilia', handle: '@emilia_ugc', avatar: 'assets/creators_page/emilia.png' }
+        ];
+      }
+
+      const names = creators.map(c => c.name);
+
+      // 1. Update Stepper review line
+      const step2Text = document.getElementById('stepper-creator-review-text');
+      if (step2Text) {
+        step2Text.textContent = `${names.join(' & ')} reviewing`;
+      }
+
+      // 2. Update online status count
+      const onlineCount = document.getElementById('tracker-online-count');
+      if (onlineCount) {
+        onlineCount.textContent = `${creators.length} of ${creators.length} Online`;
+      }
+
+      // 3. Render creator activities cards
+      const creatorsGrid = document.getElementById('tracker-creators-grid');
+      if (creatorsGrid) {
+        creatorsGrid.innerHTML = creators.map((c, i) => `
+          <div class="p-4 rounded-[14px] border border-[#e5e7eb] bg-[#fafafa] flex flex-col justify-between gap-3">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-full overflow-hidden bg-gray-200 shrink-0 border border-white shadow-xs">
+                  <img src="${c.avatar}" alt="${c.name}" class="w-full h-full object-cover">
+                </div>
+                <div>
+                  <div class="flex items-center gap-1">
+                    <span class="text-[13.5px] font-bold text-[#111827]">${c.name}</span>
+                    <span class="text-[10px] text-[#4f46e5] bg-[#eef2ff] px-1 rounded font-medium">Verified</span>
+                  </div>
+                  <span class="text-[11px] text-[#71717a]">${c.handle || `@${c.name.toLowerCase()}_ugc`}</span>
+                </div>
+              </div>
+              <span class="inline-flex items-center gap-1.5 text-[10.5px] font-bold text-[#059669] bg-[#ecfdf5] px-2 py-0.5 rounded-md">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>
+                Active
+              </span>
+            </div>
+
+            <div class="bg-white rounded-[10px] p-2.5 border border-[#f1f1f4] text-[11.5px] text-[#4b5563]">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[#71717a]">Current Status:</span>
+                <span class="font-semibold text-[#111827]" id="status-tag-${c.name.toLowerCase()}">${i === 0 ? 'Reviewing brief concepts' : 'Opening video instructions'}</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-[#71717a]">Assigned:</span>
+                <span class="font-medium text-[#059669]">${perCreator} videos ($${perCreatorPayout})</span>
+              </div>
+            </div>
+
+            <button 
+              type="button" 
+              onclick="openChat('${c.name}', '${c.handle || `@${c.name.toLowerCase()}_ugc`}', '${c.avatar}')"
+              class="w-full py-2 bg-white hover:bg-gray-50 border border-[#e5e7eb] rounded-[9px] text-[12px] font-semibold text-[#374151] hover:text-[#111827] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <svg class="w-3.5 h-3.5 text-[#6366f1]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+              <span>Message ${c.name}</span>
+            </button>
+          </div>
+        `).join('');
+      }
+
+      // 4. Update Event 1 title & escrow description
+      const event1Title = document.getElementById('event-1-title');
+      if (event1Title) {
+        event1Title.textContent = `Order Dispatched to ${names.join(' & ')}`;
+      }
+
+      const escrowDesc = document.getElementById('escrow-creators-desc');
+      if (escrowDesc) {
+        escrowDesc.textContent = `Your payment is held safely in escrow. ${names.join(' and ')} will deliver unedited footage. You review everything before funds are released.`;
+      }
 
       // Populate concepts list
       const conceptsList = document.getElementById('tracker-concepts-list');
@@ -479,7 +565,7 @@
       }
 
       // Simulate real-time creator heartbeat check
-      simulateRealtimeHeartbeat();
+      simulateRealtimeHeartbeat(creators);
     });
 
     function escapeHtml(text) {
@@ -488,13 +574,13 @@
       return div.innerHTML;
     }
 
-    function simulateRealtimeHeartbeat() {
-      // Simulate real-time updates after 6 seconds to show dynamic live activity
+    function simulateRealtimeHeartbeat(creators) {
       setTimeout(() => {
-        const franciTag = document.getElementById('franci-status-tag');
-        if (franciTag) {
-          franciTag.textContent = "Accepted brief · Preparing shoot";
-          franciTag.className = "font-semibold text-[#059669]";
+        const lead = creators && creators.length > 0 ? creators[0] : { name: 'Franci' };
+        const leadTag = document.getElementById(`status-tag-${lead.name.toLowerCase()}`);
+        if (leadTag) {
+          leadTag.textContent = "Accepted brief · Preparing shoot";
+          leadTag.className = "font-semibold text-[#059669]";
         }
 
         const stream = document.getElementById('activity-log-stream');
@@ -505,10 +591,10 @@
             <span class="w-2 h-2 rounded-full bg-[#10b981] mt-1.5 shrink-0"></span>
             <div class="flex-1 text-[12px]">
               <div class="flex items-center justify-between">
-                <span class="font-semibold text-[#065f46]">Franci Accepted Brief ✓</span>
+                <span class="font-semibold text-[#065f46]">${lead.name} Accepted Brief ✓</span>
                 <span class="text-[10.5px] text-[#047857]">Just now</span>
               </div>
-              <p class="text-[#047857] mt-0.5">Creator accepted your 3 video concepts and confirmed delivery within 48h.</p>
+              <p class="text-[#047857] mt-0.5">Creator accepted your video concepts and confirmed delivery within 48h.</p>
             </div>
           `;
           stream.insertBefore(newEvent, stream.firstChild);

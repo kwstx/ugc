@@ -405,22 +405,20 @@
           </div>
 
           <!-- Selected Creators Avatars & Video counts -->
-          <div class="flex flex-col gap-3 pt-1 pb-4">
-            <!-- Creator 1: Franci -->
+          <div id="brief-selected-creators-list" class="flex flex-col gap-3 pt-1 pb-4">
+            <!-- Populated dynamically from saved creators -->
             <div class="flex items-center gap-3">
               <img src="assets/creators_page/franci.png" alt="Franci" class="w-8 h-8 rounded-full object-cover" />
               <div>
                 <div class="text-[12px] font-bold text-[#18181b] leading-tight">Franci</div>
-                <div id="creator-1-count" class="text-[11px] text-[#71717a]">3 videos</div>
+                <div class="text-[11px] text-[#71717a]">3 videos</div>
               </div>
             </div>
-
-            <!-- Creator 2: Emilia -->
             <div class="flex items-center gap-3">
               <img src="assets/creators_page/emilia.png" alt="Emilia" class="w-8 h-8 rounded-full object-cover" />
               <div>
                 <div class="text-[12px] font-bold text-[#18181b] leading-tight">Emilia</div>
-                <div id="creator-2-count" class="text-[11px] text-[#71717a]">3 videos</div>
+                <div class="text-[11px] text-[#71717a]">3 videos</div>
               </div>
             </div>
           </div>
@@ -489,6 +487,25 @@
   </main>
 
   <script>
+    let selectedCreators = [
+      { id: 'franci', name: 'Franci', handle: '@franci_ugc', avatar: 'assets/creators_page/franci.png' },
+      { id: 'emilia', name: 'Emilia', handle: '@emilia_ugc', avatar: 'assets/creators_page/emilia.png' }
+    ];
+
+    function loadSavedCreators() {
+      const stored = localStorage.getItem('selectedCreators');
+      if (stored) {
+        try {
+          const list = JSON.parse(stored);
+          if (Array.isArray(list) && list.length > 0) {
+            selectedCreators = list;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+
     let currentQty = 6;
     const baseRate = 30.00;
 
@@ -514,16 +531,18 @@
 
     function updateFromPerCreator(val) {
       const perCreator = parseInt(val, 10);
+      const creatorCount = selectedCreators.length || 2;
       if (!isNaN(perCreator) && perCreator > 0) {
-        currentQty = perCreator * 2;
+        currentQty = perCreator * creatorCount;
         updateUI(true);
       }
     }
 
     function updateUI(skipInputSync = false) {
+      const creatorCount = selectedCreators.length || 2;
       const rate = getRateForQty(currentQty);
       const total = currentQty * rate;
-      const perCreator = Math.ceil(currentQty / 2);
+      const perCreator = Math.ceil(currentQty / creatorCount);
 
       const formattedRate = '$' + rate.toFixed(2);
       const formattedTotal = '$' + total.toFixed(2);
@@ -598,7 +617,7 @@
       const totalConcepts = document.querySelectorAll('#concepts-container > div').length || 1;
       const orderDetailsSummary = document.getElementById('order-details-summary');
       if (orderDetailsSummary) {
-        orderDetailsSummary.textContent = `${currentQty} videos · 2 creators · ${totalConcepts} ${totalConcepts === 1 ? 'concept' : 'concepts'}`;
+        orderDetailsSummary.textContent = `${currentQty} videos · ${creatorCount} ${creatorCount === 1 ? 'creator' : 'creators'} · ${totalConcepts} ${totalConcepts === 1 ? 'concept' : 'concepts'}`;
       }
 
       // 4. Update all concept unit prices
@@ -624,11 +643,19 @@
         estimateSubtitle.textContent = `${currentQty} videos · ${totalConcepts} ${totalConcepts === 1 ? 'concept' : 'concepts'}`;
       }
 
-      // 8. Creator counts
-      const creator1 = document.getElementById('creator-1-count');
-      const creator2 = document.getElementById('creator-2-count');
-      if (creator1) creator1.textContent = `${perCreator} videos`;
-      if (creator2) creator2.textContent = `${perCreator} videos`;
+      // 8. Dynamic sidebar creators list
+      const creatorsListEl = document.getElementById('brief-selected-creators-list');
+      if (creatorsListEl) {
+        creatorsListEl.innerHTML = selectedCreators.map(c => `
+          <div class="flex items-center gap-3">
+            <img src="${c.avatar}" alt="${c.name}" class="w-8 h-8 rounded-full object-cover" />
+            <div>
+              <div class="text-[12px] font-bold text-[#18181b] leading-tight">${c.name}</div>
+              <div class="text-[11px] text-[#71717a]">${perCreator} videos</div>
+            </div>
+          </div>
+        `).join('');
+      }
 
       // 9. Calculation line
       const calcQty = document.getElementById('estimate-calc-qty');
@@ -663,10 +690,11 @@
       const container = document.getElementById('concepts-container');
       if (!container) return;
 
+      const creatorCount = selectedCreators.length || 2;
       const currentRate = getRateForQty(currentQty);
       const rate = currentRate.toFixed(2);
       const total = (currentQty * currentRate).toFixed(2);
-      const perCreator = Math.ceil(currentQty / 2);
+      const perCreator = Math.ceil(currentQty / creatorCount);
       const currentConceptNum = container.children.length + 1;
 
       const newBlock = document.createElement('div');
@@ -1055,9 +1083,10 @@
         concepts.push({ title, type, script, perCreator });
       });
 
+      const creatorCount = selectedCreators.length || 2;
       const rate = getRateForQty(currentQty);
       const total = (currentQty * rate).toFixed(2);
-      const perCreator = Math.ceil(currentQty / 2);
+      const perCreator = Math.ceil(currentQty / creatorCount);
 
       const orderPayload = {
         brandName: brandNameInput.value.trim(),
@@ -1067,7 +1096,9 @@
         rate: rate.toFixed(2),
         total: total,
         perCreator: perCreator,
-        concepts: concepts
+        concepts: concepts,
+        selectedCreators: selectedCreators,
+        selectedCreatorsCount: creatorCount
       };
 
       try {
@@ -1087,8 +1118,10 @@
     window.checkBriefValidity = checkBriefValidity;
     window.handleSaveAndReview = handleSaveAndReview;
 
-    // Check validity on page load
+    // Check validity on page load & load saved creators
     document.addEventListener('DOMContentLoaded', function() {
+      loadSavedCreators();
+      updateUI();
       checkBriefValidity();
     });
   </script>

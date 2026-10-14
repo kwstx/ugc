@@ -99,7 +99,7 @@
       <span class="px-3 py-1 rounded-md bg-[#f4f4f5] text-[11.5px] font-medium text-[#3f3f46]">
         Reaction Video
       </span>
-      <span class="px-3 py-1 rounded-md bg-[#f4f4f5] text-[11.5px] font-medium text-[#3f3f46]">
+      <span id="brief-creators-badge" class="px-3 py-1 rounded-md bg-[#f4f4f5] text-[11.5px] font-medium text-[#3f3f46]">
         Franci, Emilia · Minimum 5 videos
       </span>
     </div>
@@ -134,6 +134,7 @@
         <!-- Generate my brief button -->
         <button
           type="button"
+          onclick="window.location.href='edit_brief.html'"
           style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);"
           class="text-white text-[12.5px] font-medium px-6 py-2.5 rounded-xl flex items-center gap-2 shadow-[0_3px_12px_rgba(33,58,231,0.25)] hover:shadow-[0_6px_20px_rgba(33,58,231,0.4)] hover:brightness-105 active:scale-[0.98] transition-all cursor-pointer shrink-0"
         >
@@ -163,5 +164,24 @@
 
   </main>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const stored = localStorage.getItem('selectedCreators');
+      if (stored) {
+        try {
+          const list = JSON.parse(stored);
+          if (Array.isArray(list) && list.length > 0) {
+            const names = list.map(c => c.name).join(', ');
+            const badge = document.getElementById('brief-creators-badge');
+            if (badge) {
+              badge.textContent = `${names} · Minimum 5 videos`;
+            }
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    });
+  </script>
 </body>
 </html>

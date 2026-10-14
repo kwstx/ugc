@@ -395,6 +395,14 @@
   </div>
 
   <script>
+    const creatorMeta = {
+      kris: { id: 'kris', name: 'Kris', handle: '@kris_creator', avatar: 'assets/creators_page/kris.png', verified: true },
+      angelika: { id: 'angelika', name: 'Angelika', handle: '@angelika_ugc', avatar: 'assets/creators_page/angelika.png', verified: true },
+      franci: { id: 'franci', name: 'Franci', handle: '@franci_ugc', avatar: 'assets/creators_page/franci.png', verified: true },
+      emilia: { id: 'emilia', name: 'Emilia', handle: '@emilia_ugc', avatar: 'assets/creators_page/emilia.png', verified: true },
+      andrea: { id: 'andrea', name: 'Andrea', handle: '@andrea_ugc', avatar: 'assets/creators_page/andrea.png', verified: true }
+    };
+
     const creatorState = {
       kris: {
         selected: false,
@@ -423,25 +431,21 @@
       }
     };
 
-    function toggleCreator(id) {
+    function applyVisualState(id, isSelected) {
       const state = creatorState[id];
       if (!state) return;
-
-      state.selected = !state.selected;
-
       const frame = document.getElementById(`frame-${id}`);
+      if (!frame) return;
       const inner = frame.querySelector('div');
       const img = document.getElementById(`img-${id}`);
       const plus = document.getElementById(`plus-${id}`);
       let check = document.getElementById(`check-${id}`);
 
-      if (state.selected) {
-        // SELECTED: Blue border, remove plus button, add corner checkmark
+      if (isSelected) {
         frame.className = "card-frame selected";
         if (img) img.src = state.imgSelected;
         if (plus) plus.style.display = "none";
-        
-        if (!check) {
+        if (!check && inner) {
           const checkDiv = document.createElement('div');
           checkDiv.id = `check-${id}`;
           checkDiv.className = "absolute bottom-0 right-0 w-[34px] h-[34px] bg-[#0060df] rounded-br-[15px] corner-check flex items-end justify-end p-1 z-10 pointer-events-none";
@@ -449,20 +453,77 @@
           inner.appendChild(checkDiv);
         }
       } else {
-        // UNSELECTED: Neutral outline, restore plus button, remove corner checkmark
         frame.className = "card-frame unselected";
         if (img) img.src = state.imgUnselected;
         if (plus) plus.style.display = "flex";
         if (check) check.remove();
       }
+    }
+
+    function saveSelection() {
+      const selectedList = Object.keys(creatorState)
+        .filter(id => creatorState[id].selected)
+        .map(id => creatorMeta[id]);
+      
+      const totalSelected = selectedList.length;
 
       // Update counter in bottom floating dock
-      const totalSelected = Object.values(creatorState).filter(c => c.selected).length;
       const counterEl = document.getElementById('dock-counter');
       if (counterEl) {
         counterEl.innerText = `${totalSelected} creator${totalSelected === 1 ? '' : 's'} selected`;
       }
+
+      // Update dock avatars
+      const dock = document.getElementById('dock-avatars');
+      if (dock) {
+        if (selectedList.length === 2 && selectedList.some(c => c.id === 'franci') && selectedList.some(c => c.id === 'emilia')) {
+          dock.innerHTML = `<img src="assets/creators_page/dock_avatars_exact.png" alt="Selected Creators" class="h-[34px] w-auto object-contain" />`;
+        } else if (selectedList.length === 0) {
+          dock.innerHTML = `<span class="text-[11px] text-[#9ca3af] italic">None selected</span>`;
+        } else {
+          dock.innerHTML = `<div class="flex items-center -space-x-2">` +
+            selectedList.map(c => `<img src="${c.avatar}" alt="${c.name}" class="w-7 h-7 rounded-full border-2 border-white object-cover shadow-xs" />`).join('') +
+            `</div>`;
+        }
+      }
+
+      // Persist across all following pages
+      try {
+        localStorage.setItem('selectedCreatorsCount', totalSelected);
+        localStorage.setItem('selectedCreators', JSON.stringify(selectedList));
+        localStorage.setItem('selectedCreatorIds', JSON.stringify(selectedList.map(c => c.id)));
+      } catch (e) {
+        console.error(e);
+      }
     }
+
+    function toggleCreator(id) {
+      const state = creatorState[id];
+      if (!state) return;
+
+      state.selected = !state.selected;
+      applyVisualState(id, state.selected);
+      saveSelection();
+    }
+
+    // Initialize & restore saved creators on load
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedIds = localStorage.getItem('selectedCreatorIds');
+      if (savedIds) {
+        try {
+          const ids = JSON.parse(savedIds);
+          if (Array.isArray(ids) && ids.length > 0) {
+            Object.keys(creatorState).forEach(id => {
+              creatorState[id].selected = ids.includes(id);
+              applyVisualState(id, creatorState[id].selected);
+            });
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      saveSelection();
+    });
   </script>
 
 </body>
