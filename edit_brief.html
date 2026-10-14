@@ -177,171 +177,179 @@
         </div>
 
         <!-- Section: Your videos -->
+        <!-- Section: Your videos -->
         <div class="pt-2">
           <h3 class="text-[13px] font-bold text-[#111827] mb-4">Your videos</h3>
 
-          <!-- Concept 1 Card / Block -->
-          <div class="flex flex-col gap-3">
-            <div class="flex items-center justify-between">
-              <div>
-                <span class="text-[13.5px] font-bold text-[#111827]">Concept 1</span>
-                <p id="concept-subtitle" class="text-[11px] text-[#71717a] mt-0.5">Reaction Video · Reaction / footage</p>
+          <!-- Concepts Container -->
+          <div id="concepts-container" class="flex flex-col gap-6">
+
+            <!-- Concept 1 Card / Block -->
+            <div id="concept-block-1" class="flex flex-col gap-3">
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="concept-title-text text-[13.5px] font-bold text-[#111827]">Concept 1</span>
+                  <p id="concept-subtitle-1" class="concept-subtitle text-[11px] text-[#71717a] mt-0.5">Reaction Video · Reaction / footage</p>
+                </div>
+                <span id="concept-unit-price" class="concept-unit-price text-[12px] font-bold text-[#111827]">$30.00 / video</span>
               </div>
-              <span id="concept-unit-price" class="text-[12px] font-bold text-[#111827]">$30.00 / video</span>
-            </div>
 
-            <!-- Fields: Recommended video type & Per creator -->
-            <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
-              <div class="sm:col-span-10">
-                <label class="block text-[11.5px] font-semibold text-[#374151] mb-1.5">Recommended video type</label>
-                <div class="relative" id="video-type-dropdown-container">
-                  <!-- Trigger Button -->
-                  <button 
-                    type="button" 
-                    id="video-type-trigger"
-                    onclick="toggleVideoTypeDropdown(event)"
-                    class="w-full bg-white border border-[#a5b4fc] rounded-[10px] px-3.5 h-[42px] flex items-center justify-between text-[13px] text-[#5046e5] font-medium focus:outline-none cursor-pointer shadow-xs transition-all hover:border-[#818cf8]"
-                  >
-                    <span id="selected-video-type-text">Reaction / footage</span>
-                    <svg class="w-4 h-4 text-[#a5b4fc] transition-transform duration-200" id="video-type-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                  </button>
+              <!-- Fields: Recommended video type & Per creator -->
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+                <div class="sm:col-span-10">
+                  <label class="block text-[11.5px] font-semibold text-[#374151] mb-1.5">Recommended video type</label>
+                  <div class="relative" id="video-type-dropdown-container-1">
+                    <!-- Trigger Button -->
+                    <button 
+                      type="button" 
+                      id="video-type-trigger-1"
+                      onclick="toggleDynamicDropdown(event, 1)"
+                      class="w-full bg-white border border-[#a5b4fc] rounded-[10px] px-3.5 h-[42px] flex items-center justify-between text-[13px] text-[#5046e5] font-medium focus:outline-none cursor-pointer shadow-xs transition-all hover:border-[#818cf8]"
+                    >
+                      <span id="selected-video-type-text-1">Reaction / footage</span>
+                      <svg class="w-4 h-4 text-[#a5b4fc] transition-transform duration-200" id="video-type-chevron-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                      </svg>
+                    </button>
 
-                  <!-- Popup Dropdown Menu -->
-                  <div 
-                    id="video-type-popup" 
-                    class="hidden absolute top-full left-0 mt-1.5 w-[275px] sm:w-[285px] bg-white border border-[#e5e7eb] rounded-[16px] p-2 shadow-[0_12px_28px_rgba(0,0,0,0.12),0_4px_10px_rgba(0,0,0,0.06)] z-50 text-left animate-in fade-in zoom-in-95 duration-150"
-                  >
-                    <!-- Header -->
-                    <div class="text-[11.5px] font-medium text-[#71717a] px-2.5 pt-1.5 pb-2">
-                      Video type 1
-                    </div>
+                    <!-- Popup Dropdown Menu -->
+                    <div 
+                      id="video-type-popup-1" 
+                      class="hidden absolute top-full left-0 mt-1.5 w-[275px] sm:w-[285px] bg-white border border-[#e5e7eb] rounded-[16px] p-2 shadow-[0_12px_28px_rgba(0,0,0,0.12),0_4px_10px_rgba(0,0,0,0.06)] z-50 text-left animate-in fade-in zoom-in-95 duration-150"
+                    >
+                      <!-- Header -->
+                      <div class="text-[11.5px] font-medium text-[#71717a] px-2.5 pt-1.5 pb-2">
+                        Video type 1
+                      </div>
 
-                    <!-- Options List -->
-                    <div class="flex flex-col gap-1">
-                      <!-- Option 1: Reaction / footage (Selected) -->
-                      <div 
-                        onclick="selectVideoTypeOption('Reaction / footage', this)"
-                        class="video-type-opt group cursor-pointer p-2.5 rounded-[10px] bg-[#f8f9fa] transition-colors"
-                      >
-                        <div class="flex items-center justify-between">
-                          <div class="flex items-center gap-1.5">
-                            <span class="text-[13px] font-semibold text-[#18181b]">Reaction / footage</span>
-                            <span class="text-[10px] font-medium text-[#6366f1] bg-[#eef2ff] px-1.5 py-0.5 rounded-[4px]">Recommended</span>
+                      <!-- Options List -->
+                      <div class="flex flex-col gap-1">
+                        <!-- Option 1: Reaction / footage (Selected) -->
+                        <div 
+                          onclick="selectDynamicOption(1, 'Reaction / footage', this)"
+                          class="video-type-opt-1 group cursor-pointer p-2.5 rounded-[10px] bg-[#f8f9fa] transition-colors"
+                        >
+                          <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-1.5">
+                              <span class="text-[13px] font-semibold text-[#18181b]">Reaction / footage</span>
+                              <span class="text-[10px] font-medium text-[#6366f1] bg-[#eef2ff] px-1.5 py-0.5 rounded-[4px]">Recommended</span>
+                            </div>
+                            <span class="opt-check text-[#5046e5]">
+                              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            </span>
                           </div>
-                          <span class="opt-check text-[#5046e5]">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
-                          </span>
+                          <p class="text-[11.5px] text-[#71717a] mt-0.5 leading-tight">
+                            Expressions and natural, unedited moments.
+                          </p>
                         </div>
-                        <p class="text-[11.5px] text-[#71717a] mt-0.5 leading-tight">
-                          Expressions and natural, unedited moments.
-                        </p>
-                      </div>
 
-                      <!-- Option 2: Crying / emotions -->
-                      <div 
-                        onclick="selectVideoTypeOption('Crying / emotions', this)"
-                        class="video-type-opt group cursor-pointer p-2.5 rounded-[10px] hover:bg-gray-50 transition-colors"
-                      >
-                        <div class="flex items-center justify-between">
-                          <span class="text-[13px] font-semibold text-[#18181b]">Crying / emotions</span>
-                          <span class="opt-check text-[#5046e5] hidden">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
-                          </span>
+                        <!-- Option 2: Crying / emotions -->
+                        <div 
+                          onclick="selectDynamicOption(1, 'Crying / emotions', this)"
+                          class="video-type-opt-1 group cursor-pointer p-2.5 rounded-[10px] hover:bg-gray-50 transition-colors"
+                        >
+                          <div class="flex items-center justify-between">
+                            <span class="text-[13px] font-semibold text-[#18181b]">Crying / emotions</span>
+                            <span class="opt-check text-[#5046e5] hidden">
+                              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            </span>
+                          </div>
+                          <p class="text-[11.5px] text-[#71717a] mt-0.5 leading-tight">
+                            An emotional performance, without a script.
+                          </p>
                         </div>
-                        <p class="text-[11.5px] text-[#71717a] mt-0.5 leading-tight">
-                          An emotional performance, without a script.
-                        </p>
-                      </div>
 
-                      <!-- Option 3: Lip-sync -->
-                      <div 
-                        onclick="selectVideoTypeOption('Lip-sync', this)"
-                        class="video-type-opt group cursor-pointer p-2.5 rounded-[10px] hover:bg-gray-50 transition-colors"
-                      >
-                        <div class="flex items-center justify-between">
-                          <span class="text-[13px] font-semibold text-[#18181b]">Lip-sync</span>
-                          <span class="opt-check text-[#5046e5] hidden">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
-                          </span>
+                        <!-- Option 3: Lip-sync -->
+                        <div 
+                          onclick="selectDynamicOption(1, 'Lip-sync', this)"
+                          class="video-type-opt-1 group cursor-pointer p-2.5 rounded-[10px] hover:bg-gray-50 transition-colors"
+                        >
+                          <div class="flex items-center justify-between">
+                            <span class="text-[13px] font-semibold text-[#18181b]">Lip-sync</span>
+                            <span class="opt-check text-[#5046e5] hidden">
+                              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            </span>
+                          </div>
+                          <p class="text-[11.5px] text-[#71717a] mt-0.5 leading-tight">
+                            Perform along with your reference audio.
+                          </p>
                         </div>
-                        <p class="text-[11.5px] text-[#71717a] mt-0.5 leading-tight">
-                          Perform along with your reference audio.
-                        </p>
-                      </div>
 
-                      <!-- Option 4: Talking script -->
-                      <div 
-                        onclick="selectVideoTypeOption('Talking script', this)"
-                        class="video-type-opt group cursor-pointer p-2.5 rounded-[10px] hover:bg-gray-50 transition-colors"
-                      >
-                        <div class="flex items-center justify-between">
-                          <span class="text-[13px] font-semibold text-[#18181b]">Talking script</span>
-                          <span class="opt-check text-[#5046e5] hidden">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
-                          </span>
+                        <!-- Option 4: Talking script -->
+                        <div 
+                          onclick="selectDynamicOption(1, 'Talking script', this)"
+                          class="video-type-opt-1 group cursor-pointer p-2.5 rounded-[10px] hover:bg-gray-50 transition-colors"
+                        >
+                          <div class="flex items-center justify-between">
+                            <span class="text-[13px] font-semibold text-[#18181b]">Talking script</span>
+                            <span class="opt-check text-[#5046e5] hidden">
+                              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            </span>
+                          </div>
+                          <p class="text-[11.5px] text-[#71717a] mt-0.5 leading-tight">
+                            Your exact words, filmed in one continuous shot.
+                          </p>
                         </div>
-                        <p class="text-[11.5px] text-[#71717a] mt-0.5 leading-tight">
-                          Your exact words, filmed in one continuous shot.
-                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
+
+                <div class="sm:col-span-2">
+                  <label class="block text-[11.5px] font-semibold text-[#374151] mb-1.5 text-left sm:text-center">Per creator</label>
+                  <input 
+                    type="text" 
+                    id="per-creator-input"
+                    value="3" 
+                    oninput="updateFromPerCreator(this.value)"
+                    class="per-creator-input w-full bg-white border border-[#e5e7eb] rounded-[8px] py-2 text-center text-[12.5px] text-[#18181b] font-medium focus:outline-none focus:border-[#7c66ff] shadow-sm"
+                  />
+                </div>
               </div>
 
-              <div class="sm:col-span-2">
-                <label class="block text-[11.5px] font-semibold text-[#374151] mb-1.5 text-left sm:text-center">Per creator</label>
-                <input 
-                  type="text" 
-                  id="per-creator-input"
-                  value="3" 
-                  oninput="updateFromPerCreator(this.value)"
-                  class="w-full bg-white border border-[#e5e7eb] rounded-[8px] py-2 text-center text-[12.5px] text-[#18181b] font-medium focus:outline-none focus:border-[#7c66ff] shadow-sm"
-                />
+              <!-- Hint under type -->
+              <div class="flex items-center gap-1.5 text-[11px] text-[#71717a]">
+                <svg class="w-3.5 h-3.5 text-[#9ca3af]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <span>Suggested for your brief. You can change it.</span>
+              </div>
+
+              <!-- Script / Concept Textarea -->
+              <div class="relative mt-1">
+                <textarea 
+                  rows="6" 
+                  class="w-full bg-white border border-[#e5e7eb] rounded-[10px] p-3.5 text-[13px] text-[#18181b] focus:outline-none focus:border-[#7c66ff] shadow-sm resize-y min-h-[140px]"
+                ></textarea>
+              </div>
+
+              <!-- Concept Footer details -->
+              <div class="flex items-center justify-between text-[11px] text-[#71717a] px-0.5">
+                <span>Delivered unedited</span>
+                <span id="concept-footer-price" class="concept-footer-price">6 videos · $180.00</span>
               </div>
             </div>
 
-            <!-- Hint under type -->
-            <div class="flex items-center gap-1.5 text-[11px] text-[#71717a]">
-              <svg class="w-3.5 h-3.5 text-[#9ca3af]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-              <span>Suggested for your brief. You can change it.</span>
-            </div>
-
-            <!-- Script / Concept Textarea -->
-            <div class="relative mt-1">
-              <textarea 
-                rows="6" 
-                class="w-full bg-white border border-[#e5e7eb] rounded-[10px] p-3.5 text-[13px] text-[#18181b] focus:outline-none focus:border-[#7c66ff] shadow-sm resize-y min-h-[140px]"
-              ></textarea>
-            </div>
-
-            <!-- Concept Footer details -->
-            <div class="flex items-center justify-between text-[11px] text-[#71717a] px-0.5">
-              <span>Delivered unedited</span>
-              <span id="concept-footer-price">6 videos · $180.00</span>
-            </div>
-
-            <!-- Add another video concept button -->
-            <button 
-              type="button" 
-              class="w-full mt-2 py-2.5 bg-white border border-[#e5e7eb] rounded-[10px] text-[12px] font-semibold text-[#18181b] hover:bg-gray-50 flex items-center justify-center gap-1.5 shadow-sm transition-colors cursor-pointer"
-            >
-              <span class="text-[14px] leading-none">+</span>
-              <span>Add another video concept</span>
-            </button>
           </div>
+
+          <!-- Add another video concept button -->
+          <button 
+            type="button" 
+            id="add-concept-btn"
+            onclick="addNewConcept()"
+            class="w-full mt-4 py-2.5 bg-white border border-[#e5e7eb] rounded-[10px] text-[12px] font-semibold text-[#18181b] hover:bg-gray-50 flex items-center justify-center gap-1.5 shadow-sm transition-colors cursor-pointer"
+          >
+            <span class="text-[14px] leading-none">+</span>
+            <span>Add another video concept</span>
+          </button>
         </div>
 
         <!-- Section: Filming Instructions -->
@@ -561,35 +569,33 @@
       }
 
       // 3. Order details summary
+      const totalConcepts = document.querySelectorAll('#concepts-container > div').length || 1;
       const orderDetailsSummary = document.getElementById('order-details-summary');
       if (orderDetailsSummary) {
-        orderDetailsSummary.textContent = `${currentQty} videos · 2 creators · 1 concept`;
+        orderDetailsSummary.textContent = `${currentQty} videos · 2 creators · ${totalConcepts} ${totalConcepts === 1 ? 'concept' : 'concepts'}`;
       }
 
-      // 4. Concept 1 unit price
-      const conceptUnitPrice = document.getElementById('concept-unit-price');
-      if (conceptUnitPrice) {
-        conceptUnitPrice.textContent = `${formattedRate} / video`;
-      }
+      // 4. Update all concept unit prices
+      document.querySelectorAll('.concept-unit-price').forEach(el => {
+        el.textContent = `${formattedRate} / video`;
+      });
 
-      // 5. Per creator input
+      // 5. Per creator inputs
       if (!skipInputSync) {
-        const perCreatorInput = document.getElementById('per-creator-input');
-        if (perCreatorInput) {
-          perCreatorInput.value = perCreator;
-        }
+        document.querySelectorAll('.per-creator-input').forEach(el => {
+          el.value = perCreator;
+        });
       }
 
-      // 6. Concept footer price
-      const conceptFooterPrice = document.getElementById('concept-footer-price');
-      if (conceptFooterPrice) {
-        conceptFooterPrice.textContent = `${currentQty} videos · ${formattedTotal}`;
-      }
+      // 6. Concept footer prices
+      document.querySelectorAll('.concept-footer-price').forEach(el => {
+        el.textContent = `${currentQty} videos · ${formattedTotal}`;
+      });
 
       // 7. Live estimate subtitle
       const estimateSubtitle = document.getElementById('estimate-subtitle');
       if (estimateSubtitle) {
-        estimateSubtitle.textContent = `${currentQty} videos · 1 concepts`;
+        estimateSubtitle.textContent = `${currentQty} videos · ${totalConcepts} ${totalConcepts === 1 ? 'concept' : 'concepts'}`;
       }
 
       // 8. Creator counts
@@ -615,11 +621,228 @@
       }
     }
 
+    // Dynamic concept count tracker
+    let highestConceptIndex = 1;
+
+    function addNewConcept() {
+      highestConceptIndex++;
+      const container = document.getElementById('concepts-container');
+      if (!container) return;
+
+      const currentRate = getRateForQty(currentQty);
+      const rate = currentRate.toFixed(2);
+      const total = (currentQty * currentRate).toFixed(2);
+      const perCreator = Math.ceil(currentQty / 2);
+      const currentConceptNum = container.children.length + 1;
+
+      const newBlock = document.createElement('div');
+      newBlock.id = `concept-block-${highestConceptIndex}`;
+      newBlock.className = "flex flex-col gap-3 pt-6 border-t border-[#f1f1f4]";
+      newBlock.innerHTML = `
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="concept-title-text text-[13.5px] font-bold text-[#111827]">Concept ${currentConceptNum}</span>
+              <button 
+                type="button" 
+                onclick="removeConcept(${highestConceptIndex})" 
+                class="text-[11px] text-[#9ca3af] hover:text-[#ef4444] transition-colors cursor-pointer ml-1 font-medium"
+              >
+                Remove
+              </button>
+            </div>
+            <p id="concept-subtitle-${highestConceptIndex}" class="concept-subtitle text-[11px] text-[#71717a] mt-0.5">Reaction Video · Reaction / footage</p>
+          </div>
+          <span class="concept-unit-price text-[12px] font-bold text-[#111827]">$${rate} / video</span>
+        </div>
+
+        <!-- Fields: Recommended video type & Per creator -->
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+          <div class="sm:col-span-10">
+            <label class="block text-[11.5px] font-semibold text-[#374151] mb-1.5">Recommended video type</label>
+            <div class="relative" id="video-type-dropdown-container-${highestConceptIndex}">
+              <!-- Trigger Button -->
+              <button 
+                type="button" 
+                id="video-type-trigger-${highestConceptIndex}"
+                onclick="toggleDynamicDropdown(event, ${highestConceptIndex})"
+                class="w-full bg-white border border-[#a5b4fc] rounded-[10px] px-3.5 h-[42px] flex items-center justify-between text-[13px] text-[#5046e5] font-medium focus:outline-none cursor-pointer shadow-xs transition-all hover:border-[#818cf8]"
+              >
+                <span id="selected-video-type-text-${highestConceptIndex}">Reaction / footage</span>
+                <svg class="w-4 h-4 text-[#a5b4fc] transition-transform duration-200" id="video-type-chevron-${highestConceptIndex}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+
+              <!-- Popup Dropdown Menu -->
+              <div 
+                id="video-type-popup-${highestConceptIndex}" 
+                class="hidden absolute top-full left-0 mt-1.5 w-[275px] sm:w-[285px] bg-white border border-[#e5e7eb] rounded-[16px] p-2 shadow-[0_12px_28px_rgba(0,0,0,0.12),0_4px_10px_rgba(0,0,0,0.06)] z-50 text-left animate-in fade-in zoom-in-95 duration-150"
+              >
+                <!-- Header -->
+                <div class="text-[11.5px] font-medium text-[#71717a] px-2.5 pt-1.5 pb-2">
+                  Video type ${currentConceptNum}
+                </div>
+
+                <!-- Options List -->
+                <div class="flex flex-col gap-1">
+                  <!-- Option 1: Reaction / footage (Selected) -->
+                  <div 
+                    onclick="selectDynamicOption(${highestConceptIndex}, 'Reaction / footage', this)"
+                    class="video-type-opt-${highestConceptIndex} group cursor-pointer p-2.5 rounded-[10px] bg-[#f8f9fa] transition-colors"
+                  >
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-1.5">
+                        <span class="text-[13px] font-semibold text-[#18181b]">Reaction / footage</span>
+                        <span class="text-[10px] font-medium text-[#6366f1] bg-[#eef2ff] px-1.5 py-0.5 rounded-[4px]">Recommended</span>
+                      </div>
+                      <span class="opt-check text-[#5046e5]">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </span>
+                    </div>
+                    <p class="text-[11.5px] text-[#71717a] mt-0.5 leading-tight">
+                      Expressions and natural, unedited moments.
+                    </p>
+                  </div>
+
+                  <!-- Option 2: Crying / emotions -->
+                  <div 
+                    onclick="selectDynamicOption(${highestConceptIndex}, 'Crying / emotions', this)"
+                    class="video-type-opt-${highestConceptIndex} group cursor-pointer p-2.5 rounded-[10px] hover:bg-gray-50 transition-colors"
+                  >
+                    <div class="flex items-center justify-between">
+                      <span class="text-[13px] font-semibold text-[#18181b]">Crying / emotions</span>
+                      <span class="opt-check text-[#5046e5] hidden">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </span>
+                    </div>
+                    <p class="text-[11.5px] text-[#71717a] mt-0.5 leading-tight">
+                      An emotional performance, without a script.
+                    </p>
+                  </div>
+
+                  <!-- Option 3: Lip-sync -->
+                  <div 
+                    onclick="selectDynamicOption(${highestConceptIndex}, 'Lip-sync', this)"
+                    class="video-type-opt-${highestConceptIndex} group cursor-pointer p-2.5 rounded-[10px] hover:bg-gray-50 transition-colors"
+                  >
+                    <div class="flex items-center justify-between">
+                      <span class="text-[13px] font-semibold text-[#18181b]">Lip-sync</span>
+                      <span class="opt-check text-[#5046e5] hidden">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </span>
+                    </div>
+                    <p class="text-[11.5px] text-[#71717a] mt-0.5 leading-tight">
+                      Perform along with your reference audio.
+                    </p>
+                  </div>
+
+                  <!-- Option 4: Talking script -->
+                  <div 
+                    onclick="selectDynamicOption(${highestConceptIndex}, 'Talking script', this)"
+                    class="video-type-opt-${highestConceptIndex} group cursor-pointer p-2.5 rounded-[10px] hover:bg-gray-50 transition-colors"
+                  >
+                    <div class="flex items-center justify-between">
+                      <span class="text-[13px] font-semibold text-[#18181b]">Talking script</span>
+                      <span class="opt-check text-[#5046e5] hidden">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </span>
+                    </div>
+                    <p class="text-[11.5px] text-[#71717a] mt-0.5 leading-tight">
+                      Your exact words, filmed in one continuous shot.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label class="block text-[11.5px] font-semibold text-[#374151] mb-1.5 text-left sm:text-center">Per creator</label>
+            <input 
+              type="text" 
+              value="${perCreator}" 
+              oninput="updateFromPerCreator(this.value)"
+              class="per-creator-input w-full bg-white border border-[#e5e7eb] rounded-[8px] py-2 text-center text-[12.5px] text-[#18181b] font-medium focus:outline-none focus:border-[#7c66ff] shadow-sm"
+            />
+          </div>
+        </div>
+
+        <!-- Hint under type -->
+        <div class="flex items-center gap-1.5 text-[11px] text-[#71717a]">
+          <svg class="w-3.5 h-3.5 text-[#9ca3af]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          <span>Suggested for your brief. You can change it.</span>
+        </div>
+
+        <!-- Script / Concept Textarea -->
+        <div class="relative mt-1">
+          <textarea 
+            rows="6" 
+            class="w-full bg-white border border-[#e5e7eb] rounded-[10px] p-3.5 text-[13px] text-[#18181b] focus:outline-none focus:border-[#7c66ff] shadow-sm resize-y min-h-[140px]"
+          ></textarea>
+        </div>
+
+        <!-- Concept Footer details -->
+        <div class="flex items-center justify-between text-[11px] text-[#71717a] px-0.5">
+          <span>Delivered unedited</span>
+          <span class="concept-footer-price text-[11px] text-[#71717a]">${currentQty} videos · $${total}</span>
+        </div>
+      `;
+
+      container.appendChild(newBlock);
+      renumberConcepts();
+      updateUI();
+    }
+
+    function removeConcept(idx) {
+      const block = document.getElementById(`concept-block-${idx}`);
+      if (block) {
+        block.remove();
+        renumberConcepts();
+        updateUI();
+      }
+    }
+
+    function renumberConcepts() {
+      const container = document.getElementById('concepts-container');
+      if (!container) return;
+      const blocks = container.children;
+      Array.from(blocks).forEach((block, index) => {
+        const num = index + 1;
+        const titleSpan = block.querySelector('.concept-title-text');
+        if (titleSpan) {
+          titleSpan.textContent = `Concept ${num}`;
+        }
+      });
+    }
+
     // Recommended video type popup dropdown functions
-    function toggleVideoTypeDropdown(e) {
+    function toggleDynamicDropdown(e, id) {
       if (e) e.stopPropagation();
-      const popup = document.getElementById('video-type-popup');
-      const chevron = document.getElementById('video-type-chevron');
+      // Close other dropdowns
+      document.querySelectorAll('[id^="video-type-popup-"]').forEach(p => {
+        if (p.id !== `video-type-popup-${id}`) {
+          p.classList.add('hidden');
+        }
+      });
+      document.querySelectorAll('[id^="video-type-chevron-"]').forEach(c => {
+        if (c.id !== `video-type-chevron-${id}`) {
+          c.classList.remove('rotate-180');
+        }
+      });
+
+      const popup = document.getElementById(`video-type-popup-${id}`);
+      const chevron = document.getElementById(`video-type-chevron-${id}`);
       if (popup) {
         if (popup.classList.contains('hidden')) {
           popup.classList.remove('hidden');
@@ -631,17 +854,17 @@
       }
     }
 
-    function selectVideoTypeOption(typeName, optEl) {
-      const labelText = document.getElementById('selected-video-type-text');
+    function selectDynamicOption(id, typeName, optEl) {
+      const labelText = document.getElementById(`selected-video-type-text-${id}`);
       if (labelText) labelText.textContent = typeName;
 
-      const subtitle = document.getElementById('concept-subtitle');
+      const subtitle = document.getElementById(`concept-subtitle-${id}`);
       if (subtitle) {
         subtitle.textContent = `Reaction Video · ${typeName}`;
       }
 
       // Update active checkmarks & background
-      document.querySelectorAll('.video-type-opt').forEach(el => {
+      document.querySelectorAll(`.video-type-opt-${id}`).forEach(el => {
         el.classList.remove('bg-[#f8f9fa]');
         const chk = el.querySelector('.opt-check');
         if (chk) chk.classList.add('hidden');
@@ -654,24 +877,34 @@
       }
 
       // Close dropdown
-      const popup = document.getElementById('video-type-popup');
-      const chevron = document.getElementById('video-type-chevron');
+      const popup = document.getElementById(`video-type-popup-${id}`);
+      const chevron = document.getElementById(`video-type-chevron-${id}`);
       if (popup) popup.classList.add('hidden');
       if (chevron) chevron.classList.remove('rotate-180');
     }
 
-    // Close dropdown on click outside
+    // Close dropdowns on click outside
     document.addEventListener('click', function(e) {
-      const container = document.getElementById('video-type-dropdown-container');
-      const popup = document.getElementById('video-type-popup');
-      const chevron = document.getElementById('video-type-chevron');
-      if (container && !container.contains(e.target)) {
-        if (popup && !popup.classList.contains('hidden')) {
-          popup.classList.add('hidden');
-          if (chevron) chevron.classList.remove('rotate-180');
-        }
+      const isInside = e.target.closest('[id^="video-type-dropdown-container"]');
+      if (!isInside) {
+        document.querySelectorAll('[id^="video-type-popup-"]').forEach(p => p.classList.add('hidden'));
+        document.querySelectorAll('[id^="video-type-chevron-"]').forEach(c => c.classList.remove('rotate-180'));
       }
     });
+
+    // Expose functions on window and bind click listener
+    window.addNewConcept = addNewConcept;
+    window.removeConcept = removeConcept;
+    window.toggleDynamicDropdown = toggleDynamicDropdown;
+    window.selectDynamicOption = selectDynamicOption;
+
+    const addConceptBtn = document.getElementById('add-concept-btn');
+    if (addConceptBtn) {
+      addConceptBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        addNewConcept();
+      });
+    }
   </script>
 
 </body>
