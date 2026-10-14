@@ -7,6 +7,9 @@
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <!-- Google Fonts: Newsreader, Playfair Display, Inter, Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -362,7 +365,7 @@
         </div>
 
         <!-- Right Buttons -->
-        <div class="flex items-center gap-3.5 sm:gap-4 pr-0.5">
+        <div id="desktopNavAuth" class="flex items-center gap-3.5 sm:gap-4 pr-0.5">
           <a href="#login" onclick="openLoginModal()" class="text-[14px] text-[#222222] font-medium hover:text-black transition-colors px-1">Log in</a>
           <a href="#signup" onclick="openLoginModal()" class="bg-[#111111] hover:bg-black text-white text-[13px] sm:text-[13.5px] font-semibold pl-4 pr-3.5 py-1.5 sm:py-2 rounded-full flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]">
             <span>Start free</span>
@@ -413,7 +416,7 @@
         </div>
 
         <!-- Buttons -->
-        <div class="pt-3 border-t border-zinc-100 flex flex-col gap-2.5">
+        <div id="mobileNavAuth" class="pt-3 border-t border-zinc-100 flex flex-col gap-2.5">
           <a href="#login" onclick="closeMobileMenu(); openLoginModal()" class="w-full text-center py-2.5 rounded-full border border-zinc-200 text-[14px] font-medium text-zinc-800 hover:bg-zinc-50 transition-colors">
             Log in
           </a>
@@ -523,7 +526,7 @@
       
       <!-- Button 1: Sign up free with Google -->
       <button 
-        onclick="openLoginModal()" 
+        onclick="openGoogleAuthPopup()" 
         class="bg-[#111111] hover:bg-black text-white text-[13px] sm:text-[13.5px] font-semibold pl-2.5 pr-4 py-2.5 rounded-full flex items-center gap-2 shadow-btn transition-all hover:scale-[1.02] active:scale-[0.98]"
       >
         <span class="w-5 h-5 rounded-full bg-white flex items-center justify-center p-0.5 shadow-sm">
@@ -2000,7 +2003,7 @@
       </div>
 
       <div class="flex flex-col gap-2.5">
-        <button class="w-full bg-[#111111] hover:bg-black text-white font-semibold text-xs py-2.5 rounded-full flex items-center justify-center gap-2.5 shadow transition-all hover:scale-[1.01]">
+        <button onclick="openGoogleAuthPopup()" class="w-full bg-[#111111] hover:bg-black text-white font-semibold text-xs py-2.5 rounded-full flex items-center justify-center gap-2.5 shadow transition-all hover:scale-[1.01]">
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"/>
             <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24Z"/>
@@ -2021,6 +2024,19 @@
       </div>
 
       <p class="text-[10px] text-center text-zinc-400 mt-3.5">By signing up, you agree to our Terms and Licensing.</p>
+    </div>
+  </div>
+
+
+
+
+
+  <!-- Floating Auth Notification Toast -->
+  <div id="googleAuthToast" class="hidden fixed bottom-6 right-6 z-50 bg-zinc-950 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-zinc-800 animate-in slide-in-from-bottom-5 duration-300">
+    <div class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs flex-shrink-0">✓</div>
+    <div>
+      <div class="text-[12.5px] font-medium" id="googleToastTitle">Signed up with Google</div>
+      <div class="text-[11px] text-zinc-400" id="googleToastSub">Welcome to Sofia!</div>
     </div>
   </div>
 
@@ -2115,9 +2131,254 @@
     // Auth Modal
     function openLoginModal() {
       document.getElementById('authModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
     }
     function closeLoginModal() {
       document.getElementById('authModal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    // ================= SUPABASE AUTHENTICATION =================
+    const SUPABASE_URL = 'https://nxjwfnhsrpwydknoaoqp.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_jyhuNIKOxbkGHm2JaUs36Q_STHfHysl';
+    let supabaseClient = null;
+
+    try {
+      if (window.supabase && window.supabase.createClient) {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+    } catch (e) {
+      console.error('Error initializing Supabase client:', e);
+    }
+
+    async function openGoogleAuthPopup() {
+      // Close regular email login modal if open
+      closeLoginModal();
+
+      if (!supabaseClient && window.supabase && window.supabase.createClient) {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+
+      if (!supabaseClient) {
+        alert('Supabase is still loading. Please try again in a moment.');
+        return;
+      }
+
+      try {
+        const redirectUrl = window.location.origin + window.location.pathname;
+        const { data, error } = await supabaseClient.auth.signInWithOAuth({
+          provider: 'google',
+          options: {
+            redirectTo: redirectUrl,
+            queryParams: {
+              access_type: 'offline',
+              prompt: 'select_account consent',
+            }
+          }
+        });
+        if (error) throw error;
+      } catch (err) {
+        console.error('Supabase Google OAuth error:', err);
+        alert('Google Sign-In Error: ' + (err.message || err));
+      }
+    }
+
+    // Alias for backward compatibility
+    const openGoogleAuthModal = openGoogleAuthPopup;
+
+    // Listen for Supabase Auth state changes (after OAuth redirect)
+    if (supabaseClient) {
+      supabaseClient.auth.onAuthStateChange((event, session) => {
+        if (session && session.user) {
+          const meta = session.user.user_metadata || {};
+          const name = meta.full_name || meta.name || (session.user.email ? session.user.email.split('@')[0] : 'Creator');
+          const email = session.user.email || '';
+          const initials = name.split(' ').map(p => p[0]).filter(Boolean).slice(0, 2).join('').toUpperCase() || 'U';
+          const picture = meta.avatar_url || meta.picture || '';
+
+          const user = { name, email, initials, picture };
+          localStorage.setItem('sofia_auth_user', JSON.stringify(user));
+          updateAuthStateUI();
+          showGoogleAuthToast(`Welcome, ${name}!`, email);
+        } else if (event === 'SIGNED_OUT') {
+          localStorage.removeItem('sofia_auth_user');
+          updateAuthStateUI();
+        }
+      });
+    }
+
+    function showGoogleAuthToast(title, sub) {
+      const toast = document.getElementById('googleAuthToast');
+      const titleEl = document.getElementById('googleToastTitle');
+      const subEl = document.getElementById('googleToastSub');
+      if (!toast) return;
+
+      if (titleEl) titleEl.textContent = title;
+      if (subEl) subEl.textContent = sub;
+
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 4500);
+    }
+
+    function updateAuthStateUI() {
+      let user = null;
+      try {
+        const stored = localStorage.getItem('sofia_auth_user');
+        if (stored) user = JSON.parse(stored);
+      } catch (e) {}
+
+      const desktopNav = document.getElementById('desktopNavAuth');
+      const mobileNav = document.getElementById('mobileNavAuth');
+
+      if (user) {
+        if (desktopNav) {
+          desktopNav.innerHTML = `
+            <div class="relative">
+              <button 
+                onclick="toggleUserDropdown(event)" 
+                class="flex items-center gap-2 py-1.5 pl-2 pr-3 rounded-full border border-zinc-200 hover:border-zinc-300 bg-white shadow-sm transition-all text-xs font-semibold text-zinc-800"
+              >
+                <div class="w-6 h-6 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center text-[10px] font-bold">
+                  ${user.initials || 'U'}
+                </div>
+                <span class="max-w-[110px] truncate">${user.name}</span>
+                <svg class="w-3.5 h-3.5 text-zinc-400 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+                </svg>
+              </button>
+
+              <div id="navUserDropdown" class="hidden absolute right-0 mt-2 w-52 bg-white rounded-2xl shadow-xl border border-zinc-100 py-2 z-50">
+                <div class="px-3.5 py-2 border-b border-zinc-100">
+                  <div class="text-[11px] text-zinc-400 font-medium">Signed in with Google</div>
+                  <div class="text-xs font-semibold text-zinc-800 truncate">${user.email}</div>
+                </div>
+                <a href="library.html" class="flex items-center gap-2 px-3.5 py-2 text-xs text-zinc-700 hover:bg-zinc-50 transition-colors">
+                  <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                  <span>Creator Library</span>
+                </a>
+                <a href="order.html" class="flex items-center gap-2 px-3.5 py-2 text-xs text-zinc-700 hover:bg-zinc-50 transition-colors">
+                  <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                  <span>My Orders</span>
+                </a>
+                <div class="border-t border-zinc-100 my-1"></div>
+                <button onclick="signOutUser()" class="w-full text-left px-3.5 py-2 text-xs text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                  <span>Sign out</span>
+                </button>
+              </div>
+            </div>
+          `;
+        }
+
+        if (mobileNav) {
+          mobileNav.innerHTML = `
+            <div class="p-3 bg-zinc-50 rounded-2xl border border-zinc-100 flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center text-xs font-bold">
+                  ${user.initials || 'U'}
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-zinc-900">${user.name}</div>
+                  <div class="text-[10px] text-zinc-500 font-mono">${user.email}</div>
+                </div>
+              </div>
+              <button onclick="signOutUser()" class="text-xs text-red-600 font-semibold px-2 py-1 rounded hover:bg-red-50">Sign out</button>
+            </div>
+          `;
+        }
+      } else {
+        // Logged out: restore default buttons
+        if (desktopNav) {
+          desktopNav.innerHTML = `
+            <a href="#login" onclick="openLoginModal()" class="text-[14px] text-[#222222] font-medium hover:text-black transition-colors px-1">Log in</a>
+            <a href="#signup" onclick="openLoginModal()" class="bg-[#111111] hover:bg-black text-white text-[13px] sm:text-[13.5px] font-semibold pl-4 pr-3.5 py-1.5 sm:py-2 rounded-full flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]">
+              <span>Start free</span>
+              <svg class="w-3.5 h-3.5 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </a>
+          `;
+        }
+        if (mobileNav) {
+          mobileNav.innerHTML = `
+            <a href="#login" onclick="closeMobileMenu(); openLoginModal()" class="w-full text-center py-2.5 rounded-full border border-zinc-200 text-[14px] font-medium text-zinc-800 hover:bg-zinc-50 transition-colors">
+              Log in
+            </a>
+            <a href="#signup" onclick="closeMobileMenu(); openLoginModal()" class="w-full bg-[#111111] hover:bg-black text-white text-[14px] font-semibold py-2.5 rounded-full flex items-center justify-center gap-2 shadow-sm transition-transform active:scale-[0.98]">
+              <span>Start free</span>
+              <svg class="w-3.5 h-3.5 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </a>
+          `;
+        }
+      }
+    }
+
+    function toggleUserDropdown(e) {
+      if (e) e.stopPropagation();
+      const dd = document.getElementById('navUserDropdown');
+      if (dd) dd.classList.toggle('hidden');
+    }
+
+    async function signOutUser() {
+      try {
+        if (supabaseClient) {
+          await supabaseClient.auth.signOut();
+        }
+      } catch (e) {
+        console.error('Sign out error:', e);
+      }
+      localStorage.removeItem('sofia_auth_user');
+      updateAuthStateUI();
+      showGoogleAuthToast('Signed out', 'You have been signed out');
+    }
+
+    // Close modals on escape key or backdrop click
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeLoginModal();
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      const authModal = document.getElementById('authModal');
+      const userDropdown = document.getElementById('navUserDropdown');
+
+      if (e.target === authModal) closeLoginModal();
+      if (userDropdown && !userDropdown.contains(e.target)) {
+        userDropdown.classList.add('hidden');
+      }
+    });
+
+    async function checkSupabaseSessionOnLoad() {
+      if (supabaseClient) {
+        try {
+          const { data: { session } } = await supabaseClient.auth.getSession();
+          if (session && session.user) {
+            const meta = session.user.user_metadata || {};
+            const name = meta.full_name || meta.name || (session.user.email ? session.user.email.split('@')[0] : 'Creator');
+            const email = session.user.email || '';
+            const initials = name.split(' ').map(p => p[0]).filter(Boolean).slice(0, 2).join('').toUpperCase() || 'U';
+            const picture = meta.avatar_url || meta.picture || '';
+
+            const user = { name, email, initials, picture };
+            localStorage.setItem('sofia_auth_user', JSON.stringify(user));
+          }
+        } catch (e) {
+          console.error('Session check error:', e);
+        }
+      }
+      updateAuthStateUI();
+    }
+
+    // Check user auth on load
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', checkSupabaseSessionOnLoad);
+    } else {
+      checkSupabaseSessionOnLoad();
     }
 
     // FAQ Accordion Toggle
