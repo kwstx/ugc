@@ -492,6 +492,21 @@
       { id: 'emilia', name: 'Emilia', handle: '@emilia_ugc', avatar: 'assets/creators_page/emilia.png' }
     ];
 
+    function getTierConfigs(count) {
+      if (count === 1) {
+        return { tier1: 5, tier2: 10, tier3: 20, inc: 5 };
+      }
+      return {
+        tier1: count * 3,
+        tier2: count * 5,
+        tier3: count * 10,
+        inc: count * 3
+      };
+    }
+
+    let currentQty = 6;
+    const baseRate = 30.00;
+
     function loadSavedCreators() {
       const stored = localStorage.getItem('selectedCreators');
       if (stored) {
@@ -504,10 +519,10 @@
           console.error(e);
         }
       }
+      const count = selectedCreators.length || 2;
+      const tiers = getTierConfigs(count);
+      currentQty = tiers.tier1;
     }
-
-    let currentQty = 6;
-    const baseRate = 30.00;
 
     function getRateForQty(qty) {
       if (qty >= 20) {
@@ -540,9 +555,10 @@
 
     function updateUI(skipInputSync = false) {
       const creatorCount = selectedCreators.length || 2;
+      const tiers = getTierConfigs(creatorCount);
       const rate = getRateForQty(currentQty);
       const total = currentQty * rate;
-      const perCreator = Math.ceil(currentQty / creatorCount);
+      const perCreator = Math.max(1, Math.round(currentQty / creatorCount));
 
       const formattedRate = '$' + rate.toFixed(2);
       const formattedTotal = '$' + total.toFixed(2);
@@ -553,7 +569,7 @@
         tierSubtitle.textContent = `${currentQty} videos · ${perCreator} per creator`;
       }
 
-      // 2. Button states
+      // 2. Button states & dynamic labels
       const btn6 = document.getElementById('btn-tier-6');
       const btn10 = document.getElementById('btn-tier-10');
       const btn20 = document.getElementById('btn-tier-20');
@@ -567,6 +583,20 @@
       const btn20Sub = document.getElementById('btn-tier-20-sub');
       const btnAddTitle = document.getElementById('btn-tier-add-title');
       const btnAddSub = document.getElementById('btn-tier-add-sub');
+
+      // Update button click handlers with dynamic quantities
+      if (btn6) btn6.onclick = () => selectTier(tiers.tier1);
+      if (btn10) btn10.onclick = () => selectTier(tiers.tier2);
+      if (btn20) btn20.onclick = () => selectTier(tiers.tier3);
+      if (btnAdd) btnAdd.onclick = () => addMoreVideos(tiers.inc);
+
+      // Update button titles
+      if (btn6Title) btn6Title.textContent = `${tiers.tier1} videos`;
+      if (btn6Sub) btn6Sub.textContent = `Starter order`;
+      if (btn10Title) btn10Title.textContent = `${tiers.tier2} videos`;
+      if (btn10Sub) btn10Sub.textContent = `Save 8.3% / video`;
+      if (btn20Title) btn20Title.textContent = `${tiers.tier3} videos`;
+      if (btn20Sub) btn20Sub.textContent = `Save 16.7% / video`;
 
       const activeClass = "border border-[#7c66ff] bg-[#f5f3ff] rounded-[9px] px-3 py-1.5 text-center min-w-[76px] transition-all cursor-pointer";
       const inactiveClass = "border border-[#e5e7eb] bg-white hover:border-gray-300 rounded-[9px] px-3 py-1.5 text-center min-w-[76px] transition-all cursor-pointer";
@@ -586,15 +616,15 @@
       if (btnAddTitle) btnAddTitle.className = "text-[11.5px] font-bold text-[#18181b] leading-tight";
       if (btnAddSub) btnAddSub.className = "text-[9.5px] text-[#71717a] mt-0.5";
 
-      if (currentQty === 6) {
+      if (currentQty === tiers.tier1) {
         if (btn6) btn6.className = activeClass;
         if (btn6Title) btn6Title.className = "text-[11.5px] font-bold text-[#6366f1] leading-tight";
         if (btn6Sub) btn6Sub.className = "text-[9.5px] text-[#6366f1] font-medium mt-0.5";
-      } else if (currentQty === 10) {
+      } else if (currentQty === tiers.tier2) {
         if (btn10) btn10.className = activeClass;
         if (btn10Title) btn10Title.className = "text-[11.5px] font-bold text-[#6366f1] leading-tight";
         if (btn10Sub) btn10Sub.className = "text-[9.5px] text-[#6366f1] font-medium mt-0.5";
-      } else if (currentQty === 20) {
+      } else if (currentQty === tiers.tier3) {
         if (btn20) btn20.className = activeClass;
         if (btn20Title) btn20Title.className = "text-[11.5px] font-bold text-[#6366f1] leading-tight";
         if (btn20Sub) btn20Sub.className = "text-[9.5px] text-[#6366f1] font-medium mt-0.5";
@@ -607,9 +637,9 @@
         if (btnAddSub) btnAddSub.className = "text-[9.5px] text-[#6366f1] font-medium mt-0.5";
       }
 
-      // Reset +6 button text if 6, 10, or 20 is selected
-      if (currentQty === 6 || currentQty === 10 || currentQty === 20) {
-        if (btnAddTitle) btnAddTitle.textContent = "+6 videos";
+      // Reset +add button text if one of the standard tiers is selected
+      if (currentQty === tiers.tier1 || currentQty === tiers.tier2 || currentQty === tiers.tier3) {
+        if (btnAddTitle) btnAddTitle.textContent = `+${tiers.inc} videos`;
         if (btnAddSub) btnAddSub.textContent = "Add more";
       }
 
