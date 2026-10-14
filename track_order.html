@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DansUGC - Live Order Tracking</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Inter, Newsreader, Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Grand Editorial Serif Title */
+    .hero-heading,
+    .hero-heading * {
+      font-family: 'Newsreader', 'Playfair Display', Georgia, serif !important;
+      letter-spacing: -0.028em;
+      line-height: 1.14;
+      font-weight: 400;
+    }
+
+  </style>
+</head>
+<body class="bg-[#fbfbfe] text-[#18181b] min-h-screen flex flex-col select-none">
+
+  <!-- Top Header / Navigation -->
+  <header class="w-full bg-white border-b border-[#f1f1f4] px-6 sm:px-10 h-[58px] flex items-center justify-between sticky top-0 z-30">
+    <!-- Brand Logo -->
+    <a href="index.html" class="flex items-center gap-1 text-[17px] font-bold text-[#111827] tracking-tight hover:opacity-85 transition-opacity">
+      <span>DansUGC</span>
+    </a>
+
+    <!-- Live Status Indicator Pill -->
+    <div class="flex items-center gap-2 bg-[#ecfdf5] border border-[#a7f3d0] px-3 py-1 rounded-full text-[11.5px] font-semibold text-[#065f46]">
+      <span class="w-2 h-2 rounded-full bg-[#10b981]"></span>
+      <span>Live Order Tracking</span>
+      <span class="text-[#047857]/60">· Real-time</span>
+    </div>
+
+    <!-- Right Header Actions -->
+    <div class="flex items-center gap-4 text-[12.5px]">
+      <a href="review_order.html" class="font-medium text-[#4b5563] hover:text-black transition-colors hidden sm:inline">
+        &larr; Review brief
+      </a>
+      <a href="index.html" class="text-[12.5px] font-medium text-[#4b5563] hover:text-black transition-colors">
+        Save & exit
+      </a>
+    </div>
+  </header>
+
+  <!-- Page Container -->
+  <main class="w-full max-w-[1080px] mx-auto px-6 pt-8 pb-24 flex-1">
+    
+    <!-- Top Bar with Order ID & Status -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-7 bg-white border border-[#e5e7eb] rounded-[18px] p-5 sm:p-6 shadow-xs">
+      <div>
+        <div class="flex items-center gap-2.5 mb-1">
+          <span id="order-id-display" class="text-[18px] sm:text-[20px] font-bold text-[#111827] tracking-tight">#UGC-89420</span>
+          <span class="px-2.5 py-0.5 rounded-full bg-[#e0e7ff] text-[#4338ca] text-[11px] font-bold uppercase tracking-wider">
+            Dispatched
+          </span>
+          <span class="text-[11.5px] text-[#71717a] font-normal" id="order-time-display">Placed just now</span>
+        </div>
+        <p class="text-[13px] text-[#52525b]">
+          <span id="order-brand-display" class="font-semibold text-[#18181b]">Your brand</span> · Reaction Video Package (<span id="order-qty-display">6 videos</span>)
+        </p>
+      </div>
+
+      <!-- Price & Guarantee Box -->
+      <div class="flex items-center gap-6 sm:border-l sm:border-[#f1f1f4] sm:pl-6">
+        <div>
+          <span class="text-[11px] font-medium text-[#71717a] block">Escrow Amount</span>
+          <span id="order-total-display" class="text-[20px] font-bold text-[#111827] tracking-tight">$180.00</span>
+        </div>
+        <div class="bg-[#ecfdf5] border border-[#a7f3d0] rounded-[10px] px-3 py-1.5 text-[11px] text-[#065f46] font-medium flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-[#10b981]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          <span>Escrow Protected</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4-Stage Real-Time Progress Bar -->
+    <div class="w-full bg-white border border-[#e5e7eb] rounded-[18px] p-6 mb-7 shadow-xs">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-[14px] font-bold text-[#111827]">Order Progress</h2>
+        <span class="text-[11.5px] text-[#4f46e5] font-semibold" id="estimated-completion-text">Estimated Delivery: 48–72 hours</span>
+      </div>
+
+      <!-- Stepper Line -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
+        
+        <!-- Step 1: Dispatched (Completed) -->
+        <div class="flex items-start gap-3 p-3 rounded-[12px] bg-[#f9fafb] border border-[#e5e7eb]">
+          <div class="w-7 h-7 rounded-full bg-[#10b981] text-white flex items-center justify-center shrink-0 text-[12px] font-bold shadow-xs">
+            ✓
+          </div>
+          <div>
+            <div class="text-[12.5px] font-bold text-[#111827]">1. Order Dispatched</div>
+            <div class="text-[11px] text-[#059669] font-medium mt-0.5">Brief sent to creators</div>
+            <div class="text-[10px] text-[#9ca3af] mt-1">Just now</div>
+          </div>
+        </div>
+
+        <!-- Step 2: Creator Review -->
+        <div class="flex items-start gap-3 p-3 rounded-[12px] bg-[#eef2ff] border border-[#a5b4fc] shadow-xs relative overflow-hidden">
+          <div class="w-7 h-7 rounded-full bg-[#4f46e5] text-white flex items-center justify-center shrink-0 text-[12px] font-bold shadow-xs">
+            2
+          </div>
+          <div>
+            <div class="text-[12.5px] font-bold text-[#1e1b4b]">2. Creator Review</div>
+            <div class="text-[11px] text-[#4338ca] font-medium mt-0.5">Franci & Emilia reviewing</div>
+            <div class="text-[10px] text-[#6366f1] mt-1">Active right now</div>
+          </div>
+        </div>
+
+        <!-- Step 3: Filming & Production (Upcoming) -->
+        <div class="flex items-start gap-3 p-3 rounded-[12px] bg-white border border-[#e5e7eb] opacity-60">
+          <div class="w-7 h-7 rounded-full bg-[#f3f4f6] text-[#6b7280] flex items-center justify-center shrink-0 text-[12px] font-medium">
+            3
+          </div>
+          <div>
+            <div class="text-[12.5px] font-bold text-[#374151]">3. Filming & Production</div>
+            <div class="text-[11px] text-[#71717a] mt-0.5">Authentic footage capture</div>
+            <div class="text-[10px] text-[#9ca3af] mt-1">Starts upon acceptance</div>
+          </div>
+        </div>
+
+        <!-- Step 4: Review & Approval (Final) -->
+        <div class="flex items-start gap-3 p-3 rounded-[12px] bg-white border border-[#e5e7eb] opacity-60">
+          <div class="w-7 h-7 rounded-full bg-[#f3f4f6] text-[#6b7280] flex items-center justify-center shrink-0 text-[12px] font-medium">
+            4
+          </div>
+          <div>
+            <div class="text-[12.5px] font-bold text-[#374151]">4. Client Approval</div>
+            <div class="text-[11px] text-[#71717a] mt-0.5">Approve unedited footage</div>
+            <div class="text-[10px] text-[#9ca3af] mt-1">Funds released to creators</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 2-Column Content Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start">
+      
+      <!-- Left Column: Creator Statuses & Activity Stream -->
+      <div class="lg:col-span-8 flex flex-col gap-6">
+
+        <!-- Creator Live Status Cards -->
+        <div class="w-full bg-white border border-[#e5e7eb] rounded-[18px] p-6 shadow-xs">
+          <div class="flex items-center justify-between mb-4 pb-3 border-b border-[#f3f4f6]">
+            <div>
+              <span class="text-[10.5px] font-bold tracking-wider text-[#9ca3af] uppercase block">ASSIGNED CREATORS</span>
+              <h2 class="text-[15px] font-bold text-[#111827]">Live Creator Activities</h2>
+            </div>
+            <span class="text-[11px] font-medium text-[#10b981] bg-[#ecfdf5] px-2 py-0.5 rounded-full">
+              2 of 2 Online
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <!-- Creator 1: Franci -->
+            <div class="p-4 rounded-[14px] border border-[#e5e7eb] bg-[#fafafa] flex flex-col justify-between gap-3">
+              <div class="flex items-start justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-full overflow-hidden bg-gray-200 shrink-0 border border-white shadow-xs">
+                    <img src="assets/creators_page/franci.png" alt="Franci" class="w-full h-full object-cover">
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-1">
+                      <span class="text-[13.5px] font-bold text-[#111827]">Franci</span>
+                      <span class="text-[10px] text-[#4f46e5] bg-[#eef2ff] px-1 rounded font-medium">Verified</span>
+                    </div>
+                    <span class="text-[11px] text-[#71717a]">@franci_ugc</span>
+                  </div>
+                </div>
+                <span class="inline-flex items-center gap-1.5 text-[10.5px] font-bold text-[#059669] bg-[#ecfdf5] px-2 py-0.5 rounded-md">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>
+                  Active
+                </span>
+              </div>
+
+              <div class="bg-white rounded-[10px] p-2.5 border border-[#f1f1f4] text-[11.5px] text-[#4b5563]">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-[#71717a]">Current Status:</span>
+                  <span class="font-semibold text-[#111827]" id="franci-status-tag">Reviewing brief concepts</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-[#71717a]">Assigned:</span>
+                  <span class="font-medium text-[#059669]" id="franci-assigned-text">3 videos ($90.00)</span>
+                </div>
+              </div>
+
+              <button 
+                type="button" 
+                onclick="openChat('Franci', '@franci_ugc', 'assets/creators_page/franci.png')"
+                class="w-full py-2 bg-white hover:bg-gray-50 border border-[#e5e7eb] rounded-[9px] text-[12px] font-semibold text-[#374151] hover:text-[#111827] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+              >
+                <svg class="w-3.5 h-3.5 text-[#6366f1]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                <span>Message Franci</span>
+              </button>
+            </div>
+
+            <!-- Creator 2: Emilia -->
+            <div class="p-4 rounded-[14px] border border-[#e5e7eb] bg-[#fafafa] flex flex-col justify-between gap-3">
+              <div class="flex items-start justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-full overflow-hidden bg-gray-200 shrink-0 border border-white shadow-xs">
+                    <img src="assets/creators_page/emilia.png" alt="Emilia" class="w-full h-full object-cover">
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-1">
+                      <span class="text-[13.5px] font-bold text-[#111827]">Emilia</span>
+                      <span class="text-[10px] text-[#4f46e5] bg-[#eef2ff] px-1 rounded font-medium">Verified</span>
+                    </div>
+                    <span class="text-[11px] text-[#71717a]">@emilia_ugc</span>
+                  </div>
+                </div>
+                <span class="inline-flex items-center gap-1.5 text-[10.5px] font-bold text-[#059669] bg-[#ecfdf5] px-2 py-0.5 rounded-md">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>
+                  Active
+                </span>
+              </div>
+
+              <div class="bg-white rounded-[10px] p-2.5 border border-[#f1f1f4] text-[11.5px] text-[#4b5563]">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-[#71717a]">Current Status:</span>
+                  <span class="font-semibold text-[#111827]" id="emilia-status-tag">Opening video instructions</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-[#71717a]">Assigned:</span>
+                  <span class="font-medium text-[#059669]" id="emilia-assigned-text">3 videos ($90.00)</span>
+                </div>
+              </div>
+
+              <button 
+                type="button" 
+                onclick="openChat('Emilia', '@emilia_ugc', 'assets/creators_page/emilia.png')"
+                class="w-full py-2 bg-white hover:bg-gray-50 border border-[#e5e7eb] rounded-[9px] text-[12px] font-semibold text-[#374151] hover:text-[#111827] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+              >
+                <svg class="w-3.5 h-3.5 text-[#6366f1]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                <span>Message Emilia</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Real-Time Activity Log Stream -->
+        <div class="w-full bg-white border border-[#e5e7eb] rounded-[18px] p-6 shadow-xs">
+          <div class="flex items-center justify-between mb-4 pb-3 border-b border-[#f3f4f6]">
+            <div>
+              <span class="text-[10.5px] font-bold tracking-wider text-[#9ca3af] uppercase block">LIVE AUDIT TRAIL</span>
+              <h2 class="text-[15px] font-bold text-[#111827]">Real-Time Event Stream</h2>
+            </div>
+            <span class="text-[11px] font-medium text-[#6b7280]">
+              Auto-sync enabled
+            </span>
+          </div>
+
+          <div id="activity-log-stream" class="flex flex-col gap-3">
+            <!-- Event 1 -->
+            <div class="flex items-start gap-3 p-3 rounded-[10px] bg-[#f9fafb] border border-[#f1f1f4]">
+              <span class="w-2 h-2 rounded-full bg-[#10b981] mt-1.5 shrink-0"></span>
+              <div class="flex-1 text-[12px]">
+                <div class="flex items-center justify-between">
+                  <span class="font-semibold text-[#111827]">Order Dispatched to Franci & Emilia</span>
+                  <span class="text-[10.5px] text-[#9ca3af]">Just now</span>
+                </div>
+                <p class="text-[#52525b] mt-0.5">Brief and creative guidelines successfully routed to chosen creators' portal.</p>
+              </div>
+            </div>
+
+            <!-- Event 2 -->
+            <div class="flex items-start gap-3 p-3 rounded-[10px] bg-white border border-[#f1f1f4]">
+              <span class="w-2 h-2 rounded-full bg-[#6366f1] mt-1.5 shrink-0"></span>
+              <div class="flex-1 text-[12px]">
+                <div class="flex items-center justify-between">
+                  <span class="font-semibold text-[#111827]">Escrow Hold Verified</span>
+                  <span class="text-[10.5px] text-[#9ca3af]">1 minute ago</span>
+                </div>
+                <p class="text-[#52525b] mt-0.5">Payment secured safely. Funds remain in platform escrow until video approval.</p>
+              </div>
+            </div>
+
+            <!-- Event 3 -->
+            <div class="flex items-start gap-3 p-3 rounded-[10px] bg-white border border-[#f1f1f4]">
+              <span class="w-2 h-2 rounded-full bg-[#9ca3af] mt-1.5 shrink-0"></span>
+              <div class="flex-1 text-[12px]">
+                <div class="flex items-center justify-between">
+                  <span class="font-semibold text-[#111827]">Brief Saved & Finalized</span>
+                  <span class="text-[10.5px] text-[#9ca3af]">2 minutes ago</span>
+                </div>
+                <p class="text-[#52525b] mt-0.5">Creative brief details and video concepts locked in for execution.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Brief Overview & Live Support -->
+      <div class="lg:col-span-4 flex flex-col gap-6 sticky top-[80px]">
+
+        <!-- Assigned Concepts Card -->
+        <div class="w-full bg-white border border-[#e5e7eb] rounded-[18px] p-6 shadow-xs">
+          <div class="flex items-center justify-between mb-3 pb-3 border-b border-[#f3f4f6]">
+            <h3 class="text-[14px] font-bold text-[#111827]">Order Concepts</h3>
+            <span class="text-[11.5px] text-[#4f46e5] font-semibold" id="tracker-concepts-count">1 concept</span>
+          </div>
+
+          <div id="tracker-concepts-list" class="flex flex-col gap-3">
+            <!-- Concepts populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Safe Escrow Notice -->
+        <div class="w-full bg-gradient-to-br from-[#f8fafc] to-[#f1f5f9] border border-[#e2e8f0] rounded-[18px] p-5">
+          <div class="flex items-center gap-2 mb-2 text-[#0f172a] font-bold text-[13px]">
+            <svg class="w-4 h-4 text-[#10b981]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            <span>Buyer Escrow Protection</span>
+          </div>
+          <p class="text-[11.5px] text-[#475569] leading-relaxed mb-3">
+            Your payment is held safely in escrow. Franci and Emilia will deliver unedited footage. You review everything before funds are released.
+          </p>
+          <div class="text-[11px] text-[#64748b] flex items-center justify-between border-t border-[#e2e8f0] pt-2.5">
+            <span>Support: live 24/7</span>
+            <a href="mailto:support@dansugc.com" class="text-[#4f46e5] font-semibold hover:underline">Contact Concierge</a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Creator Chat Drawer / Modal (Interactive messaging) -->
+  <div id="chat-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in duration-150">
+    <div class="bg-white rounded-[20px] max-w-[440px] w-full shadow-2xl border border-[#e5e7eb] flex flex-col overflow-hidden animate-in zoom-in-95 duration-150">
+      
+      <!-- Chat Header -->
+      <div class="p-4 bg-[#fafafa] border-b border-[#f1f1f4] flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full overflow-hidden bg-gray-200 border border-white shadow-xs">
+            <img id="chat-avatar" src="assets/creators_page/franci.png" alt="Creator" class="w-full h-full object-cover">
+          </div>
+          <div>
+            <div class="text-[13px] font-bold text-[#111827]" id="chat-name">Franci</div>
+            <div class="text-[11px] text-[#10b981] flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>
+              <span>Online now</span>
+            </div>
+          </div>
+        </div>
+        <button type="button" onclick="closeChat()" class="text-[#9ca3af] hover:text-[#111827] p-1 cursor-pointer">
+          ✕
+        </button>
+      </div>
+
+      <!-- Messages Body -->
+      <div id="chat-messages" class="p-4 flex flex-col gap-3 h-[250px] overflow-y-auto bg-[#fbfbfe] text-[12px]">
+        <div class="text-center text-[11px] text-[#9ca3af] my-1">Order #UGC-89420 Channel Initiated</div>
+        
+        <!-- Creator auto greeting message -->
+        <div class="flex items-start gap-2 max-w-[85%]">
+          <div class="bg-white border border-[#e5e7eb] rounded-[12px] rounded-tl-none p-3 shadow-xs text-[#374151]">
+            Hey! Thanks for sending the brief over. I'm currently reading through the concepts and will confirm filming schedule shortly!
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input -->
+      <form onsubmit="sendChatMessage(event)" class="p-3 bg-white border-t border-[#f1f1f4] flex items-center gap-2">
+        <input 
+          type="text" 
+          id="chat-input-field" 
+          placeholder="Send a quick note to creator..." 
+          class="flex-1 bg-[#f9fafb] border border-[#e5e7eb] rounded-[10px] px-3.5 py-2 text-[12.5px] text-[#18181b] focus:outline-none focus:border-[#7c66ff]"
+        />
+        <button 
+          type="submit" 
+          style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);"
+          class="text-white px-3.5 py-2 rounded-[10px] text-[12px] font-semibold hover:brightness-105 active:scale-[0.98] transition-all cursor-pointer"
+        >
+          Send
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load last finalized order
+      const stored = localStorage.getItem('dansugc_last_finalized_order') || localStorage.getItem('ugc_order_review');
+      let order = null;
+      if (stored) {
+        try {
+          order = JSON.parse(stored);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      if (!order) {
+        order = {
+          id: "UGC-89420",
+          brandName: "Your brand",
+          qty: 6,
+          rate: "30.00",
+          total: "180.00",
+          perCreator: 3,
+          concepts: [
+            {
+              title: "Concept 1",
+              type: "Reaction / footage",
+              script: "Natural, unedited first impressions opening the package and testing the product in a bright kitchen.",
+              perCreator: 3
+            }
+          ]
+        };
+      }
+
+      // Populate Order info
+      document.getElementById('order-id-display').textContent = '#' + (order.id || 'UGC-89420');
+      document.getElementById('order-brand-display').textContent = order.brandName || 'Your brand';
+      document.getElementById('order-qty-display').textContent = `${order.qty || 6} videos`;
+      document.getElementById('order-total-display').textContent = `$${order.total || '180.00'}`;
+
+      const perCreator = order.perCreator || 3;
+      const rate = order.rate || '30.00';
+      const perCreatorPayout = (perCreator * parseFloat(rate)).toFixed(2);
+
+      document.getElementById('franci-assigned-text').textContent = `${perCreator} videos ($${perCreatorPayout})`;
+      document.getElementById('emilia-assigned-text').textContent = `${perCreator} videos ($${perCreatorPayout})`;
+
+      // Populate concepts list
+      const conceptsList = document.getElementById('tracker-concepts-list');
+      conceptsList.innerHTML = '';
+
+      if (order.concepts && order.concepts.length > 0) {
+        document.getElementById('tracker-concepts-count').textContent = `${order.concepts.length} concept${order.concepts.length === 1 ? '' : 's'}`;
+        order.concepts.forEach((concept, idx) => {
+          const item = document.createElement('div');
+          item.className = "p-3 rounded-[10px] bg-[#f9fafb] border border-[#f1f1f4] text-[12px]";
+          item.innerHTML = `
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-bold text-[#111827]">${concept.title || `Concept ${idx + 1}`}</span>
+              <span class="text-[10px] text-[#6366f1] bg-[#eef2ff] px-1.5 py-0.2 rounded font-medium">${concept.type || 'Reaction / footage'}</span>
+            </div>
+            <p class="text-[11.5px] text-[#52525b] line-clamp-2">${concept.script ? escapeHtml(concept.script) : 'Unedited natural reaction footage.'}</p>
+          `;
+          conceptsList.appendChild(item);
+        });
+      }
+
+      // Simulate real-time creator heartbeat check
+      simulateRealtimeHeartbeat();
+    });
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.innerText = text;
+      return div.innerHTML;
+    }
+
+    function simulateRealtimeHeartbeat() {
+      // Simulate real-time updates after 6 seconds to show dynamic live activity
+      setTimeout(() => {
+        const franciTag = document.getElementById('franci-status-tag');
+        if (franciTag) {
+          franciTag.textContent = "Accepted brief · Preparing shoot";
+          franciTag.className = "font-semibold text-[#059669]";
+        }
+
+        const stream = document.getElementById('activity-log-stream');
+        if (stream) {
+          const newEvent = document.createElement('div');
+          newEvent.className = "flex items-start gap-3 p-3 rounded-[10px] bg-[#ecfdf5] border border-[#a7f3d0] animate-in fade-in duration-300";
+          newEvent.innerHTML = `
+            <span class="w-2 h-2 rounded-full bg-[#10b981] mt-1.5 shrink-0"></span>
+            <div class="flex-1 text-[12px]">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-[#065f46]">Franci Accepted Brief ✓</span>
+                <span class="text-[10.5px] text-[#047857]">Just now</span>
+              </div>
+              <p class="text-[#047857] mt-0.5">Creator accepted your 3 video concepts and confirmed delivery within 48h.</p>
+            </div>
+          `;
+          stream.insertBefore(newEvent, stream.firstChild);
+        }
+      }, 5000);
+    }
+
+    // Chat modal controls
+    function openChat(name, handle, avatar) {
+      document.getElementById('chat-name').textContent = name;
+      document.getElementById('chat-avatar').src = avatar;
+      document.getElementById('chat-modal').classList.remove('hidden');
+      setTimeout(() => {
+        document.getElementById('chat-input-field').focus();
+      }, 100);
+    }
+
+    function closeChat() {
+      document.getElementById('chat-modal').classList.add('hidden');
+    }
+
+    function sendChatMessage(e) {
+      e.preventDefault();
+      const input = document.getElementById('chat-input-field');
+      const val = input.value.trim();
+      if (!val) return;
+
+      const container = document.getElementById('chat-messages');
+      const myMsg = document.createElement('div');
+      myMsg.className = "flex items-start justify-end gap-2 max-w-[85%] self-end";
+      myMsg.innerHTML = `
+        <div class="bg-[#4f46e5] text-white rounded-[12px] rounded-tr-none p-3 shadow-xs">
+          ${escapeHtml(val)}
+        </div>
+      `;
+      container.appendChild(myMsg);
+      input.value = '';
+      container.scrollTop = container.scrollHeight;
+
+      // Creator auto reply after 1.5s
+      setTimeout(() => {
+        const reply = document.createElement('div');
+        reply.className = "flex items-start gap-2 max-w-[85%] animate-in fade-in duration-200";
+        reply.innerHTML = `
+          <div class="bg-white border border-[#e5e7eb] rounded-[12px] rounded-tl-none p-3 shadow-xs text-[#374151]">
+            Got it, will keep that in mind while shooting the reaction footage!
+          </div>
+        `;
+        container.appendChild(reply);
+        container.scrollTop = container.scrollHeight;
+      }, 1500);
+    }
+  </script>
+
+</body>
+</html>
