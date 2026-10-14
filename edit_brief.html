@@ -88,7 +88,7 @@
     </div>
 
     <!-- Alert / Banner -->
-    <div class="w-full bg-[#fef2f2] border border-[#fecaca] rounded-[10px] px-4 py-2.5 mb-6 text-[12px] text-[#dc2626]">
+    <div id="validation-banner" class="w-full bg-[#fef2f2] border border-[#fecaca] rounded-[10px] px-4 py-2.5 mb-6 text-[12px] text-[#dc2626] transition-colors">
       Complete the brand details, each video and the filming instructions.
     </div>
 
@@ -153,7 +153,9 @@
           <label class="text-[12px] font-bold text-[#111827] mb-1.5">Brand name</label>
           <input 
             type="text" 
+            id="brand-name-input"
             value="Your brand"
+            oninput="checkBriefValidity()"
             class="w-full bg-white border border-[#e5e7eb] rounded-[10px] px-3.5 py-2.5 text-[13px] text-[#18181b] focus:outline-none focus:border-[#7c66ff] shadow-sm"
           />
         </div>
@@ -163,6 +165,9 @@
           <label class="text-[12px] font-bold text-[#111827] mb-1.5">About the brand</label>
           <textarea 
             rows="5" 
+            id="about-brand-input"
+            oninput="checkBriefValidity()"
+            placeholder="Tell creators what your brand does, your product, and target audience..."
             class="w-full bg-white border border-[#e5e7eb] rounded-[10px] p-3.5 text-[13px] text-[#18181b] focus:outline-none focus:border-[#7c66ff] shadow-sm resize-y min-h-[110px]"
           ></textarea>
         </div>
@@ -340,7 +345,9 @@
               <div class="relative mt-1">
                 <textarea 
                   rows="6" 
-                  class="w-full bg-white border border-[#e5e7eb] rounded-[10px] p-3.5 text-[13px] text-[#18181b] focus:outline-none focus:border-[#7c66ff] shadow-sm resize-y min-h-[140px]"
+                  oninput="checkBriefValidity()"
+                  placeholder="Describe your video script or unedited footage instructions here..."
+                  class="concept-script-textarea w-full bg-white border border-[#e5e7eb] rounded-[10px] p-3.5 text-[13px] text-[#18181b] focus:outline-none focus:border-[#7c66ff] shadow-sm resize-y min-h-[140px]"
                 ></textarea>
               </div>
 
@@ -370,6 +377,8 @@
           <label class="text-[12px] font-bold text-[#111827] mb-1.5">Filming instructions</label>
           <textarea 
             rows="3" 
+            id="filming-instructions-input"
+            oninput="checkBriefValidity()"
             class="w-full bg-white border border-[#e5e7eb] rounded-[10px] p-3.5 text-[12.5px] text-[#374151] focus:outline-none focus:border-[#7c66ff] shadow-sm resize-y min-h-[75px]"
           >Film vertically with natural light. Deliver unedited footage.</textarea>
         </div>
@@ -431,7 +440,9 @@
           <!-- Primary Action Button -->
           <button 
             type="button" 
-            class="w-full bg-[#9fa2fb] hover:bg-[#8e91f9] active:scale-[0.99] text-white text-[12.5px] font-semibold py-3 px-4 rounded-[12px] flex items-center justify-center gap-1.5 transition-all shadow-sm cursor-pointer mb-2.5"
+            id="save-review-btn-sidebar"
+            onclick="handleSaveAndReview()"
+            class="w-full bg-[#9fa2fb] hover:bg-[#8e91f9] active:scale-[0.99] text-white text-[12.5px] font-semibold py-3 px-4 rounded-[12px] flex items-center justify-center gap-1.5 transition-all shadow-sm cursor-pointer mb-2.5 opacity-80"
           >
             <span>Save changes & review</span>
             <span class="text-[14px] leading-none">&rarr;</span>
@@ -466,7 +477,9 @@
       </div>
       <button 
         type="button"
-        class="bg-[#9fa2fb] hover:bg-[#8e91f9] text-white text-[12px] font-semibold px-4 py-2 rounded-[10px] flex items-center gap-1.5 transition-all"
+        id="save-review-btn-floating"
+        onclick="handleSaveAndReview()"
+        class="bg-[#9fa2fb] hover:bg-[#8e91f9] text-white text-[12px] font-semibold px-4 py-2 rounded-[10px] flex items-center gap-1.5 transition-all cursor-pointer opacity-80"
       >
         <span>Save & review</span>
         <span class="text-[13px] leading-none">&rarr;</span>
@@ -635,6 +648,11 @@
 
       // 12. Update visibility of delete buttons
       updateConceptDeleteButtons();
+
+      // 13. Update form completion state & button readiness
+      if (typeof checkBriefValidity === 'function') {
+        checkBriefValidity();
+      }
     }
 
     // Dynamic concept count tracker
@@ -807,7 +825,9 @@
         <div class="relative mt-1">
           <textarea 
             rows="6" 
-            class="w-full bg-white border border-[#e5e7eb] rounded-[10px] p-3.5 text-[13px] text-[#18181b] focus:outline-none focus:border-[#7c66ff] shadow-sm resize-y min-h-[140px]"
+            oninput="checkBriefValidity()"
+            placeholder="Describe your video script or unedited footage instructions here..."
+            class="concept-script-textarea w-full bg-white border border-[#e5e7eb] rounded-[10px] p-3.5 text-[13px] text-[#18181b] focus:outline-none focus:border-[#7c66ff] shadow-sm resize-y min-h-[140px]"
           ></textarea>
         </div>
 
@@ -926,11 +946,151 @@
       }
     });
 
+    // Form validation and Save & Review logic
+    function checkBriefValidity() {
+      const brandName = document.getElementById('brand-name-input')?.value.trim();
+      const aboutBrand = document.getElementById('about-brand-input')?.value.trim();
+      const filmingInstructions = document.getElementById('filming-instructions-input')?.value.trim();
+      
+      const scriptTextareas = document.querySelectorAll('.concept-script-textarea');
+      let allScriptsFilled = scriptTextareas.length > 0;
+      scriptTextareas.forEach(ta => {
+        if (!ta.value.trim()) allScriptsFilled = false;
+      });
+
+      const isValid = Boolean(brandName && aboutBrand && filmingInstructions && allScriptsFilled);
+      updateValidationUI(isValid);
+      return isValid;
+    }
+
+    function updateValidationUI(isValid) {
+      const banner = document.getElementById('validation-banner');
+      const btnSidebar = document.getElementById('save-review-btn-sidebar');
+      const btnFloating = document.getElementById('save-review-btn-floating');
+
+      if (isValid) {
+        if (banner) {
+          banner.className = "w-full bg-[#ecfdf5] border border-[#a7f3d0] rounded-[10px] px-4 py-2.5 mb-6 text-[12px] text-[#065f46] flex items-center justify-between transition-colors";
+          banner.innerHTML = `
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#10b981]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="font-semibold">All details completed!</span>
+              <span class="text-[#047857]">You can now click Save & review to finalize your order.</span>
+            </div>
+          `;
+        }
+        const activeBtnStyle = "background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);";
+        const activeSidebarClass = "w-full text-white text-[12.5px] font-semibold py-3 px-4 rounded-[12px] flex items-center justify-center gap-1.5 shadow-[0_3px_12px_rgba(33,58,231,0.25)] hover:shadow-[0_6px_20px_rgba(33,58,231,0.4)] hover:brightness-105 active:scale-[0.98] transition-all cursor-pointer mb-2.5";
+        const activeFloatingClass = "text-white text-[12px] font-semibold px-4 py-2 rounded-[10px] flex items-center gap-1.5 shadow-[0_3px_12px_rgba(33,58,231,0.25)] hover:shadow-[0_6px_20px_rgba(33,58,231,0.4)] hover:brightness-105 active:scale-[0.98] transition-all cursor-pointer";
+
+        if (btnSidebar) {
+          btnSidebar.style.cssText = activeBtnStyle;
+          btnSidebar.className = activeSidebarClass;
+        }
+        if (btnFloating) {
+          btnFloating.style.cssText = activeBtnStyle;
+          btnFloating.className = activeFloatingClass;
+        }
+      } else {
+        if (banner) {
+          banner.className = "w-full bg-[#fef2f2] border border-[#fecaca] rounded-[10px] px-4 py-2.5 mb-6 text-[12px] text-[#dc2626] transition-colors";
+          banner.innerHTML = `Complete the brand details, each video and the filming instructions.`;
+        }
+        const inactiveSidebarClass = "w-full bg-[#9fa2fb] hover:bg-[#8e91f9] active:scale-[0.99] text-white text-[12.5px] font-semibold py-3 px-4 rounded-[12px] flex items-center justify-center gap-1.5 transition-all shadow-sm cursor-pointer mb-2.5 opacity-80";
+        const inactiveFloatingClass = "bg-[#9fa2fb] hover:bg-[#8e91f9] text-white text-[12px] font-semibold px-4 py-2 rounded-[10px] flex items-center gap-1.5 transition-all cursor-pointer opacity-80";
+
+        if (btnSidebar) {
+          btnSidebar.style.cssText = "";
+          btnSidebar.className = inactiveSidebarClass;
+        }
+        if (btnFloating) {
+          btnFloating.style.cssText = "";
+          btnFloating.className = inactiveFloatingClass;
+        }
+      }
+    }
+
+    function handleSaveAndReview() {
+      const brandNameInput = document.getElementById('brand-name-input');
+      const aboutBrandInput = document.getElementById('about-brand-input');
+      const filmingInstructionsInput = document.getElementById('filming-instructions-input');
+      const scriptTextareas = document.querySelectorAll('.concept-script-textarea');
+
+      let firstEmpty = null;
+      if (!brandNameInput?.value.trim()) firstEmpty = brandNameInput;
+      else if (!aboutBrandInput?.value.trim()) firstEmpty = aboutBrandInput;
+      else {
+        for (let ta of scriptTextareas) {
+          if (!ta.value.trim()) {
+            firstEmpty = ta;
+            break;
+          }
+        }
+        if (!firstEmpty && !filmingInstructionsInput?.value.trim()) {
+          firstEmpty = filmingInstructionsInput;
+        }
+      }
+
+      if (firstEmpty) {
+        firstEmpty.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        firstEmpty.focus();
+        firstEmpty.classList.add('ring-2', 'ring-[#ef4444]', 'border-[#ef4444]');
+        setTimeout(() => {
+          firstEmpty.classList.remove('ring-2', 'ring-[#ef4444]', 'border-[#ef4444]');
+        }, 2000);
+        return;
+      }
+
+      // Collect complete order brief details
+      const concepts = [];
+      const blocks = document.querySelectorAll('#concepts-container > div');
+      blocks.forEach((block, idx) => {
+        const title = block.querySelector('.concept-title-text')?.textContent.trim() || `Concept ${idx + 1}`;
+        const typeEl = block.querySelector('[id^="selected-video-type-text-"]');
+        const type = typeEl ? typeEl.textContent.trim() : 'Reaction / footage';
+        const script = block.querySelector('.concept-script-textarea')?.value.trim() || '';
+        const perCreator = block.querySelector('.per-creator-input')?.value.trim() || '3';
+        concepts.push({ title, type, script, perCreator });
+      });
+
+      const rate = getRateForQty(currentQty);
+      const total = (currentQty * rate).toFixed(2);
+      const perCreator = Math.ceil(currentQty / 2);
+
+      const orderPayload = {
+        brandName: brandNameInput.value.trim(),
+        aboutBrand: aboutBrandInput.value.trim(),
+        filmingInstructions: filmingInstructionsInput.value.trim(),
+        qty: currentQty,
+        rate: rate.toFixed(2),
+        total: total,
+        perCreator: perCreator,
+        concepts: concepts
+      };
+
+      try {
+        localStorage.setItem('ugc_order_review', JSON.stringify(orderPayload));
+      } catch (e) {
+        console.error(e);
+      }
+
+      window.location.href = 'review_order.html';
+    }
+
     // Expose functions on window
     window.addNewConcept = addNewConcept;
     window.removeConcept = removeConcept;
     window.toggleDynamicDropdown = toggleDynamicDropdown;
     window.selectDynamicOption = selectDynamicOption;
+    window.checkBriefValidity = checkBriefValidity;
+    window.handleSaveAndReview = handleSaveAndReview;
+
+    // Check validity on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      checkBriefValidity();
+    });
   </script>
 
 </body>
