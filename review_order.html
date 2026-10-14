@@ -289,7 +289,7 @@
 
   <!-- Finalize Confirmation Modal (Hidden by default) -->
   <div id="confirmation-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in duration-200">
-    <div class="bg-white rounded-[20px] max-w-[480px] w-full p-6 sm:p-8 text-center shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] border border-[#e5e7eb] transform animate-in zoom-in-95 duration-200">
+    <div class="bg-white rounded-[22px] max-w-[500px] w-full p-6 sm:p-8 text-center shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] border border-[#e5e7eb] transform animate-in zoom-in-95 duration-200">
       
       <!-- Green Success Icon -->
       <div class="w-16 h-16 rounded-full bg-[#ecfdf5] border-4 border-[#d1fae5] flex items-center justify-center mx-auto mb-4 text-[#10b981]">
@@ -299,18 +299,60 @@
       </div>
 
       <!-- Modal Titles -->
-      <span class="text-[11.5px] font-bold text-[#6366f1] bg-[#eef2ff] px-2.5 py-1 rounded-full uppercase tracking-wider inline-block mb-2">
-        Order Placed Successfully
+      <span class="text-[11px] font-bold text-[#059669] bg-[#ecfdf5] border border-[#a7f3d0] px-3 py-1 rounded-full uppercase tracking-wider inline-flex items-center gap-1.5 mb-2">
+        <span class="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></span>
+        Order Finalized & Sent via Platform
       </span>
       <h3 class="text-[22px] font-bold text-[#111827] tracking-tight mb-2">
-        Your brief has been submitted!
+        Dispatched to chosen creators!
       </h3>
-      <p class="text-[13px] text-[#52525b] leading-relaxed mb-6">
-        Order <span class="font-semibold text-[#18181b]">#UGC-89420</span> has been dispatched to <span class="font-semibold text-[#18181b]">Franci & Emilia</span>. They will review your concepts and start filming once accepted.
+      <p class="text-[12.5px] text-[#52525b] leading-relaxed mb-5">
+        Order <span id="modal-order-id" class="font-bold text-[#18181b]">#UGC-89420</span> has been finalized and sent directly via the platform to your chosen creators:
       </p>
 
+      <!-- Creators delivery status rows -->
+      <div class="flex flex-col gap-2.5 mb-5 text-left">
+        <!-- Creator 1 -->
+        <div class="flex items-center justify-between p-3 rounded-[12px] bg-[#f9fafb] border border-[#f1f1f4]">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full overflow-hidden bg-gray-200 shrink-0 border border-white shadow-xs">
+              <img src="assets/creators_page/franci.png" alt="Franci" class="w-full h-full object-cover">
+            </div>
+            <div>
+              <div class="text-[13px] font-bold text-[#111827]">Franci</div>
+              <div class="text-[11px] text-[#71717a]" id="modal-franci-sub">3 videos assigned · $90.00</div>
+            </div>
+          </div>
+          <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-[#059669] bg-[#ecfdf5] px-2 py-0.5 rounded-md">
+            <svg class="w-3.5 h-3.5 text-[#10b981]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            Sent to inbox
+          </span>
+        </div>
+
+        <!-- Creator 2 -->
+        <div class="flex items-center justify-between p-3 rounded-[12px] bg-[#f9fafb] border border-[#f1f1f4]">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full overflow-hidden bg-gray-200 shrink-0 border border-white shadow-xs">
+              <img src="assets/creators_page/emilia.png" alt="Emilia" class="w-full h-full object-cover">
+            </div>
+            <div>
+              <div class="text-[13px] font-bold text-[#111827]">Emilia</div>
+              <div class="text-[11px] text-[#71717a]" id="modal-emilia-sub">3 videos assigned · $90.00</div>
+            </div>
+          </div>
+          <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-[#059669] bg-[#ecfdf5] px-2 py-0.5 rounded-md">
+            <svg class="w-3.5 h-3.5 text-[#10b981]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            Sent to inbox
+          </span>
+        </div>
+      </div>
+
       <!-- Order Summary Pill inside modal -->
-      <div class="bg-[#f9fafb] border border-[#f1f1f4] rounded-[12px] p-3.5 mb-6 text-[12px] flex items-center justify-between text-[#4b5563]">
+      <div class="bg-[#f9fafb] border border-[#f1f1f4] rounded-[12px] p-3 mb-6 text-[12px] flex items-center justify-between text-[#4b5563]">
         <span id="modal-summary-text">6 videos · 2 creators</span>
         <span id="modal-summary-total" class="font-bold text-[#111827] text-[13.5px]">$180.00</span>
       </div>
@@ -320,13 +362,13 @@
         <a 
           href="track_results.html"
           style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);"
-          class="w-full text-white text-[13px] font-semibold py-3 px-4 rounded-[12px] shadow-[0_3px_12px_rgba(33,58,231,0.25)] hover:brightness-105 active:scale-[0.98] transition-all"
+          class="w-full text-white text-[13px] font-semibold py-3 px-4 rounded-[12px] shadow-[0_3px_12px_rgba(33,58,231,0.25)] hover:brightness-105 active:scale-[0.98] transition-all text-center"
         >
           Track order results &rarr;
         </a>
         <a 
           href="index.html" 
-          class="w-full bg-[#f4f4f5] hover:bg-[#e4e4e7] text-[#3f3f46] text-[12.5px] font-medium py-2.5 px-4 rounded-[12px] transition-colors"
+          class="w-full bg-[#f4f4f5] hover:bg-[#e4e4e7] text-[#3f3f46] text-[12.5px] font-medium py-2.5 px-4 rounded-[12px] transition-colors text-center"
         >
           Return to home
         </a>
@@ -336,6 +378,8 @@
   </div>
 
   <script>
+    let currentOrder = null;
+
     // Load stored brief details
     document.addEventListener('DOMContentLoaded', function() {
       const stored = localStorage.getItem('ugc_order_review');
@@ -368,6 +412,8 @@
           ]
         };
       }
+
+      currentOrder = order;
 
       // Populate Brand info
       document.getElementById('review-brand-title').textContent = order.brandName || 'Your brand';
@@ -430,11 +476,94 @@
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <span>Processing order...</span>
+          <span>Finalizing & sending to creators...</span>
         `;
       }
 
+      const orderId = 'UGC-' + Math.floor(10000 + Math.random() * 90000);
+      const now = new Date().toISOString();
+
+      const orderData = currentOrder || {
+        brandName: "Your brand",
+        aboutBrand: "",
+        filmingInstructions: "",
+        qty: 6,
+        rate: "30.00",
+        total: "180.00",
+        perCreator: 3,
+        concepts: []
+      };
+
+      const finalizedOrder = {
+        id: orderId,
+        type: 'exclusive_ugc',
+        format: 'Reaction Video',
+        status: 'Sent to creators',
+        deliveryStatus: 'Dispatched via Platform to chosen creators',
+        brandName: orderData.brandName,
+        aboutBrand: orderData.aboutBrand,
+        filmingInstructions: orderData.filmingInstructions,
+        qty: orderData.qty,
+        rate: orderData.rate,
+        total: orderData.total,
+        perCreator: orderData.perCreator,
+        concepts: orderData.concepts,
+        creators: [
+          { name: 'Franci', handle: '@franci_ugc', avatar: 'assets/creators_page/franci.png', quota: orderData.perCreator, status: 'Sent & Dispatched' },
+          { name: 'Emilia', handle: '@emilia_ugc', avatar: 'assets/creators_page/emilia.png', quota: orderData.perCreator, status: 'Sent & Dispatched' }
+        ],
+        createdAt: now
+      };
+
+      // Save to localStorage
+      try {
+        const existing = JSON.parse(localStorage.getItem('dansugc_orders') || '[]');
+        existing.unshift(finalizedOrder);
+        localStorage.setItem('dansugc_orders', JSON.stringify(existing));
+        localStorage.setItem('dansugc_last_finalized_order', JSON.stringify(finalizedOrder));
+
+        // Send via platform to Franci & Emilia's creator inboxes
+        localStorage.setItem('dansugc_creator_inbox_franci', JSON.stringify({
+          orderId: orderId,
+          brandName: finalizedOrder.brandName,
+          status: 'Brief Received',
+          quota: finalizedOrder.perCreator,
+          payout: (finalizedOrder.perCreator * parseFloat(finalizedOrder.rate)).toFixed(2),
+          concepts: finalizedOrder.concepts,
+          dispatchedAt: now
+        }));
+
+        localStorage.setItem('dansugc_creator_inbox_emilia', JSON.stringify({
+          orderId: orderId,
+          brandName: finalizedOrder.brandName,
+          status: 'Brief Received',
+          quota: finalizedOrder.perCreator,
+          payout: (finalizedOrder.perCreator * parseFloat(finalizedOrder.rate)).toFixed(2),
+          concepts: finalizedOrder.concepts,
+          dispatchedAt: now
+        }));
+      } catch (e) {
+        console.error(e);
+      }
+
       setTimeout(() => {
+        if (btn) {
+          btn.innerHTML = `
+            <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>Order Finalized & Sent!</span>
+          `;
+          btn.style.background = '#059669';
+        }
+
+        document.getElementById('modal-order-id').textContent = '#' + orderId;
+        const perCreatorPayout = (orderData.perCreator * parseFloat(orderData.rate)).toFixed(2);
+        const franciSub = document.getElementById('modal-franci-sub');
+        const emiliaSub = document.getElementById('modal-emilia-sub');
+        if (franciSub) franciSub.textContent = `${orderData.perCreator} videos assigned · $${perCreatorPayout}`;
+        if (emiliaSub) emiliaSub.textContent = `${orderData.perCreator} videos assigned · $${perCreatorPayout}`;
+
         const modal = document.getElementById('confirmation-modal');
         if (modal) {
           modal.classList.remove('hidden');
