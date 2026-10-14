@@ -97,32 +97,32 @@
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-3">
         <div>
           <h2 class="text-[13px] font-bold text-[#111827] leading-tight">More videos. Better value.</h2>
-          <p class="text-[11.5px] text-[#71717a] mt-0.5">6 videos · 3 per creator</p>
+          <p id="tier-subtitle" class="text-[11.5px] text-[#71717a] mt-0.5">6 videos · 3 per creator</p>
         </div>
 
         <div class="flex items-center gap-2.5 flex-wrap">
           <!-- Option 1: 6 videos (Selected) -->
-          <button type="button" class="border border-[#7c66ff] bg-[#f5f3ff] rounded-[9px] px-3 py-1.5 text-center min-w-[76px] transition-all">
-            <div class="text-[11.5px] font-bold text-[#6366f1] leading-tight">6 videos</div>
-            <div class="text-[9.5px] text-[#6366f1] font-medium mt-0.5">Starter order</div>
+          <button id="btn-tier-6" onclick="selectTier(6)" type="button" class="border border-[#7c66ff] bg-[#f5f3ff] rounded-[9px] px-3 py-1.5 text-center min-w-[76px] transition-all cursor-pointer">
+            <div id="btn-tier-6-title" class="text-[11.5px] font-bold text-[#6366f1] leading-tight">6 videos</div>
+            <div id="btn-tier-6-sub" class="text-[9.5px] text-[#6366f1] font-medium mt-0.5">Starter order</div>
           </button>
 
           <!-- Option 2: 10 videos -->
-          <button type="button" class="border border-[#e5e7eb] bg-white hover:border-gray-300 rounded-[9px] px-3 py-1.5 text-center min-w-[76px] transition-all">
-            <div class="text-[11.5px] font-bold text-[#18181b] leading-tight">10 videos</div>
-            <div class="text-[9.5px] text-[#71717a] mt-0.5">Save 8.3% / video</div>
+          <button id="btn-tier-10" onclick="selectTier(10)" type="button" class="border border-[#e5e7eb] bg-white hover:border-gray-300 rounded-[9px] px-3 py-1.5 text-center min-w-[76px] transition-all cursor-pointer">
+            <div id="btn-tier-10-title" class="text-[11.5px] font-bold text-[#18181b] leading-tight">10 videos</div>
+            <div id="btn-tier-10-sub" class="text-[9.5px] text-[#71717a] mt-0.5">Save 8.3% / video</div>
           </button>
 
           <!-- Option 3: 20 videos -->
-          <button type="button" class="border border-[#e5e7eb] bg-white hover:border-gray-300 rounded-[9px] px-3 py-1.5 text-center min-w-[76px] transition-all">
-            <div class="text-[11.5px] font-bold text-[#18181b] leading-tight">20 videos</div>
-            <div class="text-[9.5px] text-[#71717a] mt-0.5">Save 16.7% / video</div>
+          <button id="btn-tier-20" onclick="selectTier(20)" type="button" class="border border-[#e5e7eb] bg-white hover:border-gray-300 rounded-[9px] px-3 py-1.5 text-center min-w-[76px] transition-all cursor-pointer">
+            <div id="btn-tier-20-title" class="text-[11.5px] font-bold text-[#18181b] leading-tight">20 videos</div>
+            <div id="btn-tier-20-sub" class="text-[9.5px] text-[#71717a] mt-0.5">Save 16.7% / video</div>
           </button>
 
           <!-- Option 4: +6 videos -->
-          <button type="button" class="border border-[#e5e7eb] bg-white hover:border-gray-300 rounded-[9px] px-3 py-1.5 text-center min-w-[76px] transition-all">
-            <div class="text-[11.5px] font-bold text-[#18181b] leading-tight">+6 videos</div>
-            <div class="text-[9.5px] text-[#71717a] mt-0.5">Add more</div>
+          <button id="btn-tier-add" onclick="addMoreVideos(6)" type="button" class="border border-[#e5e7eb] bg-white hover:border-gray-300 rounded-[9px] px-3 py-1.5 text-center min-w-[76px] transition-all cursor-pointer">
+            <div id="btn-tier-add-title" class="text-[11.5px] font-bold text-[#18181b] leading-tight">+6 videos</div>
+            <div id="btn-tier-add-sub" class="text-[9.5px] text-[#71717a] mt-0.5">Add more</div>
           </button>
         </div>
       </div>
@@ -171,7 +171,7 @@
         <div class="flex flex-col">
           <label class="text-[12px] font-bold text-[#111827] mb-1.5">Order details</label>
           <div class="w-full bg-[#f9fafb] border border-[#f3f4f6] rounded-[10px] p-4 text-[12px] text-[#4b5563] leading-relaxed">
-            <p class="font-normal text-[#18181b]">6 videos · 2 creators · 1 concept</p>
+            <p id="order-details-summary" class="font-normal text-[#18181b]">6 videos · 2 creators · 1 concept</p>
             <p class="text-[#71717a] mt-0.5">Each creator films the quantities listed below.</p>
           </div>
         </div>
@@ -187,7 +187,7 @@
                 <span class="text-[13.5px] font-bold text-[#111827]">Concept 1</span>
                 <p class="text-[11px] text-[#71717a] mt-0.5">Reaction Video · Reaction / footage</p>
               </div>
-              <span class="text-[12px] font-bold text-[#111827]">$30.00 / video</span>
+              <span id="concept-unit-price" class="text-[12px] font-bold text-[#111827]">$30.00 / video</span>
             </div>
 
             <!-- Fields: Recommended video type & Per creator -->
@@ -210,7 +210,9 @@
                 <label class="block text-[11.5px] font-semibold text-[#374151] mb-1.5 text-left sm:text-center">Per creator</label>
                 <input 
                   type="text" 
+                  id="per-creator-input"
                   value="3" 
+                  oninput="updateFromPerCreator(this.value)"
                   class="w-full bg-white border border-[#e5e7eb] rounded-[8px] py-2 text-center text-[12.5px] text-[#18181b] font-medium focus:outline-none focus:border-[#7c66ff] shadow-sm"
                 />
               </div>
@@ -235,7 +237,7 @@
             <!-- Concept Footer details -->
             <div class="flex items-center justify-between text-[11px] text-[#71717a] px-0.5">
               <span>Delivered unedited</span>
-              <span>6 videos · $180.00</span>
+              <span id="concept-footer-price">6 videos · $180.00</span>
             </div>
 
             <!-- Add another video concept button -->
@@ -276,7 +278,7 @@
           <!-- Estimate Item -->
           <div class="mb-4">
             <div class="text-[13px] font-bold text-[#111827]">Reaction Video</div>
-            <div class="text-[11.5px] text-[#71717a]">6 videos · 1 concepts</div>
+            <div id="estimate-subtitle" class="text-[11.5px] text-[#71717a]">6 videos · 1 concepts</div>
           </div>
 
           <!-- Selected Creators Avatars & Video counts -->
@@ -286,7 +288,7 @@
               <img src="assets/creators_page/franci.png" alt="Franci" class="w-8 h-8 rounded-full object-cover" />
               <div>
                 <div class="text-[12px] font-bold text-[#18181b] leading-tight">Franci</div>
-                <div class="text-[11px] text-[#71717a]">3 videos</div>
+                <div id="creator-1-count" class="text-[11px] text-[#71717a]">3 videos</div>
               </div>
             </div>
 
@@ -295,21 +297,21 @@
               <img src="assets/creators_page/emilia.png" alt="Emilia" class="w-8 h-8 rounded-full object-cover" />
               <div>
                 <div class="text-[12px] font-bold text-[#18181b] leading-tight">Emilia</div>
-                <div class="text-[11px] text-[#71717a]">3 videos</div>
+                <div id="creator-2-count" class="text-[11px] text-[#71717a]">3 videos</div>
               </div>
             </div>
           </div>
 
           <!-- Calculation Line -->
-          <div class="pt-3 pb-5 border-t border-[#f3f4f6] flex items-center justify-between text-[11.5px] text-[#4b5563]">
-            <span>6 videos &times; $30.00</span>
-            <span class="text-[#18181b] font-medium">= $180.00</span>
+          <div id="estimate-calc-line" class="pt-3 pb-5 border-t border-[#f3f4f6] flex items-center justify-between text-[11.5px] text-[#4b5563]">
+            <span id="estimate-calc-qty">6 videos &times; $30.00</span>
+            <span id="estimate-calc-total" class="text-[#18181b] font-medium">= $180.00</span>
           </div>
 
           <!-- Estimated Total -->
           <div class="pt-1 pb-5 border-t border-[#f3f4f6] flex items-center justify-between">
             <span class="text-[12.5px] font-bold text-[#111827]">Estimated total</span>
-            <span class="text-[20px] font-bold text-[#111827] tracking-tight">$180.00</span>
+            <span id="estimate-total-price" class="text-[20px] font-bold text-[#111827] tracking-tight">$180.00</span>
           </div>
 
           <!-- Primary Action Button -->
@@ -345,7 +347,7 @@
         </svg>
       </button>
       <div class="text-left pr-2">
-        <div class="text-[12px] font-bold text-[#111827] leading-tight">6 videos · $180.00</div>
+        <div id="floating-bar-price" class="text-[12px] font-bold text-[#111827] leading-tight">6 videos · $180.00</div>
         <div class="text-[10px] text-[#71717a] leading-tight mt-0.5">Review before you pay</div>
       </div>
       <button 
@@ -358,6 +360,168 @@
     </div>
 
   </main>
+
+  <script>
+    let currentQty = 6;
+    const baseRate = 30.00;
+
+    function getRateForQty(qty) {
+      if (qty >= 20) {
+        return 25.00; // Save 16.7% ($25.00 / video)
+      } else if (qty >= 10) {
+        return 27.50; // Save 8.3% ($27.50 / video)
+      } else {
+        return 30.00; // Starter ($30.00 / video)
+      }
+    }
+
+    function selectTier(qty) {
+      currentQty = qty;
+      updateUI();
+    }
+
+    function addMoreVideos(increment) {
+      currentQty += increment;
+      updateUI();
+    }
+
+    function updateFromPerCreator(val) {
+      const perCreator = parseInt(val, 10);
+      if (!isNaN(perCreator) && perCreator > 0) {
+        currentQty = perCreator * 2;
+        updateUI(true);
+      }
+    }
+
+    function updateUI(skipInputSync = false) {
+      const rate = getRateForQty(currentQty);
+      const total = currentQty * rate;
+      const perCreator = Math.ceil(currentQty / 2);
+
+      const formattedRate = '$' + rate.toFixed(2);
+      const formattedTotal = '$' + total.toFixed(2);
+
+      // 1. Tier subtitle
+      const tierSubtitle = document.getElementById('tier-subtitle');
+      if (tierSubtitle) {
+        tierSubtitle.textContent = `${currentQty} videos · ${perCreator} per creator`;
+      }
+
+      // 2. Button states
+      const btn6 = document.getElementById('btn-tier-6');
+      const btn10 = document.getElementById('btn-tier-10');
+      const btn20 = document.getElementById('btn-tier-20');
+      const btnAdd = document.getElementById('btn-tier-add');
+
+      const btn6Title = document.getElementById('btn-tier-6-title');
+      const btn6Sub = document.getElementById('btn-tier-6-sub');
+      const btn10Title = document.getElementById('btn-tier-10-title');
+      const btn10Sub = document.getElementById('btn-tier-10-sub');
+      const btn20Title = document.getElementById('btn-tier-20-title');
+      const btn20Sub = document.getElementById('btn-tier-20-sub');
+      const btnAddTitle = document.getElementById('btn-tier-add-title');
+      const btnAddSub = document.getElementById('btn-tier-add-sub');
+
+      const activeClass = "border border-[#7c66ff] bg-[#f5f3ff] rounded-[9px] px-3 py-1.5 text-center min-w-[76px] transition-all cursor-pointer";
+      const inactiveClass = "border border-[#e5e7eb] bg-white hover:border-gray-300 rounded-[9px] px-3 py-1.5 text-center min-w-[76px] transition-all cursor-pointer";
+
+      // Reset all buttons to inactive first
+      if (btn6) btn6.className = inactiveClass;
+      if (btn10) btn10.className = inactiveClass;
+      if (btn20) btn20.className = inactiveClass;
+      if (btnAdd) btnAdd.className = inactiveClass;
+
+      if (btn6Title) btn6Title.className = "text-[11.5px] font-bold text-[#18181b] leading-tight";
+      if (btn6Sub) btn6Sub.className = "text-[9.5px] text-[#71717a] mt-0.5";
+      if (btn10Title) btn10Title.className = "text-[11.5px] font-bold text-[#18181b] leading-tight";
+      if (btn10Sub) btn10Sub.className = "text-[9.5px] text-[#71717a] mt-0.5";
+      if (btn20Title) btn20Title.className = "text-[11.5px] font-bold text-[#18181b] leading-tight";
+      if (btn20Sub) btn20Sub.className = "text-[9.5px] text-[#71717a] mt-0.5";
+      if (btnAddTitle) btnAddTitle.className = "text-[11.5px] font-bold text-[#18181b] leading-tight";
+      if (btnAddSub) btnAddSub.className = "text-[9.5px] text-[#71717a] mt-0.5";
+
+      if (currentQty === 6) {
+        if (btn6) btn6.className = activeClass;
+        if (btn6Title) btn6Title.className = "text-[11.5px] font-bold text-[#6366f1] leading-tight";
+        if (btn6Sub) btn6Sub.className = "text-[9.5px] text-[#6366f1] font-medium mt-0.5";
+      } else if (currentQty === 10) {
+        if (btn10) btn10.className = activeClass;
+        if (btn10Title) btn10Title.className = "text-[11.5px] font-bold text-[#6366f1] leading-tight";
+        if (btn10Sub) btn10Sub.className = "text-[9.5px] text-[#6366f1] font-medium mt-0.5";
+      } else if (currentQty === 20) {
+        if (btn20) btn20.className = activeClass;
+        if (btn20Title) btn20Title.className = "text-[11.5px] font-bold text-[#6366f1] leading-tight";
+        if (btn20Sub) btn20Sub.className = "text-[9.5px] text-[#6366f1] font-medium mt-0.5";
+      } else {
+        if (btnAdd) btnAdd.className = activeClass;
+        if (btnAddTitle) {
+          btnAddTitle.textContent = `${currentQty} videos`;
+          btnAddTitle.className = "text-[11.5px] font-bold text-[#6366f1] leading-tight";
+        }
+        if (btnAddSub) btnAddSub.className = "text-[9.5px] text-[#6366f1] font-medium mt-0.5";
+      }
+
+      // Reset +6 button text if 6, 10, or 20 is selected
+      if (currentQty === 6 || currentQty === 10 || currentQty === 20) {
+        if (btnAddTitle) btnAddTitle.textContent = "+6 videos";
+        if (btnAddSub) btnAddSub.textContent = "Add more";
+      }
+
+      // 3. Order details summary
+      const orderDetailsSummary = document.getElementById('order-details-summary');
+      if (orderDetailsSummary) {
+        orderDetailsSummary.textContent = `${currentQty} videos · 2 creators · 1 concept`;
+      }
+
+      // 4. Concept 1 unit price
+      const conceptUnitPrice = document.getElementById('concept-unit-price');
+      if (conceptUnitPrice) {
+        conceptUnitPrice.textContent = `${formattedRate} / video`;
+      }
+
+      // 5. Per creator input
+      if (!skipInputSync) {
+        const perCreatorInput = document.getElementById('per-creator-input');
+        if (perCreatorInput) {
+          perCreatorInput.value = perCreator;
+        }
+      }
+
+      // 6. Concept footer price
+      const conceptFooterPrice = document.getElementById('concept-footer-price');
+      if (conceptFooterPrice) {
+        conceptFooterPrice.textContent = `${currentQty} videos · ${formattedTotal}`;
+      }
+
+      // 7. Live estimate subtitle
+      const estimateSubtitle = document.getElementById('estimate-subtitle');
+      if (estimateSubtitle) {
+        estimateSubtitle.textContent = `${currentQty} videos · 1 concepts`;
+      }
+
+      // 8. Creator counts
+      const creator1 = document.getElementById('creator-1-count');
+      const creator2 = document.getElementById('creator-2-count');
+      if (creator1) creator1.textContent = `${perCreator} videos`;
+      if (creator2) creator2.textContent = `${perCreator} videos`;
+
+      // 9. Calculation line
+      const calcQty = document.getElementById('estimate-calc-qty');
+      const calcTotal = document.getElementById('estimate-calc-total');
+      if (calcQty) calcQty.innerHTML = `${currentQty} videos &times; ${formattedRate}`;
+      if (calcTotal) calcTotal.textContent = `= ${formattedTotal}`;
+
+      // 10. Estimated total
+      const estTotal = document.getElementById('estimate-total-price');
+      if (estTotal) estTotal.textContent = formattedTotal;
+
+      // 11. Floating bottom bar price
+      const floatingBarPrice = document.getElementById('floating-bar-price');
+      if (floatingBarPrice) {
+        floatingBarPrice.textContent = `${currentQty} videos · ${formattedTotal}`;
+      }
+    }
+  </script>
 
 </body>
 </html>

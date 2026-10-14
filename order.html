@@ -381,9 +381,14 @@
             type="number"
             id="creator-pay"
             value="25"
+            step="0.01"
+            min="25"
             oninput="updateCustomPricingFromInput(this.value)"
             class="w-full h-[42px] px-3.5 rounded-[10px] border border-[#e5e7eb] text-[13.5px] text-[#18181b] focus:outline-none focus:border-[#5046e5] focus:ring-1 focus:ring-[#5046e5] bg-white transition-all"
           />
+          <p class="text-[11.5px] text-[#71717a] font-normal mt-1.5">
+            Minimum $25 per video. The creator receives this full amount.
+          </p>
         </div>
 
       </div>
@@ -430,7 +435,10 @@
           <!-- Publish Button -->
           <button
             type="button"
-            class="w-full h-[44px] bg-[#5046e5] hover:bg-[#4338ca] text-white text-[13.5px] font-semibold rounded-[10px] flex items-center justify-center gap-1.5 transition-all shadow-sm active:scale-[0.99] cursor-pointer"
+            id="publish-btn"
+            onclick="publishOpenOrder()"
+            style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);"
+            class="w-full h-[44px] text-white text-[13.5px] font-semibold rounded-[10px] flex items-center justify-center gap-1.5 shadow-[0_3px_12px_rgba(33,58,231,0.25)] hover:shadow-[0_6px_20px_rgba(33,58,231,0.4)] hover:brightness-105 active:scale-[0.98] transition-all cursor-pointer"
           >
             <span>Publish open order</span>
             <span class="text-[14px] leading-none">&rarr;</span>
@@ -563,18 +571,165 @@
     }
 
     function calculateCustomPricing(amount) {
-      const fee = Math.round(amount * 0.20);
-      const total = amount + fee;
+      const fee = +(amount * 0.20).toFixed(2);
+      const total = +(amount + fee).toFixed(2);
+
+      const format = (n) => Number.isInteger(n) ? n.toString() : n.toFixed(2);
 
       const rewardEl = document.getElementById('summary-creator-reward');
       const feeEl = document.getElementById('summary-platform-fee');
       const totalEl = document.getElementById('summary-total-fee');
 
-      if (rewardEl) rewardEl.textContent = '$' + amount;
-      if (feeEl) feeEl.textContent = '$' + fee;
-      if (totalEl) totalEl.textContent = '$' + total;
+      if (rewardEl) rewardEl.textContent = '$' + format(amount);
+      if (feeEl) feeEl.textContent = '$' + format(fee);
+      if (totalEl) totalEl.textContent = '$' + format(total);
+    }
+
+    // Publish Open Order handler
+    function publishOpenOrder() {
+      const btn = document.getElementById('publish-btn');
+      if (!btn) return;
+
+      const titleInput = document.getElementById('order-title');
+      const companyInput = document.getElementById('company-name');
+      const linkInput = document.getElementById('format-link');
+      const detailsInput = document.getElementById('order-details');
+      const payInput = document.getElementById('creator-pay');
+
+      const title = (titleInput && titleInput.value.trim()) || 'Natural cafe conversation';
+      const company = (companyInput && companyInput.value.trim()) || 'My Brand';
+      const link = (linkInput && linkInput.value.trim()) || '';
+      const details = (detailsInput && detailsInput.value.trim()) || '';
+      const formatType = currentCustomType === 'raw' ? 'Raw Footage' : 'Edited UGC';
+      const pay = (payInput && payInput.value) || '25';
+      const fee = document.getElementById('summary-platform-fee') ? document.getElementById('summary-platform-fee').textContent : '$5';
+      const total = document.getElementById('summary-total-fee') ? document.getElementById('summary-total-fee').textContent : '$30';
+      const orderId = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
+
+      const orderData = {
+        id: orderId,
+        title: title,
+        company: company,
+        formatType: formatType,
+        formatLink: link,
+        details: details,
+        creatorPay: pay,
+        platformFee: fee,
+        total: total,
+        status: 'Live & Accepting Creators',
+        createdAt: new Date().toISOString()
+      };
+
+      // Button loading state
+      btn.disabled = true;
+      btn.innerHTML = `
+        <svg class="animate-spin h-4 w-4 text-white shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>Publishing order...</span>
+      `;
+
+      setTimeout(() => {
+        // Save to localStorage
+        try {
+          const list = JSON.parse(localStorage.getItem('dansugc_orders') || '[]');
+          list.unshift(orderData);
+          localStorage.setItem('dansugc_orders', JSON.stringify(list));
+          localStorage.setItem('dansugc_last_published', JSON.stringify(orderData));
+        } catch (e) {}
+
+        // Button success state
+        btn.innerHTML = `
+          <svg class="w-4 h-4 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          <span>Order published!</span>
+        `;
+
+        // Update modal info and show
+        document.getElementById('modal-order-id').textContent = '#' + orderId;
+        document.getElementById('modal-order-title').textContent = title;
+        document.getElementById('modal-order-format').textContent = formatType;
+        document.getElementById('modal-order-pay').textContent = '$' + pay + ' / video';
+        document.getElementById('publish-modal').classList.remove('hidden');
+      }, 400);
+    }
+
+    function closePublishModal() {
+      document.getElementById('publish-modal').classList.add('hidden');
+      const btn = document.getElementById('publish-btn');
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = `
+          <span>Publish open order</span>
+          <span class="text-[14px] leading-none">&rarr;</span>
+        `;
+      }
     }
   </script>
+
+  <!-- Success Confirmation Modal -->
+  <div id="publish-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs transition-opacity">
+    <div class="bg-white rounded-[22px] max-w-[430px] w-full p-6 sm:p-7 shadow-2xl border border-gray-100 flex flex-col items-center text-center animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Success Icon -->
+      <div class="w-13 h-13 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4 text-emerald-600">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+
+      <!-- Headline -->
+      <h3 class="text-[20px] font-bold text-[#18181b] tracking-tight mb-1.5">
+        Open order published!
+      </h3>
+      <p class="text-[13px] text-[#71717a] font-normal leading-relaxed mb-5 max-w-[340px]">
+        Your project is now live for creators. You will be notified as soon as creators join and submit their videos.
+      </p>
+
+      <!-- Details Card -->
+      <div class="w-full bg-[#f9fafb] rounded-[14px] p-3.5 border border-[#f1f1f4] mb-5 text-left text-[12.5px] space-y-2">
+        <div class="flex items-center justify-between pb-1 border-b border-[#f1f1f4]">
+          <span class="text-[#71717a]">Order ID</span>
+          <div class="flex items-center gap-1.5">
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span id="modal-order-id" class="font-semibold text-[#18181b]">#ORD-10023</span>
+          </div>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-[#71717a]">Order Title</span>
+          <span id="modal-order-title" class="font-medium text-[#18181b] truncate max-w-[200px]">Natural cafe conversation</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-[#71717a]">Format</span>
+          <span id="modal-order-format" class="font-medium text-[#18181b]">Raw Footage</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-[#71717a]">Creator Reward</span>
+          <span id="modal-order-pay" class="font-semibold text-[#18181b]">$25 / video</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="w-full flex flex-col gap-2">
+        <button
+          onclick="closePublishModal()"
+          style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);"
+          class="w-full h-[42px] text-white text-[13px] font-semibold rounded-[10px] flex items-center justify-center gap-1.5 shadow-[0_3px_12px_rgba(33,58,231,0.25)] hover:shadow-[0_6px_20px_rgba(33,58,231,0.4)] hover:brightness-105 active:scale-[0.98] transition-all cursor-pointer"
+        >
+          <span>Done</span>
+        </button>
+        <a
+          href="index.html"
+          class="w-full h-[38px] bg-transparent text-[#71717a] hover:text-[#18181b] text-[12.5px] font-medium flex items-center justify-center transition-colors"
+        >
+          Return to home
+        </a>
+      </div>
+
+    </div>
+  </div>
 
 </body>
 </html>
