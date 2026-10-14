@@ -185,7 +185,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <span class="text-[13.5px] font-bold text-[#111827]">Concept 1</span>
-                <p class="text-[11px] text-[#71717a] mt-0.5">Reaction Video · Reaction / footage</p>
+                <p id="concept-subtitle" class="text-[11px] text-[#71717a] mt-0.5">Reaction Video · Reaction / footage</p>
               </div>
               <span id="concept-unit-price" class="text-[12px] font-bold text-[#111827]">$30.00 / video</span>
             </div>
@@ -194,14 +194,107 @@
             <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
               <div class="sm:col-span-10">
                 <label class="block text-[11.5px] font-semibold text-[#374151] mb-1.5">Recommended video type</label>
-                <div class="relative">
-                  <select class="w-full appearance-none bg-white border border-[#c7d2fe] rounded-[8px] px-3.5 py-2 text-[12.5px] text-[#4f46e5] font-medium focus:outline-none pr-8 cursor-pointer shadow-sm">
-                    <option selected>Reaction / footage</option>
-                  </select>
-                  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-[#6366f1]">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="relative" id="video-type-dropdown-container">
+                  <!-- Trigger Button -->
+                  <button 
+                    type="button" 
+                    id="video-type-trigger"
+                    onclick="toggleVideoTypeDropdown(event)"
+                    class="w-full bg-white border border-[#a5b4fc] rounded-[10px] px-3.5 h-[42px] flex items-center justify-between text-[13px] text-[#5046e5] font-medium focus:outline-none cursor-pointer shadow-xs transition-all hover:border-[#818cf8]"
+                  >
+                    <span id="selected-video-type-text">Reaction / footage</span>
+                    <svg class="w-4 h-4 text-[#a5b4fc] transition-transform duration-200" id="video-type-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
+                  </button>
+
+                  <!-- Popup Dropdown Menu -->
+                  <div 
+                    id="video-type-popup" 
+                    class="hidden absolute top-full left-0 mt-1.5 w-[275px] sm:w-[285px] bg-white border border-[#e5e7eb] rounded-[16px] p-2 shadow-[0_12px_28px_rgba(0,0,0,0.12),0_4px_10px_rgba(0,0,0,0.06)] z-50 text-left animate-in fade-in zoom-in-95 duration-150"
+                  >
+                    <!-- Header -->
+                    <div class="text-[11.5px] font-medium text-[#71717a] px-2.5 pt-1.5 pb-2">
+                      Video type 1
+                    </div>
+
+                    <!-- Options List -->
+                    <div class="flex flex-col gap-1">
+                      <!-- Option 1: Reaction / footage (Selected) -->
+                      <div 
+                        onclick="selectVideoTypeOption('Reaction / footage', this)"
+                        class="video-type-opt group cursor-pointer p-2.5 rounded-[10px] bg-[#f8f9fa] transition-colors"
+                      >
+                        <div class="flex items-center justify-between">
+                          <div class="flex items-center gap-1.5">
+                            <span class="text-[13px] font-semibold text-[#18181b]">Reaction / footage</span>
+                            <span class="text-[10px] font-medium text-[#6366f1] bg-[#eef2ff] px-1.5 py-0.5 rounded-[4px]">Recommended</span>
+                          </div>
+                          <span class="opt-check text-[#5046e5]">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          </span>
+                        </div>
+                        <p class="text-[11.5px] text-[#71717a] mt-0.5 leading-tight">
+                          Expressions and natural, unedited moments.
+                        </p>
+                      </div>
+
+                      <!-- Option 2: Crying / emotions -->
+                      <div 
+                        onclick="selectVideoTypeOption('Crying / emotions', this)"
+                        class="video-type-opt group cursor-pointer p-2.5 rounded-[10px] hover:bg-gray-50 transition-colors"
+                      >
+                        <div class="flex items-center justify-between">
+                          <span class="text-[13px] font-semibold text-[#18181b]">Crying / emotions</span>
+                          <span class="opt-check text-[#5046e5] hidden">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          </span>
+                        </div>
+                        <p class="text-[11.5px] text-[#71717a] mt-0.5 leading-tight">
+                          An emotional performance, without a script.
+                        </p>
+                      </div>
+
+                      <!-- Option 3: Lip-sync -->
+                      <div 
+                        onclick="selectVideoTypeOption('Lip-sync', this)"
+                        class="video-type-opt group cursor-pointer p-2.5 rounded-[10px] hover:bg-gray-50 transition-colors"
+                      >
+                        <div class="flex items-center justify-between">
+                          <span class="text-[13px] font-semibold text-[#18181b]">Lip-sync</span>
+                          <span class="opt-check text-[#5046e5] hidden">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          </span>
+                        </div>
+                        <p class="text-[11.5px] text-[#71717a] mt-0.5 leading-tight">
+                          Perform along with your reference audio.
+                        </p>
+                      </div>
+
+                      <!-- Option 4: Talking script -->
+                      <div 
+                        onclick="selectVideoTypeOption('Talking script', this)"
+                        class="video-type-opt group cursor-pointer p-2.5 rounded-[10px] hover:bg-gray-50 transition-colors"
+                      >
+                        <div class="flex items-center justify-between">
+                          <span class="text-[13px] font-semibold text-[#18181b]">Talking script</span>
+                          <span class="opt-check text-[#5046e5] hidden">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          </span>
+                        </div>
+                        <p class="text-[11.5px] text-[#71717a] mt-0.5 leading-tight">
+                          Your exact words, filmed in one continuous shot.
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -521,6 +614,64 @@
         floatingBarPrice.textContent = `${currentQty} videos · ${formattedTotal}`;
       }
     }
+
+    // Recommended video type popup dropdown functions
+    function toggleVideoTypeDropdown(e) {
+      if (e) e.stopPropagation();
+      const popup = document.getElementById('video-type-popup');
+      const chevron = document.getElementById('video-type-chevron');
+      if (popup) {
+        if (popup.classList.contains('hidden')) {
+          popup.classList.remove('hidden');
+          if (chevron) chevron.classList.add('rotate-180');
+        } else {
+          popup.classList.add('hidden');
+          if (chevron) chevron.classList.remove('rotate-180');
+        }
+      }
+    }
+
+    function selectVideoTypeOption(typeName, optEl) {
+      const labelText = document.getElementById('selected-video-type-text');
+      if (labelText) labelText.textContent = typeName;
+
+      const subtitle = document.getElementById('concept-subtitle');
+      if (subtitle) {
+        subtitle.textContent = `Reaction Video · ${typeName}`;
+      }
+
+      // Update active checkmarks & background
+      document.querySelectorAll('.video-type-opt').forEach(el => {
+        el.classList.remove('bg-[#f8f9fa]');
+        const chk = el.querySelector('.opt-check');
+        if (chk) chk.classList.add('hidden');
+      });
+
+      if (optEl) {
+        optEl.classList.add('bg-[#f8f9fa]');
+        const activeCheck = optEl.querySelector('.opt-check');
+        if (activeCheck) activeCheck.classList.remove('hidden');
+      }
+
+      // Close dropdown
+      const popup = document.getElementById('video-type-popup');
+      const chevron = document.getElementById('video-type-chevron');
+      if (popup) popup.classList.add('hidden');
+      if (chevron) chevron.classList.remove('rotate-180');
+    }
+
+    // Close dropdown on click outside
+    document.addEventListener('click', function(e) {
+      const container = document.getElementById('video-type-dropdown-container');
+      const popup = document.getElementById('video-type-popup');
+      const chevron = document.getElementById('video-type-chevron');
+      if (container && !container.contains(e.target)) {
+        if (popup && !popup.classList.contains('hidden')) {
+          popup.classList.add('hidden');
+          if (chevron) chevron.classList.remove('rotate-180');
+        }
+      }
+    });
   </script>
 
 </body>
