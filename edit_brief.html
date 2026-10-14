@@ -926,19 +926,11 @@
       }
     });
 
-    // Expose functions on window and bind click listener
+    // Expose functions on window
     window.addNewConcept = addNewConcept;
     window.removeConcept = removeConcept;
     window.toggleDynamicDropdown = toggleDynamicDropdown;
     window.selectDynamicOption = selectDynamicOption;
-
-    const addConceptBtn = document.getElementById('add-concept-btn');
-    if (addConceptBtn) {
-      addConceptBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        addNewConcept();
-      });
-    }
   </script>
 
 </body>
