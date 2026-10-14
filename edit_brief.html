@@ -191,7 +191,20 @@
                   <span class="concept-title-text text-[13.5px] font-bold text-[#111827]">Concept 1</span>
                   <p id="concept-subtitle-1" class="concept-subtitle text-[11px] text-[#71717a] mt-0.5">Reaction Video · Reaction / footage</p>
                 </div>
-                <span id="concept-unit-price" class="concept-unit-price text-[12px] font-bold text-[#111827]">$30.00 / video</span>
+                <div class="flex items-center gap-2.5">
+                  <span id="concept-unit-price" class="concept-unit-price text-[12px] font-bold text-[#111827]">$30.00 / video</span>
+                  <button 
+                    type="button" 
+                    id="concept-delete-btn-1"
+                    onclick="removeConcept(1)" 
+                    title="Delete concept"
+                    class="concept-delete-btn hidden text-[#9ca3af] hover:text-[#ef4444] transition-colors p-1.5 rounded-md hover:bg-[#fee2e2]/60 flex items-center justify-center cursor-pointer"
+                  >
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
               </div>
 
               <!-- Fields: Recommended video type & Per creator -->
@@ -619,6 +632,9 @@
       if (floatingBarPrice) {
         floatingBarPrice.textContent = `${currentQty} videos · ${formattedTotal}`;
       }
+
+      // 12. Update visibility of delete buttons
+      updateConceptDeleteButtons();
     }
 
     // Dynamic concept count tracker
@@ -641,19 +657,22 @@
       newBlock.innerHTML = `
         <div class="flex items-center justify-between">
           <div>
-            <div class="flex items-center gap-2">
-              <span class="concept-title-text text-[13.5px] font-bold text-[#111827]">Concept ${currentConceptNum}</span>
-              <button 
-                type="button" 
-                onclick="removeConcept(${highestConceptIndex})" 
-                class="text-[11px] text-[#9ca3af] hover:text-[#ef4444] transition-colors cursor-pointer ml-1 font-medium"
-              >
-                Remove
-              </button>
-            </div>
+            <span class="concept-title-text text-[13.5px] font-bold text-[#111827]">Concept ${currentConceptNum}</span>
             <p id="concept-subtitle-${highestConceptIndex}" class="concept-subtitle text-[11px] text-[#71717a] mt-0.5">Reaction Video · Reaction / footage</p>
           </div>
-          <span class="concept-unit-price text-[12px] font-bold text-[#111827]">$${rate} / video</span>
+          <div class="flex items-center gap-2.5">
+            <span class="concept-unit-price text-[12px] font-bold text-[#111827]">$${rate} / video</span>
+            <button 
+              type="button" 
+              onclick="removeConcept(${highestConceptIndex})" 
+              title="Delete concept"
+              class="concept-delete-btn text-[#9ca3af] hover:text-[#ef4444] transition-colors p-1.5 rounded-md hover:bg-[#fee2e2]/60 flex items-center justify-center cursor-pointer"
+            >
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <!-- Fields: Recommended video type & Per creator -->
@@ -822,6 +841,21 @@
         const titleSpan = block.querySelector('.concept-title-text');
         if (titleSpan) {
           titleSpan.textContent = `Concept ${num}`;
+        }
+      });
+      updateConceptDeleteButtons();
+    }
+
+    function updateConceptDeleteButtons() {
+      const container = document.getElementById('concepts-container');
+      if (!container) return;
+      const count = container.children.length;
+      const deleteButtons = container.querySelectorAll('.concept-delete-btn');
+      deleteButtons.forEach(btn => {
+        if (count > 1) {
+          btn.classList.remove('hidden');
+        } else {
+          btn.classList.add('hidden');
         }
       });
     }
