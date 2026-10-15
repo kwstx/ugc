@@ -148,6 +148,15 @@ function runRetentionCleanup() {
     const deleteStmt = db.prepare('DELETE FROM uploads WHERE id = ?');
 
     for (const file of oldUploads) {
+      // 1. Delete from Cloudflare R2 if configured
+      try {
+        const { deleteFromR2, isR2Configured } = require('./r2Client');
+        if (isR2Configured) {
+          deleteFromR2(file.filename).catch(() => {});
+        }
+      } catch (e) {}
+
+      // 2. Delete local copy if present
       const filePath = path.join(uploadsDir, file.filename);
       if (fs.existsSync(filePath)) {
         try {

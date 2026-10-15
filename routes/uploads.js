@@ -11,8 +11,13 @@ const {
   getStorageQuotaReport,
   runRetentionCleanup
 } = require('../services/storageGuard');
+const {
+  isR2Configured,
+  uploadToR2,
+  getR2PresignedUploadUrl
+} = require('../services/r2Client');
 
-// Ensure uploads folder exists
+// Ensure local uploads folder exists as local buffer/cache
 const uploadsDir = path.join(__dirname, '..', 'uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
@@ -70,7 +75,11 @@ router.get('/quota', (req, res) => {
   try {
     recordOperation('class_b', 1); // Reading quota counts as 1 Class B read
     const report = getStorageQuotaReport();
-    res.json({ success: true, ...report });
+    res.json({
+      success: true,
+      provider: isR2Configured ? 'Cloudflare R2' : 'Local Disk',
+      ...report
+    });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
@@ -80,9 +89,10 @@ router.get('/quota', (req, res) => {
  * POST /api/uploads
  * Multipart file upload for brand assets, logos, and reference clips
  * Protected by 15MB file size limit, 8GB storage cap, and monthly circuit breaker
+ * Uploads to Cloudflare R2 when configured, with local buffer
  */
 router.post('/', preUploadCheck, (req, res) => {
-  upload.single('file')(req, res, (err) => {
+  upload.single('file')(req, res, async (err) => {
     if (err) {
       if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
         return res.status(400).json({
@@ -113,7 +123,20 @@ router.post('/', preUploadCheck, (req, res) => {
       });
     }
 
-    const fileUrl = `/uploads/${req.file.filename}`;
+    let fileUrl = `/uploads/${req.file.filename}`;
+    let r2Details = null;
+
+    // Upload directly to Cloudflare R2 if configured
+    if (isR2Configured) {
+      try {
+        const fileBuffer = fs.readFileSync(req.file.path);
+        r2Details = await uploadToR2(req.file.filename, fileBuffer, req.file.mimetype);
+        fileUrl = r2Details.url;
+      } catch (r2Err) {
+        console.error('Error uploading to Cloudflare R2, falling back to local URL:', r2Err);
+      }
+    }
+
     const uploadId = `upload_${Date.now()}`;
 
     const insertStmt = db.prepare(`
@@ -135,6 +158,7 @@ router.post('/', preUploadCheck, (req, res) => {
 
     res.json({
       success: true,
+      storageProvider: isR2Configured ? 'Cloudflare R2' : 'Local Disk',
       file: {
         id: uploadId,
         filename: req.file.filename,
@@ -142,7 +166,8 @@ router.post('/', preUploadCheck, (req, res) => {
         mimetype: req.file.mimetype,
         size: req.file.size,
         sizeMb: (req.file.size / (1024 * 1024)).toFixed(2),
-        url: fileUrl
+        url: fileUrl,
+        r2: r2Details
       },
       quotaStatus: {
         currentUsageGb: validation.currentUsageGb,
@@ -154,12 +179,12 @@ router.post('/', preUploadCheck, (req, res) => {
 
 /**
  * POST /api/uploads/presigned-url
- * Generates an upload URL for client-side direct S3/R2/Cloud Storage upload
+ * Generates an upload URL for client-side direct Cloudflare R2 upload
  * Validates against circuit breaker and storage cap before issuing URL
  */
-router.post('/presigned-url', (req, res) => {
+router.post('/presigned-url', async (req, res) => {
   try {
-    const { filename, contentType, expectedSizeBytes = 0 } = req.body;
+    const { filename, contentType = 'application/octet-stream', expectedSizeBytes = 0 } = req.body;
     if (!filename) {
       return res.status(400).json({ success: false, error: 'Filename is required.' });
     }
@@ -184,14 +209,23 @@ router.post('/presigned-url', (req, res) => {
     const ext = path.extname(filename);
     const uniqueKey = `brief-assets/${Date.now()}-${Math.random().toString(36).substring(2, 8)}${ext}`;
 
-    const presignedUrl = `/api/uploads`;
-    const publicUrl = `/uploads/${path.basename(uniqueKey)}`;
+    let presignedUrl = `/api/uploads`;
+    let publicUrl = `/uploads/${path.basename(uniqueKey)}`;
+    let provider = 'Local Disk';
+
+    if (isR2Configured) {
+      const r2Presigned = await getR2PresignedUploadUrl(uniqueKey, contentType, 3600);
+      presignedUrl = r2Presigned.uploadUrl;
+      publicUrl = r2Presigned.publicUrl;
+      provider = 'Cloudflare R2';
+    }
 
     // Presigned request creation counts as 1 Class A metadata write
     recordOperation('class_a', 1);
 
     res.json({
       success: true,
+      provider,
       uploadUrl: presignedUrl,
       key: uniqueKey,
       publicUrl: publicUrl,
