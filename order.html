@@ -295,100 +295,168 @@
           </label>
           
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-            <!-- Option 1: Raw Video (Selected by default) -->
+            <!-- Option 1: Raw Video / Reaction -->
             <div id="card-raw" onclick="selectCustomVideoType('raw')" class="cursor-pointer rounded-[12px] p-4 border-[1.5px] border-[#5046e5] bg-[#fbfbfe] flex items-center gap-3 transition-all">
               <div id="radio-raw" class="w-[18px] h-[18px] rounded-full border-[1.5px] border-[#5046e5] flex items-center justify-center shrink-0">
                 <div class="w-[8px] h-[8px] rounded-full bg-[#5046e5]"></div>
               </div>
               <div class="flex flex-col">
-                <span class="text-[13.5px] font-semibold text-[#18181b] leading-tight">Raw Footage</span>
-                <span class="text-[11.5px] text-[#71717a] font-normal leading-tight mt-1">Unedited, natural shots</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[13.5px] font-semibold text-[#18181b] leading-tight">Reaction Video</span>
+                  <span class="text-[10px] bg-indigo-100 text-indigo-700 font-bold px-1.5 py-0.5 rounded">24-48h</span>
+                </div>
+                <span class="text-[11.5px] text-[#71717a] font-normal leading-tight mt-1">Unedited, expressive reaction shots</span>
               </div>
             </div>
 
-            <!-- Option 2: Full UGC (Unselected by default) -->
+            <!-- Option 2: Full UGC -->
             <div id="card-full-ugc" onclick="selectCustomVideoType('full')" class="cursor-pointer rounded-[12px] p-4 border border-[#e5e7eb] bg-white flex items-center gap-3 hover:border-[#d1d5db] transition-all">
               <div id="radio-full-ugc" class="w-[18px] h-[18px] rounded-full border border-[#d1d5db] bg-white shrink-0">
               </div>
               <div class="flex flex-col">
-                <span class="text-[13.5px] font-semibold text-[#18181b] leading-tight">Edited UGC</span>
-                <span class="text-[11.5px] text-[#71717a] font-normal leading-tight mt-1">Finished, ready-to-post videos</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[13.5px] font-semibold text-[#18181b] leading-tight">Full UGC</span>
+                  <span class="text-[10px] bg-emerald-100 text-emerald-700 font-bold px-1.5 py-0.5 rounded">Commercial</span>
+                </div>
+                <span class="text-[11.5px] text-[#71717a] font-normal leading-tight mt-1">Finished edit with script & hooks</span>
               </div>
             </div>
           </div>
         </div>
 
+        <!-- Format Badge Notice -->
+        <div id="format-notice-box" class="p-3 rounded-[10px] bg-[#eff6ff] border border-[#bfdbfe] text-[12px] text-[#1e40af] flex items-start gap-2.5">
+          <svg class="w-4 h-4 text-[#2563eb] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <div id="format-notice-text">
+            <strong>Reaction Video Prerequisites:</strong> Supply a source video or reference link for creators to react to. No physical product shipping required; 24-48h fast turnaround.
+          </div>
+        </div>
+
         <!-- Field 2: Company name -->
         <div>
-          <label class="block text-[13px] font-semibold text-[#18181b] mb-2">
-            Company name
+          <label class="block text-[13px] font-semibold text-[#18181b] mb-1.5">
+            Company / Brand name <span class="text-rose-500">*</span>
           </label>
           <input
             type="text"
             id="company-name"
+            placeholder="e.g. Lumina Skincare"
             class="w-full h-[42px] px-3.5 rounded-[10px] border border-[#e5e7eb] text-[13.5px] text-[#18181b] focus:outline-none focus:border-[#5046e5] focus:ring-1 focus:ring-[#5046e5] bg-white transition-all"
           />
         </div>
 
         <!-- Field 3: Give your order a title -->
         <div>
-          <label class="block text-[13px] font-semibold text-[#18181b] mb-2">
-            Give your order a title
+          <label class="block text-[13px] font-semibold text-[#18181b] mb-1.5">
+            Order title <span class="text-rose-500">*</span>
           </label>
           <input
             type="text"
             id="order-title"
-            placeholder="Natural cafe conversation"
+            placeholder="e.g. Natural reaction to morning coffee taste test"
             class="w-full h-[42px] px-3.5 rounded-[10px] border border-[#e5e7eb] text-[13.5px] text-[#18181b] placeholder:text-[#a1a1aa] focus:outline-none focus:border-[#5046e5] focus:ring-1 focus:ring-[#5046e5] bg-white transition-all"
           />
         </div>
 
-        <!-- Field 4: Link to the format or example -->
-        <div>
-          <label class="block text-[13px] font-semibold text-[#18181b] mb-2">
-            Link to the format or example
+        <!-- Field 4: Source media or reference link -->
+        <div id="field-source-link">
+          <label id="label-format-link" class="block text-[13px] font-semibold text-[#18181b] mb-1.5">
+            Source media or video link to react to <span class="text-rose-500">*</span>
           </label>
           <input
             type="text"
             id="format-link"
-            placeholder="https://..."
+            placeholder="https://tiktok.com/... or https://youtube.com/..."
             class="w-full h-[42px] px-3.5 rounded-[10px] border border-[#e5e7eb] text-[13.5px] text-[#18181b] placeholder:text-[#a1a1aa] focus:outline-none focus:border-[#5046e5] focus:ring-1 focus:ring-[#5046e5] bg-white transition-all"
           />
-          <p class="text-[11.5px] text-[#71717a] font-normal mt-1.5">
-            Share a link that creators can open.
+          <p id="hint-format-link" class="text-[11.5px] text-[#71717a] font-normal mt-1.5">
+            Reaction videos require a video link so creators can sync their split-screen reactions.
           </p>
         </div>
 
-        <!-- Field 5: What do you need? -->
+        <!-- Field 4b: Reaction Layout instructions (shown for reaction) -->
+        <div id="field-reaction-layout">
+          <label class="block text-[13px] font-semibold text-[#18181b] mb-1.5">
+            Reaction screen framing
+          </label>
+          <select
+            id="layout-instruction"
+            class="w-full h-[42px] px-3.5 rounded-[10px] border border-[#e5e7eb] text-[13px] text-[#18181b] focus:outline-none focus:border-[#5046e5] focus:ring-1 focus:ring-[#5046e5] bg-white transition-all cursor-pointer"
+          >
+            <option value="split_screen">Split Screen (Top Source / Bottom Creator)</option>
+            <option value="picture_in_picture">Picture-in-Picture (Source with Creator Bubble)</option>
+            <option value="side_by_side">Side-by-Side (Vertical split)</option>
+          </select>
+        </div>
+
+        <!-- Field 5: What do you need? (Script / Details) -->
         <div>
-          <label class="block text-[13px] font-semibold text-[#18181b] mb-2">
-            What do you need?
+          <label id="label-order-details" class="block text-[13px] font-semibold text-[#18181b] mb-1.5">
+            Direction & Key Instructions <span id="req-script-asterisk" class="hidden text-rose-500">*</span>
           </label>
           <textarea
             id="order-details"
-            rows="5"
-            placeholder="Describe the script, setting, or visual ideas"
-            class="w-full min-h-[140px] p-3.5 rounded-[10px] border border-[#e5e7eb] text-[13px] text-[#18181b] placeholder:text-[#a1a1aa] focus:outline-none focus:border-[#5046e5] focus:ring-1 focus:ring-[#5046e5] bg-white transition-all resize-y"
+            rows="4"
+            placeholder="Describe the reaction hook, tone, or specific talking points..."
+            class="w-full min-h-[110px] p-3.5 rounded-[10px] border border-[#e5e7eb] text-[13px] text-[#18181b] placeholder:text-[#a1a1aa] focus:outline-none focus:border-[#5046e5] focus:ring-1 focus:ring-[#5046e5] bg-white transition-all resize-y"
           ></textarea>
+        </div>
+
+        <!-- Field 5b: Physical Product Shipping (shown for Full UGC) -->
+        <div id="field-physical-shipping" class="hidden p-4 rounded-[12px] bg-[#f9fafb] border border-[#e5e7eb] space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-[13px] font-semibold text-[#18181b] block">Physical Product Shipping</span>
+              <span class="text-[11.5px] text-[#71717a]">Do creators need a physical sample mailed to them?</span>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="requires-shipping-toggle" onchange="toggleShippingFields(this.checked)" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#5b5af7]"></div>
+            </label>
+          </div>
+
+          <div id="shipping-details-container" class="hidden pt-2 border-t border-[#e5e7eb] space-y-2.5">
+            <div>
+              <label class="block text-[12px] font-medium text-[#374151] mb-1">Product Name to Ship</label>
+              <input
+                type="text"
+                id="shipping-product-name"
+                placeholder="e.g. Hydrating Glow Serum (50ml)"
+                class="w-full h-[38px] px-3 rounded-[8px] border border-[#e5e7eb] text-[12.5px] bg-white focus:outline-none focus:border-[#5046e5]"
+              />
+            </div>
+            <p class="text-[11px] text-[#059669] flex items-center gap-1 font-medium">
+              <span>✓</span> Production timeline stays paused until creator confirms delivery of sample.
+            </p>
+          </div>
         </div>
 
         <!-- Field 6: Creator pay per video (USD) -->
         <div>
-          <label class="block text-[13px] font-semibold text-[#18181b] mb-2">
-            Creator pay per video (USD)
-          </label>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block text-[13px] font-semibold text-[#18181b]">
+              Creator reward per video (USD)
+            </label>
+            <span id="min-pay-badge" class="text-[11px] text-[#5b5af7] font-semibold">Min $25.00</span>
+          </div>
           <input
             type="number"
             id="creator-pay"
             value="25"
-            step="0.01"
+            step="1"
             min="25"
             oninput="updateCustomPricingFromInput(this.value)"
             class="w-full h-[42px] px-3.5 rounded-[10px] border border-[#e5e7eb] text-[13.5px] text-[#18181b] focus:outline-none focus:border-[#5046e5] focus:ring-1 focus:ring-[#5046e5] bg-white transition-all"
           />
-          <p class="text-[11.5px] text-[#71717a] font-normal mt-1.5">
-            Minimum $25 per video. The creator receives this full amount.
+          <p id="creator-pay-hint" class="text-[11.5px] text-[#71717a] font-normal mt-1.5">
+            Minimum $25 per reaction video. Creators receive 100% of this reward from escrow.
           </p>
+        </div>
+
+        <!-- Validation Error Alert Container -->
+        <div id="publish-error-box" class="hidden p-3.5 rounded-[10px] bg-rose-50 border border-rose-200 text-[12px] text-rose-700 space-y-1">
         </div>
 
       </div>
@@ -429,7 +497,7 @@
 
           <!-- Disclaimer -->
           <p class="text-[11.5px] text-[#6b7280] leading-relaxed mb-6">
-            Charged to Personal Account only when you approve a video. Revisions and rejections have no charge.
+            Charged to Escrow upfront with 100% money-back guarantee. Released only when you approve a video.
           </p>
 
           <!-- Publish Button -->
@@ -446,7 +514,7 @@
 
           <!-- Note under button -->
           <p class="text-[11.5px] text-[#6b7280] mt-3.5 text-left">
-            Your brief will be visible to creators in their studio.
+            Your brief will be broadcast directly to matched creators.
           </p>
 
         </div>
@@ -528,6 +596,17 @@
     // Custom Order form interactivity
     let currentCustomType = 'raw';
 
+    function toggleShippingFields(checked) {
+      const container = document.getElementById('shipping-details-container');
+      if (container) {
+        if (checked) {
+          container.classList.remove('hidden');
+        } else {
+          container.classList.add('hidden');
+        }
+      }
+    }
+
     function selectCustomVideoType(type) {
       currentCustomType = type;
       const cardRaw = document.getElementById('card-raw');
@@ -535,6 +614,18 @@
       const radioRaw = document.getElementById('radio-raw');
       const radioFull = document.getElementById('radio-full-ugc');
       const creatorPayInput = document.getElementById('creator-pay');
+      const noticeBox = document.getElementById('format-notice-box');
+      const noticeText = document.getElementById('format-notice-text');
+      const minBadge = document.getElementById('min-pay-badge');
+      const payHint = document.getElementById('creator-pay-hint');
+      const reactionLayout = document.getElementById('field-reaction-layout');
+      const shippingField = document.getElementById('field-physical-shipping');
+      const scriptAsterisk = document.getElementById('req-script-asterisk');
+      const labelLink = document.getElementById('label-format-link');
+      const hintLink = document.getElementById('hint-format-link');
+      const errorBox = document.getElementById('publish-error-box');
+
+      if (errorBox) errorBox.classList.add('hidden');
 
       if (type === 'raw') {
         cardRaw.className = "cursor-pointer rounded-[12px] p-4 border-[1.5px] border-[#5046e5] bg-[#fbfbfe] flex items-center gap-3 transition-all";
@@ -545,9 +636,25 @@
         radioFull.className = "w-[18px] h-[18px] rounded-full border border-[#d1d5db] bg-white shrink-0";
         radioFull.innerHTML = '';
 
-        if (creatorPayInput) {
+        if (noticeBox) {
+          noticeBox.className = "p-3 rounded-[10px] bg-[#eff6ff] border border-[#bfdbfe] text-[12px] text-[#1e40af] flex items-start gap-2.5";
+        }
+        if (noticeText) {
+          noticeText.innerHTML = "<strong>Reaction Video Prerequisites:</strong> Supply a source video or reference link for creators to react to. No physical product shipping required; 24-48h fast turnaround.";
+        }
+        if (reactionLayout) reactionLayout.classList.remove('hidden');
+        if (shippingField) shippingField.classList.add('hidden');
+        if (scriptAsterisk) scriptAsterisk.classList.add('hidden');
+        if (minBadge) minBadge.textContent = "Min $25.00";
+        if (payHint) payHint.textContent = "Minimum $25 per reaction video. Creators receive 100% of this reward from escrow.";
+        if (labelLink) labelLink.innerHTML = 'Source media or video link to react to <span class="text-rose-500">*</span>';
+        if (hintLink) hintLink.textContent = "Reaction videos require a video link so creators can sync their split-screen reactions.";
+
+        if (creatorPayInput && parseFloat(creatorPayInput.value) > 90) {
           creatorPayInput.value = 25;
           calculateCustomPricing(25);
+        } else if (creatorPayInput) {
+          calculateCustomPricing(parseFloat(creatorPayInput.value) || 25);
         }
       } else {
         cardFull.className = "cursor-pointer rounded-[12px] p-4 border-[1.5px] border-[#5046e5] bg-[#fbfbfe] flex items-center gap-3 transition-all";
@@ -558,9 +665,25 @@
         radioRaw.className = "w-[18px] h-[18px] rounded-full border border-[#d1d5db] bg-white shrink-0";
         radioRaw.innerHTML = '';
 
-        if (creatorPayInput) {
-          creatorPayInput.value = 25;
-          calculateCustomPricing(25);
+        if (noticeBox) {
+          noticeBox.className = "p-3 rounded-[10px] bg-[#f0fdf4] border border-[#bbf7d0] text-[12px] text-[#166534] flex items-start gap-2.5";
+        }
+        if (noticeText) {
+          noticeText.innerHTML = "<strong>Full UGC Prerequisites:</strong> Supply detailed script direction, talking points, or shot list (min 15 characters). Physical sample shipping can be enabled below; 5-day turnaround.";
+        }
+        if (reactionLayout) reactionLayout.classList.add('hidden');
+        if (shippingField) shippingField.classList.remove('hidden');
+        if (scriptAsterisk) scriptAsterisk.classList.remove('hidden');
+        if (minBadge) minBadge.textContent = "Min $100.00";
+        if (payHint) payHint.textContent = "Minimum $100 per Full UGC video (includes multi-scene filming, scripting & commercial editing).";
+        if (labelLink) labelLink.innerHTML = 'Reference video or campaign link (Optional)';
+        if (hintLink) hintLink.textContent = "Optional reference link for creator inspiration.";
+
+        if (creatorPayInput && parseFloat(creatorPayInput.value) < 100) {
+          creatorPayInput.value = 100;
+          calculateCustomPricing(100);
+        } else if (creatorPayInput) {
+          calculateCustomPricing(parseFloat(creatorPayInput.value) || 100);
         }
       }
     }
@@ -585,40 +708,66 @@
       if (totalEl) totalEl.textContent = '$' + format(total);
     }
 
-    // Publish Open Order handler
-    function publishOpenOrder() {
+    // Publish Open Order handler with backend API integration
+    async function publishOpenOrder() {
       const btn = document.getElementById('publish-btn');
+      const errorBox = document.getElementById('publish-error-box');
       if (!btn) return;
+
+      if (errorBox) {
+        errorBox.classList.add('hidden');
+        errorBox.innerHTML = '';
+      }
 
       const titleInput = document.getElementById('order-title');
       const companyInput = document.getElementById('company-name');
       const linkInput = document.getElementById('format-link');
       const detailsInput = document.getElementById('order-details');
       const payInput = document.getElementById('creator-pay');
+      const layoutSelect = document.getElementById('layout-instruction');
+      const shippingToggle = document.getElementById('requires-shipping-toggle');
+      const shippingProductInput = document.getElementById('shipping-product-name');
 
-      const title = (titleInput && titleInput.value.trim()) || 'Natural cafe conversation';
-      const company = (companyInput && companyInput.value.trim()) || 'My Brand';
+      const title = (titleInput && titleInput.value.trim()) || '';
+      const company = (companyInput && companyInput.value.trim()) || '';
       const link = (linkInput && linkInput.value.trim()) || '';
       const details = (detailsInput && detailsInput.value.trim()) || '';
-      const formatType = currentCustomType === 'raw' ? 'Raw Footage' : 'Edited UGC';
-      const pay = (payInput && payInput.value) || '25';
-      const fee = document.getElementById('summary-platform-fee') ? document.getElementById('summary-platform-fee').textContent : '$5';
-      const total = document.getElementById('summary-total-fee') ? document.getElementById('summary-total-fee').textContent : '$30';
-      const orderId = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
+      const formatType = currentCustomType === 'raw' ? 'reaction' : 'full_ugc';
+      const pay = parseFloat(payInput ? payInput.value : '25') || 25;
+      const layoutInstruction = layoutSelect ? layoutSelect.value : 'split_screen';
+      const requiresShipping = Boolean(shippingToggle && shippingToggle.checked && formatType === 'full_ugc');
+      const shippingProductName = (shippingProductInput && shippingProductInput.value.trim()) || '';
 
-      const orderData = {
-        id: orderId,
-        title: title,
-        company: company,
-        formatType: formatType,
-        formatLink: link,
-        details: details,
-        creatorPay: pay,
-        platformFee: fee,
-        total: total,
-        status: 'Live & Accepting Creators',
-        createdAt: new Date().toISOString()
-      };
+      // Frontend validation check
+      const clientErrors = [];
+      if (!company) clientErrors.push('Please enter your Company / Brand name.');
+      if (!title) clientErrors.push('Please give your order a title.');
+
+      if (formatType === 'reaction' && !link) {
+        clientErrors.push('Reaction Video orders require a valid video link or reference for creators to react to.');
+      }
+      if (formatType === 'full_ugc' && (!details || details.length < 15)) {
+        clientErrors.push('Full UGC orders require detailed script direction, talking points, or shot list (at least 15 characters).');
+      }
+      if (formatType === 'full_ugc' && requiresShipping && !shippingProductName) {
+        clientErrors.push('Please enter the product name to ship to the creator.');
+      }
+      if (formatType === 'reaction' && pay < 25) {
+        clientErrors.push('Minimum creator pay for Reaction Video is $25.00.');
+      }
+      if (formatType === 'full_ugc' && pay < 100) {
+        clientErrors.push('Minimum creator pay for Full UGC is $100.00.');
+      }
+
+      if (clientErrors.length > 0) {
+        if (errorBox) {
+          errorBox.innerHTML = clientErrors.map(e => `<div>• ${e}</div>`).join('');
+          errorBox.classList.remove('hidden');
+        } else {
+          alert(clientErrors.join('\n'));
+        }
+        return;
+      }
 
       // Button loading state
       btn.disabled = true;
@@ -627,16 +776,65 @@
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
-        <span>Publishing order...</span>
+        <span>Securing escrow & publishing...</span>
       `;
 
-      setTimeout(() => {
-        // Save to localStorage
+      const payload = {
+        formatType,
+        brandName: company,
+        title,
+        formatLink: link,
+        details,
+        script: details,
+        layoutInstruction,
+        requiresShipping,
+        shippingProductName,
+        creatorPay: pay,
+        paymentMethod: 'card'
+      };
+
+      try {
+        const response = await fetch('/api/orders/open', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          const errList = data.validationErrors || [data.error || 'Failed to publish order'];
+          if (errorBox) {
+            errorBox.innerHTML = errList.map(e => `<div>• ${e}</div>`).join('');
+            errorBox.classList.remove('hidden');
+          } else {
+            alert(errList.join('\n'));
+          }
+          btn.disabled = false;
+          btn.innerHTML = `<span>Publish open order</span><span class="text-[14px] leading-none">&rarr;</span>`;
+          return;
+        }
+
+        // Save order to localStorage for offline access
         try {
           const list = JSON.parse(localStorage.getItem('dansugc_orders') || '[]');
-          list.unshift(orderData);
+          list.unshift({
+            id: data.orderId,
+            title,
+            company,
+            formatType: data.formatAnalysis.formatLabel,
+            formatLink: link,
+            details,
+            creatorPay: data.pricing.creatorPay,
+            platformFee: data.pricing.platformFee,
+            total: data.pricing.total,
+            status: 'Live & Accepting Creators',
+            createdAt: new Date().toISOString()
+          });
           localStorage.setItem('dansugc_orders', JSON.stringify(list));
-          localStorage.setItem('dansugc_last_published', JSON.stringify(orderData));
+          localStorage.setItem('dansugc_last_published', JSON.stringify(data));
         } catch (e) {}
 
         // Button success state
@@ -647,13 +845,34 @@
           <span>Order published!</span>
         `;
 
-        // Update modal info and show
-        document.getElementById('modal-order-id').textContent = '#' + orderId;
+        // Update modal info with backend verified data
+        document.getElementById('modal-order-id').textContent = '#' + data.orderId;
         document.getElementById('modal-order-title').textContent = title;
-        document.getElementById('modal-order-format').textContent = formatType;
-        document.getElementById('modal-order-pay').textContent = '$' + pay + ' / video';
+        document.getElementById('modal-order-format').textContent = data.formatAnalysis.formatLabel;
+        document.getElementById('modal-order-pay').textContent = '$' + data.pricing.creatorPay.toFixed(2) + ' / video';
+        
+        const escrowEl = document.getElementById('modal-order-escrow');
+        if (escrowEl) escrowEl.textContent = `Escrow Protected ($${data.pricing.total.toFixed(2)})`;
+
+        const slaEl = document.getElementById('modal-order-sla');
+        if (slaEl) slaEl.textContent = `${data.formatAnalysis.turnaroundHours}h SLA`;
+
+        const trackBtn = document.getElementById('modal-track-link');
+        if (trackBtn) {
+          trackBtn.href = `track_order.html?id=${data.orderId}`;
+        }
+
         document.getElementById('publish-modal').classList.remove('hidden');
-      }, 400);
+
+      } catch (err) {
+        console.error('Network or server error publishing order:', err);
+        if (errorBox) {
+          errorBox.innerHTML = `<div>• Network error: Could not reach DansUGC backend server. Please verify server is running.</div>`;
+          errorBox.classList.remove('hidden');
+        }
+        btn.disabled = false;
+        btn.innerHTML = `<span>Publish open order</span><span class="text-[14px] leading-none">&rarr;</span>`;
+      }
     }
 
     function closePublishModal() {
@@ -685,7 +904,7 @@
         Open order published!
       </h3>
       <p class="text-[13px] text-[#71717a] font-normal leading-relaxed mb-5 max-w-[340px]">
-        Your project is now live for creators. You will be notified as soon as creators join and submit their videos.
+        Your project is verified and live for qualified creators. Creator funds are secured in escrow and only released upon your final approval.
       </p>
 
       <!-- Details Card -->
@@ -703,29 +922,39 @@
         </div>
         <div class="flex items-center justify-between">
           <span class="text-[#71717a]">Format</span>
-          <span id="modal-order-format" class="font-medium text-[#18181b]">Raw Footage</span>
+          <span id="modal-order-format" class="font-medium text-[#18181b]">Reaction Video</span>
         </div>
         <div class="flex items-center justify-between">
           <span class="text-[#71717a]">Creator Reward</span>
-          <span id="modal-order-pay" class="font-semibold text-[#18181b]">$25 / video</span>
+          <span id="modal-order-pay" class="font-semibold text-[#18181b]">$25.00 / video</span>
+        </div>
+        <div class="flex items-center justify-between pt-1 border-t border-[#f1f1f4]">
+          <span class="text-[#71717a]">Escrow Protection</span>
+          <span id="modal-order-escrow" class="font-semibold text-[#059669]">Escrow Protected ✓</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-[#71717a]">Turnaround SLA</span>
+          <span id="modal-order-sla" class="font-medium text-[#4338ca]">24-48h SLA</span>
         </div>
       </div>
 
       <!-- Actions -->
       <div class="w-full flex flex-col gap-2">
-        <button
-          onclick="closePublishModal()"
+        <a
+          id="modal-track-link"
+          href="track_order.html"
           style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);"
           class="w-full h-[42px] text-white text-[13px] font-semibold rounded-[10px] flex items-center justify-center gap-1.5 shadow-[0_3px_12px_rgba(33,58,231,0.25)] hover:shadow-[0_6px_20px_rgba(33,58,231,0.4)] hover:brightness-105 active:scale-[0.98] transition-all cursor-pointer"
         >
-          <span>Done</span>
-        </button>
-        <a
-          href="index.html"
-          class="w-full h-[38px] bg-transparent text-[#71717a] hover:text-[#18181b] text-[12.5px] font-medium flex items-center justify-center transition-colors"
-        >
-          Return to home
+          <span>Track live order</span>
+          <span class="text-[14px] leading-none">&rarr;</span>
         </a>
+        <button
+          onclick="closePublishModal()"
+          class="w-full h-[38px] bg-transparent text-[#71717a] hover:text-[#18181b] text-[12.5px] font-medium flex items-center justify-center transition-colors cursor-pointer"
+        >
+          Close
+        </button>
       </div>
 
     </div>

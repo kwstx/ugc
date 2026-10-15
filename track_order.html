@@ -414,15 +414,38 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Load last finalized order
-      const stored = localStorage.getItem('dansugc_last_finalized_order') || localStorage.getItem('ugc_order_review');
+    document.addEventListener('DOMContentLoaded', async function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const queryOrderId = urlParams.get('id');
+
       let order = null;
-      if (stored) {
+      let isOpenOrder = false;
+
+      // Try fetching from backend if ID is in URL
+      if (queryOrderId) {
         try {
-          order = JSON.parse(stored);
+          const res = await fetch(`/api/orders/${encodeURIComponent(queryOrderId)}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.success && data.order) {
+              order = data.order;
+              isOpenOrder = (data.type === 'open_order');
+            }
+          }
         } catch (e) {
-          console.error(e);
+          console.warn('Backend fetch failed, falling back to local storage:', e);
+        }
+      }
+
+      // Fallback to local storage if not loaded
+      if (!order) {
+        const stored = localStorage.getItem('dansugc_last_finalized_order') || localStorage.getItem('dansugc_last_published') || localStorage.getItem('ugc_order_review');
+        if (stored) {
+          try {
+            order = JSON.parse(stored);
+          } catch (e) {
+            console.error(e);
+          }
         }
       }
 
@@ -446,23 +469,232 @@
       }
 
       // Populate Order info
-      document.getElementById('order-id-display').textContent = '#' + (order.id || 'UGC-89420');
-      document.getElementById('order-brand-display').textContent = order.brandName || 'Your brand';
-      document.getElementById('order-qty-display').textContent = `${order.qty || 6} videos`;
-      document.getElementById('order-total-display').textContent = `$${order.total || '180.00'}`;
+      const orderIdEl = document.getElementById('order-id-display');
+      if (orderIdEl) orderIdEl.textContent = '#' + (order.id || 'UGC-89420');
 
+      const brandEl = document.getElementById('order-brand-display');
+      if (brandEl) brandEl.textContent = order.brandName || order.company || 'Your brand';
+
+      const qtyEl = document.getElementById('order-qty-display');
+      if (qtyEl) {
+        if (isOpenOrder) {
+          qtyEl.textContent = order.formatLabel || (order.formatType === 'reaction' ? 'Reaction Video' : 'Full UGC');
+        } else {
+          qtyEl.textContent = `${order.qty || 6} videos`;
+        }
+      }
+
+      const totalEl = document.getElementById('order-total-display');
+      if (totalEl) totalEl.textContent = `$${parseFloat(order.total || 180).toFixed(2)}`;
+
+      // Update SLA completion text
+      const slaEl = document.getElementById('estimated-completion-text');
+      if (slaEl && isOpenOrder) {
+        if (order.formatType === 'reaction') {
+          slaEl.textContent = `Fast SLA: 24–48 hours (No physical shipping required)`;
+        } else if (order.requiresShipping) {
+          slaEl.textContent = `SLA: 5 days (Production starts after sample delivery)`;
+        } else {
+          slaEl.textContent = `SLA: 5 days (Direct digital script delivery)`;
+        }
+      }
+
+      // Handle Open Marketplace Order Layout
+      if (isOpenOrder) {
+        renderOpenOrderExperience(order);
+      } else {
+        renderStandardBriefExperience(order);
+      }
+    });
+
+    function renderOpenOrderExperience(order) {
+      const creatorsGrid = document.getElementById('tracker-creators-grid');
+      const onlineCount = document.getElementById('tracker-online-count');
+      const step2Text = document.getElementById('stepper-creator-review-text');
+
+      if (onlineCount) {
+        onlineCount.textContent = order.assignedCreatorName ? '1 Active Creator' : 'Broadcasting to Matching Creators';
+      }
+
+      if (step2Text) {
+        step2Text.textContent = order.assignedCreatorName 
+          ? `${order.assignedCreatorName} confirmed brief`
+          : 'Broadcasting in Studio Feed';
+      }
+
+      // Render assigned creator or searching state
+      if (creatorsGrid) {
+        if (order.assignedCreatorName) {
+          creatorsGrid.innerHTML = `
+            <div class="col-span-2 p-5 rounded-[16px] border border-[#e5e7eb] bg-white flex flex-col gap-4 shadow-xs">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-full overflow-hidden bg-indigo-50 border-2 border-[#6366f1] shrink-0">
+                    <img src="assets/order/thumb_shocked.png" alt="${escapeHtml(order.assignedCreatorName)}" class="w-full h-full object-cover">
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-[14px] font-bold text-[#111827]">${escapeHtml(order.assignedCreatorName)}</span>
+                      <span class="text-[10px] text-[#4f46e5] bg-[#eef2ff] px-2 py-0.5 rounded-full font-bold">Matched Creator ✓</span>
+                    </div>
+                    <span class="text-[11.5px] text-[#71717a]">Specialty: ${order.formatType === 'reaction' ? 'Expressive Reactions' : 'Commercial UGC'}</span>
+                  </div>
+                </div>
+                <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#059669] bg-[#ecfdf5] px-2.5 py-1 rounded-full">
+                  <span class="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></span>
+                  Active on Brief
+                </span>
+              </div>
+
+              <!-- Format & Payout Badges -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-[12px]">
+                <div class="p-2.5 rounded-[10px] bg-[#f9fafb] border border-[#f1f1f4]">
+                  <span class="text-[#71717a] text-[10.5px] block">Format</span>
+                  <span class="font-bold text-[#111827]">${order.formatType === 'reaction' ? 'Reaction Video' : 'Full UGC'}</span>
+                </div>
+                <div class="p-2.5 rounded-[10px] bg-[#f9fafb] border border-[#f1f1f4]">
+                  <span class="text-[#71717a] text-[10.5px] block">Creator Payout</span>
+                  <span class="font-bold text-[#059669]">$${parseFloat(order.creatorPay).toFixed(2)}</span>
+                </div>
+                <div class="p-2.5 rounded-[10px] bg-[#f9fafb] border border-[#f1f1f4]">
+                  <span class="text-[#71717a] text-[10.5px] block">Escrow Status</span>
+                  <span class="font-bold ${order.escrowStatus === 'released' ? 'text-emerald-600' : 'text-indigo-600'}">${order.escrowStatus.toUpperCase()}</span>
+                </div>
+                <div class="p-2.5 rounded-[10px] bg-[#f9fafb] border border-[#f1f1f4]">
+                  <span class="text-[#71717a] text-[10.5px] block">Turnaround SLA</span>
+                  <span class="font-bold text-[#4338ca]">${order.turnaroundHours}h</span>
+                </div>
+              </div>
+
+              <!-- Physical Shipping Info Card if applicable -->
+              ${order.requiresShipping ? `
+                <div class="p-3.5 rounded-[12px] bg-[#f8fafc] border border-[#e2e8f0] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[12px]">
+                  <div>
+                    <span class="font-bold text-[#1e293b] flex items-center gap-1.5">
+                      <span>📦 Physical Product Sample:</span>
+                      <span class="font-semibold text-[#475569]">${escapeHtml(order.shippingProductName || 'Sample Product')}</span>
+                    </span>
+                    <span class="text-[#64748b] text-[11px] block mt-0.5">Carrier: ${order.carrier || 'USPS'} · Tracking: ${order.trackingNumber || 'Pending'} · Status: <span class="font-semibold text-[#0f172a]">${order.shippingStatus}</span></span>
+                  </div>
+                  ${order.shippingStatus !== 'delivered' ? `
+                    <button onclick="advanceShippingStatus('${order.id}')" class="px-3 py-1.5 bg-[#5b5af7] hover:bg-[#4f46e5] text-white text-[11px] font-semibold rounded-[8px] transition-all cursor-pointer">
+                      Mark Sample Delivered
+                    </button>
+                  ` : `
+                    <span class="text-emerald-700 font-bold bg-emerald-100 px-2.5 py-1 rounded-full text-[11px]">Delivered ✓</span>
+                  `}
+                </div>
+              ` : `
+                <div class="p-2.5 rounded-[10px] bg-[#f0fdf4] border border-[#bbf7d0] text-[11.5px] text-[#166534] flex items-center gap-2">
+                  <span>⚡</span>
+                  <span><strong>Zero Shipping Delay:</strong> Reaction video format requires no physical shipping. Creator is shooting with reference audio & PIP framing.</span>
+                </div>
+              `}
+
+              <!-- Deliverable and Escrow Release Section -->
+              ${order.deliverables && order.deliverables.length > 0 ? `
+                <div class="p-4 rounded-[12px] bg-[#faf5ff] border border-[#e9d5ff] space-y-3">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <span class="text-[10px] uppercase font-bold tracking-wider text-[#7e22ce]">Deliverable Ready for Review</span>
+                      <h4 class="text-[14px] font-bold text-[#581c87]">Creator Uploaded Video Deliverable</h4>
+                    </div>
+                    <span class="px-2.5 py-0.5 rounded-full bg-purple-200 text-purple-900 text-[11px] font-bold">
+                      Quality Score: ${order.deliverables[0].verificationReport ? order.deliverables[0].verificationReport.score : 98}/100
+                    </span>
+                  </div>
+
+                  <div class="text-[12px] text-[#6b21a8] bg-white/80 p-2.5 rounded-[8px] border border-purple-100">
+                    <strong>Automated Quality Checks:</strong>
+                    ${order.deliverables[0].verificationReport && order.deliverables[0].verificationReport.verifiedChecks ? 
+                      order.deliverables[0].verificationReport.verifiedChecks.map(c => `
+                        <div class="flex items-center justify-between mt-1 text-[11px]">
+                          <span>• ${c.name}</span>
+                          <span class="text-emerald-600 font-bold">✓ ${c.status}</span>
+                        </div>
+                      `).join('') : 'All format checks passed (Audio-visual sync verified).'}
+                  </div>
+
+                  ${order.escrowStatus === 'held' ? `
+                    <div class="flex items-center gap-2 pt-1">
+                      <button onclick="approveDeliverable('${order.id}')" style="background: linear-gradient(180deg, #10b981 0%, #059669 100%);" class="flex-1 h-[38px] text-white text-[12px] font-bold rounded-[8px] flex items-center justify-center gap-1.5 shadow-xs hover:brightness-105 cursor-pointer">
+                        <span>Approve & Release Escrow ($${parseFloat(order.creatorPay).toFixed(2)})</span>
+                        <span>✓</span>
+                      </button>
+                      <button onclick="requestDeliverableRevision('${order.id}')" class="px-4 h-[38px] border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 text-[12px] font-medium rounded-[8px] cursor-pointer">
+                        Request Revision
+                      </button>
+                    </div>
+                  ` : `
+                    <div class="p-2.5 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-[8px] text-[12px] font-semibold flex items-center gap-1.5">
+                      <span>✓</span>
+                      <span>Approved by client. $${parseFloat(order.creatorPay).toFixed(2)} released from escrow directly to ${escapeHtml(order.assignedCreatorName)}.</span>
+                    </div>
+                  `}
+                </div>
+              ` : `
+                <div class="p-3 bg-gray-50 border border-gray-200 rounded-[10px] text-[11.5px] text-gray-600 flex items-center justify-between">
+                  <span>Creator is actively filming footage. Submission expected within SLA.</span>
+                  <button onclick="simulateDeliverableUpload('${order.id}')" class="text-[11px] text-[#4f46e5] font-semibold hover:underline">
+                    Simulate Creator Submission →
+                  </button>
+                </div>
+              `}
+
+            </div>
+          `;
+        } else {
+          // No creator assigned yet (Order is open)
+          creatorsGrid.innerHTML = `
+            <div class="col-span-2 p-6 rounded-[16px] border border-indigo-100 bg-[#fbfbfe] flex flex-col items-center text-center gap-3">
+              <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 animate-pulse">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+              </div>
+              <h3 class="text-[15px] font-bold text-[#18181b]">Broadcast Live in Creator Studio Feed</h3>
+              <p class="text-[12.5px] text-[#71717a] max-w-[420px]">
+                Your open ${order.formatType === 'reaction' ? 'Reaction Video' : 'Full UGC'} brief is visible to verified creators. Up to 3 creators may apply.
+              </p>
+              <div class="pt-2">
+                <button onclick="simulateCreatorClaim('${order.id}', '${order.formatType}')" class="px-4 py-2 bg-[#5b5af7] hover:bg-[#4f46e5] text-white text-[12px] font-semibold rounded-[8px] transition-all shadow-xs cursor-pointer">
+                  Simulate Creator Claiming Brief
+                </button>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      // Populate concepts list with open order details
+      const conceptsList = document.getElementById('tracker-concepts-list');
+      if (conceptsList) {
+        conceptsList.innerHTML = `
+          <div class="p-3.5 rounded-[12px] bg-[#f9fafb] border border-[#f1f1f4] text-[12px] space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-[#111827]">${escapeHtml(order.title)}</span>
+              <span class="text-[10.5px] text-[#4f46e5] bg-[#eef2ff] px-2 py-0.5 rounded font-semibold">${order.formatType === 'reaction' ? 'Reaction Video' : 'Full UGC'}</span>
+            </div>
+            ${order.formatLink ? `
+              <div class="text-[11.5px] text-[#4b5563]">
+                <span class="font-medium text-[#71717a]">Source Media:</span>
+                <a href="${escapeHtml(order.formatLink)}" target="_blank" class="text-[#5b5af7] hover:underline break-all">${escapeHtml(order.formatLink)}</a>
+              </div>
+            ` : ''}
+            <div class="text-[11.5px] text-[#52525b] leading-relaxed">
+              ${escapeHtml(order.details || order.script || 'Unedited authentic video footage.')}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function renderStandardBriefExperience(order) {
       const perCreator = order.perCreator || 3;
       const rate = order.rate || '30.00';
       const perCreatorPayout = (perCreator * parseFloat(rate)).toFixed(2);
 
-      // Load creators
       let creators = order.creators || order.selectedCreators;
-      if (!creators || !Array.isArray(creators) || creators.length === 0) {
-        try {
-          const raw = localStorage.getItem('selectedCreators');
-          if (raw) creators = JSON.parse(raw);
-        } catch (e) {}
-      }
       if (!creators || !Array.isArray(creators) || creators.length === 0) {
         creators = [
           { id: 'franci', name: 'Franci', handle: '@franci_ugc', avatar: 'assets/creators_page/franci.png' },
@@ -471,20 +703,12 @@
       }
 
       const names = creators.map(c => c.name);
-
-      // 1. Update Stepper review line
       const step2Text = document.getElementById('stepper-creator-review-text');
-      if (step2Text) {
-        step2Text.textContent = `${names.join(' & ')} reviewing`;
-      }
+      if (step2Text) step2Text.textContent = `${names.join(' & ')} reviewing`;
 
-      // 2. Update online status count
       const onlineCount = document.getElementById('tracker-online-count');
-      if (onlineCount) {
-        onlineCount.textContent = `${creators.length} of ${creators.length} Online`;
-      }
+      if (onlineCount) onlineCount.textContent = `${creators.length} of ${creators.length} Online`;
 
-      // 3. Render creator activities cards
       const creatorsGrid = document.getElementById('tracker-creators-grid');
       if (creatorsGrid) {
         creatorsGrid.innerHTML = creators.map((c, i) => `
@@ -533,40 +757,112 @@
         `).join('');
       }
 
-      // 4. Update Event 1 title & escrow description
-      const event1Title = document.getElementById('event-1-title');
-      if (event1Title) {
-        event1Title.textContent = `Order Dispatched to ${names.join(' & ')}`;
-      }
-
-      const escrowDesc = document.getElementById('escrow-creators-desc');
-      if (escrowDesc) {
-        escrowDesc.textContent = `Your payment is held safely in escrow. ${names.join(' and ')} will deliver unedited footage. You review everything before funds are released.`;
-      }
-
-      // Populate concepts list
       const conceptsList = document.getElementById('tracker-concepts-list');
-      conceptsList.innerHTML = '';
-
-      if (order.concepts && order.concepts.length > 0) {
-        document.getElementById('tracker-concepts-count').textContent = `${order.concepts.length} concept${order.concepts.length === 1 ? '' : 's'}`;
-        order.concepts.forEach((concept, idx) => {
-          const item = document.createElement('div');
-          item.className = "p-3 rounded-[10px] bg-[#f9fafb] border border-[#f1f1f4] text-[12px]";
-          item.innerHTML = `
-            <div class="flex items-center justify-between mb-1">
-              <span class="font-bold text-[#111827]">${concept.title || `Concept ${idx + 1}`}</span>
-              <span class="text-[10px] text-[#6366f1] bg-[#eef2ff] px-1.5 py-0.2 rounded font-medium">${concept.type || 'Reaction / footage'}</span>
-            </div>
-            <p class="text-[11.5px] text-[#52525b] line-clamp-2">${concept.script ? escapeHtml(concept.script) : 'Unedited natural reaction footage.'}</p>
-          `;
-          conceptsList.appendChild(item);
-        });
+      if (conceptsList) {
+        conceptsList.innerHTML = '';
+        if (order.concepts && order.concepts.length > 0) {
+          order.concepts.forEach((concept, idx) => {
+            const item = document.createElement('div');
+            item.className = "p-3 rounded-[10px] bg-[#f9fafb] border border-[#f1f1f4] text-[12px]";
+            item.innerHTML = `
+              <div class="flex items-center justify-between mb-1">
+                <span class="font-bold text-[#111827]">${concept.title || `Concept ${idx + 1}`}</span>
+                <span class="text-[10px] text-[#6366f1] bg-[#eef2ff] px-1.5 py-0.2 rounded font-medium">${concept.type || 'Reaction / footage'}</span>
+              </div>
+              <p class="text-[11.5px] text-[#52525b] line-clamp-2">${concept.script ? escapeHtml(concept.script) : 'Unedited natural reaction footage.'}</p>
+            `;
+            conceptsList.appendChild(item);
+          });
+        }
       }
 
-      // Simulate real-time creator heartbeat check
       simulateRealtimeHeartbeat(creators);
-    });
+    }
+
+    // Interactive helper actions for real-time tracking
+    async function simulateCreatorClaim(orderId, formatType) {
+      const creatorId = formatType === 'reaction' ? 'creator_5' : 'creator_3'; // Franci or Robert
+      try {
+        const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}/claim`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ creatorId, pitch: 'Experienced UGC creator ready to shoot.' })
+        });
+        if (res.ok) {
+          window.location.reload();
+        } else {
+          const err = await res.json();
+          alert(err.error || 'Failed to claim');
+        }
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    async function advanceShippingStatus(orderId) {
+      try {
+        const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}/shipping`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ carrier: 'USPS Priority', trackingNumber: '94001118992231', status: 'delivered' })
+        });
+        if (res.ok) {
+          window.location.reload();
+        }
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    async function simulateDeliverableUpload(orderId) {
+      try {
+        const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}/deliverable`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            videoUrl: 'https://pub-a179e3c7817f4ed39aefde80a344155f.r2.dev/clips/clip-2.mp4',
+            notes: 'High-energy 9:16 vertical video captured in natural morning light.'
+          })
+        });
+        if (res.ok) {
+          window.location.reload();
+        }
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    async function approveDeliverable(orderId) {
+      try {
+        const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}/review-submission`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'approve', feedback: 'Outstanding audio sync and natural reaction! Approved.' })
+        });
+        if (res.ok) {
+          window.location.reload();
+        }
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    async function requestDeliverableRevision(orderId) {
+      const feedback = prompt('Please enter your revision feedback for the creator:', 'Please adjust the hook pacing in the first 3 seconds.');
+      if (!feedback) return;
+      try {
+        const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}/review-submission`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'request_revision', feedback })
+        });
+        if (res.ok) {
+          window.location.reload();
+        }
+      } catch (e) {
+        alert(e.message);
+      }
+    }
 
     function escapeHtml(text) {
       const div = document.createElement('div');

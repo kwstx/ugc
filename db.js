@@ -122,7 +122,107 @@ db.exec(`
     status TEXT DEFAULT 'completed',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
+
+  CREATE TABLE IF NOT EXISTS open_orders (
+    id TEXT PRIMARY KEY,
+    session_id TEXT,
+    brand_name TEXT NOT NULL,
+    title TEXT NOT NULL,
+    format_type TEXT NOT NULL, -- 'reaction' or 'full_ugc'
+    format_link TEXT,
+    source_media_url TEXT,
+    layout_instruction TEXT DEFAULT 'split_screen', -- 'split_screen', 'picture_in_picture', 'side_by_side'
+    details TEXT,
+    script TEXT,
+    talking_points TEXT,
+    hooks TEXT,
+    requires_shipping INTEGER DEFAULT 0,
+    shipping_product_name TEXT,
+    shipping_origin TEXT, -- JSON
+    shipping_destination TEXT, -- JSON
+    tracking_number TEXT,
+    carrier TEXT,
+    shipping_status TEXT DEFAULT 'not_required', -- 'not_required', 'pending_shipment', 'in_transit', 'delivered'
+    shipping_delivered_at DATETIME,
+    creator_pay REAL NOT NULL,
+    platform_fee REAL NOT NULL,
+    total REAL NOT NULL,
+    escrow_status TEXT DEFAULT 'held', -- 'pending_payment', 'held', 'partially_released', 'released', 'refunded'
+    payment_intent_id TEXT,
+    status TEXT DEFAULT 'open', -- 'open', 'claimed', 'in_progress', 'shipping', 'submitted', 'in_review', 'completed', 'cancelled'
+    max_applicants INTEGER DEFAULT 3,
+    assigned_creator_id TEXT,
+    assigned_creator_name TEXT,
+    assigned_at DATETIME,
+    turnaround_hours INTEGER NOT NULL,
+    due_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS order_claims (
+    id TEXT PRIMARY KEY,
+    order_id TEXT NOT NULL,
+    creator_id TEXT NOT NULL,
+    creator_name TEXT NOT NULL,
+    pitch TEXT,
+    status TEXT DEFAULT 'pending', -- 'pending', 'assigned', 'withdrawn', 'rejected'
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(order_id) REFERENCES open_orders(id)
+  );
+
+  CREATE TABLE IF NOT EXISTS order_deliverables (
+    id TEXT PRIMARY KEY,
+    order_id TEXT NOT NULL,
+    creator_id TEXT NOT NULL,
+    video_url TEXT NOT NULL,
+    preview_thumbnail TEXT,
+    notes TEXT,
+    format_type TEXT NOT NULL,
+    verification_report TEXT, -- JSON
+    status TEXT DEFAULT 'submitted', -- 'submitted', 'revision_requested', 'approved', 'rejected'
+    brand_feedback TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    reviewed_at DATETIME,
+    FOREIGN KEY(order_id) REFERENCES open_orders(id)
+  );
+
+  CREATE TABLE IF NOT EXISTS notifications (
+    id TEXT PRIMARY KEY,
+    recipient_type TEXT NOT NULL, -- 'brand', 'creator'
+    recipient_id TEXT NOT NULL,
+    order_id TEXT,
+    event_type TEXT NOT NULL,
+    title TEXT NOT NULL,
+    message TEXT NOT NULL,
+    read INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS brand_sessions (
+    id TEXT PRIMARY KEY,
+    brand_name TEXT NOT NULL,
+    email TEXT,
+    api_key TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    last_active_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
 `);
+
+// Creator schema migrations
+const creatorCols = db.prepare("PRAGMA table_info(creators)").all().map(c => c.name);
+if (!creatorCols.includes('formats')) {
+  db.exec("ALTER TABLE creators ADD COLUMN formats TEXT;");
+}
+if (!creatorCols.includes('rating')) {
+  db.exec("ALTER TABLE creators ADD COLUMN rating TEXT DEFAULT '5.0 (20)';");
+}
+if (!creatorCols.includes('completed_orders')) {
+  db.exec("ALTER TABLE creators ADD COLUMN completed_orders INTEGER DEFAULT 0;");
+}
+if (!creatorCols.includes('shipping_address')) {
+  db.exec("ALTER TABLE creators ADD COLUMN shipping_address TEXT;");
+}
 
 // Seed default creators if empty
 const countStmt = db.prepare('SELECT COUNT(*) as count FROM creators');
@@ -130,20 +230,38 @@ const creatorCount = countStmt.get().count;
 
 if (creatorCount === 0) {
   const insertCreator = db.prepare(`
-    INSERT INTO creators (id, name, handle, avatar, status, rate)
-    VALUES (?, ?, ?, ?, ?, ?)
+    INSERT INTO creators (id, name, handle, avatar, status, rate, formats, rating, shipping_address)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
   const initialCreators = [
-    ['creator_1', 'Sofia', '@sofia.ugc', 'avatar_1.png', 'active', 30.00],
-    ['creator_2', 'Maya', '@maya_creates', 'avatar_2.png', 'active', 30.00],
-    ['creator_3', 'Robert', '@robert_visuals', 'avatar_3.png', 'active', 30.00],
-    ['creator_4', 'Sarah', '@sarah_lifestyle', 'avatar_full.png', 'active', 30.00]
+    ['creator_1', 'Sofia', '@sofia.ugc', 'avatar_1.png', 'active', 30.00, JSON.stringify(['reaction', 'full_ugc']), '4.9 (48)', JSON.stringify({ street: '124 Market St #4', city: 'Austin', state: 'TX', zip: '78701' })],
+    ['creator_2', 'Maya', '@maya_creates', 'avatar_2.png', 'active', 30.00, JSON.stringify(['reaction']), '5.0 (34)', JSON.stringify({ street: '89 Sunset Blvd', city: 'Los Angeles', state: 'CA', zip: '90028' })],
+    ['creator_3', 'Robert', '@robert_visuals', 'avatar_3.png', 'active', 30.00, JSON.stringify(['full_ugc']), '4.8 (56)', JSON.stringify({ street: '450 Broadway', city: 'New York', state: 'NY', zip: '10013' })],
+    ['creator_4', 'Sarah', '@sarah_lifestyle', 'avatar_full.png', 'active', 30.00, JSON.stringify(['reaction', 'full_ugc']), '5.0 (29)', JSON.stringify({ street: '772 Ocean Dr', city: 'Miami', state: 'FL', zip: '33139' })]
   ];
 
   for (const c of initialCreators) {
     insertCreator.run(...c);
   }
+}
+
+// Ensure creators have formats and ratings configured
+const updateCreatorStmt = db.prepare('UPDATE creators SET formats = ?, rating = ?, shipping_address = ? WHERE id = ?');
+try {
+  updateCreatorStmt.run(JSON.stringify(['reaction', 'full_ugc']), '4.9 (48)', JSON.stringify({ street: '124 Market St #4', city: 'Austin', state: 'TX', zip: '78701' }), 'creator_1');
+  updateCreatorStmt.run(JSON.stringify(['reaction']), '5.0 (34)', JSON.stringify({ street: '89 Sunset Blvd', city: 'Los Angeles', state: 'CA', zip: '90028' }), 'creator_2');
+  updateCreatorStmt.run(JSON.stringify(['full_ugc']), '4.8 (56)', JSON.stringify({ street: '450 Broadway', city: 'New York', state: 'NY', zip: '10013' }), 'creator_3');
+  updateCreatorStmt.run(JSON.stringify(['reaction', 'full_ugc']), '5.0 (29)', JSON.stringify({ street: '772 Ocean Dr', city: 'Miami', state: 'FL', zip: '33139' }), 'creator_4');
+
+  const insertOrIgnoreCreator = db.prepare(`
+    INSERT OR IGNORE INTO creators (id, name, handle, avatar, status, rate, formats, rating, completed_orders, shipping_address)
+    VALUES (?, ?, ?, ?, 'active', ?, ?, ?, 0, ?)
+  `);
+  insertOrIgnoreCreator.run('creator_5', 'Franci', '@franci_ugc', 'assets/order/thumb_shocked.png', 25.00, JSON.stringify(['reaction']), '4.9 (88)', JSON.stringify({ street: '210 Pine St', city: 'Seattle', state: 'WA', zip: '98101' }));
+  insertOrIgnoreCreator.run('creator_6', 'Marcus', '@marcus_fit', 'assets/library/clip_4.png', 35.00, JSON.stringify(['full_ugc']), '4.8 (26)', JSON.stringify({ street: '55 Boulder Way', city: 'Denver', state: 'CO', zip: '80202' }));
+} catch (e) {
+  console.warn('Creator update migration note:', e.message);
 }
 
 // Seed default library clips if empty

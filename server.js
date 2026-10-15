@@ -11,6 +11,7 @@ const uploadsRouter = require('./routes/uploads');
 const aiRouter = require('./routes/ai');
 const libraryRouter = require('./routes/library');
 const cartRouter = require('./routes/cart');
+const notificationsRouter = require('./routes/notifications');
 const { runRetentionCleanup, getStorageQuotaReport } = require('./services/storageGuard');
 
 const app = express();
@@ -37,6 +38,7 @@ app.use('/api/uploads', uploadsRouter);
 app.use('/api/ai', aiRouter);
 app.use('/api/library', libraryRouter);
 app.use('/api/cart', cartRouter);
+app.use('/api/notifications', notificationsRouter);
 
 // Storage Quota and Cloudflare Free-Tier Safeguard Monitoring Endpoint
 app.get('/api/storage/quota', (req, res) => {
