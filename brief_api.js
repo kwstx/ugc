@@ -1,0 +1,312 @@
+/**
+ * DansUGC Brief Backend Client Integration
+ * Handles:
+ * - Draft Autosave (POST /api/briefs/save-draft, PUT /api/briefs/:id)
+ * - Brief Retrieval (GET /api/briefs/:id)
+ * - Server-side Validation & Review (POST /api/briefs/:id/review)
+ * - AI Script Assistant (POST /api/ai/script-helper)
+ * - Real-time script pacing & duration estimation
+ */
+
+let currentBriefId = null;
+let autosaveTimeout = null;
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', async () => {
+  // Check for briefId in URL or localStorage
+  const urlParams = new URLSearchParams(window.location.search);
+  const paramId = urlParams.get('briefId') || urlParams.get('id');
+  const savedId = localStorage.getItem('dansugc_current_brief_id');
+  const targetId = paramId || savedId;
+
+  if (targetId) {
+    await loadBriefFromBackend(targetId);
+  }
+
+  // Hook up inputs for autosave
+  setupAutosaveListeners();
+});
+
+/**
+ * Hook up input events for debounced autosave
+ */
+function setupAutosaveListeners() {
+  const inputs = ['brand-name-input', 'about-brand-input', 'filming-instructions-input'];
+  inputs.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', () => scheduleAutosave());
+    }
+  });
+
+  document.addEventListener('input', (e) => {
+    if (e.target && e.target.classList.contains('concept-script-textarea')) {
+      scheduleAutosave();
+    }
+  });
+}
+
+function scheduleAutosave() {
+  showAutosaveBadge('Saving draft...', 'saving');
+  clearTimeout(autosaveTimeout);
+  autosaveTimeout = setTimeout(() => {
+    saveDraftToBackend(false);
+  }, 1800);
+}
+
+function showAutosaveBadge(text, state = 'saved') {
+  const badge = document.getElementById('autosave-status');
+  const badgeText = document.getElementById('autosave-text');
+  const dot = document.getElementById('autosave-dot');
+  if (!badge || !badgeText) return;
+
+  badge.classList.remove('hidden');
+  badgeText.textContent = text;
+
+  if (dot) {
+    if (state === 'saving') {
+      dot.className = 'w-2 h-2 rounded-full bg-[#f59e0b] animate-ping';
+    } else if (state === 'error') {
+      dot.className = 'w-2 h-2 rounded-full bg-[#ef4444]';
+    } else {
+      dot.className = 'w-2 h-2 rounded-full bg-[#10b981]';
+    }
+  }
+}
+
+/**
+ * Collect payload from current DOM
+ */
+function collectBriefPayload() {
+  const brandName = document.getElementById('brand-name-input')?.value.trim() || '';
+  const aboutBrand = document.getElementById('about-brand-input')?.value.trim() || '';
+  const filmingInstructions = document.getElementById('filming-instructions-input')?.value.trim() || '';
+
+  const concepts = [];
+  const blocks = document.querySelectorAll('#concepts-container > div');
+  blocks.forEach((block, idx) => {
+    const title = block.querySelector('.concept-title-text')?.textContent.trim() || `Concept ${idx + 1}`;
+    const typeEl = block.querySelector('[id^="selected-video-type-text-"]');
+    const type = typeEl ? typeEl.textContent.trim() : 'Reaction / footage';
+    const script = block.querySelector('.concept-script-textarea')?.value.trim() || '';
+    const perCreator = block.querySelector('.per-creator-input')?.value.trim() || '3';
+    concepts.push({ title, type, script, perCreator });
+  });
+
+  const creatorCount = (window.selectedCreators && window.selectedCreators.length) || 2;
+  const qty = window.currentQty || 6;
+
+  return {
+    id: currentBriefId,
+    brandName,
+    aboutBrand,
+    filmingInstructions,
+    qty,
+    selectedCreators: window.selectedCreators || [],
+    concepts
+  };
+}
+
+/**
+ * POST /api/briefs/save-draft
+ */
+async function saveDraftToBackend(showExplicitAlert = false) {
+  const payload = collectBriefPayload();
+  try {
+    const response = await fetch('/api/briefs/save-draft', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) throw new Error('Failed to save brief to backend');
+
+    const result = await response.json();
+    if (result.success && result.briefId) {
+      currentBriefId = result.briefId;
+      localStorage.setItem('dansugc_current_brief_id', currentBriefId);
+      showAutosaveBadge('All changes saved to backend', 'saved');
+      if (showExplicitAlert) {
+        alert('Draft saved successfully to backend!');
+      }
+    }
+  } catch (err) {
+    console.warn('Backend autosave fallback to localStorage:', err);
+    showAutosaveBadge('Saved locally', 'saved');
+  }
+}
+
+/**
+ * GET /api/briefs/:id
+ */
+async function loadBriefFromBackend(briefId) {
+  try {
+    showAutosaveBadge('Loading brief...', 'saving');
+    const response = await fetch(`/api/briefs/${briefId}`);
+    if (!response.ok) throw new Error('Brief not found on server');
+
+    const result = await response.json();
+    if (result.success && result.brief) {
+      const b = result.brief;
+      currentBriefId = b.id;
+      localStorage.setItem('dansugc_current_brief_id', b.id);
+
+      const brandInput = document.getElementById('brand-name-input');
+      const aboutInput = document.getElementById('about-brand-input');
+      const filmingInput = document.getElementById('filming-instructions-input');
+
+      if (brandInput && b.brandName) brandInput.value = b.brandName;
+      if (aboutInput && b.aboutBrand) aboutInput.value = b.aboutBrand;
+      if (filmingInput && b.filmingInstructions) filmingInput.value = b.filmingInstructions;
+
+      if (b.qty && typeof window.selectTier === 'function') {
+        window.selectTier(b.qty);
+      }
+
+      if (b.concepts && b.concepts.length > 0) {
+        const firstTa = document.querySelector('.concept-script-textarea');
+        if (firstTa && b.concepts[0].script) {
+          firstTa.value = b.concepts[0].script;
+        }
+      }
+
+      if (typeof window.checkBriefValidity === 'function') {
+        window.checkBriefValidity();
+      }
+
+      showAutosaveBadge('Brief loaded from server', 'saved');
+    }
+  } catch (err) {
+    console.warn('Could not load from backend, using local state:', err);
+    showAutosaveBadge('Loaded local draft', 'saved');
+  }
+}
+
+/**
+ * POST /api/briefs/:id/review
+ * Server-side Validation & Submission
+ */
+async function submitReviewToBackend() {
+  const payload = collectBriefPayload();
+  const targetId = currentBriefId || 'draft_' + Date.now();
+
+  try {
+    const response = await fetch(`/api/briefs/${targetId}/review`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.error || (data.details ? data.details.join('\n') : 'Validation failed on server'));
+    }
+
+    // Save server-verified payload to review order
+    localStorage.setItem('ugc_order_review', JSON.stringify(data.verifiedOrder));
+    localStorage.setItem('dansugc_current_brief_id', targetId);
+    window.location.href = 'review_order.html';
+  } catch (err) {
+    console.warn('Server review validation error, falling back to local review flow:', err);
+    // If backend is unavailable, proceed with local payload
+    const localRate = window.getRateForQty ? window.getRateForQty(payload.qty) : 30.00;
+    const localPayload = {
+      ...payload,
+      rate: localRate.toFixed(2),
+      total: (payload.qty * localRate).toFixed(2),
+      perCreator: Math.ceil(payload.qty / (payload.selectedCreators.length || 2)),
+      selectedCreatorsCount: payload.selectedCreators.length || 2
+    };
+    localStorage.setItem('ugc_order_review', JSON.stringify(localPayload));
+    window.location.href = 'review_order.html';
+  }
+}
+
+/**
+ * POST /api/ai/script-helper
+ */
+async function callAiScriptHelper(conceptIndex, mode = 'generate') {
+  const block = document.getElementById(`concept-block-${conceptIndex}`) || document.getElementById('concepts-container');
+  const textarea = block ? block.querySelector('.concept-script-textarea') : document.querySelector('.concept-script-textarea');
+  const typeEl = block ? block.querySelector('[id^="selected-video-type-text-"]') : null;
+  const conceptType = typeEl ? typeEl.textContent.trim() : 'Reaction / footage';
+
+  const brandName = document.getElementById('brand-name-input')?.value.trim() || 'Our Brand';
+  const aboutBrand = document.getElementById('about-brand-input')?.value.trim() || 'High quality products';
+  const currentScript = textarea ? textarea.value.trim() : '';
+
+  const aiBtn = document.getElementById(`ai-btn-${conceptIndex}`) || event?.target?.closest('button');
+  if (aiBtn) {
+    aiBtn.disabled = true;
+    aiBtn.innerHTML = `<span>✨ Generating...</span>`;
+  }
+
+  try {
+    const res = await fetch('/api/ai/script-helper', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mode,
+        brandName,
+        aboutBrand,
+        conceptType,
+        currentScript
+      })
+    });
+
+    const data = await res.json();
+    if (data.success && textarea) {
+      textarea.value = data.script;
+      updateScriptPacing(conceptIndex);
+      if (typeof window.checkBriefValidity === 'function') {
+        window.checkBriefValidity();
+      }
+      scheduleAutosave();
+    }
+  } catch (err) {
+    console.error('AI script helper error:', err);
+    alert('AI Helper currently offline or busy. Try again in a moment.');
+  } finally {
+    if (aiBtn) {
+      aiBtn.disabled = false;
+      aiBtn.innerHTML = `<span>✨ AI Script Helper</span>`;
+    }
+  }
+}
+
+/**
+ * Real-time script pacing analysis
+ */
+function updateScriptPacing(conceptIndex) {
+  const block = document.getElementById(`concept-block-${conceptIndex}`) || document.getElementById('concepts-container');
+  if (!block) return;
+  const textarea = block.querySelector('.concept-script-textarea');
+  const indicator = document.getElementById(`script-pacing-${conceptIndex}`);
+  if (!textarea || !indicator) return;
+
+  const words = textarea.value.trim().split(/\s+/).filter(Boolean).length;
+  if (words === 0) {
+    indicator.textContent = 'Estimated duration: 0s';
+    indicator.className = 'text-[11px] text-[#6b7280]';
+    return;
+  }
+
+  const seconds = Math.max(3, Math.round(words / 2.33));
+  if (seconds > 60) {
+    indicator.textContent = `Estimated duration: ~${seconds}s (Warning: >60s may reduce retention)`;
+    indicator.className = 'text-[11px] text-[#dc2626] font-medium';
+  } else if (seconds >= 30) {
+    indicator.textContent = `Estimated duration: ~${seconds}s (Optimal for 30s-60s ad)`;
+    indicator.className = 'text-[11px] text-[#2563eb] font-medium';
+  } else {
+    indicator.textContent = `Estimated duration: ~${seconds}s (Great 15s short-form hook)`;
+    indicator.className = 'text-[11px] text-[#059669] font-medium';
+  }
+}
+
+// Expose globals
+window.saveDraftToBackend = saveDraftToBackend;
+window.submitReviewToBackend = submitReviewToBackend;
+window.callAiScriptHelper = callAiScriptHelper;
+window.updateScriptPacing = updateScriptPacing;

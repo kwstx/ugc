@@ -1,0 +1,29 @@
+{
+  "name": "ugc",
+  "version": "1.0.0",
+  "description": "A pixel-perfect, responsive replica of the Sofia landing page with interactive search, category tags, creator reaction clips catalog, and concierge support chat.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kwstx/ugc.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kwstx/ugc/issues"
+  },
+  "homepage": "https://github.com/kwstx/ugc#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.8",
+    "express": "^5.3.0",
+    "multer": "^2.4.0"
+  }
+}

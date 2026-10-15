@@ -68,10 +68,16 @@
       </div>
     </nav>
 
-    <!-- Cancel editing -->
-    <a href="brief.html" class="text-[12.5px] font-medium text-[#4b5563] hover:text-black transition-colors">
-      Cancel editing
-    </a>
+    <!-- Autosave status & Cancel -->
+    <div class="flex items-center gap-4">
+      <div id="autosave-status" class="hidden sm:flex items-center gap-1.5 text-[11px] text-[#6b7280] bg-[#f9fafb] border border-[#e5e7eb] px-2.5 py-1 rounded-full">
+        <span id="autosave-dot" class="w-2 h-2 rounded-full bg-[#10b981]"></span>
+        <span id="autosave-text">All changes saved</span>
+      </div>
+      <a href="brief.html" class="text-[12.5px] font-medium text-[#4b5563] hover:text-black transition-colors">
+        Cancel editing
+      </a>
+    </div>
   </header>
 
   <!-- Page Container -->
@@ -1131,13 +1137,16 @@
         selectedCreatorsCount: creatorCount
       };
 
-      try {
-        localStorage.setItem('ugc_order_review', JSON.stringify(orderPayload));
-      } catch (e) {
-        console.error(e);
+      if (typeof window.submitReviewToBackend === 'function') {
+        window.submitReviewToBackend();
+      } else {
+        try {
+          localStorage.setItem('ugc_order_review', JSON.stringify(orderPayload));
+        } catch (e) {
+          console.error(e);
+        }
+        window.location.href = 'review_order.html';
       }
-
-      window.location.href = 'review_order.html';
     }
 
     // Expose functions on window
@@ -1155,6 +1164,9 @@
       checkBriefValidity();
     });
   </script>
+
+  <!-- DansUGC Brief Backend Client Integration -->
+  <script src="brief_api.js"></script>
 
 </body>
 </html>
