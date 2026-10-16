@@ -413,13 +413,65 @@
         </div>
       </div>
 
-      <!-- Filter: All genders -->
-      <button class="border border-[#dedbd3] bg-transparent hover:border-[#b8b5ac] rounded-full px-2.5 py-1 text-[11px] text-[#18181b] flex items-center gap-1 shrink-0 transition-colors cursor-pointer">
-        <span>All genders</span>
-        <svg class="w-2.5 h-2.5 text-[#222] stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
-        </svg>
-      </button>
+      <!-- Filter: All genders with Dropdown Popup -->
+      <div class="relative inline-block text-left" id="gender-dropdown-wrapper">
+        <button 
+          id="gender-filter-btn" 
+          type="button" 
+          onclick="toggleGenderDropdown(event)" 
+          class="border border-[#dedbd3] bg-transparent hover:border-[#b8b5ac] rounded-full px-2.5 py-1 text-[11px] text-[#18181b] flex items-center gap-1.5 shrink-0 transition-all cursor-pointer select-none focus:outline-none"
+        >
+          <span id="gender-filter-label">All genders</span>
+          <svg id="gender-filter-chevron" class="w-2.5 h-2.5 text-[#222] stroke-[2.2] transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+          </svg>
+        </button>
+
+        <!-- Gender Dropdown Popup Menu -->
+        <div 
+          id="gender-dropdown-menu" 
+          class="hidden absolute left-0 top-full mt-2 w-52 rounded-[14px] bg-white border border-[#dcd9d0] shadow-[0_12px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.05)] py-1.5 z-50 text-[11.5px] text-[#18181b]"
+          style="min-width: 195px;"
+        >
+          <div class="px-3 py-1.5 text-[10px] font-semibold tracking-wider text-[#8e8c85] uppercase border-b border-[#f0eee6] mb-1 flex items-center justify-between">
+            <span>Filter by gender</span>
+            <span class="text-[9px] lowercase font-normal text-[#9ca3af]">click to filter</span>
+          </div>
+          <div class="space-y-0.5 px-1.5" id="gender-list-options">
+            <button type="button" onclick="selectGender('all', 'All genders', event)" data-value="all" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="font-medium text-[#18181b]">All genders</span>
+              <div class="flex items-center gap-1.5">
+                <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">5</span>
+                <span class="gender-check text-[#0060df] text-xs font-bold">✓</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectGender('female', 'Female', event)" data-value="female" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="text-[#333]">Female</span>
+              <div class="flex items-center gap-1.5">
+                <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">4</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectGender('male', 'Male', event)" data-value="male" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="text-[#333]">Male</span>
+              <div class="flex items-center gap-1.5">
+                <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">1</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectGender('non-binary', 'Non-binary', event)" data-value="non-binary" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="text-[#333]">Non-binary</span>
+              <div class="flex items-center gap-1.5">
+                <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectGender('couples', 'Couples / Duos', event)" data-value="couples" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="text-[#333]">Couples / Duos</span>
+              <div class="flex items-center gap-1.5">
+                <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
 
       <!-- Filter: All creator types -->
       <button class="border border-[#dedbd3] bg-transparent hover:border-[#b8b5ac] rounded-full px-2.5 py-1 text-[11px] text-[#18181b] flex items-center gap-1 shrink-0 transition-colors cursor-pointer">
@@ -434,7 +486,7 @@
     <div id="creators-grid" class="grid grid-cols-5 gap-3.5 w-full mt-7 mb-3.5">
       
       <!-- Card 1: Kris (Latvia) -->
-      <div onclick="toggleCreator('kris')" id="creator-kris" data-country="Latvia" data-languages="English,Latvian" class="creator-card cursor-pointer flex flex-col group">
+      <div onclick="toggleCreator('kris')" id="creator-kris" data-country="Latvia" data-languages="English,Latvian" data-gender="male" class="creator-card cursor-pointer flex flex-col group">
         <div id="frame-kris" class="card-frame unselected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
             <img id="img-kris" src="assets/creators_page/kris.png" alt="Kris" class="w-full h-full object-cover pointer-events-none" />
@@ -451,7 +503,7 @@
       </div>
 
       <!-- Card 2: Angelika (Romania) -->
-      <div onclick="toggleCreator('angelika')" id="creator-angelika" data-country="Romania" data-languages="English,Romanian" class="creator-card cursor-pointer flex flex-col group">
+      <div onclick="toggleCreator('angelika')" id="creator-angelika" data-country="Romania" data-languages="English,Romanian" data-gender="female" class="creator-card cursor-pointer flex flex-col group">
         <div id="frame-angelika" class="card-frame unselected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
             <img id="img-angelika" src="assets/creators_page/angelika.png" alt="Angelika" class="w-full h-full object-cover pointer-events-none" />
@@ -468,7 +520,7 @@
       </div>
 
       <!-- Card 3: Franci (Latvia) -->
-      <div onclick="toggleCreator('franci')" id="creator-franci" data-country="Latvia" data-languages="English" class="creator-card cursor-pointer flex flex-col group">
+      <div onclick="toggleCreator('franci')" id="creator-franci" data-country="Latvia" data-languages="English" data-gender="female" class="creator-card cursor-pointer flex flex-col group">
         <div id="frame-franci" class="card-frame selected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
             <img id="img-franci" src="assets/creators_page/inner_franci.png" alt="Franci" class="w-full h-full object-cover pointer-events-none" />
@@ -490,7 +542,7 @@
       </div>
 
       <!-- Card 4: Emilia (Poland) -->
-      <div onclick="toggleCreator('emilia')" id="creator-emilia" data-country="Poland" data-languages="English,Latvian,Polish" class="creator-card cursor-pointer flex flex-col group">
+      <div onclick="toggleCreator('emilia')" id="creator-emilia" data-country="Poland" data-languages="English,Latvian,Polish" data-gender="female" class="creator-card cursor-pointer flex flex-col group">
         <div id="frame-emilia" class="card-frame selected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
             <img id="img-emilia" src="assets/creators_page/inner_emilia.png" alt="Emilia" class="w-full h-full object-cover pointer-events-none" />
@@ -512,7 +564,7 @@
       </div>
 
       <!-- Card 5: Andrea (Austria) -->
-      <div onclick="toggleCreator('andrea')" id="creator-andrea" data-country="Austria" data-languages="English,Romanian,German" class="creator-card cursor-pointer flex flex-col group">
+      <div onclick="toggleCreator('andrea')" id="creator-andrea" data-country="Austria" data-languages="English,Romanian,German" data-gender="female" class="creator-card cursor-pointer flex flex-col group">
         <div id="frame-andrea" class="card-frame unselected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
             <img id="img-andrea" src="assets/creators_page/andrea.png" alt="Andrea" class="w-full h-full object-cover pointer-events-none" />
@@ -598,15 +650,16 @@
 
   <script>
     const creatorMeta = {
-      kris: { id: 'kris', name: 'Kris', handle: '@kris_creator', avatar: 'assets/creators_page/kris.png', verified: true, country: 'Latvia', languages: ['English', 'Latvian'] },
-      angelika: { id: 'angelika', name: 'Angelika', handle: '@angelika_ugc', avatar: 'assets/creators_page/angelika.png', verified: true, country: 'Romania', languages: ['English', 'Romanian'] },
-      franci: { id: 'franci', name: 'Franci', handle: '@franci_ugc', avatar: 'assets/creators_page/franci.png', verified: true, country: 'Latvia', languages: ['English'] },
-      emilia: { id: 'emilia', name: 'Emilia', handle: '@emilia_ugc', avatar: 'assets/creators_page/emilia.png', verified: true, country: 'Poland', languages: ['English', 'Latvian', 'Polish'] },
-      andrea: { id: 'andrea', name: 'Andrea', handle: '@andrea_ugc', avatar: 'assets/creators_page/andrea.png', verified: true, country: 'Austria', languages: ['English', 'Romanian', 'German'] }
+      kris: { id: 'kris', name: 'Kris', handle: '@kris_creator', avatar: 'assets/creators_page/kris.png', verified: true, country: 'Latvia', languages: ['English', 'Latvian'], gender: 'male' },
+      angelika: { id: 'angelika', name: 'Angelika', handle: '@angelika_ugc', avatar: 'assets/creators_page/angelika.png', verified: true, country: 'Romania', languages: ['English', 'Romanian'], gender: 'female' },
+      franci: { id: 'franci', name: 'Franci', handle: '@franci_ugc', avatar: 'assets/creators_page/franci.png', verified: true, country: 'Latvia', languages: ['English'], gender: 'female' },
+      emilia: { id: 'emilia', name: 'Emilia', handle: '@emilia_ugc', avatar: 'assets/creators_page/emilia.png', verified: true, country: 'Poland', languages: ['English', 'Latvian', 'Polish'], gender: 'female' },
+      andrea: { id: 'andrea', name: 'Andrea', handle: '@andrea_ugc', avatar: 'assets/creators_page/andrea.png', verified: true, country: 'Austria', languages: ['English', 'Romanian', 'German'], gender: 'female' }
     };
 
     let currentSelectedCountry = 'all';
     let currentSelectedLanguage = 'all';
+    let currentSelectedGender = 'all';
 
     function closeCountryDropdown() {
       const menu = document.getElementById('country-dropdown-menu');
@@ -622,12 +675,20 @@
       if (chevron) chevron.classList.remove('rotate-180');
     }
 
+    function closeGenderDropdown() {
+      const menu = document.getElementById('gender-dropdown-menu');
+      const chevron = document.getElementById('gender-filter-chevron');
+      if (menu) menu.classList.add('hidden');
+      if (chevron) chevron.classList.remove('rotate-180');
+    }
+
     function toggleCountryDropdown(event) {
       if (event) {
         event.stopPropagation();
         event.preventDefault();
       }
       closeLanguageDropdown();
+      closeGenderDropdown();
 
       const menu = document.getElementById('country-dropdown-menu');
       const chevron = document.getElementById('country-filter-chevron');
@@ -649,9 +710,32 @@
         event.preventDefault();
       }
       closeCountryDropdown();
+      closeGenderDropdown();
 
       const menu = document.getElementById('language-dropdown-menu');
       const chevron = document.getElementById('language-filter-chevron');
+      if (!menu) return;
+
+      const isHidden = menu.classList.contains('hidden');
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        if (chevron) chevron.classList.add('rotate-180');
+      } else {
+        menu.classList.add('hidden');
+        if (chevron) chevron.classList.remove('rotate-180');
+      }
+    }
+
+    function toggleGenderDropdown(event) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      closeCountryDropdown();
+      closeLanguageDropdown();
+
+      const menu = document.getElementById('gender-dropdown-menu');
+      const chevron = document.getElementById('gender-filter-chevron');
       if (!menu) return;
 
       const isHidden = menu.classList.contains('hidden');
@@ -766,9 +850,61 @@
       applyFilters();
     }
 
+    function selectGender(gender, label, event) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      currentSelectedGender = gender;
+
+      // Update button label
+      const btnLabel = document.getElementById('gender-filter-label');
+      const btn = document.getElementById('gender-filter-btn');
+      if (btnLabel) {
+        btnLabel.textContent = gender === 'all' ? 'All genders' : label;
+      }
+
+      // Active visual styling on the filter pill
+      if (btn) {
+        if (gender === 'all') {
+          btn.classList.remove('border-[#0060df]', 'bg-[#eff6ff]', 'text-[#0060df]', 'font-medium');
+          btn.classList.add('border-[#dedbd3]', 'bg-transparent', 'text-[#18181b]');
+        } else {
+          btn.classList.remove('border-[#dedbd3]', 'bg-transparent', 'text-[#18181b]');
+          btn.classList.add('border-[#0060df]', 'bg-[#eff6ff]', 'text-[#0060df]', 'font-medium');
+        }
+      }
+
+      // Update checkmarks in gender popup
+      const options = document.querySelectorAll('.gender-opt');
+      options.forEach(opt => {
+        const val = opt.getAttribute('data-value');
+        const existingCheck = opt.querySelector('.gender-check');
+        if (val === gender) {
+          if (!existingCheck) {
+            const container = opt.querySelector('div.flex');
+            const check = document.createElement('span');
+            check.className = 'gender-check text-[#0060df] text-xs font-bold';
+            check.textContent = '✓';
+            if (container) {
+              container.appendChild(check);
+            } else {
+              opt.appendChild(check);
+            }
+          }
+        } else {
+          if (existingCheck) existingCheck.remove();
+        }
+      });
+
+      closeGenderDropdown();
+      applyFilters();
+    }
+
     function resetFilters(event) {
       selectCountry('all', 'All countries', event);
       selectLanguage('all', 'All languages', event);
+      selectGender('all', 'All genders', event);
       const searchInput = document.getElementById('creator-search-input');
       if (searchInput) searchInput.value = '';
       applyFilters();
@@ -783,14 +919,16 @@
       cards.forEach(card => {
         const cardCountry = (card.getAttribute('data-country') || '').toLowerCase();
         const cardLanguages = (card.getAttribute('data-languages') || '').toLowerCase().split(',').map(s => s.trim());
+        const cardGender = (card.getAttribute('data-gender') || '').toLowerCase();
         const nameEl = card.querySelector('span.text-\\[13px\\]');
         const name = nameEl ? nameEl.textContent.trim().toLowerCase() : '';
 
         const matchesCountry = (currentSelectedCountry === 'all' || cardCountry === currentSelectedCountry.toLowerCase());
         const matchesLanguage = (currentSelectedLanguage === 'all' || cardLanguages.includes(currentSelectedLanguage.toLowerCase()));
+        const matchesGender = (currentSelectedGender === 'all' || cardGender === currentSelectedGender.toLowerCase());
         const matchesSearch = !query || name.includes(query);
 
-        if (matchesCountry && matchesLanguage && matchesSearch) {
+        if (matchesCountry && matchesLanguage && matchesGender && matchesSearch) {
           card.style.display = 'flex';
           visibleCount++;
         } else {
@@ -813,7 +951,7 @@
       // Row 2 partial peek visibility
       const row2Peek = document.getElementById('row2-peek');
       if (row2Peek) {
-        row2Peek.style.display = (currentSelectedCountry === 'all' && currentSelectedLanguage === 'all' && !query) ? 'grid' : 'none';
+        row2Peek.style.display = (currentSelectedCountry === 'all' && currentSelectedLanguage === 'all' && currentSelectedGender === 'all' && !query) ? 'grid' : 'none';
       }
     }
 
@@ -827,12 +965,17 @@
       if (langWrapper && !langWrapper.contains(e.target)) {
         closeLanguageDropdown();
       }
+      const genderWrapper = document.getElementById('gender-dropdown-wrapper');
+      if (genderWrapper && !genderWrapper.contains(e.target)) {
+        closeGenderDropdown();
+      }
     });
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeCountryDropdown();
         closeLanguageDropdown();
+        closeGenderDropdown();
       }
     });
 
