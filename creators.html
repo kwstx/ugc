@@ -310,14 +310,108 @@
         </div>
       </div>
 
-      <!-- Filter: speaking All languages -->
+      <!-- Filter: speaking All languages with Dropdown Popup -->
       <span class="text-[11px] text-[#716f6a] shrink-0 font-normal">, speaking</span>
-      <button class="border border-[#dedbd3] bg-transparent hover:border-[#b8b5ac] rounded-full px-2.5 py-1 text-[11px] text-[#18181b] flex items-center gap-1 shrink-0 transition-colors cursor-pointer">
-        <span>All languages</span>
-        <svg class="w-2.5 h-2.5 text-[#222] stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
-        </svg>
-      </button>
+      <div class="relative inline-block text-left" id="language-dropdown-wrapper">
+        <button 
+          id="language-filter-btn" 
+          type="button" 
+          onclick="toggleLanguageDropdown(event)" 
+          class="border border-[#dedbd3] bg-transparent hover:border-[#b8b5ac] rounded-full px-2.5 py-1 text-[11px] text-[#18181b] flex items-center gap-1.5 shrink-0 transition-all cursor-pointer select-none focus:outline-none"
+        >
+          <span id="language-filter-label">All languages</span>
+          <svg id="language-filter-chevron" class="w-2.5 h-2.5 text-[#222] stroke-[2.2] transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+          </svg>
+        </button>
+
+        <!-- Dropdown Popup Menu -->
+        <div 
+          id="language-dropdown-menu" 
+          class="hidden absolute left-0 top-full mt-2 w-56 rounded-[14px] bg-white border border-[#dcd9d0] shadow-[0_12px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.05)] py-1.5 z-50 text-[11.5px] text-[#18181b]"
+          style="min-width: 210px;"
+        >
+          <div class="px-3 py-1.5 text-[10px] font-semibold tracking-wider text-[#8e8c85] uppercase border-b border-[#f0eee6] mb-1 flex items-center justify-between">
+            <span>Filter by language</span>
+            <span class="text-[9px] lowercase font-normal text-[#9ca3af]">click to filter</span>
+          </div>
+          <div class="max-h-[260px] overflow-y-auto space-y-0.5 px-1.5" id="language-list-options">
+            <button type="button" onclick="selectLanguage('all', 'All languages', event)" data-value="all" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-sm">🌐</span>
+                <span class="font-medium text-[#18181b]">All languages</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">5</span>
+                <span class="lang-check text-[#0060df] text-xs font-bold">✓</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectLanguage('English', '🇬🇧 English', event)" data-value="English" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-sm">🇬🇧</span>
+                <span class="text-[#333]">English</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">5</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectLanguage('Latvian', '🇱🇻 Latvian', event)" data-value="Latvian" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-sm">🇱🇻</span>
+                <span class="text-[#333]">Latvian</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">2</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectLanguage('Romanian', '🇷🇴 Romanian', event)" data-value="Romanian" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-sm">🇷🇴</span>
+                <span class="text-[#333]">Romanian</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">2</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectLanguage('Polish', '🇵🇱 Polish', event)" data-value="Polish" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-sm">🇵🇱</span>
+                <span class="text-[#333]">Polish</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">1</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectLanguage('German', '🇩🇪 German', event)" data-value="German" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-sm">🇩🇪</span>
+                <span class="text-[#333]">German</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">1</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectLanguage('Spanish', '🇪🇸 Spanish', event)" data-value="Spanish" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-sm">🇪🇸</span>
+                <span class="text-[#333]">Spanish</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectLanguage('French', '🇫🇷 French', event)" data-value="French" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-sm">🇫🇷</span>
+                <span class="text-[#333]">French</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
 
       <!-- Filter: All genders -->
       <button class="border border-[#dedbd3] bg-transparent hover:border-[#b8b5ac] rounded-full px-2.5 py-1 text-[11px] text-[#18181b] flex items-center gap-1 shrink-0 transition-colors cursor-pointer">
@@ -340,7 +434,7 @@
     <div id="creators-grid" class="grid grid-cols-5 gap-3.5 w-full mt-7 mb-3.5">
       
       <!-- Card 1: Kris (Latvia) -->
-      <div onclick="toggleCreator('kris')" id="creator-kris" data-country="Latvia" class="creator-card cursor-pointer flex flex-col group">
+      <div onclick="toggleCreator('kris')" id="creator-kris" data-country="Latvia" data-languages="English,Latvian" class="creator-card cursor-pointer flex flex-col group">
         <div id="frame-kris" class="card-frame unselected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
             <img id="img-kris" src="assets/creators_page/kris.png" alt="Kris" class="w-full h-full object-cover pointer-events-none" />
@@ -357,7 +451,7 @@
       </div>
 
       <!-- Card 2: Angelika (Romania) -->
-      <div onclick="toggleCreator('angelika')" id="creator-angelika" data-country="Romania" class="creator-card cursor-pointer flex flex-col group">
+      <div onclick="toggleCreator('angelika')" id="creator-angelika" data-country="Romania" data-languages="English,Romanian" class="creator-card cursor-pointer flex flex-col group">
         <div id="frame-angelika" class="card-frame unselected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
             <img id="img-angelika" src="assets/creators_page/angelika.png" alt="Angelika" class="w-full h-full object-cover pointer-events-none" />
@@ -374,7 +468,7 @@
       </div>
 
       <!-- Card 3: Franci (Latvia) -->
-      <div onclick="toggleCreator('franci')" id="creator-franci" data-country="Latvia" class="creator-card cursor-pointer flex flex-col group">
+      <div onclick="toggleCreator('franci')" id="creator-franci" data-country="Latvia" data-languages="English" class="creator-card cursor-pointer flex flex-col group">
         <div id="frame-franci" class="card-frame selected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
             <img id="img-franci" src="assets/creators_page/inner_franci.png" alt="Franci" class="w-full h-full object-cover pointer-events-none" />
@@ -396,7 +490,7 @@
       </div>
 
       <!-- Card 4: Emilia (Poland) -->
-      <div onclick="toggleCreator('emilia')" id="creator-emilia" data-country="Poland" class="creator-card cursor-pointer flex flex-col group">
+      <div onclick="toggleCreator('emilia')" id="creator-emilia" data-country="Poland" data-languages="English,Latvian,Polish" class="creator-card cursor-pointer flex flex-col group">
         <div id="frame-emilia" class="card-frame selected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
             <img id="img-emilia" src="assets/creators_page/inner_emilia.png" alt="Emilia" class="w-full h-full object-cover pointer-events-none" />
@@ -418,7 +512,7 @@
       </div>
 
       <!-- Card 5: Andrea (Austria) -->
-      <div onclick="toggleCreator('andrea')" id="creator-andrea" data-country="Austria" class="creator-card cursor-pointer flex flex-col group">
+      <div onclick="toggleCreator('andrea')" id="creator-andrea" data-country="Austria" data-languages="English,Romanian,German" class="creator-card cursor-pointer flex flex-col group">
         <div id="frame-andrea" class="card-frame unselected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
             <img id="img-andrea" src="assets/creators_page/andrea.png" alt="Andrea" class="w-full h-full object-cover pointer-events-none" />
@@ -434,7 +528,7 @@
         </div>
       </div>
 
-      <!-- Empty State when no creators match country filter -->
+      <!-- Empty State when no creators match country/language filter -->
       <div id="no-creators-state" class="hidden col-span-5 text-center py-12 flex flex-col items-center justify-center">
         <div class="w-12 h-12 rounded-full bg-[#f4f3ef] border border-[#e5e3dc] flex items-center justify-center text-[#787671] mb-2.5 mx-auto">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
@@ -443,9 +537,9 @@
           </svg>
         </div>
         <p class="text-[13px] font-semibold text-[#18181b]">No creators found</p>
-        <p class="text-[11px] text-[#716f6a] mt-0.5 max-w-[260px]">There are currently no active creators matching your filter in this country.</p>
-        <button type="button" onclick="selectCountry('all', 'All countries', event)" class="mt-3 text-[11px] font-medium text-[#0060df] hover:underline cursor-pointer">
-          Reset to all countries
+        <p class="text-[11px] text-[#716f6a] mt-0.5 max-w-[260px]">There are currently no active creators matching your filter criteria.</p>
+        <button type="button" onclick="resetFilters(event)" class="mt-3 text-[11px] font-medium text-[#0060df] hover:underline cursor-pointer">
+          Reset all filters
         </button>
       </div>
 
@@ -504,22 +598,60 @@
 
   <script>
     const creatorMeta = {
-      kris: { id: 'kris', name: 'Kris', handle: '@kris_creator', avatar: 'assets/creators_page/kris.png', verified: true, country: 'Latvia' },
-      angelika: { id: 'angelika', name: 'Angelika', handle: '@angelika_ugc', avatar: 'assets/creators_page/angelika.png', verified: true, country: 'Romania' },
-      franci: { id: 'franci', name: 'Franci', handle: '@franci_ugc', avatar: 'assets/creators_page/franci.png', verified: true, country: 'Latvia' },
-      emilia: { id: 'emilia', name: 'Emilia', handle: '@emilia_ugc', avatar: 'assets/creators_page/emilia.png', verified: true, country: 'Poland' },
-      andrea: { id: 'andrea', name: 'Andrea', handle: '@andrea_ugc', avatar: 'assets/creators_page/andrea.png', verified: true, country: 'Austria' }
+      kris: { id: 'kris', name: 'Kris', handle: '@kris_creator', avatar: 'assets/creators_page/kris.png', verified: true, country: 'Latvia', languages: ['English', 'Latvian'] },
+      angelika: { id: 'angelika', name: 'Angelika', handle: '@angelika_ugc', avatar: 'assets/creators_page/angelika.png', verified: true, country: 'Romania', languages: ['English', 'Romanian'] },
+      franci: { id: 'franci', name: 'Franci', handle: '@franci_ugc', avatar: 'assets/creators_page/franci.png', verified: true, country: 'Latvia', languages: ['English'] },
+      emilia: { id: 'emilia', name: 'Emilia', handle: '@emilia_ugc', avatar: 'assets/creators_page/emilia.png', verified: true, country: 'Poland', languages: ['English', 'Latvian', 'Polish'] },
+      andrea: { id: 'andrea', name: 'Andrea', handle: '@andrea_ugc', avatar: 'assets/creators_page/andrea.png', verified: true, country: 'Austria', languages: ['English', 'Romanian', 'German'] }
     };
 
     let currentSelectedCountry = 'all';
+    let currentSelectedLanguage = 'all';
+
+    function closeCountryDropdown() {
+      const menu = document.getElementById('country-dropdown-menu');
+      const chevron = document.getElementById('country-filter-chevron');
+      if (menu) menu.classList.add('hidden');
+      if (chevron) chevron.classList.remove('rotate-180');
+    }
+
+    function closeLanguageDropdown() {
+      const menu = document.getElementById('language-dropdown-menu');
+      const chevron = document.getElementById('language-filter-chevron');
+      if (menu) menu.classList.add('hidden');
+      if (chevron) chevron.classList.remove('rotate-180');
+    }
 
     function toggleCountryDropdown(event) {
       if (event) {
         event.stopPropagation();
         event.preventDefault();
       }
+      closeLanguageDropdown();
+
       const menu = document.getElementById('country-dropdown-menu');
       const chevron = document.getElementById('country-filter-chevron');
+      if (!menu) return;
+
+      const isHidden = menu.classList.contains('hidden');
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        if (chevron) chevron.classList.add('rotate-180');
+      } else {
+        menu.classList.add('hidden');
+        if (chevron) chevron.classList.remove('rotate-180');
+      }
+    }
+
+    function toggleLanguageDropdown(event) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      closeCountryDropdown();
+
+      const menu = document.getElementById('language-dropdown-menu');
+      const chevron = document.getElementById('language-filter-chevron');
       if (!menu) return;
 
       const isHidden = menu.classList.contains('hidden');
@@ -557,7 +689,7 @@
         }
       }
 
-      // Update checkmarks in popup
+      // Update checkmarks in country popup
       const options = document.querySelectorAll('.country-opt');
       options.forEach(opt => {
         const val = opt.getAttribute('data-value');
@@ -579,13 +711,66 @@
         }
       });
 
-      // Close dropdown
-      const menu = document.getElementById('country-dropdown-menu');
-      const chevron = document.getElementById('country-filter-chevron');
-      if (menu) menu.classList.add('hidden');
-      if (chevron) chevron.classList.remove('rotate-180');
+      closeCountryDropdown();
+      applyFilters();
+    }
 
-      // Apply filtering to creator grid
+    function selectLanguage(language, label, event) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      currentSelectedLanguage = language;
+
+      // Update button label
+      const btnLabel = document.getElementById('language-filter-label');
+      const btn = document.getElementById('language-filter-btn');
+      if (btnLabel) {
+        btnLabel.textContent = language === 'all' ? 'All languages' : label;
+      }
+
+      // Active visual styling on the filter pill
+      if (btn) {
+        if (language === 'all') {
+          btn.classList.remove('border-[#0060df]', 'bg-[#eff6ff]', 'text-[#0060df]', 'font-medium');
+          btn.classList.add('border-[#dedbd3]', 'bg-transparent', 'text-[#18181b]');
+        } else {
+          btn.classList.remove('border-[#dedbd3]', 'bg-transparent', 'text-[#18181b]');
+          btn.classList.add('border-[#0060df]', 'bg-[#eff6ff]', 'text-[#0060df]', 'font-medium');
+        }
+      }
+
+      // Update checkmarks in language popup
+      const options = document.querySelectorAll('.lang-opt');
+      options.forEach(opt => {
+        const val = opt.getAttribute('data-value');
+        const existingCheck = opt.querySelector('.lang-check');
+        if (val === language) {
+          if (!existingCheck) {
+            const container = opt.querySelector('div.flex');
+            const check = document.createElement('span');
+            check.className = 'lang-check text-[#0060df] text-xs font-bold';
+            check.textContent = '✓';
+            if (container) {
+              container.appendChild(check);
+            } else {
+              opt.appendChild(check);
+            }
+          }
+        } else {
+          if (existingCheck) existingCheck.remove();
+        }
+      });
+
+      closeLanguageDropdown();
+      applyFilters();
+    }
+
+    function resetFilters(event) {
+      selectCountry('all', 'All countries', event);
+      selectLanguage('all', 'All languages', event);
+      const searchInput = document.getElementById('creator-search-input');
+      if (searchInput) searchInput.value = '';
       applyFilters();
     }
 
@@ -596,14 +781,16 @@
       let visibleCount = 0;
 
       cards.forEach(card => {
-        const cardCountry = card.getAttribute('data-country') || '';
+        const cardCountry = (card.getAttribute('data-country') || '').toLowerCase();
+        const cardLanguages = (card.getAttribute('data-languages') || '').toLowerCase().split(',').map(s => s.trim());
         const nameEl = card.querySelector('span.text-\\[13px\\]');
         const name = nameEl ? nameEl.textContent.trim().toLowerCase() : '';
 
-        const matchesCountry = (currentSelectedCountry === 'all' || cardCountry.toLowerCase() === currentSelectedCountry.toLowerCase());
+        const matchesCountry = (currentSelectedCountry === 'all' || cardCountry === currentSelectedCountry.toLowerCase());
+        const matchesLanguage = (currentSelectedLanguage === 'all' || cardLanguages.includes(currentSelectedLanguage.toLowerCase()));
         const matchesSearch = !query || name.includes(query);
 
-        if (matchesCountry && matchesSearch) {
+        if (matchesCountry && matchesLanguage && matchesSearch) {
           card.style.display = 'flex';
           visibleCount++;
         } else {
@@ -626,31 +813,26 @@
       // Row 2 partial peek visibility
       const row2Peek = document.getElementById('row2-peek');
       if (row2Peek) {
-        row2Peek.style.display = (currentSelectedCountry === 'all' && !query) ? 'grid' : 'none';
+        row2Peek.style.display = (currentSelectedCountry === 'all' && currentSelectedLanguage === 'all' && !query) ? 'grid' : 'none';
       }
     }
 
-    // Close country dropdown when clicking outside or pressing Escape
+    // Close dropdowns when clicking outside or pressing Escape
     document.addEventListener('click', (e) => {
-      const wrapper = document.getElementById('country-dropdown-wrapper');
-      const menu = document.getElementById('country-dropdown-menu');
-      const chevron = document.getElementById('country-filter-chevron');
-      if (wrapper && !wrapper.contains(e.target)) {
-        if (menu && !menu.classList.contains('hidden')) {
-          menu.classList.add('hidden');
-          if (chevron) chevron.classList.remove('rotate-180');
-        }
+      const countryWrapper = document.getElementById('country-dropdown-wrapper');
+      if (countryWrapper && !countryWrapper.contains(e.target)) {
+        closeCountryDropdown();
+      }
+      const langWrapper = document.getElementById('language-dropdown-wrapper');
+      if (langWrapper && !langWrapper.contains(e.target)) {
+        closeLanguageDropdown();
       }
     });
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        const menu = document.getElementById('country-dropdown-menu');
-        const chevron = document.getElementById('country-filter-chevron');
-        if (menu && !menu.classList.contains('hidden')) {
-          menu.classList.add('hidden');
-          if (chevron) chevron.classList.remove('rotate-180');
-        }
+        closeCountryDropdown();
+        closeLanguageDropdown();
       }
     });
 
