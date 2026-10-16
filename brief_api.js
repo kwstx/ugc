@@ -8,19 +8,18 @@
  * - Real-time script pacing & duration estimation
  */
 
+const BRIEF_API_BASE = (window.location.port === '3000') ? '' : 'http://localhost:3000';
 let currentBriefId = null;
 let autosaveTimeout = null;
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', async () => {
-  // Check for briefId in URL or localStorage
+  // Check for explicit briefId in URL
   const urlParams = new URLSearchParams(window.location.search);
   const paramId = urlParams.get('briefId') || urlParams.get('id');
-  const savedId = localStorage.getItem('dansugc_current_brief_id');
-  const targetId = paramId || savedId;
 
-  if (targetId) {
-    await loadBriefFromBackend(targetId);
+  if (paramId) {
+    await loadBriefFromBackend(paramId);
   }
 
   // Hook up inputs for autosave
@@ -115,7 +114,7 @@ function collectBriefPayload() {
 async function saveDraftToBackend(showExplicitAlert = false) {
   const payload = collectBriefPayload();
   try {
-    const response = await fetch('/api/briefs/save-draft', {
+    const response = await fetch(`${BRIEF_API_BASE}/api/briefs/save-draft`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -144,7 +143,7 @@ async function saveDraftToBackend(showExplicitAlert = false) {
 async function loadBriefFromBackend(briefId) {
   try {
     showAutosaveBadge('Loading brief...', 'saving');
-    const response = await fetch(`/api/briefs/${briefId}`);
+    const response = await fetch(`${BRIEF_API_BASE}/api/briefs/${briefId}`);
     if (!response.ok) throw new Error('Brief not found on server');
 
     const result = await response.json();
@@ -193,7 +192,7 @@ async function submitReviewToBackend() {
   const targetId = currentBriefId || 'draft_' + Date.now();
 
   try {
-    const response = await fetch(`/api/briefs/${targetId}/review`, {
+    const response = await fetch(`${BRIEF_API_BASE}/api/briefs/${targetId}/review`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -212,7 +211,8 @@ async function submitReviewToBackend() {
   } catch (err) {
     console.warn('Server review validation error, falling back to local review flow:', err);
     // If backend is unavailable, proceed with local payload
-    const localRate = window.getRateForQty ? window.getRateForQty(payload.qty) : 30.00;
+    const fallbackBase = (payload.format === 'Full UGC') ? 100.00 : 25.00;
+    const localRate = window.getRateForQty ? window.getRateForQty(payload.qty) : fallbackBase;
     const localPayload = {
       ...payload,
       rate: localRate.toFixed(2),
@@ -245,7 +245,7 @@ async function callAiScriptHelper(conceptIndex, mode = 'generate') {
   }
 
   try {
-    const res = await fetch('/api/ai/script-helper', {
+    const res = await fetch(`${BRIEF_API_BASE}/api/ai/script-helper`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

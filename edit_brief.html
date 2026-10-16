@@ -510,22 +510,47 @@
       };
     }
 
+    const API_BASE = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+
+    function resolveLocalFormat() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlFormat = urlParams.get('format');
+      if (urlFormat) {
+        return urlFormat.toLowerCase().includes('full') ? 'Full UGC' : 'Reaction Video';
+      }
+      try {
+        const stored = localStorage.getItem('selectedFormat') || sessionStorage.getItem('selectedFormat');
+        const storedKey = localStorage.getItem('selectedFormatKey') || sessionStorage.getItem('selectedFormatKey');
+        if (
+          (stored && stored.toLowerCase().includes('full')) ||
+          (storedKey && storedKey.toLowerCase().includes('full'))
+        ) {
+          return 'Full UGC';
+        }
+        if (
+          (stored && stored.toLowerCase().includes('reaction')) ||
+          (storedKey && storedKey.toLowerCase().includes('reaction'))
+        ) {
+          return 'Reaction Video';
+        }
+      } catch (e) {}
+      return null;
+    }
+
     let currentQty = 6;
-    let currentFormat = 'Reaction Video';
+    let currentFormat = resolveLocalFormat() || 'Reaction Video';
+    let currentRateFromBackend = null;
+    window.currentFormat = currentFormat;
 
     function getBaseRate() {
+      if (currentRateFromBackend !== null && !isNaN(currentRateFromBackend)) {
+        return Number(currentRateFromBackend);
+      }
       return (currentFormat === 'Full UGC') ? 100.00 : 25.00;
     }
 
     function getRateForQty(qty) {
-      const base = getBaseRate();
-      if (qty >= 20) {
-        return parseFloat((base * (1 - 0.1666666667)).toFixed(2)); // Save 16.7%
-      } else if (qty >= 10) {
-        return parseFloat((base * (1 - 0.0833333333)).toFixed(2)); // Save 8.3%
-      } else {
-        return base; // Starter rate ($25 for reaction, $100 for Full UGC)
-      }
+      return getBaseRate();
     }
 
     function updateFormatUI() {
@@ -551,27 +576,56 @@
     }
 
     async function syncFormatFromBackend() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const urlFormat = urlParams.get('format');
-      if (urlFormat === 'full' || urlFormat === 'full_ugc') {
-        currentFormat = 'Full UGC';
-      } else if (urlFormat === 'reaction') {
-        currentFormat = 'Reaction Video';
-      } else {
+      const localChoice = resolveLocalFormat();
+      if (localChoice) {
+        currentFormat = localChoice;
+        currentRateFromBackend = (currentFormat === 'Full UGC') ? 100.00 : 25.00;
+        const key = (currentFormat === 'Full UGC') ? 'full' : 'reaction';
         try {
-          const res = await fetch('/api/orders/format');
+          localStorage.setItem('selectedFormat', currentFormat);
+          localStorage.setItem('selectedFormatKey', key);
+          sessionStorage.setItem('selectedFormat', currentFormat);
+          sessionStorage.setItem('selectedFormatKey', key);
+        } catch (e) {}
+        window.currentFormat = currentFormat;
+        updateFormatUI();
+        updateUI();
+
+        try {
+          const res = await fetch(`${API_BASE}/api/orders/format`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ format: currentFormat, formatKey: key })
+          });
           if (res.ok) {
             const data = await res.json();
             if (data && data.format) {
               currentFormat = data.format;
+              currentRateFromBackend = data.rate;
             }
           }
         } catch (err) {
-          console.warn('Could not fetch format from backend, checking localStorage:', err);
-          const stored = localStorage.getItem('selectedFormat') || sessionStorage.getItem('selectedFormat');
-          if (stored) {
-            currentFormat = stored;
+          console.warn('Could not sync format with backend:', err);
+        }
+      } else {
+        try {
+          const res = await fetch(`${API_BASE}/api/orders/format`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.format) {
+              currentFormat = data.format;
+              currentRateFromBackend = data.rate;
+              const key = (currentFormat === 'Full UGC') ? 'full' : 'reaction';
+              try {
+                localStorage.setItem('selectedFormat', currentFormat);
+                localStorage.setItem('selectedFormatKey', key);
+                sessionStorage.setItem('selectedFormat', currentFormat);
+                sessionStorage.setItem('selectedFormatKey', key);
+              } catch (e) {}
+            }
           }
+        } catch (err) {
+          console.warn('Could not fetch format from backend:', err);
         }
       }
 
@@ -617,6 +671,7 @@
     }
 
     function updateUI(skipInputSync = false) {
+      updateFormatUI();
       const creatorCount = selectedCreators.length || 2;
       const tiers = getTierConfigs(creatorCount);
       const rate = getRateForQty(currentQty);
@@ -1035,7 +1090,7 @@
 
       const subtitle = document.getElementById(`concept-subtitle-${id}`);
       if (subtitle) {
-        subtitle.textContent = `Reaction Video · ${typeName}`;
+        subtitle.textContent = `${currentFormat} · ${typeName}`;
       }
 
       // Update active checkmarks & background

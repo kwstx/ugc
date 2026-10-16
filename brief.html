@@ -133,6 +133,7 @@
 
         <!-- Generate my brief button -->
         <button
+          id="generate-brief-btn"
           type="button"
           onclick="window.location.href='edit_brief.html'"
           style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);"
@@ -150,13 +151,13 @@
       <!-- Bottom Links -->
       <div class="flex items-center justify-between pt-1 text-[12px]">
         <!-- Back to creators link -->
-        <a href="creators.html" class="flex items-center gap-1.5 font-medium text-[#374151] hover:text-black transition-colors">
+        <a id="back-to-creators-link" href="creators.html" class="flex items-center gap-1.5 font-medium text-[#374151] hover:text-black transition-colors">
           <span class="text-[13px] leading-none">&larr;</span>
           <span>Back to creators</span>
         </a>
 
         <!-- Write my brief myself link -->
-        <a href="edit_brief.html" class="font-medium text-[#374151] hover:text-black transition-colors">
+        <a id="write-brief-myself-link" href="edit_brief.html" class="font-medium text-[#374151] hover:text-black transition-colors">
           Write my brief myself
         </a>
       </div>
@@ -165,12 +166,70 @@
   </main>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Restore selected format
-      const savedFormat = localStorage.getItem('selectedFormat') || sessionStorage.getItem('selectedFormat');
+    const API_BASE = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlFormat = urlParams.get('format');
+      let savedFormat = null;
+
+      if (urlFormat) {
+        savedFormat = urlFormat.toLowerCase().includes('full') ? 'Full UGC' : 'Reaction Video';
+      } else {
+        const stored = localStorage.getItem('selectedFormat') || sessionStorage.getItem('selectedFormat');
+        const storedKey = localStorage.getItem('selectedFormatKey') || sessionStorage.getItem('selectedFormatKey');
+        if (stored === 'Full UGC' || storedKey === 'full' || storedKey === 'full_ugc') {
+          savedFormat = 'Full UGC';
+        } else if (stored === 'Reaction Video' || storedKey === 'reaction') {
+          savedFormat = 'Reaction Video';
+        }
+      }
+
+      if (!savedFormat) {
+        try {
+          const res = await fetch(`${API_BASE}/api/orders/format`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.format) savedFormat = data.format;
+          }
+        } catch (e) {}
+      }
+
+      if (!savedFormat) savedFormat = 'Reaction Video';
+      const key = (savedFormat === 'Full UGC') ? 'full' : 'reaction';
+
+      try {
+        localStorage.setItem('selectedFormat', savedFormat);
+        localStorage.setItem('selectedFormatKey', key);
+        sessionStorage.setItem('selectedFormat', savedFormat);
+        sessionStorage.setItem('selectedFormatKey', key);
+      } catch (e) {}
+
+      fetch(`${API_BASE}/api/orders/format`, {
+        method: 'POST',
+        keepalive: true,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ format: savedFormat, formatKey: key })
+      }).catch(() => {});
+
       const formatBadge = document.getElementById('brief-format-badge');
-      if (formatBadge && savedFormat) {
+      if (formatBadge) {
         formatBadge.textContent = savedFormat;
+      }
+
+      const genBtn = document.getElementById('generate-brief-btn');
+      if (genBtn) {
+        genBtn.onclick = () => {
+          window.location.href = `edit_brief.html?format=${key}`;
+        };
+      }
+      const writeLink = document.getElementById('write-brief-myself-link');
+      if (writeLink) {
+        writeLink.href = `edit_brief.html?format=${key}`;
+      }
+      const backLink = document.getElementById('back-to-creators-link');
+      if (backLink) {
+        backLink.href = `creators.html?format=${key}`;
       }
 
       const stored = localStorage.getItem('selectedCreators');

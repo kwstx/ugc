@@ -559,6 +559,8 @@
       persistFormatSelection();
     }
 
+    const API_BASE = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+
     function persistFormatSelection() {
       const formatLabel = (currentSelection === 'full') ? 'Full UGC' : 'Reaction Video';
       try {
@@ -569,8 +571,9 @@
       } catch (e) {}
 
       // Persist chosen format to backend API
-      fetch('/api/orders/format', {
+      fetch(`${API_BASE}/api/orders/format`, {
         method: 'POST',
+        keepalive: true,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           format: formatLabel,
@@ -595,7 +598,7 @@
       const urlParams = new URLSearchParams(window.location.search);
       const urlFormat = urlParams.get('format');
       const saved = urlFormat || localStorage.getItem('selectedFormatKey') || (localStorage.getItem('selectedFormat') === 'Full UGC' ? 'full' : 'reaction');
-      if (saved === 'full' || saved === 'full_ugc') {
+      if (saved && String(saved).toLowerCase().includes('full')) {
         selectCard('full');
       } else {
         selectCard('reaction');

@@ -31,23 +31,17 @@ function calculatePricing(quantity, creatorCount = 2, explicitFormat = null) {
     chosenFormat = active.format_choice;
   }
 
-  const isFullUgc = (chosenFormat === 'Full UGC' || chosenFormat === 'full' || chosenFormat === 'full_ugc');
+  const isFullUgc = (
+    chosenFormat &&
+    (chosenFormat === 'Full UGC' ||
+      String(chosenFormat).toLowerCase().includes('full'))
+  );
   const baseRate = isFullUgc ? 100.00 : 25.00;
   const formatLabel = isFullUgc ? 'Full UGC' : 'Reaction Video';
 
-  let rate = baseRate;
-  let discountLabel = `Starter ($${baseRate.toFixed(2)} / video)`;
-  let discountPercent = 0;
-
-  if (qty >= 20) {
-    rate = parseFloat((baseRate * (1 - 0.1666666667)).toFixed(2));
-    discountLabel = `Save 16.7% ($${rate.toFixed(2)} / video)`;
-    discountPercent = 16.7;
-  } else if (qty >= 10) {
-    rate = parseFloat((baseRate * (1 - 0.0833333333)).toFixed(2));
-    discountLabel = `Save 8.3% ($${rate.toFixed(2)} / video)`;
-    discountPercent = 8.3;
-  }
+  const rate = baseRate;
+  const discountLabel = `$${baseRate.toFixed(2)} / video`;
+  const discountPercent = 0;
 
   const total = parseFloat((qty * rate).toFixed(2));
   const perCreator = Math.max(1, Math.ceil(qty / validCreatorCount));
