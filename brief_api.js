@@ -95,6 +95,7 @@ function collectBriefPayload() {
 
   const creatorCount = (window.selectedCreators && window.selectedCreators.length) || 2;
   const qty = window.currentQty || 6;
+  const format = window.currentFormat || localStorage.getItem('selectedFormat') || 'Reaction Video';
 
   return {
     id: currentBriefId,
@@ -102,6 +103,7 @@ function collectBriefPayload() {
     aboutBrand,
     filmingInstructions,
     qty,
+    format,
     selectedCreators: window.selectedCreators || [],
     concepts
   };

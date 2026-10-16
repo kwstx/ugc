@@ -503,6 +503,80 @@ router.post('/create', (req, res) => {
 });
 
 /**
+ * POST /api/orders/format
+ * Save format choice ('Reaction Video' / 'Full UGC') to backend
+ */
+router.post('/format', (req, res) => {
+  try {
+    const session = resolveSession(req);
+    const { format, formatKey } = req.body;
+
+    const isFull = (formatKey === 'full' || format === 'Full UGC' || format === 'full_ugc');
+    const formatChoice = isFull ? 'Full UGC' : 'Reaction Video';
+    const key = isFull ? 'full' : 'reaction';
+    const rate = isFull ? 100.00 : 25.00;
+
+    const upsertStmt = db.prepare(`
+      INSERT INTO order_format_state (session_id, format_choice, format_key, rate, updated_at)
+      VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+      ON CONFLICT(session_id) DO UPDATE SET
+        format_choice = excluded.format_choice,
+        format_key = excluded.format_key,
+        rate = excluded.rate,
+        updated_at = CURRENT_TIMESTAMP
+    `);
+
+    // Save for current session
+    upsertStmt.run(session.id, formatChoice, key, rate);
+    // Also save for default session for shared access
+    upsertStmt.run('default_session', formatChoice, key, rate);
+
+    res.json({
+      success: true,
+      format: formatChoice,
+      formatKey: key,
+      rate
+    });
+  } catch (error) {
+    console.error('Error saving order format:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/orders/format
+ * Retrieve active format choice and rate from backend
+ */
+router.get('/format', (req, res) => {
+  try {
+    const session = resolveSession(req);
+    let row = db.prepare('SELECT format_choice, format_key, rate FROM order_format_state WHERE session_id = ?').get(session.id);
+    if (!row) {
+      row = db.prepare('SELECT format_choice, format_key, rate FROM order_format_state WHERE session_id = ?').get('default_session');
+    }
+
+    if (row) {
+      return res.json({
+        success: true,
+        format: row.format_choice,
+        formatKey: row.format_key,
+        rate: row.rate
+      });
+    }
+
+    res.json({
+      success: true,
+      format: 'Reaction Video',
+      formatKey: 'reaction',
+      rate: 25.00
+    });
+  } catch (error) {
+    console.error('Error getting order format:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
  * GET /api/orders/:id
  * Retrieve order details (supports both open_orders and brief-based orders)
  */

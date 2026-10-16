@@ -207,7 +207,25 @@ db.exec(`
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     last_active_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
+
+  CREATE TABLE IF NOT EXISTS order_format_state (
+    session_id TEXT PRIMARY KEY,
+    format_choice TEXT NOT NULL,
+    format_key TEXT NOT NULL,
+    rate REAL NOT NULL,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
 `);
+
+// Seed default order format state if empty
+try {
+  db.prepare(`
+    INSERT OR IGNORE INTO order_format_state (session_id, format_choice, format_key, rate)
+    VALUES ('default_session', 'Reaction Video', 'reaction', 25.00)
+  `).run();
+} catch (e) {
+  console.warn('order_format_state init note:', e.message);
+}
 
 // Creator schema migrations
 const creatorCols = db.prepare("PRAGMA table_info(creators)").all().map(c => c.name);

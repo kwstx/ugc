@@ -23,12 +23,13 @@ router.post('/save-draft', (req, res) => {
       aboutBrand = '',
       filmingInstructions = '',
       qty = 6,
+      format,
       selectedCreators = [],
       concepts = []
     } = req.body;
 
     const briefId = id || generateId('brief');
-    const pricing = calculatePricing(qty, selectedCreators.length || 2);
+    const pricing = calculatePricing(qty, selectedCreators.length || 2, format);
 
     // Analyze scripts for durations
     const analyzedConcepts = concepts.map(c => ({
@@ -94,6 +95,7 @@ router.put('/:id', (req, res) => {
       aboutBrand = '',
       filmingInstructions = '',
       qty = 6,
+      format,
       selectedCreators = [],
       concepts = []
     } = req.body;
@@ -103,7 +105,7 @@ router.put('/:id', (req, res) => {
       return res.status(404).json({ success: false, error: 'Brief not found.' });
     }
 
-    const pricing = calculatePricing(qty, selectedCreators.length || 2);
+    const pricing = calculatePricing(qty, selectedCreators.length || 2, format);
     const analyzedConcepts = concepts.map(c => ({
       ...c,
       analysis: analyzeScript(c.script || '')
@@ -228,7 +230,7 @@ router.post('/:id/review', (req, res) => {
     }
 
     // Recalculate price server-side
-    const pricing = calculatePricing(qty || 6, selectedCreators.length || 2);
+    const pricing = calculatePricing(qty || 6, selectedCreators.length || 2, req.body.format);
 
     // Calculate script timings
     const analyzedConcepts = concepts.map(c => ({

@@ -568,6 +568,18 @@
         sessionStorage.setItem('selectedFormatKey', currentSelection);
       } catch (e) {}
 
+      // Persist chosen format to backend API
+      fetch('/api/orders/format', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          format: formatLabel,
+          formatKey: currentSelection
+        })
+      }).catch(err => {
+        console.warn('Could not persist format to backend:', err);
+      });
+
       const chooseBtn = document.getElementById('choose-creators-link');
       if (chooseBtn) {
         chooseBtn.href = `creators.html?format=${currentSelection}`;

@@ -147,7 +147,7 @@
         <div class="flex items-center justify-between">
           <div>
             <span class="block text-[10px] font-bold tracking-wider text-[#9ca3af] uppercase mb-0.5">BRIEF DETAILS</span>
-            <h2 class="text-[18px] font-bold text-[#111827] tracking-tight">Your brand · Reaction Video</h2>
+            <h2 id="brief-format-title" class="text-[18px] font-bold text-[#111827] tracking-tight">Your brand · Reaction Video</h2>
           </div>
           <span class="px-2.5 py-1 rounded-[6px] bg-[#f4f4f5] text-[11px] font-medium text-[#71717a]">
             Unsaved changes
@@ -161,7 +161,7 @@
             type="text" 
             id="brand-name-input"
             value="Your brand"
-            oninput="checkBriefValidity()"
+            oninput="checkBriefValidity(); if(typeof updateFormatUI === 'function') updateFormatUI();"
             class="w-full bg-white border border-[#e5e7eb] rounded-[10px] px-3.5 py-2.5 text-[13px] text-[#18181b] focus:outline-none focus:border-[#7c66ff] shadow-sm"
           />
         </div>
@@ -406,7 +406,7 @@
 
           <!-- Estimate Item -->
           <div class="mb-4">
-            <div class="text-[13px] font-bold text-[#111827]">Reaction Video</div>
+            <div id="estimate-format-name" class="text-[13px] font-bold text-[#111827]">Reaction Video</div>
             <div id="estimate-subtitle" class="text-[11.5px] text-[#71717a]">6 videos · 1 concepts</div>
           </div>
 
@@ -511,7 +511,74 @@
     }
 
     let currentQty = 6;
-    const baseRate = 30.00;
+    let currentFormat = 'Reaction Video';
+
+    function getBaseRate() {
+      return (currentFormat === 'Full UGC') ? 100.00 : 25.00;
+    }
+
+    function getRateForQty(qty) {
+      const base = getBaseRate();
+      if (qty >= 20) {
+        return parseFloat((base * (1 - 0.1666666667)).toFixed(2)); // Save 16.7%
+      } else if (qty >= 10) {
+        return parseFloat((base * (1 - 0.0833333333)).toFixed(2)); // Save 8.3%
+      } else {
+        return base; // Starter rate ($25 for reaction, $100 for Full UGC)
+      }
+    }
+
+    function updateFormatUI() {
+      const brandInput = document.getElementById('brand-name-input');
+      const brandName = (brandInput && brandInput.value.trim()) ? brandInput.value.trim() : 'Your brand';
+
+      const briefTitle = document.getElementById('brief-format-title');
+      if (briefTitle) {
+        briefTitle.textContent = `${brandName} · ${currentFormat}`;
+      }
+
+      const estimateFormat = document.getElementById('estimate-format-name');
+      if (estimateFormat) {
+        estimateFormat.textContent = currentFormat;
+      }
+
+      document.querySelectorAll('.concept-subtitle').forEach(el => {
+        const text = el.textContent || '';
+        const parts = text.split('·');
+        const typePart = parts.length > 1 ? parts.slice(1).join('·').trim() : 'Reaction / footage';
+        el.textContent = `${currentFormat} · ${typePart}`;
+      });
+    }
+
+    async function syncFormatFromBackend() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlFormat = urlParams.get('format');
+      if (urlFormat === 'full' || urlFormat === 'full_ugc') {
+        currentFormat = 'Full UGC';
+      } else if (urlFormat === 'reaction') {
+        currentFormat = 'Reaction Video';
+      } else {
+        try {
+          const res = await fetch('/api/orders/format');
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.format) {
+              currentFormat = data.format;
+            }
+          }
+        } catch (err) {
+          console.warn('Could not fetch format from backend, checking localStorage:', err);
+          const stored = localStorage.getItem('selectedFormat') || sessionStorage.getItem('selectedFormat');
+          if (stored) {
+            currentFormat = stored;
+          }
+        }
+      }
+
+      window.currentFormat = currentFormat;
+      updateFormatUI();
+      updateUI();
+    }
 
     function loadSavedCreators() {
       const stored = localStorage.getItem('selectedCreators');
@@ -528,16 +595,6 @@
       const count = selectedCreators.length || 2;
       const tiers = getTierConfigs(count);
       currentQty = tiers.tier1;
-    }
-
-    function getRateForQty(qty) {
-      if (qty >= 20) {
-        return 25.00; // Save 16.7% ($25.00 / video)
-      } else if (qty >= 10) {
-        return 27.50; // Save 8.3% ($27.50 / video)
-      } else {
-        return 30.00; // Starter ($30.00 / video)
-      }
     }
 
     function selectTier(qty) {
@@ -740,7 +797,7 @@
         <div class="flex items-center justify-between">
           <div>
             <span class="concept-title-text text-[13.5px] font-bold text-[#111827]">Concept ${currentConceptNum}</span>
-            <p id="concept-subtitle-${highestConceptIndex}" class="concept-subtitle text-[11px] text-[#71717a] mt-0.5">Reaction Video · Reaction / footage</p>
+            <p id="concept-subtitle-${highestConceptIndex}" class="concept-subtitle text-[11px] text-[#71717a] mt-0.5">${currentFormat} · Reaction / footage</p>
           </div>
           <div class="flex items-center gap-2.5">
             <span class="concept-unit-price text-[12px] font-bold text-[#111827]">$${rate} / video</span>
@@ -1157,9 +1214,10 @@
     window.checkBriefValidity = checkBriefValidity;
     window.handleSaveAndReview = handleSaveAndReview;
 
-    // Check validity on page load & load saved creators
-    document.addEventListener('DOMContentLoaded', function() {
+    // Check validity on page load & load saved creators & sync format from backend
+    document.addEventListener('DOMContentLoaded', async function() {
       loadSavedCreators();
+      await syncFormatFromBackend();
       updateUI();
       checkBriefValidity();
     });
