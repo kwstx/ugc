@@ -213,7 +213,7 @@
           <div class="flex flex-col gap-3.5 text-[12.5px] mb-5">
             <div class="flex items-center justify-between text-[#4b5563]">
               <span>Package format</span>
-              <span class="font-semibold text-[#111827]">Reaction Video</span>
+              <span id="summary-format" class="font-semibold text-[#111827]">Reaction Video</span>
             </div>
 
             <div class="flex items-center justify-between text-[#4b5563]">
@@ -498,6 +498,13 @@
         `).join('');
       }
 
+      // Restore selected format
+      const savedFormat = localStorage.getItem('selectedFormat') || sessionStorage.getItem('selectedFormat');
+      const formatEl = document.getElementById('summary-format');
+      if (formatEl && savedFormat) {
+        formatEl.textContent = savedFormat;
+      }
+
       // Populate Concepts
       const conceptsContainer = document.getElementById('review-concepts-container');
       conceptsContainer.innerHTML = '';
@@ -563,10 +570,12 @@
           { name: 'Emilia', handle: '@emilia_ugc', avatar: 'assets/creators_page/emilia.png' }
         ];
 
+        const savedFormat = localStorage.getItem('selectedFormat') || sessionStorage.getItem('selectedFormat') || 'Reaction Video';
+
         const finalizedOrder = {
           id: orderId,
           type: 'exclusive_ugc',
-          format: 'Reaction Video',
+          format: savedFormat,
           status: 'Sent to creators',
           deliveryStatus: 'Dispatched via Platform to chosen creators',
           brandName: orderData.brandName,

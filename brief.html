@@ -96,7 +96,7 @@
 
     <!-- Selection Badges -->
     <div class="flex items-center justify-center gap-2 mb-7">
-      <span class="px-3 py-1 rounded-md bg-[#f4f4f5] text-[11.5px] font-medium text-[#3f3f46]">
+      <span id="brief-format-badge" class="px-3 py-1 rounded-md bg-[#f4f4f5] text-[11.5px] font-medium text-[#3f3f46]">
         Reaction Video
       </span>
       <span id="brief-creators-badge" class="px-3 py-1 rounded-md bg-[#f4f4f5] text-[11.5px] font-medium text-[#3f3f46]">
@@ -166,6 +166,13 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Restore selected format
+      const savedFormat = localStorage.getItem('selectedFormat') || sessionStorage.getItem('selectedFormat');
+      const formatBadge = document.getElementById('brief-format-badge');
+      if (formatBadge && savedFormat) {
+        formatBadge.textContent = savedFormat;
+      }
+
       const stored = localStorage.getItem('selectedCreators');
       if (stored) {
         try {

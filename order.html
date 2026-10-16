@@ -52,7 +52,7 @@
       </div>
 
       <!-- Step 2: Next -->
-      <a href="creators.html" class="flex items-center gap-2 text-[#6b7280] hover:text-[#18181b] font-normal transition-colors cursor-pointer">
+      <a href="creators.html" id="top-creators-nav-link" onclick="persistFormatSelection()" class="flex items-center gap-2 text-[#6b7280] hover:text-[#18181b] font-normal transition-colors cursor-pointer">
         <span class="w-[21px] h-[21px] rounded-full bg-[#f3f4f6] text-[#6b7280] flex items-center justify-center text-[11.5px] font-medium">2</span>
         <span>Creators</span>
       </a>
@@ -246,7 +246,7 @@
           </a>
         </div>
 
-        <a href="creators.html" class="inline-block">
+        <a href="creators.html" id="choose-creators-link" onclick="persistFormatSelection()" class="inline-block">
           <button
             style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);"
             class="text-white text-[13px] font-medium px-5 h-[38px] rounded-[9px] flex items-center justify-center gap-1.5 shadow-[0_3px_12px_rgba(33,58,231,0.25)] hover:shadow-[0_6px_20px_rgba(33,58,231,0.4)] hover:brightness-105 active:scale-[0.98] transition-all cursor-pointer"
@@ -555,7 +555,40 @@
         checkReaction.className = "w-5 h-5 rounded-full border-[1.5px] border-[#d4d4d8] bg-white flex items-center justify-center";
         checkReaction.innerHTML = "";
       }
+
+      persistFormatSelection();
     }
+
+    function persistFormatSelection() {
+      const formatLabel = (currentSelection === 'full') ? 'Full UGC' : 'Reaction Video';
+      try {
+        localStorage.setItem('selectedFormat', formatLabel);
+        localStorage.setItem('selectedFormatKey', currentSelection);
+        sessionStorage.setItem('selectedFormat', formatLabel);
+        sessionStorage.setItem('selectedFormatKey', currentSelection);
+      } catch (e) {}
+
+      const chooseBtn = document.getElementById('choose-creators-link');
+      if (chooseBtn) {
+        chooseBtn.href = `creators.html?format=${currentSelection}`;
+      }
+      const topCreatorsNav = document.getElementById('top-creators-nav-link');
+      if (topCreatorsNav) {
+        topCreatorsNav.href = `creators.html?format=${currentSelection}`;
+      }
+    }
+
+    // Initialize format selection from storage or URL
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlFormat = urlParams.get('format');
+      const saved = urlFormat || localStorage.getItem('selectedFormatKey') || (localStorage.getItem('selectedFormat') === 'Full UGC' ? 'full' : 'reaction');
+      if (saved === 'full' || saved === 'full_ugc') {
+        selectCard('full');
+      } else {
+        selectCard('reaction');
+      }
+    });
 
     // Toggle to Custom Order View
     function openCustomView(e) {

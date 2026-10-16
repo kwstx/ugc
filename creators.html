@@ -111,7 +111,7 @@
       <!-- Stepper Navigation -->
       <nav class="flex items-center gap-6 sm:gap-7 text-[13px]">
         <!-- Step 1: Format (Completed) -->
-        <a href="order.html" class="flex items-center gap-2 text-[#52525b] hover:text-black transition-colors cursor-pointer">
+        <a id="header-format-nav" href="order.html" class="flex items-center gap-2 text-[#52525b] hover:text-black transition-colors cursor-pointer">
           <span class="w-[21px] h-[21px] rounded-full bg-[#f1f2f4] flex items-center justify-center text-[#52525b]">
             <svg class="w-3 h-3 text-[#4b5563]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
@@ -156,11 +156,11 @@
       </div>
 
       <!-- Format Badge with fieldset/legend style border cut-out matching reference exactly -->
-      <a href="order.html" class="relative inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-[9px] border border-[#d5d2cb] bg-[#F8F7F2] hover:border-[#b8b5ac] transition-colors mt-1 shadow-[0_1px_2px_rgba(0,0,0,0.02)] cursor-pointer">
+      <a id="selected-format-btn" href="order.html" class="relative inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-[9px] border border-[#d5d2cb] bg-[#F8F7F2] hover:border-[#b8b5ac] transition-colors mt-1 shadow-[0_1px_2px_rgba(0,0,0,0.02)] cursor-pointer">
         <span class="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#F8F7F2] px-1.5 text-[10.5px] text-[#716f6a] font-normal whitespace-nowrap leading-none select-none">
           Selected format
         </span>
-        <span class="text-[14px] text-[#18181b] font-normal leading-normal">Reaction Video</span>
+        <span id="selected-format-display" class="text-[14px] text-[#18181b] font-normal leading-normal">Reaction Video</span>
         <svg class="w-3.5 h-3.5 text-[#18181b] stroke-[1.6]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
           <path d="M13.5 3.5l3 3L6 17H3v-3L13.5 3.5z"/>
           <line x1="3" y1="18.5" x2="10.5" y2="18.5"/>
@@ -196,25 +196,119 @@
       </button>
     </div>
 
-    <!-- Filter Bar Card (Fitting completely inside container border without overflow) -->
-    <div class="w-full rounded-[14px] border border-[#dcd9d0] bg-transparent px-2.5 py-1.5 flex items-center justify-between gap-1 mt-1 mb-8 overflow-hidden">
+    <!-- Filter Bar Card (Relative z-30 to allow dropdown popup to display seamlessly) -->
+    <div class="w-full rounded-[14px] border border-[#dcd9d0] bg-transparent px-2.5 py-1.5 flex items-center justify-between gap-1 mt-1 mb-8 relative z-30">
       <!-- Search Input Pill -->
       <div class="relative flex items-center border border-[#dedbd3] bg-transparent rounded-full px-3 py-1 w-[150px] shrink-0">
         <svg class="w-3.5 h-3.5 text-[#8a8882] shrink-0 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
           <circle cx="11" cy="11" r="8"></circle>
           <path d="m21 21-4.3-4.3"></path>
         </svg>
-        <input type="text" placeholder="search by name" class="w-full bg-transparent text-[11.5px] text-[#18181b] placeholder-[#9ca3af] focus:outline-none" />
+        <input id="creator-search-input" oninput="applyFilters()" type="text" placeholder="search by name" class="w-full bg-transparent text-[11.5px] text-[#18181b] placeholder-[#9ca3af] focus:outline-none" />
       </div>
 
-      <!-- Filter: From All countries -->
+      <!-- Filter: From All countries with Dropdown Popup -->
       <span class="text-[11px] text-[#716f6a] shrink-0 font-normal">From</span>
-      <button class="border border-[#dedbd3] bg-transparent hover:border-[#b8b5ac] rounded-full px-2.5 py-1 text-[11px] text-[#18181b] flex items-center gap-1 shrink-0 transition-colors cursor-pointer">
-        <span>All countries</span>
-        <svg class="w-2.5 h-2.5 text-[#222] stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
-        </svg>
-      </button>
+      <div class="relative inline-block text-left" id="country-dropdown-wrapper">
+        <button 
+          id="country-filter-btn" 
+          type="button" 
+          onclick="toggleCountryDropdown(event)" 
+          class="border border-[#dedbd3] bg-transparent hover:border-[#b8b5ac] rounded-full px-2.5 py-1 text-[11px] text-[#18181b] flex items-center gap-1.5 shrink-0 transition-all cursor-pointer select-none focus:outline-none"
+        >
+          <span id="country-filter-label">All countries</span>
+          <svg id="country-filter-chevron" class="w-2.5 h-2.5 text-[#222] stroke-[2.2] transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+          </svg>
+        </button>
+
+        <!-- Dropdown Popup Menu -->
+        <div 
+          id="country-dropdown-menu" 
+          class="hidden absolute left-0 top-full mt-2 w-56 rounded-[14px] bg-white border border-[#dcd9d0] shadow-[0_12px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.05)] py-1.5 z-50 text-[11.5px] text-[#18181b]"
+          style="min-width: 210px;"
+        >
+          <div class="px-3 py-1.5 text-[10px] font-semibold tracking-wider text-[#8e8c85] uppercase border-b border-[#f0eee6] mb-1 flex items-center justify-between">
+            <span>Filter by country</span>
+            <span class="text-[9px] lowercase font-normal text-[#9ca3af]">click to filter</span>
+          </div>
+          <div class="max-h-[260px] overflow-y-auto space-y-0.5 px-1.5" id="country-list-options">
+            <button type="button" onclick="selectCountry('all', 'All countries', event)" data-value="all" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-sm">🌐</span>
+                <span class="font-medium text-[#18181b]">All countries</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">5</span>
+                <span class="country-check text-[#0060df] text-xs font-bold">✓</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectCountry('Latvia', '🇱🇻 Latvia', event)" data-value="Latvia" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-sm">🇱🇻</span>
+                <span class="text-[#333]">Latvia</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">2</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectCountry('Romania', '🇷🇴 Romania', event)" data-value="Romania" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-sm">🇷🇴</span>
+                <span class="text-[#333]">Romania</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">1</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectCountry('Poland', '🇵🇱 Poland', event)" data-value="Poland" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-sm">🇵🇱</span>
+                <span class="text-[#333]">Poland</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">1</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectCountry('Austria', '🇦🇹 Austria', event)" data-value="Austria" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-sm">🇦🇹</span>
+                <span class="text-[#333]">Austria</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">1</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectCountry('United States', '🇺🇸 United States', event)" data-value="United States" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-sm">🇺🇸</span>
+                <span class="text-[#333]">United States</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectCountry('United Kingdom', '🇬🇧 United Kingdom', event)" data-value="United Kingdom" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-sm">🇬🇧</span>
+                <span class="text-[#333]">United Kingdom</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+              </div>
+            </button>
+            <button type="button" onclick="selectCountry('Germany', '🇩🇪 Germany', event)" data-value="Germany" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-sm">🇩🇪</span>
+                <span class="text-[#333]">Germany</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
 
       <!-- Filter: speaking All languages -->
       <span class="text-[11px] text-[#716f6a] shrink-0 font-normal">, speaking</span>
@@ -224,7 +318,6 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
         </svg>
       </button>
-
 
       <!-- Filter: All genders -->
       <button class="border border-[#dedbd3] bg-transparent hover:border-[#b8b5ac] rounded-full px-2.5 py-1 text-[11px] text-[#18181b] flex items-center gap-1 shrink-0 transition-colors cursor-pointer">
@@ -244,10 +337,10 @@
     </div>
 
     <!-- Creators Grid Row 1 (Pixel-perfect outlines all around cards matching reference image) -->
-    <div class="grid grid-cols-5 gap-3.5 w-full mt-7 mb-3.5">
+    <div id="creators-grid" class="grid grid-cols-5 gap-3.5 w-full mt-7 mb-3.5">
       
-      <!-- Card 1: Kris (Unselected outline with plus button) -->
-      <div onclick="toggleCreator('kris')" id="creator-kris" class="cursor-pointer flex flex-col group">
+      <!-- Card 1: Kris (Latvia) -->
+      <div onclick="toggleCreator('kris')" id="creator-kris" data-country="Latvia" class="creator-card cursor-pointer flex flex-col group">
         <div id="frame-kris" class="card-frame unselected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
             <img id="img-kris" src="assets/creators_page/kris.png" alt="Kris" class="w-full h-full object-cover pointer-events-none" />
@@ -263,8 +356,8 @@
         </div>
       </div>
 
-      <!-- Card 2: Angelika (Unselected outline with plus button) -->
-      <div onclick="toggleCreator('angelika')" id="creator-angelika" class="cursor-pointer flex flex-col group">
+      <!-- Card 2: Angelika (Romania) -->
+      <div onclick="toggleCreator('angelika')" id="creator-angelika" data-country="Romania" class="creator-card cursor-pointer flex flex-col group">
         <div id="frame-angelika" class="card-frame unselected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
             <img id="img-angelika" src="assets/creators_page/angelika.png" alt="Angelika" class="w-full h-full object-cover pointer-events-none" />
@@ -280,8 +373,8 @@
         </div>
       </div>
 
-      <!-- Card 3: Franci (Selected outline with blue border & corner check, NO plus button) -->
-      <div onclick="toggleCreator('franci')" id="creator-franci" class="cursor-pointer flex flex-col group">
+      <!-- Card 3: Franci (Latvia) -->
+      <div onclick="toggleCreator('franci')" id="creator-franci" data-country="Latvia" class="creator-card cursor-pointer flex flex-col group">
         <div id="frame-franci" class="card-frame selected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
             <img id="img-franci" src="assets/creators_page/inner_franci.png" alt="Franci" class="w-full h-full object-cover pointer-events-none" />
@@ -302,8 +395,8 @@
         </div>
       </div>
 
-      <!-- Card 4: Emilia (Selected outline with blue border & corner check, NO plus button) -->
-      <div onclick="toggleCreator('emilia')" id="creator-emilia" class="cursor-pointer flex flex-col group">
+      <!-- Card 4: Emilia (Poland) -->
+      <div onclick="toggleCreator('emilia')" id="creator-emilia" data-country="Poland" class="creator-card cursor-pointer flex flex-col group">
         <div id="frame-emilia" class="card-frame selected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
             <img id="img-emilia" src="assets/creators_page/inner_emilia.png" alt="Emilia" class="w-full h-full object-cover pointer-events-none" />
@@ -324,8 +417,8 @@
         </div>
       </div>
 
-      <!-- Card 5: Andrea (Unselected outline with plus button) -->
-      <div onclick="toggleCreator('andrea')" id="creator-andrea" class="cursor-pointer flex flex-col group">
+      <!-- Card 5: Andrea (Austria) -->
+      <div onclick="toggleCreator('andrea')" id="creator-andrea" data-country="Austria" class="creator-card cursor-pointer flex flex-col group">
         <div id="frame-andrea" class="card-frame unselected">
           <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
             <img id="img-andrea" src="assets/creators_page/andrea.png" alt="Andrea" class="w-full h-full object-cover pointer-events-none" />
@@ -341,10 +434,25 @@
         </div>
       </div>
 
+      <!-- Empty State when no creators match country filter -->
+      <div id="no-creators-state" class="hidden col-span-5 text-center py-12 flex flex-col items-center justify-center">
+        <div class="w-12 h-12 rounded-full bg-[#f4f3ef] border border-[#e5e3dc] flex items-center justify-center text-[#787671] mb-2.5 mx-auto">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.3-4.3"/>
+          </svg>
+        </div>
+        <p class="text-[13px] font-semibold text-[#18181b]">No creators found</p>
+        <p class="text-[11px] text-[#716f6a] mt-0.5 max-w-[260px]">There are currently no active creators matching your filter in this country.</p>
+        <button type="button" onclick="selectCountry('all', 'All countries', event)" class="mt-3 text-[11px] font-medium text-[#0060df] hover:underline cursor-pointer">
+          Reset to all countries
+        </button>
+      </div>
+
     </div>
 
     <!-- Row 2 Partial Peek (Matching reference image exactly) -->
-    <div class="grid grid-cols-5 gap-3.5 w-full h-[37px] overflow-hidden pointer-events-none mb-12">
+    <div id="row2-peek" class="grid grid-cols-5 gap-3.5 w-full h-[37px] overflow-hidden pointer-events-none mb-12">
       <div class="rounded-t-[20px] p-[3.5px] pb-0 bg-white border-t border-x border-[#dcd9d0]">
         <div class="rounded-t-[16px] overflow-hidden h-[34px]">
           <img src="assets/creators_page/pixel_r2_1.png" class="w-full h-full object-cover" />
@@ -396,12 +504,155 @@
 
   <script>
     const creatorMeta = {
-      kris: { id: 'kris', name: 'Kris', handle: '@kris_creator', avatar: 'assets/creators_page/kris.png', verified: true },
-      angelika: { id: 'angelika', name: 'Angelika', handle: '@angelika_ugc', avatar: 'assets/creators_page/angelika.png', verified: true },
-      franci: { id: 'franci', name: 'Franci', handle: '@franci_ugc', avatar: 'assets/creators_page/franci.png', verified: true },
-      emilia: { id: 'emilia', name: 'Emilia', handle: '@emilia_ugc', avatar: 'assets/creators_page/emilia.png', verified: true },
-      andrea: { id: 'andrea', name: 'Andrea', handle: '@andrea_ugc', avatar: 'assets/creators_page/andrea.png', verified: true }
+      kris: { id: 'kris', name: 'Kris', handle: '@kris_creator', avatar: 'assets/creators_page/kris.png', verified: true, country: 'Latvia' },
+      angelika: { id: 'angelika', name: 'Angelika', handle: '@angelika_ugc', avatar: 'assets/creators_page/angelika.png', verified: true, country: 'Romania' },
+      franci: { id: 'franci', name: 'Franci', handle: '@franci_ugc', avatar: 'assets/creators_page/franci.png', verified: true, country: 'Latvia' },
+      emilia: { id: 'emilia', name: 'Emilia', handle: '@emilia_ugc', avatar: 'assets/creators_page/emilia.png', verified: true, country: 'Poland' },
+      andrea: { id: 'andrea', name: 'Andrea', handle: '@andrea_ugc', avatar: 'assets/creators_page/andrea.png', verified: true, country: 'Austria' }
     };
+
+    let currentSelectedCountry = 'all';
+
+    function toggleCountryDropdown(event) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      const menu = document.getElementById('country-dropdown-menu');
+      const chevron = document.getElementById('country-filter-chevron');
+      if (!menu) return;
+
+      const isHidden = menu.classList.contains('hidden');
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        if (chevron) chevron.classList.add('rotate-180');
+      } else {
+        menu.classList.add('hidden');
+        if (chevron) chevron.classList.remove('rotate-180');
+      }
+    }
+
+    function selectCountry(country, label, event) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      currentSelectedCountry = country;
+
+      // Update button label
+      const btnLabel = document.getElementById('country-filter-label');
+      const btn = document.getElementById('country-filter-btn');
+      if (btnLabel) {
+        btnLabel.textContent = country === 'all' ? 'All countries' : label;
+      }
+
+      // Active visual styling on the filter pill
+      if (btn) {
+        if (country === 'all') {
+          btn.classList.remove('border-[#0060df]', 'bg-[#eff6ff]', 'text-[#0060df]', 'font-medium');
+          btn.classList.add('border-[#dedbd3]', 'bg-transparent', 'text-[#18181b]');
+        } else {
+          btn.classList.remove('border-[#dedbd3]', 'bg-transparent', 'text-[#18181b]');
+          btn.classList.add('border-[#0060df]', 'bg-[#eff6ff]', 'text-[#0060df]', 'font-medium');
+        }
+      }
+
+      // Update checkmarks in popup
+      const options = document.querySelectorAll('.country-opt');
+      options.forEach(opt => {
+        const val = opt.getAttribute('data-value');
+        const existingCheck = opt.querySelector('.country-check');
+        if (val === country) {
+          if (!existingCheck) {
+            const container = opt.querySelector('div.flex');
+            const check = document.createElement('span');
+            check.className = 'country-check text-[#0060df] text-xs font-bold';
+            check.textContent = '✓';
+            if (container) {
+              container.appendChild(check);
+            } else {
+              opt.appendChild(check);
+            }
+          }
+        } else {
+          if (existingCheck) existingCheck.remove();
+        }
+      });
+
+      // Close dropdown
+      const menu = document.getElementById('country-dropdown-menu');
+      const chevron = document.getElementById('country-filter-chevron');
+      if (menu) menu.classList.add('hidden');
+      if (chevron) chevron.classList.remove('rotate-180');
+
+      // Apply filtering to creator grid
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const searchInput = document.getElementById('creator-search-input');
+      const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+      const cards = document.querySelectorAll('.creator-card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const cardCountry = card.getAttribute('data-country') || '';
+        const nameEl = card.querySelector('span.text-\\[13px\\]');
+        const name = nameEl ? nameEl.textContent.trim().toLowerCase() : '';
+
+        const matchesCountry = (currentSelectedCountry === 'all' || cardCountry.toLowerCase() === currentSelectedCountry.toLowerCase());
+        const matchesSearch = !query || name.includes(query);
+
+        if (matchesCountry && matchesSearch) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Handle empty state display
+      const noState = document.getElementById('no-creators-state');
+      if (noState) {
+        if (visibleCount === 0) {
+          noState.classList.remove('hidden');
+          noState.classList.add('flex');
+        } else {
+          noState.classList.add('hidden');
+          noState.classList.remove('flex');
+        }
+      }
+
+      // Row 2 partial peek visibility
+      const row2Peek = document.getElementById('row2-peek');
+      if (row2Peek) {
+        row2Peek.style.display = (currentSelectedCountry === 'all' && !query) ? 'grid' : 'none';
+      }
+    }
+
+    // Close country dropdown when clicking outside or pressing Escape
+    document.addEventListener('click', (e) => {
+      const wrapper = document.getElementById('country-dropdown-wrapper');
+      const menu = document.getElementById('country-dropdown-menu');
+      const chevron = document.getElementById('country-filter-chevron');
+      if (wrapper && !wrapper.contains(e.target)) {
+        if (menu && !menu.classList.contains('hidden')) {
+          menu.classList.add('hidden');
+          if (chevron) chevron.classList.remove('rotate-180');
+        }
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const menu = document.getElementById('country-dropdown-menu');
+        const chevron = document.getElementById('country-filter-chevron');
+        if (menu && !menu.classList.contains('hidden')) {
+          menu.classList.add('hidden');
+          if (chevron) chevron.classList.remove('rotate-180');
+        }
+      }
+    });
 
     const creatorState = {
       kris: {
@@ -506,8 +757,54 @@
       saveSelection();
     }
 
+    function updateSelectedFormatUI() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlFormat = urlParams.get('format');
+      let format = 'Reaction Video';
+
+      if (urlFormat) {
+        if (urlFormat.toLowerCase().includes('full')) {
+          format = 'Full UGC';
+        } else {
+          format = 'Reaction Video';
+        }
+        try {
+          localStorage.setItem('selectedFormat', format);
+          localStorage.setItem('selectedFormatKey', format === 'Full UGC' ? 'full' : 'reaction');
+          sessionStorage.setItem('selectedFormat', format);
+          sessionStorage.setItem('selectedFormatKey', format === 'Full UGC' ? 'full' : 'reaction');
+        } catch (e) {}
+      } else {
+        const stored = localStorage.getItem('selectedFormat') || sessionStorage.getItem('selectedFormat');
+        const storedKey = localStorage.getItem('selectedFormatKey') || sessionStorage.getItem('selectedFormatKey');
+        if (stored === 'Full UGC' || storedKey === 'full' || storedKey === 'full_ugc') {
+          format = 'Full UGC';
+        } else {
+          format = 'Reaction Video';
+        }
+      }
+
+      const displayEl = document.getElementById('selected-format-display');
+      if (displayEl) {
+        displayEl.textContent = format;
+      }
+
+      const key = (format === 'Full UGC') ? 'full' : 'reaction';
+      const formatBtn = document.getElementById('selected-format-btn');
+      if (formatBtn) {
+        formatBtn.href = `order.html?format=${key}`;
+      }
+
+      const formatNav = document.getElementById('header-format-nav');
+      if (formatNav) {
+        formatNav.href = `order.html?format=${key}`;
+      }
+    }
+
     // Initialize & restore saved creators on load
     document.addEventListener('DOMContentLoaded', () => {
+      updateSelectedFormatUI();
+
       const savedIds = localStorage.getItem('selectedCreatorIds');
       if (savedIds) {
         try {
