@@ -541,6 +541,8 @@
     let currentFormat = resolveLocalFormat() || 'Reaction Video';
     let currentRateFromBackend = null;
     window.currentFormat = currentFormat;
+    window.currentQty = currentQty;
+    window.selectedCreators = selectedCreators;
 
     function getBaseRate() {
       if (currentRateFromBackend !== null && !isNaN(currentRateFromBackend)) {
@@ -551,6 +553,18 @@
 
     function getRateForQty(qty) {
       return getBaseRate();
+    }
+    window.getRateForQty = getRateForQty;
+
+    function sumConceptsPerCreator() {
+      let totalPerCreator = 0;
+      document.querySelectorAll('#concepts-container .per-creator-input').forEach(el => {
+        const val = parseInt(el.value, 10);
+        if (!isNaN(val) && val > 0) {
+          totalPerCreator += val;
+        }
+      });
+      return Math.max(1, totalPerCreator);
     }
 
     function updateFormatUI() {
@@ -589,7 +603,7 @@
         } catch (e) {}
         window.currentFormat = currentFormat;
         updateFormatUI();
-        updateUI();
+        updateUI(true);
 
         try {
           const res = await fetch(`${API_BASE}/api/orders/format`, {
@@ -631,7 +645,7 @@
 
       window.currentFormat = currentFormat;
       updateFormatUI();
-      updateUI();
+      updateUI(true);
     }
 
     function loadSavedCreators() {
@@ -646,37 +660,64 @@
           console.error(e);
         }
       }
+      window.selectedCreators = selectedCreators;
       const count = selectedCreators.length || 2;
       const tiers = getTierConfigs(count);
       currentQty = tiers.tier1;
+      window.currentQty = currentQty;
     }
 
     function selectTier(qty) {
       currentQty = qty;
+      window.currentQty = currentQty;
       updateUI();
+      if (typeof window.scheduleAutosave === 'function') window.scheduleAutosave();
     }
 
     function addMoreVideos(increment) {
       currentQty += increment;
+      window.currentQty = currentQty;
       updateUI();
+      if (typeof window.scheduleAutosave === 'function') window.scheduleAutosave();
     }
 
     function updateFromPerCreator(val) {
-      const perCreator = parseInt(val, 10);
+      const parsed = parseInt(val, 10);
+      if (isNaN(parsed) || parsed < 1) return;
       const creatorCount = selectedCreators.length || 2;
-      if (!isNaN(perCreator) && perCreator > 0) {
-        currentQty = perCreator * creatorCount;
-        updateUI(true);
-      }
+      const totalPerCreator = sumConceptsPerCreator();
+      currentQty = totalPerCreator * creatorCount;
+      window.currentQty = currentQty;
+      updateUI(true);
+      if (typeof window.scheduleAutosave === 'function') window.scheduleAutosave();
     }
 
     function updateUI(skipInputSync = false) {
       updateFormatUI();
       const creatorCount = selectedCreators.length || 2;
       const tiers = getTierConfigs(creatorCount);
+
+      // 5. Per creator inputs sync (when triggered by tier buttons or initial load)
+      if (!skipInputSync) {
+        const targetPerCreator = Math.max(1, Math.round(currentQty / creatorCount));
+        const allInputs = Array.from(document.querySelectorAll('#concepts-container .per-creator-input'));
+        if (allInputs.length > 0) {
+          const otherConceptsPerCreator = allInputs.slice(1).reduce((sum, el) => {
+            const v = parseInt(el.value, 10);
+            return sum + (!isNaN(v) && v > 0 ? v : 1);
+          }, 0);
+          allInputs[0].value = Math.max(1, targetPerCreator - otherConceptsPerCreator);
+        }
+      }
+
+      // Ensure currentQty and perCreator reflect the sum of all concepts' Per creator inputs
+      const totalPerCreator = sumConceptsPerCreator();
+      currentQty = totalPerCreator * creatorCount;
+      window.currentQty = currentQty;
+
       const rate = getRateForQty(currentQty);
       const total = currentQty * rate;
-      const perCreator = Math.max(1, Math.round(currentQty / creatorCount));
+      const perCreator = totalPerCreator;
 
       const formattedRate = '$' + rate.toFixed(2);
       const formattedTotal = '$' + total.toFixed(2);
@@ -773,16 +814,16 @@
         el.textContent = `${formattedRate} / video`;
       });
 
-      // 5. Per creator inputs
-      if (!skipInputSync) {
-        document.querySelectorAll('.per-creator-input').forEach(el => {
-          el.value = perCreator;
-        });
-      }
-
-      // 6. Concept footer prices
-      document.querySelectorAll('.concept-footer-price').forEach(el => {
-        el.textContent = `${currentQty} videos · ${formattedTotal}`;
+      // 6. Concept footer prices (calculated per concept from its own Per creator input)
+      document.querySelectorAll('#concepts-container > div').forEach(block => {
+        const inputEl = block.querySelector('.per-creator-input');
+        const footerEl = block.querySelector('.concept-footer-price');
+        const conceptPerCreator = Math.max(1, parseInt(inputEl?.value, 10) || 1);
+        const conceptQty = conceptPerCreator * creatorCount;
+        const conceptSubtotal = conceptQty * rate;
+        if (footerEl) {
+          footerEl.textContent = `${conceptQty} videos · $${conceptSubtotal.toFixed(2)}`;
+        }
       });
 
       // 7. Live estimate subtitle
@@ -841,8 +882,9 @@
       const creatorCount = selectedCreators.length || 2;
       const currentRate = getRateForQty(currentQty);
       const rate = currentRate.toFixed(2);
-      const total = (currentQty * currentRate).toFixed(2);
-      const perCreator = Math.ceil(currentQty / creatorCount);
+      const perCreator = 1;
+      const conceptQty = perCreator * creatorCount;
+      const conceptTotal = (conceptQty * currentRate).toFixed(2);
       const currentConceptNum = container.children.length + 1;
 
       const newBlock = document.createElement('div');
@@ -1010,21 +1052,30 @@
         <!-- Concept Footer details -->
         <div class="flex items-center justify-between text-[11px] text-[#71717a] px-0.5">
           <span>Delivered unedited</span>
-          <span class="concept-footer-price text-[11px] text-[#71717a]">${currentQty} videos · $${total}</span>
+          <span class="concept-footer-price text-[11px] text-[#71717a]">${conceptQty} videos · $${conceptTotal}</span>
         </div>
       `;
 
       container.appendChild(newBlock);
+      const totalPerCreator = sumConceptsPerCreator();
+      currentQty = totalPerCreator * creatorCount;
+      window.currentQty = currentQty;
       renumberConcepts();
-      updateUI();
+      updateUI(true);
+      if (typeof window.scheduleAutosave === 'function') window.scheduleAutosave();
     }
 
     function removeConcept(idx) {
       const block = document.getElementById(`concept-block-${idx}`);
       if (block) {
         block.remove();
+        const creatorCount = selectedCreators.length || 2;
+        const totalPerCreator = sumConceptsPerCreator();
+        currentQty = totalPerCreator * creatorCount;
+        window.currentQty = currentQty;
         renumberConcepts();
-        updateUI();
+        updateUI(true);
+        if (typeof window.scheduleAutosave === 'function') window.scheduleAutosave();
       }
     }
 
@@ -1220,21 +1271,34 @@
       }
 
       // Collect complete order brief details
+      const creatorCount = selectedCreators.length || 2;
+      const rate = getRateForQty(currentQty);
       const concepts = [];
+      let summedPerCreator = 0;
       const blocks = document.querySelectorAll('#concepts-container > div');
       blocks.forEach((block, idx) => {
         const title = block.querySelector('.concept-title-text')?.textContent.trim() || `Concept ${idx + 1}`;
         const typeEl = block.querySelector('[id^="selected-video-type-text-"]');
         const type = typeEl ? typeEl.textContent.trim() : 'Reaction / footage';
         const script = block.querySelector('.concept-script-textarea')?.value.trim() || '';
-        const perCreator = block.querySelector('.per-creator-input')?.value.trim() || '3';
-        concepts.push({ title, type, script, perCreator });
+        const conceptPerCreator = Math.max(1, parseInt(block.querySelector('.per-creator-input')?.value.trim(), 10) || 1);
+        summedPerCreator += conceptPerCreator;
+        const conceptQty = conceptPerCreator * creatorCount;
+        const conceptSubtotal = parseFloat((conceptQty * rate).toFixed(2));
+        concepts.push({
+          title,
+          type,
+          script,
+          perCreator: conceptPerCreator,
+          qty: conceptQty,
+          subtotal: conceptSubtotal
+        });
       });
 
-      const creatorCount = selectedCreators.length || 2;
-      const rate = getRateForQty(currentQty);
+      const perCreator = summedPerCreator > 0 ? summedPerCreator : Math.ceil(currentQty / creatorCount);
+      currentQty = perCreator * creatorCount;
+      window.currentQty = currentQty;
       const total = (currentQty * rate).toFixed(2);
-      const perCreator = Math.ceil(currentQty / creatorCount);
 
       const orderPayload = {
         brandName: brandNameInput.value.trim(),
@@ -1268,12 +1332,15 @@
     window.selectDynamicOption = selectDynamicOption;
     window.checkBriefValidity = checkBriefValidity;
     window.handleSaveAndReview = handleSaveAndReview;
+    window.updateUI = updateUI;
+    window.selectTier = selectTier;
 
     // Check validity on page load & load saved creators & sync format from backend
     document.addEventListener('DOMContentLoaded', async function() {
       loadSavedCreators();
-      await syncFormatFromBackend();
       updateUI();
+      await syncFormatFromBackend();
+      updateUI(true);
       checkBriefValidity();
     });
   </script>

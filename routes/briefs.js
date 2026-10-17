@@ -29,13 +29,27 @@ router.post('/save-draft', (req, res) => {
     } = req.body;
 
     const briefId = id || generateId('brief');
-    const pricing = calculatePricing(qty, selectedCreators.length || 2, format);
+    const creatorCount = (Array.isArray(selectedCreators) && selectedCreators.length > 0) ? selectedCreators.length : 2;
+    const summedPerCreator = Array.isArray(concepts) && concepts.length > 0
+      ? concepts.reduce((sum, c) => sum + Math.max(1, parseInt(c.perCreator, 10) || 1), 0)
+      : 0;
+    const effectiveQty = summedPerCreator > 0 ? (summedPerCreator * creatorCount) : (qty || 6);
+    const pricing = calculatePricing(effectiveQty, creatorCount, format);
 
-    // Analyze scripts for durations
-    const analyzedConcepts = concepts.map(c => ({
-      ...c,
-      analysis: analyzeScript(c.script || '')
-    }));
+    // Analyze scripts for durations and calculate per-concept quantity & subtotal
+    const analyzedConcepts = concepts.map(c => {
+      const conceptPerCreator = Math.max(1, parseInt(c.perCreator, 10) || 1);
+      const conceptQty = conceptPerCreator * creatorCount;
+      const conceptSubtotal = parseFloat((conceptQty * pricing.rate).toFixed(2));
+      return {
+        ...c,
+        perCreator: conceptPerCreator,
+        qty: conceptQty,
+        rate: pricing.rate,
+        subtotal: conceptSubtotal,
+        analysis: analyzeScript(c.script || '')
+      };
+    });
 
     const creatorsJson = JSON.stringify(selectedCreators);
     const conceptsJson = JSON.stringify(analyzedConcepts);
@@ -105,11 +119,26 @@ router.put('/:id', (req, res) => {
       return res.status(404).json({ success: false, error: 'Brief not found.' });
     }
 
-    const pricing = calculatePricing(qty, selectedCreators.length || 2, format);
-    const analyzedConcepts = concepts.map(c => ({
-      ...c,
-      analysis: analyzeScript(c.script || '')
-    }));
+    const creatorCount = (Array.isArray(selectedCreators) && selectedCreators.length > 0) ? selectedCreators.length : 2;
+    const summedPerCreator = Array.isArray(concepts) && concepts.length > 0
+      ? concepts.reduce((sum, c) => sum + Math.max(1, parseInt(c.perCreator, 10) || 1), 0)
+      : 0;
+    const effectiveQty = summedPerCreator > 0 ? (summedPerCreator * creatorCount) : (qty || 6);
+    const pricing = calculatePricing(effectiveQty, creatorCount, format);
+
+    const analyzedConcepts = concepts.map(c => {
+      const conceptPerCreator = Math.max(1, parseInt(c.perCreator, 10) || 1);
+      const conceptQty = conceptPerCreator * creatorCount;
+      const conceptSubtotal = parseFloat((conceptQty * pricing.rate).toFixed(2));
+      return {
+        ...c,
+        perCreator: conceptPerCreator,
+        qty: conceptQty,
+        rate: pricing.rate,
+        subtotal: conceptSubtotal,
+        analysis: analyzeScript(c.script || '')
+      };
+    });
 
     const updateStmt = db.prepare(`
       UPDATE briefs
@@ -229,30 +258,59 @@ router.post('/:id/review', (req, res) => {
       });
     }
 
-    // Recalculate price server-side
-    const pricing = calculatePricing(qty || 6, selectedCreators.length || 2, req.body.format);
+    // Recalculate price server-side from summed per-creator quantities across concepts
+    const creatorCount = (Array.isArray(selectedCreators) && selectedCreators.length > 0) ? selectedCreators.length : 2;
+    const summedPerCreator = concepts.reduce((sum, c) => sum + Math.max(1, parseInt(c.perCreator, 10) || 1), 0);
+    const effectiveQty = summedPerCreator > 0 ? (summedPerCreator * creatorCount) : (qty || 6);
+    const pricing = calculatePricing(effectiveQty, creatorCount, req.body.format);
 
-    // Calculate script timings
-    const analyzedConcepts = concepts.map(c => ({
-      ...c,
-      analysis: analyzeScript(c.script)
-    }));
+    // Calculate script timings & per-concept video count and subtotal
+    const analyzedConcepts = concepts.map(c => {
+      const conceptPerCreator = Math.max(1, parseInt(c.perCreator, 10) || 1);
+      const conceptQty = conceptPerCreator * creatorCount;
+      const conceptSubtotal = parseFloat((conceptQty * pricing.rate).toFixed(2));
+      return {
+        ...c,
+        perCreator: conceptPerCreator,
+        qty: conceptQty,
+        rate: pricing.rate,
+        subtotal: conceptSubtotal,
+        analysis: analyzeScript(c.script)
+      };
+    });
 
-    // Update brief record
-    const updateStmt = db.prepare(`
-      UPDATE briefs
-      SET brand_name = ?, about_brand = ?, filming_instructions = ?,
-          qty = ?, rate = ?, total = ?, per_creator = ?,
-          selected_creators = ?, concepts = ?, status = 'reviewed',
-          updated_at = CURRENT_TIMESTAMP
-      WHERE id = ?
-    `);
+    // Upsert brief record so it is always saved in the database
+    const existing = db.prepare('SELECT id FROM briefs WHERE id = ?').get(id);
+    if (existing) {
+      const updateStmt = db.prepare(`
+        UPDATE briefs
+        SET brand_name = ?, about_brand = ?, filming_instructions = ?,
+            qty = ?, rate = ?, total = ?, per_creator = ?,
+            selected_creators = ?, concepts = ?, status = 'reviewed',
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `);
 
-    updateStmt.run(
-      brandName.trim(), aboutBrand.trim(), filmingInstructions.trim(),
-      pricing.quantity, pricing.rate, pricing.total, pricing.perCreator,
-      JSON.stringify(selectedCreators), JSON.stringify(analyzedConcepts), id
-    );
+      updateStmt.run(
+        brandName.trim(), aboutBrand.trim(), filmingInstructions.trim(),
+        pricing.quantity, pricing.rate, pricing.total, pricing.perCreator,
+        JSON.stringify(selectedCreators), JSON.stringify(analyzedConcepts), id
+      );
+    } else {
+      const insertStmt = db.prepare(`
+        INSERT INTO briefs (
+          id, session_id, brand_name, about_brand, filming_instructions,
+          qty, rate, total, per_creator, selected_creators, concepts, status
+        ) VALUES (?, 'guest_session', ?, ?, ?, ?, ?, ?, ?, ?, ?, 'reviewed')
+      `);
+
+      insertStmt.run(
+        id,
+        brandName.trim(), aboutBrand.trim(), filmingInstructions.trim(),
+        pricing.quantity, pricing.rate, pricing.total, pricing.perCreator,
+        JSON.stringify(selectedCreators), JSON.stringify(analyzedConcepts)
+      );
+    }
 
     const verifiedPayload = {
       briefId: id,

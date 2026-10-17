@@ -39,7 +39,11 @@ function setupAutosaveListeners() {
   });
 
   document.addEventListener('input', (e) => {
-    if (e.target && e.target.classList.contains('concept-script-textarea')) {
+    if (
+      e.target &&
+      (e.target.classList.contains('concept-script-textarea') ||
+        e.target.classList.contains('per-creator-input'))
+    ) {
       scheduleAutosave();
     }
   });
@@ -81,20 +85,38 @@ function collectBriefPayload() {
   const aboutBrand = document.getElementById('about-brand-input')?.value.trim() || '';
   const filmingInstructions = document.getElementById('filming-instructions-input')?.value.trim() || '';
 
+  const creatorCount = (window.selectedCreators && window.selectedCreators.length) || 2;
+  const format = window.currentFormat || localStorage.getItem('selectedFormat') || 'Reaction Video';
+  const fallbackBase = (format === 'Full UGC') ? 100.00 : 25.00;
+  const rate = (typeof window.getRateForQty === 'function')
+    ? window.getRateForQty(window.currentQty || 6)
+    : fallbackBase;
+
   const concepts = [];
+  let summedPerCreator = 0;
   const blocks = document.querySelectorAll('#concepts-container > div');
   blocks.forEach((block, idx) => {
     const title = block.querySelector('.concept-title-text')?.textContent.trim() || `Concept ${idx + 1}`;
     const typeEl = block.querySelector('[id^="selected-video-type-text-"]');
     const type = typeEl ? typeEl.textContent.trim() : 'Reaction / footage';
     const script = block.querySelector('.concept-script-textarea')?.value.trim() || '';
-    const perCreator = block.querySelector('.per-creator-input')?.value.trim() || '3';
-    concepts.push({ title, type, script, perCreator });
+    const perCreator = Math.max(1, parseInt(block.querySelector('.per-creator-input')?.value.trim(), 10) || 1);
+    summedPerCreator += perCreator;
+    const conceptQty = perCreator * creatorCount;
+    const conceptSubtotal = parseFloat((conceptQty * rate).toFixed(2));
+    concepts.push({
+      title,
+      type,
+      script,
+      perCreator,
+      qty: conceptQty,
+      subtotal: conceptSubtotal
+    });
   });
 
-  const creatorCount = (window.selectedCreators && window.selectedCreators.length) || 2;
-  const qty = window.currentQty || 6;
-  const format = window.currentFormat || localStorage.getItem('selectedFormat') || 'Reaction Video';
+  const totalPerCreator = summedPerCreator > 0 ? summedPerCreator : 3;
+  const qty = totalPerCreator * creatorCount;
+  window.currentQty = qty;
 
   return {
     id: currentBriefId,
@@ -102,6 +124,7 @@ function collectBriefPayload() {
     aboutBrand,
     filmingInstructions,
     qty,
+    perCreator: totalPerCreator,
     format,
     selectedCreators: window.selectedCreators || [],
     concepts
@@ -160,15 +183,24 @@ async function loadBriefFromBackend(briefId) {
       if (aboutInput && b.aboutBrand) aboutInput.value = b.aboutBrand;
       if (filmingInput && b.filmingInstructions) filmingInput.value = b.filmingInstructions;
 
-      if (b.qty && typeof window.selectTier === 'function') {
-        window.selectTier(b.qty);
+      if (b.concepts && b.concepts.length > 0) {
+        const container = document.getElementById('concepts-container');
+        while (container && container.children.length < b.concepts.length && typeof window.addNewConcept === 'function') {
+          window.addNewConcept();
+        }
+        const blocks = document.querySelectorAll('#concepts-container > div');
+        b.concepts.forEach((c, idx) => {
+          const block = blocks[idx];
+          if (!block) return;
+          const ta = block.querySelector('.concept-script-textarea');
+          if (ta && c.script !== undefined) ta.value = c.script;
+          const pcInput = block.querySelector('.per-creator-input');
+          if (pcInput && c.perCreator !== undefined) pcInput.value = c.perCreator;
+        });
       }
 
-      if (b.concepts && b.concepts.length > 0) {
-        const firstTa = document.querySelector('.concept-script-textarea');
-        if (firstTa && b.concepts[0].script) {
-          firstTa.value = b.concepts[0].script;
-        }
+      if (typeof window.updateUI === 'function') {
+        window.updateUI(true);
       }
 
       if (typeof window.checkBriefValidity === 'function') {
@@ -217,7 +249,7 @@ async function submitReviewToBackend() {
       ...payload,
       rate: localRate.toFixed(2),
       total: (payload.qty * localRate).toFixed(2),
-      perCreator: Math.ceil(payload.qty / (payload.selectedCreators.length || 2)),
+      perCreator: payload.perCreator || Math.ceil(payload.qty / (payload.selectedCreators.length || 2)),
       selectedCreatorsCount: payload.selectedCreators.length || 2
     };
     localStorage.setItem('ugc_order_review', JSON.stringify(localPayload));
@@ -308,6 +340,7 @@ function updateScriptPacing(conceptIndex) {
 }
 
 // Expose globals
+window.scheduleAutosave = scheduleAutosave;
 window.saveDraftToBackend = saveDraftToBackend;
 window.submitReviewToBackend = submitReviewToBackend;
 window.callAiScriptHelper = callAiScriptHelper;
