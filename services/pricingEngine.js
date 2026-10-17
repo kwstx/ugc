@@ -17,6 +17,18 @@ function getActiveFormatFromDb(sessionId = 'default_session') {
   return { format_choice: 'Reaction Video', rate: 25.00 };
 }
 
+function getTierConfigs(count) {
+  if (count === 1) {
+    return { tier1: 5, tier2: 10, tier3: 20, inc: 5 };
+  }
+  return {
+    tier1: count * 3,
+    tier2: count * 5,
+    tier3: count * 10,
+    inc: count * 3
+  };
+}
+
 function calculatePricing(quantity, creatorCount = 2, explicitFormat = null) {
   const qty = parseInt(quantity, 10);
   if (isNaN(qty) || qty < 1) {
@@ -39,9 +51,20 @@ function calculatePricing(quantity, creatorCount = 2, explicitFormat = null) {
   const baseRate = isFullUgc ? 100.00 : 25.00;
   const formatLabel = isFullUgc ? 'Full UGC' : 'Reaction Video';
 
-  const rate = baseRate;
-  const discountLabel = `$${baseRate.toFixed(2)} / video`;
-  const discountPercent = 0;
+  const tiers = getTierConfigs(validCreatorCount);
+  let rate = baseRate;
+  let discountLabel = `Starter ($${baseRate.toFixed(2)} / video)`;
+  let discountPercent = 0;
+
+  if (qty >= tiers.tier3) {
+    rate = parseFloat((baseRate * (1 - 0.1666666667)).toFixed(2));
+    discountLabel = `Save 16.7% ($${rate.toFixed(2)} / video)`;
+    discountPercent = 16.7;
+  } else if (qty >= tiers.tier2) {
+    rate = parseFloat((baseRate * (1 - 0.0833333333)).toFixed(2));
+    discountLabel = `Save 8.3% ($${rate.toFixed(2)} / video)`;
+    discountPercent = 8.3;
+  }
 
   const total = parseFloat((qty * rate).toFixed(2));
   const perCreator = Math.max(1, Math.ceil(qty / validCreatorCount));

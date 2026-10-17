@@ -30,15 +30,20 @@ router.post('/save-draft', (req, res) => {
 
     const briefId = id || generateId('brief');
     const creatorCount = (Array.isArray(selectedCreators) && selectedCreators.length > 0) ? selectedCreators.length : 2;
-    const summedPerCreator = Array.isArray(concepts) && concepts.length > 0
+    const hasExplicitPerCreator = Array.isArray(concepts) && concepts.length > 0 && concepts.every(c => c.perCreator !== undefined);
+    const summedPerCreator = hasExplicitPerCreator
       ? concepts.reduce((sum, c) => sum + Math.max(1, parseInt(c.perCreator, 10) || 1), 0)
       : 0;
-    const effectiveQty = summedPerCreator > 0 ? (summedPerCreator * creatorCount) : (qty || 6);
+    const effectiveQty = (qty && (!hasExplicitPerCreator || Number(qty) !== summedPerCreator * creatorCount))
+      ? parseInt(qty, 10)
+      : (summedPerCreator > 0 ? (summedPerCreator * creatorCount) : (qty || 6));
     const pricing = calculatePricing(effectiveQty, creatorCount, format);
 
     // Analyze scripts for durations and calculate per-concept quantity & subtotal
     const analyzedConcepts = concepts.map(c => {
-      const conceptPerCreator = Math.max(1, parseInt(c.perCreator, 10) || 1);
+      const conceptPerCreator = c.perCreator !== undefined
+        ? Math.max(1, parseInt(c.perCreator, 10) || 1)
+        : Math.max(1, Math.round(effectiveQty / creatorCount / Math.max(1, concepts.length)));
       const conceptQty = conceptPerCreator * creatorCount;
       const conceptSubtotal = parseFloat((conceptQty * pricing.rate).toFixed(2));
       return {
@@ -120,14 +125,19 @@ router.put('/:id', (req, res) => {
     }
 
     const creatorCount = (Array.isArray(selectedCreators) && selectedCreators.length > 0) ? selectedCreators.length : 2;
-    const summedPerCreator = Array.isArray(concepts) && concepts.length > 0
+    const hasExplicitPerCreator = Array.isArray(concepts) && concepts.length > 0 && concepts.every(c => c.perCreator !== undefined);
+    const summedPerCreator = hasExplicitPerCreator
       ? concepts.reduce((sum, c) => sum + Math.max(1, parseInt(c.perCreator, 10) || 1), 0)
       : 0;
-    const effectiveQty = summedPerCreator > 0 ? (summedPerCreator * creatorCount) : (qty || 6);
+    const effectiveQty = (qty && (!hasExplicitPerCreator || Number(qty) !== summedPerCreator * creatorCount))
+      ? parseInt(qty, 10)
+      : (summedPerCreator > 0 ? (summedPerCreator * creatorCount) : (qty || 6));
     const pricing = calculatePricing(effectiveQty, creatorCount, format);
 
     const analyzedConcepts = concepts.map(c => {
-      const conceptPerCreator = Math.max(1, parseInt(c.perCreator, 10) || 1);
+      const conceptPerCreator = c.perCreator !== undefined
+        ? Math.max(1, parseInt(c.perCreator, 10) || 1)
+        : Math.max(1, Math.round(effectiveQty / creatorCount / Math.max(1, concepts.length)));
       const conceptQty = conceptPerCreator * creatorCount;
       const conceptSubtotal = parseFloat((conceptQty * pricing.rate).toFixed(2));
       return {
@@ -260,13 +270,20 @@ router.post('/:id/review', (req, res) => {
 
     // Recalculate price server-side from summed per-creator quantities across concepts
     const creatorCount = (Array.isArray(selectedCreators) && selectedCreators.length > 0) ? selectedCreators.length : 2;
-    const summedPerCreator = concepts.reduce((sum, c) => sum + Math.max(1, parseInt(c.perCreator, 10) || 1), 0);
-    const effectiveQty = summedPerCreator > 0 ? (summedPerCreator * creatorCount) : (qty || 6);
+    const hasExplicitPerCreator = Array.isArray(concepts) && concepts.length > 0 && concepts.every(c => c.perCreator !== undefined);
+    const summedPerCreator = hasExplicitPerCreator
+      ? concepts.reduce((sum, c) => sum + Math.max(1, parseInt(c.perCreator, 10) || 1), 0)
+      : 0;
+    const effectiveQty = (qty && (!hasExplicitPerCreator || Number(qty) !== summedPerCreator * creatorCount))
+      ? parseInt(qty, 10)
+      : (summedPerCreator > 0 ? (summedPerCreator * creatorCount) : (qty || 6));
     const pricing = calculatePricing(effectiveQty, creatorCount, req.body.format);
 
     // Calculate script timings & per-concept video count and subtotal
     const analyzedConcepts = concepts.map(c => {
-      const conceptPerCreator = Math.max(1, parseInt(c.perCreator, 10) || 1);
+      const conceptPerCreator = c.perCreator !== undefined
+        ? Math.max(1, parseInt(c.perCreator, 10) || 1)
+        : Math.max(1, Math.round(effectiveQty / creatorCount / Math.max(1, concepts.length)));
       const conceptQty = conceptPerCreator * creatorCount;
       const conceptSubtotal = parseFloat((conceptQty * pricing.rate).toFixed(2));
       return {

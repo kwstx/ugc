@@ -552,7 +552,16 @@
     }
 
     function getRateForQty(qty) {
-      return getBaseRate();
+      const base = getBaseRate();
+      const creatorCount = (selectedCreators && selectedCreators.length) || 2;
+      const tiers = getTierConfigs(creatorCount);
+      if (qty >= tiers.tier3) {
+        return parseFloat((base * (1 - 0.1666666667)).toFixed(2)); // Save 16.7% / video
+      } else if (qty >= tiers.tier2) {
+        return parseFloat((base * (1 - 0.0833333333)).toFixed(2)); // Save 8.3% / video
+      } else {
+        return base; // Starter order
+      }
     }
     window.getRateForQty = getRateForQty;
 
@@ -701,12 +710,24 @@
       if (!skipInputSync) {
         const targetPerCreator = Math.max(1, Math.round(currentQty / creatorCount));
         const allInputs = Array.from(document.querySelectorAll('#concepts-container .per-creator-input'));
-        if (allInputs.length > 0) {
+        if (allInputs.length === 1) {
+          allInputs[0].value = targetPerCreator;
+        } else if (allInputs.length > 1) {
           const otherConceptsPerCreator = allInputs.slice(1).reduce((sum, el) => {
             const v = parseInt(el.value, 10);
             return sum + (!isNaN(v) && v > 0 ? v : 1);
           }, 0);
-          allInputs[0].value = Math.max(1, targetPerCreator - otherConceptsPerCreator);
+          if (targetPerCreator > otherConceptsPerCreator) {
+            allInputs[0].value = targetPerCreator - otherConceptsPerCreator;
+          } else {
+            const effectiveTarget = Math.max(allInputs.length, targetPerCreator);
+            const basePerConcept = Math.floor(effectiveTarget / allInputs.length);
+            let remainder = effectiveTarget % allInputs.length;
+            allInputs.forEach(el => {
+              el.value = basePerConcept + (remainder > 0 ? 1 : 0);
+              if (remainder > 0) remainder--;
+            });
+          }
         }
       }
 
