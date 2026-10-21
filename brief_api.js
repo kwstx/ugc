@@ -1,5 +1,5 @@
 /**
- * DansUGC Brief Backend Client Integration
+ * Sofia Brief Backend Client Integration
  * Handles:
  * - Draft Autosave (POST /api/briefs/save-draft, PUT /api/briefs/:id)
  * - Brief Retrieval (GET /api/briefs/:id)
@@ -148,7 +148,7 @@ async function saveDraftToBackend(showExplicitAlert = false) {
     const result = await response.json();
     if (result.success && result.briefId) {
       currentBriefId = result.briefId;
-      localStorage.setItem('dansugc_current_brief_id', currentBriefId);
+      localStorage.setItem('sofia_current_brief_id', currentBriefId);
       showAutosaveBadge('All changes saved to backend', 'saved');
       if (showExplicitAlert) {
         alert('Draft saved successfully to backend!');
@@ -173,7 +173,7 @@ async function loadBriefFromBackend(briefId) {
     if (result.success && result.brief) {
       const b = result.brief;
       currentBriefId = b.id;
-      localStorage.setItem('dansugc_current_brief_id', b.id);
+      localStorage.setItem('sofia_current_brief_id', b.id);
 
       const brandInput = document.getElementById('brand-name-input');
       const aboutInput = document.getElementById('about-brand-input');
@@ -196,7 +196,15 @@ async function loadBriefFromBackend(briefId) {
           if (ta && c.script !== undefined) ta.value = c.script;
           const pcInput = block.querySelector('.per-creator-input');
           if (pcInput && c.perCreator !== undefined) pcInput.value = c.perCreator;
+          const titleEl = block.querySelector('.concept-title-text');
+          if (titleEl && c.title) titleEl.textContent = c.title;
+          const typeEl = block.querySelector('[id^="selected-video-type-text-"]');
+          if (typeEl && c.type) typeEl.textContent = c.type;
         });
+      }
+
+      if (typeof window.updateFormatUI === 'function') {
+        window.updateFormatUI();
       }
 
       if (typeof window.updateUI === 'function') {
@@ -207,10 +215,39 @@ async function loadBriefFromBackend(briefId) {
         window.checkBriefValidity();
       }
 
-      showAutosaveBadge('Brief loaded from server', 'saved');
+      showAutosaveBadge('AI brief loaded', 'saved');
     }
   } catch (err) {
     console.warn('Could not load from backend, using local state:', err);
+    try {
+      const localGenerated = JSON.parse(localStorage.getItem('sofia_generated_brief') || 'null');
+      if (localGenerated) {
+        const brandInput = document.getElementById('brand-name-input');
+        const aboutInput = document.getElementById('about-brand-input');
+        const filmingInput = document.getElementById('filming-instructions-input');
+        if (brandInput && localGenerated.brandName) brandInput.value = localGenerated.brandName;
+        if (aboutInput && localGenerated.aboutBrand) aboutInput.value = localGenerated.aboutBrand;
+        if (filmingInput && localGenerated.filmingInstructions) filmingInput.value = localGenerated.filmingInstructions;
+        if (localGenerated.concepts && localGenerated.concepts.length > 0) {
+          const container = document.getElementById('concepts-container');
+          while (container && container.children.length < localGenerated.concepts.length && typeof window.addNewConcept === 'function') {
+            window.addNewConcept();
+          }
+          const blocks = document.querySelectorAll('#concepts-container > div');
+          localGenerated.concepts.forEach((c, idx) => {
+            const block = blocks[idx];
+            if (!block) return;
+            const ta = block.querySelector('.concept-script-textarea');
+            if (ta && c.script !== undefined) ta.value = c.script;
+            const titleEl = block.querySelector('.concept-title-text');
+            if (titleEl && c.title) titleEl.textContent = c.title;
+          });
+        }
+        if (typeof window.updateFormatUI === 'function') window.updateFormatUI();
+        if (typeof window.updateUI === 'function') window.updateUI(true);
+        if (typeof window.checkBriefValidity === 'function') window.checkBriefValidity();
+      }
+    } catch (_) {}
     showAutosaveBadge('Loaded local draft', 'saved');
   }
 }
@@ -238,7 +275,7 @@ async function submitReviewToBackend() {
 
     // Save server-verified payload to review order
     localStorage.setItem('ugc_order_review', JSON.stringify(data.verifiedOrder));
-    localStorage.setItem('dansugc_current_brief_id', targetId);
+    localStorage.setItem('sofia_current_brief_id', targetId);
     window.location.href = 'review_order.html';
   } catch (err) {
     console.warn('Server review validation error, falling back to local review flow:', err);

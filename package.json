@@ -2,7 +2,7 @@
   "name": "ugc",
   "version": "1.0.0",
   "description": "A pixel-perfect, responsive replica of the Sofia landing page with interactive search, category tags, creator reaction clips catalog, and concierge support chat.",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",

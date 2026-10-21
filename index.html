@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sofia - Real human reactions, for ads that go viral</title>
+  <title>Sofia - Real creators, reactions that convert</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -362,6 +362,7 @@
           </a>
           <a href="#custom-orders" onclick="document.getElementById('custom-orders')?.scrollIntoView({ behavior: 'smooth' })" class="hover:text-black transition-colors">Custom orders</a>
           <a href="#pricingSection" onclick="document.getElementById('pricingSection')?.scrollIntoView({ behavior: 'smooth' })" class="hover:text-black transition-colors">Pricing</a>
+          <a href="creator_portal.html" class="hover:text-black transition-colors">Creators portal</a>
         </div>
 
         <!-- Right Buttons -->
@@ -413,6 +414,10 @@
             <span>Pricing</span>
             <span class="text-xs text-zinc-400">→</span>
           </a>
+          <a href="creator_portal.html" onclick="closeMobileMenu()" class="py-1 hover:text-black transition-colors flex items-center justify-between">
+            <span>Creators portal</span>
+            <span class="text-xs text-zinc-400">→</span>
+          </a>
         </div>
 
         <!-- Buttons -->
@@ -445,17 +450,17 @@
 
     <!-- 3. HERO HEADLINE -->
     <h1 class="hero-heading text-[42px] sm:text-[54px] md:text-[62px] lg:text-[68px] max-w-4xl mx-auto mb-4 sm:mb-5">
-      <!-- Line 1: Real human reactions, -->
+      <!-- Line 1: Real creators, -->
       <span class="block hero-title-line-1">
-        Real human reactions,
+        Real creators,
       </span>
       
-      <!-- Line 2: for ads that go viral. -->
+      <!-- Line 2: reactions that convert. -->
       <span class="block mt-0.5 sm:mt-1 hero-title-line-2">
-        for ads that go 
+        reactions that 
         <span class="relative inline-block whitespace-nowrap">
-          viral.
-          <!-- Pixel-accurate SVG double hand-drawn underline under 'viral.' -->
+          convert.
+          <!-- Pixel-accurate SVG double hand-drawn underline under 'convert.' -->
           <svg class="absolute -bottom-2 sm:-bottom-3 left-0 w-[102%] h-3.5 sm:h-4.5 text-[#3b5bfd] pointer-events-none" viewBox="0 0 140 18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M2 5.5 C 38 3.5, 96 4, 138 6.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
             <path d="M26 13.5 C 58 11.5, 102 12, 133 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
@@ -467,8 +472,8 @@
 
     <!-- 4. SUBTITLE COPY -->
     <p class="hero-subtitle text-[14.5px] sm:text-[16px] max-w-[580px] mx-auto mb-7 sm:mb-9 font-normal">
-      Search raw reaction clips from real creators. Download in seconds,<br class="hidden sm:inline" />
-      drop in your app demo, and ship the ad today.
+      Discover authentic UGC from real people. Find the perfect reaction,<br class="hidden sm:inline" />
+      license it in seconds, and turn it into your next winning ad.
     </p>
 
 
@@ -1407,7 +1412,7 @@
         </div>
 
         <div>
-          <button class="w-full bg-[#141312] hover:bg-black text-white text-[12.5px] sm:text-[13px] font-semibold py-3 rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.12)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)] active:scale-[0.99] transition-all cursor-pointer mb-2.5">
+          <button id="btn-checkout-starter" onclick="startSubscriptionCheckout('starter')" class="w-full bg-[#141312] hover:bg-black text-white text-[12.5px] sm:text-[13px] font-semibold py-3 rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.12)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)] active:scale-[0.99] transition-all cursor-pointer mb-2.5">
             Get started
           </button>
           <p class="text-center text-[#78716c] text-[10.5px] sm:text-[11px]">
@@ -1520,7 +1525,7 @@
           </div>
 
           <div>
-            <button class="w-full bg-[#141312] hover:bg-black text-white text-[12.5px] sm:text-[13px] font-semibold py-3 rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.12)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)] active:scale-[0.99] transition-all cursor-pointer mb-2.5">
+            <button id="btn-checkout-growth" onclick="startSubscriptionCheckout('growth')" class="w-full bg-[#141312] hover:bg-black text-white text-[12.5px] sm:text-[13px] font-semibold py-3 rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.12)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)] active:scale-[0.99] transition-all cursor-pointer mb-2.5">
               Get started
             </button>
             <p class="text-center text-[#78716c] text-[10.5px] sm:text-[11px]">
@@ -1622,7 +1627,7 @@
         </div>
 
         <div>
-          <button class="w-full bg-[#141312] hover:bg-black text-white text-[12.5px] sm:text-[13px] font-semibold py-3 rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.12)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)] active:scale-[0.99] transition-all cursor-pointer mb-2.5">
+          <button id="btn-checkout-scale" onclick="startSubscriptionCheckout('scale')" class="w-full bg-[#141312] hover:bg-black text-white text-[12.5px] sm:text-[13px] font-semibold py-3 rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.12)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)] active:scale-[0.99] transition-all cursor-pointer mb-2.5">
             Get started
           </button>
           <p class="text-center text-[#78716c] text-[10.5px] sm:text-[11px]">
@@ -1631,6 +1636,27 @@
         </div>
       </div>
 
+    </div>
+
+    <!-- Active Subscription & Credit Wallet Status Bar (Rendered dynamically when subscribed) -->
+    <div id="activeSubscriptionBar" class="hidden w-full max-w-[1020px] mt-8 p-5 rounded-[22px] bg-[#faf8f5] border border-[#e4d4be] shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+        <span id="subStatusBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11.5px] font-bold bg-[#eff2fe] text-[#213ae7]">
+          7-Day Free Trial Active
+        </span>
+        <div>
+          <p id="subPlanSummary" class="text-[13.5px] font-bold text-[#18181b]">Growth Plan</p>
+          <p id="subEntitlementSummary" class="text-[12px] text-[#71717a]">Wallet Balance: 0 credits</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <button onclick="openCustomerPortal()" class="px-4 py-2 rounded-full bg-white border border-[#d4d4d8] hover:border-[#18181b] text-[12px] font-semibold text-[#18181b] transition-colors cursor-pointer">
+          Manage in Customer Portal
+        </button>
+        <button onclick="cancelSubscriptionNow()" class="px-3.5 py-2 rounded-full text-[12px] font-medium text-[#71717a] hover:text-red-600 transition-colors cursor-pointer">
+          Cancel anytime
+        </button>
+      </div>
     </div>
 
   </section>
@@ -1919,56 +1945,6 @@
   </section>
 
 
-  <!-- ================= 7. FLOATING BLUE SUPPORT CHAT WIDGET ================= -->
-  <div class="fixed bottom-6 right-6 sm:bottom-7 sm:right-7 z-50">
-    <button 
-      id="chatTriggerBtn"
-      onclick="toggleChat()" 
-      class="w-[46px] h-[46px] sm:w-[50px] sm:h-[50px] rounded-full bg-[#0091ff] hover:bg-[#0081e6] active:scale-95 text-white flex items-center justify-center shadow-chat transition-all duration-200 hover:scale-105"
-      aria-label="Open support chat"
-    >
-      <svg class="w-5 h-5 sm:w-5.5 sm:h-5.5 fill-current" viewBox="0 0 24 24">
-        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-      </svg>
-    </button>
-
-    <!-- Chat Modal Window -->
-    <div 
-      id="chatModal" 
-      class="hidden absolute bottom-14 right-0 w-[310px] sm:w-[340px] bg-white rounded-3xl shadow-2xl border border-zinc-200 overflow-hidden text-left transition-all origin-bottom-right"
-    >
-      <!-- Chat Header -->
-      <div class="bg-[#0091ff] text-white p-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center font-bold text-xs">
-            S
-          </div>
-          <div>
-            <h4 class="font-switzer font-bold text-xs leading-tight">Sofia Concierge</h4>
-            <p class="text-[11px] text-blue-100 flex items-center gap-1">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-300"></span> Online now
-            </p>
-          </div>
-        </div>
-        <button onclick="toggleChat()" class="text-white/80 hover:text-white text-base font-bold">✕</button>
-      </div>
-
-      <!-- Chat Messages -->
-      <div class="p-3.5 bg-zinc-50 min-h-[160px] flex flex-col gap-2.5 text-xs">
-        <div class="bg-white p-3 rounded-2xl rounded-tl-none border border-zinc-200/80 shadow-sm text-zinc-700 leading-relaxed">
-          Hi! Looking for authentic creator reaction hooks for your viral ads? Type any concept or search above! 🎬
-        </div>
-      </div>
-
-      <!-- Chat Input -->
-      <div class="p-2.5 bg-white border-t border-zinc-200 flex items-center gap-2">
-        <input type="text" placeholder="Ask a question..." class="flex-1 text-xs bg-zinc-100 px-3.5 py-2 rounded-full outline-none focus:ring-1 focus:ring-blue-500" />
-        <button class="w-7 h-7 bg-[#0091ff] rounded-full text-white flex items-center justify-center shrink-0">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </button>
-      </div>
-    </div>
-  </div>
 
 
 
@@ -2030,6 +2006,237 @@
 
 
 
+  <!-- ================= 10.5. EMBEDDED ONBOARDING VIEW ("What brings you to Sofia?" -> "Where does your brand live online?" -> "Building a UGC engine for Engram.") ================= -->
+  <div id="onboardingOverlay" class="hidden fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center px-6 py-10 select-none overflow-y-auto">
+    <main id="onbMainContainer" class="w-full max-w-[440px] min-h-[540px] flex flex-col justify-between my-auto">
+      
+      <!-- Top Header: Brand Logo + Progress Indicator -->
+      <div id="onbTopHeader" class="flex items-center justify-between w-full">
+        <button type="button" onclick="closeOnboardingOverlay()" class="inline-flex items-center text-[#111111] hover:opacity-85 transition-opacity cursor-pointer">
+          <span class="text-[14px] font-medium tracking-[-0.01em] text-[#111111]">Sofia</span>
+        </button>
+
+        <!-- Top-Right 5-Step Progress Indicator (Shown on Step 1 of 5) -->
+        <div id="onbStepDots" class="hidden items-center gap-1.5">
+          <span class="w-[18px] h-[5px] rounded-full bg-[#27272a]"></span>
+          <span class="w-[5px] h-[5px] rounded-full bg-[#e4e2dd]"></span>
+          <span class="w-[5px] h-[5px] rounded-full bg-[#e4e2dd]"></span>
+          <span class="w-[5px] h-[5px] rounded-full bg-[#e4e2dd]"></span>
+          <span class="w-[5px] h-[5px] rounded-full bg-[#e4e2dd]"></span>
+        </div>
+      </div>
+
+      <!-- STEP A: Role Selection ("What brings you to Sofia?") -->
+      <div id="onbScreenRole" class="my-auto pt-12 pb-10">
+        <h1 class="font-serif text-[38px] sm:text-[42px] font-normal text-[#111111] tracking-[-0.025em] leading-[1.08] mb-3.5">
+          What brings you<br />
+          to Sofia?
+        </h1>
+
+        <p style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;" class="text-[12px] text-[#6b6860] tracking-[-0.01em] mb-7">
+          We'll set up the right workspace for you.
+        </p>
+
+        <!-- Selection Cards -->
+        <div class="flex flex-col gap-3 mb-5">
+          
+          <!-- Option 1: I'm growing a business -->
+          <button
+            type="button"
+            id="onb-option-business"
+            onclick="selectEmbeddedWorkspaceRole('business')"
+            class="w-full text-left px-5 py-4 flex items-center justify-between gap-4 rounded-[14px] border border-[#e4e2dd] hover:border-[#c9c6be] bg-white transition-all cursor-pointer"
+          >
+            <div>
+              <div class="text-[14px] font-semibold text-[#111111] leading-snug">
+                I'm growing a business
+              </div>
+              <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;" class="text-[11px] text-[#6b6860] mt-1">
+                I want UGC content made for my brand.
+              </div>
+            </div>
+            <div id="onb-radio-business" class="w-[18px] h-[18px] rounded-full border-[1.5px] border-[#c8c5be] flex items-center justify-center shrink-0 transition-all">
+              <div class="w-[6px] h-[6px] rounded-full bg-white opacity-0 transition-opacity"></div>
+            </div>
+          </button>
+
+          <!-- Option 2: I'm a creator -->
+          <button
+            type="button"
+            id="onb-option-creator"
+            onclick="selectEmbeddedWorkspaceRole('creator')"
+            class="w-full text-left px-5 py-4 flex items-center justify-between gap-4 rounded-[14px] border border-[#e4e2dd] hover:border-[#c9c6be] bg-white transition-all cursor-pointer"
+          >
+            <div>
+              <div class="text-[14px] font-semibold text-[#111111] leading-snug">
+                I'm a creator
+              </div>
+              <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;" class="text-[11px] text-[#6b6860] mt-1">
+                I make UGC and want to get paid for it.
+              </div>
+            </div>
+            <div id="onb-radio-creator" class="w-[18px] h-[18px] rounded-full border-[1.5px] border-[#c8c5be] flex items-center justify-center shrink-0 transition-all">
+              <div class="w-[6px] h-[6px] rounded-full bg-white opacity-0 transition-opacity"></div>
+            </div>
+          </button>
+
+        </div>
+
+        <!-- Continue Button -->
+        <button
+          type="button"
+          id="onbContinueBtn"
+          onclick="handleEmbeddedOnboardingContinue()"
+          disabled
+          class="w-full py-3.5 rounded-[12px] text-[13px] font-semibold flex items-center justify-center gap-1.5 bg-[#a3a3a3] text-white cursor-not-allowed transition-colors"
+        >
+          <span id="onbContinueBtnLabel">Continue</span>
+          <span class="text-[14px] leading-none">→</span>
+        </button>
+      </div>
+
+      <!-- STEP B: Step 1 of 5 ("Where does your brand live online?") -->
+      <div id="onbScreenBrandSite" class="hidden my-auto pt-12 pb-10">
+        <h1 class="font-serif text-[38px] sm:text-[42px] font-normal text-[#111111] tracking-[-0.025em] leading-[1.08] mb-3.5">
+          Where does your<br />
+          brand live online?
+        </h1>
+
+        <p style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;" class="text-[12px] text-[#6b6860] leading-[1.6] tracking-[-0.01em] mb-7">
+          Drop your site. We'll read it and make 10 reels<br />
+          before you set up anything. The first 3 are free.
+        </p>
+
+        <!-- Combined Input + "Scan my brand ->" Pill Box -->
+        <div class="w-full flex items-center justify-between gap-2 pl-4 pr-2 py-2 rounded-[14px] border border-[#e4e2dd] focus-within:border-[#111111] bg-white transition-colors mb-4">
+          <input
+            type="text"
+            id="onbBrandUrlInput"
+            placeholder="yourbrand.com or an App Store link"
+            style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;"
+            class="flex-1 min-w-0 bg-transparent text-[13px] text-[#111111] placeholder-[#a8a49c] outline-none"
+            onkeydown="if(event.key==='Enter') handleScanBrandSubmit()"
+          />
+          <button
+            type="button"
+            id="onbScanBrandBtn"
+            onclick="handleScanBrandSubmit()"
+            class="shrink-0 bg-[#22201e] hover:bg-black text-white text-[12.5px] font-semibold px-4 py-2.5 rounded-[10px] inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <span id="onbScanBrandBtnLabel">Scan my brand</span>
+            <span class="text-[13px] leading-none">→</span>
+          </button>
+        </div>
+
+        <!-- Checkbox: "I'm solo, no website yet" -->
+        <label class="inline-flex items-center gap-2.5 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            id="onbSoloNoWebsiteCheckbox"
+            onchange="toggleSoloNoWebsite(this.checked)"
+            class="w-[15px] h-[15px] rounded-[4px] border border-[#9ca3af] accent-[#111111] cursor-pointer"
+          />
+          <span class="text-[12.5px] text-[#3f3d39] font-normal">I'm solo, no website yet</span>
+        </label>
+      </div>
+
+      <!-- STEP C: Building a UGC engine for Brand (Only shown when a website or app URL is provided, skipped when solo) -->
+      <div id="onbScreenBuildingEngine" class="hidden my-auto py-8 text-center w-full">
+        <!-- Rounded indigo icon (pulsing) -->
+        <div class="w-[58px] h-[58px] rounded-[18px] bg-[#eff0fe] flex items-center justify-center mx-auto mb-5 animate-pulse">
+          <div class="w-[42px] h-[42px] rounded-[13px] bg-[#5558f6] shadow-[0_2px_8px_rgba(85,88,246,0.28)]"></div>
+        </div>
+
+        <!-- Editorial Headline -->
+        <h1 class="font-serif text-[38px] sm:text-[42px] font-normal text-[#111111] tracking-[-0.025em] leading-[1.1] mb-5">
+          Building a UGC engine<br />
+          for <span id="onbEngineBrandTitle">Engram</span>.
+        </h1>
+
+        <!-- Lavender Status Pill -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#f3f3fe] text-[#6366f1] text-[11px] mb-8" style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;">
+          <svg class="w-3.5 h-3.5 animate-spin text-[#6366f1]" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-opacity="0.22" stroke-width="2.2"></circle>
+            <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
+          </svg>
+          <span id="onbEngineStatusText">Writing hooks in your voice...</span>
+        </div>
+
+        <!-- 3 Summary Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-left mb-5">
+          <!-- Card 1: Brand -->
+          <div class="rounded-[14px] border border-[#e6e4df] bg-white p-3.5 min-h-[104px] flex flex-col justify-start">
+            <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;" class="text-[10px] text-[#8a8780] mb-1.5">
+              Brand
+            </div>
+            <div id="onbEngineBrandCard" class="text-[13px] font-semibold text-[#111111] leading-snug">
+              Engram
+            </div>
+          </div>
+
+          <!-- Card 2: What you do -->
+          <div class="rounded-[14px] border border-[#e6e4df] bg-white p-3.5 min-h-[104px] flex flex-col justify-start">
+            <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;" class="text-[10px] text-[#8a8780] mb-1.5">
+              What you do
+            </div>
+            <div id="onbEngineDescCard" class="text-[12px] font-semibold text-[#111111] leading-[1.38] line-clamp-3">
+              Engram is a dating app that utilizes AI to help users find...
+            </div>
+          </div>
+
+          <!-- Card 3: Reactions matched -->
+          <div class="rounded-[14px] border border-dashed border-[#c7c9fe] bg-[#f8f8ff] p-3.5 min-h-[104px] flex flex-col justify-start">
+            <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;" class="text-[10px] text-[#6366f1] mb-1.5">
+              Reactions matched
+            </div>
+            <div id="onbEngineReactionsCard" class="text-[13px] font-semibold text-[#111111] leading-snug">
+              45
+            </div>
+          </div>
+        </div>
+
+        <!-- Suitable Creators Found for Product -->
+        <div id="onbSuitableCreatorsWrap" class="text-left rounded-[14px] border border-[#e6e4df] bg-[#fafaf9] p-3.5 mb-10">
+          <div class="flex items-center justify-between mb-2.5">
+            <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;" class="text-[10px] text-[#6b6860] uppercase tracking-wider">
+              Suitable creators matched for <span id="onbCreatorsBrandLabel" class="text-[#111111] font-semibold">your product</span>
+            </span>
+            <span id="onbCreatorsNicheBadge" style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;" class="text-[10px] px-2 py-0.5 rounded-full bg-[#eef0ff] text-[#5558f6] font-medium">
+              Matching...
+            </span>
+          </div>
+          <div id="onbSuitableCreatorsList" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <!-- Populated dynamically from product analysis & creator search -->
+          </div>
+        </div>
+
+        <!-- Bottom Subtle Note + Continue Link -->
+        <div>
+          <p style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;" class="text-[11px] text-[#6b6860] mb-3.5">
+            Wrong guess? You can edit everything in ReelClaw later.
+          </p>
+          <button
+            type="button"
+            onclick="handleEngineContinue()"
+            class="inline-flex items-center gap-1 text-[12.5px] font-semibold text-[#5558f6] hover:text-[#3d40d8] transition-colors cursor-pointer"
+          >
+            <span>Continue</span>
+            <span class="text-[13px] leading-none">→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bottom Footer Note -->
+      <div id="onbFooterWrap" class="pt-6">
+        <p id="onbFooterText" style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;" class="text-[11px] text-[#78756e]">
+          About 60 seconds to set up
+        </p>
+      </div>
+
+    </main>
+  </div>
+
+
   <!-- Floating Auth Notification Toast -->
   <div id="googleAuthToast" class="hidden fixed bottom-6 right-6 z-50 bg-zinc-950 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-zinc-800 animate-in slide-in-from-bottom-5 duration-300">
     <div class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs flex-shrink-0">✓</div>
@@ -2042,6 +2249,302 @@
 
   <!-- ================= 11. JAVASCRIPT ================= -->
   <script>
+    let embeddedOnboardingRole = null;
+
+    function openOnboardingOverlay() {
+      const overlay = document.getElementById('onboardingOverlay');
+      if (overlay) {
+        // Reset to first screen ("What brings you to Sofia?")
+        const mainContainer = document.getElementById('onbMainContainer');
+        const topHeader = document.getElementById('onbTopHeader');
+        const footerWrap = document.getElementById('onbFooterWrap');
+        const roleScreen = document.getElementById('onbScreenRole');
+        const siteScreen = document.getElementById('onbScreenBrandSite');
+        const engineScreen = document.getElementById('onbScreenBuildingEngine');
+        const dots = document.getElementById('onbStepDots');
+        const footer = document.getElementById('onbFooterText');
+
+        if (mainContainer) {
+          mainContainer.classList.remove('max-w-[520px]');
+          mainContainer.classList.add('max-w-[440px]');
+        }
+        if (topHeader) topHeader.classList.remove('hidden');
+        if (footerWrap) footerWrap.classList.remove('hidden');
+        if (roleScreen) roleScreen.classList.remove('hidden');
+        if (siteScreen) siteScreen.classList.add('hidden');
+        if (engineScreen) engineScreen.classList.add('hidden');
+        if (dots) {
+          dots.classList.add('hidden');
+          dots.classList.remove('flex');
+        }
+        if (footer) footer.textContent = 'About 60 seconds to set up';
+
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeOnboardingOverlay() {
+      const overlay = document.getElementById('onboardingOverlay');
+      if (overlay) {
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function selectEmbeddedWorkspaceRole(role) {
+      embeddedOnboardingRole = role;
+      const bizCard = document.getElementById('onb-option-business');
+      const creatorCard = document.getElementById('onb-option-creator');
+      const bizRadio = document.getElementById('onb-radio-business');
+      const creatorRadio = document.getElementById('onb-radio-creator');
+      const continueBtn = document.getElementById('onbContinueBtn');
+
+      if (role === 'business') {
+        bizCard.className = 'w-full text-left px-5 py-4 flex items-center justify-between gap-4 rounded-[14px] border border-[#111111] shadow-[0_0_0_1px_#111111] bg-white transition-all cursor-pointer';
+        creatorCard.className = 'w-full text-left px-5 py-4 flex items-center justify-between gap-4 rounded-[14px] border border-[#e4e2dd] hover:border-[#c9c6be] bg-white transition-all cursor-pointer';
+        bizRadio.className = 'w-[18px] h-[18px] rounded-full border-[1.5px] border-[#111111] bg-[#111111] flex items-center justify-center shrink-0 transition-all';
+        bizRadio.firstElementChild.classList.remove('opacity-0');
+        creatorRadio.className = 'w-[18px] h-[18px] rounded-full border-[1.5px] border-[#c8c5be] flex items-center justify-center shrink-0 transition-all';
+        creatorRadio.firstElementChild.classList.add('opacity-0');
+      } else {
+        creatorCard.className = 'w-full text-left px-5 py-4 flex items-center justify-between gap-4 rounded-[14px] border border-[#111111] shadow-[0_0_0_1px_#111111] bg-white transition-all cursor-pointer';
+        bizCard.className = 'w-full text-left px-5 py-4 flex items-center justify-between gap-4 rounded-[14px] border border-[#e4e2dd] hover:border-[#c9c6be] bg-white transition-all cursor-pointer';
+        creatorRadio.className = 'w-[18px] h-[18px] rounded-full border-[1.5px] border-[#111111] bg-[#111111] flex items-center justify-center shrink-0 transition-all';
+        creatorRadio.firstElementChild.classList.remove('opacity-0');
+        bizRadio.className = 'w-[18px] h-[18px] rounded-full border-[1.5px] border-[#c8c5be] flex items-center justify-center shrink-0 transition-all';
+        bizRadio.firstElementChild.classList.add('opacity-0');
+      }
+
+      if (continueBtn) {
+        continueBtn.disabled = false;
+        continueBtn.className = 'w-full py-3.5 rounded-[12px] text-[13px] font-semibold flex items-center justify-center gap-1.5 bg-[#141312] hover:bg-black text-white cursor-pointer transition-colors';
+      }
+    }
+
+    function handleEmbeddedOnboardingContinue() {
+      if (!embeddedOnboardingRole) return;
+      localStorage.setItem('sofia_workspace_role', embeddedOnboardingRole);
+
+      // Transition in-place to Step 1 of 5 ("Where does your brand live online?")
+      const roleScreen = document.getElementById('onbScreenRole');
+      const siteScreen = document.getElementById('onbScreenBrandSite');
+      const dots = document.getElementById('onbStepDots');
+      const footer = document.getElementById('onbFooterText');
+
+      if (roleScreen) roleScreen.classList.add('hidden');
+      if (siteScreen) siteScreen.classList.remove('hidden');
+      if (dots) {
+        dots.classList.remove('hidden');
+        dots.classList.add('flex');
+      }
+      if (footer) footer.textContent = 'Step 1 of 5';
+
+      setTimeout(() => {
+        document.getElementById('onbBrandUrlInput')?.focus();
+      }, 60);
+    }
+
+    function toggleSoloNoWebsite(checked) {
+      const input = document.getElementById('onbBrandUrlInput');
+      const btnLabel = document.getElementById('onbScanBrandBtnLabel');
+      if (checked) {
+        if (input) {
+          input.value = '';
+          input.disabled = true;
+          input.placeholder = 'No website — continuing solo';
+        }
+        if (btnLabel) btnLabel.textContent = 'Continue';
+      } else {
+        if (input) {
+          input.disabled = false;
+          input.placeholder = 'yourbrand.com or an App Store link';
+        }
+        if (btnLabel) btnLabel.textContent = 'Scan my brand';
+      }
+    }
+
+    function deriveBrandFallbackFromInput(rawUrl) {
+      let cleaned = (rawUrl || '').trim().replace(/^https?:\/\//i, '').replace(/^www\./i, '').split('/')[0].split('?')[0];
+      let base = (cleaned.split('.')[0] || 'Engram').toLowerCase();
+      let formattedName = base.charAt(0).toUpperCase() + base.slice(1);
+      if (base === 'engram') {
+        return {
+          brandName: 'Engram',
+          niche: 'Dating & Relationships',
+          summary: 'Engram is a dating app that utilizes AI to help users find meaningful, compatible matches faster.',
+          displaySummary: 'Engram is a dating app that utilizes AI to help users find...',
+          reactionsMatched: 45,
+          suitableCreators: [
+            { id: 'creator_2', name: 'Maya', handle: '@maya_creates', rating: '5.0 (34)', matchScore: 98, matchReason: 'Dating & lifestyle reaction hooks' },
+            { id: 'creator_5', name: 'Franci', handle: '@franci_ugc', rating: '4.9 (88)', matchScore: 96, matchReason: 'High-retention viral reaction clips' },
+            { id: 'creator_4', name: 'Sarah', handle: '@sarah_lifestyle', rating: '5.0 (29)', matchScore: 94, matchReason: 'Relatable relationship storytelling' },
+            { id: 'creator_1', name: 'Sofia', handle: '@sofia.ugc', rating: '4.9 (48)', matchScore: 92, matchReason: 'App walkthroughs & social proof' }
+          ]
+        };
+      }
+      return {
+        brandName: formattedName,
+        niche: 'Productivity & AI Tech',
+        summary: `${formattedName} (${cleaned || rawUrl}) is a digital product that helps users streamline workflows and achieve results faster.`,
+        displaySummary: `${formattedName} is a digital product that helps users streamline workflows...`,
+        reactionsMatched: 42,
+        suitableCreators: [
+          { id: 'creator_1', name: 'Sofia', handle: '@sofia.ugc', rating: '4.9 (48)', matchScore: 97, matchReason: 'SaaS & mobile app green-screen demos' },
+          { id: 'creator_3', name: 'Robert', handle: '@robert_visuals', rating: '4.8 (56)', matchScore: 95, matchReason: 'Tech & product talking-head reviews' },
+          { id: 'creator_5', name: 'Franci', handle: '@franci_ugc', rating: '4.9 (88)', matchScore: 93, matchReason: 'Scroll-stopping reaction hooks' },
+          { id: 'creator_2', name: 'Maya', handle: '@maya_creates', rating: '5.0 (34)', matchScore: 91, matchReason: 'Creator workflow & app discovery clips' }
+        ]
+      };
+    }
+
+    function renderMatchedCreatorsList(creators, brandName, niche) {
+      const listEl = document.getElementById('onbSuitableCreatorsList');
+      const brandLabelEl = document.getElementById('onbCreatorsBrandLabel');
+      const nicheBadgeEl = document.getElementById('onbCreatorsNicheBadge');
+      if (brandLabelEl && brandName) brandLabelEl.textContent = brandName;
+      if (nicheBadgeEl && niche) nicheBadgeEl.textContent = niche;
+      if (!listEl) return;
+
+      listEl.innerHTML = (creators || []).map(c => {
+        const initials = (c.name || 'C').slice(0, 2).toUpperCase();
+        return `
+          <div class="flex items-start justify-between gap-2.5 p-2.5 rounded-[11px] bg-white border border-[#e6e4df]">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-8 h-8 rounded-full bg-[#eef0ff] text-[#5558f6] font-semibold text-[11px] flex items-center justify-center shrink-0">
+                ${initials}
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[12px] font-semibold text-[#111111] truncate">${c.name}</span>
+                  <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;" class="text-[10px] text-[#8a8780]">★ ${String(c.rating || '5.0').split(' ')[0]}</span>
+                </div>
+                <div class="text-[10.5px] text-[#6b6860] truncate" title="${c.matchReason || ''}">
+                  ${c.matchReason || 'Verified UGC Creator'}
+                </div>
+              </div>
+            </div>
+            <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;" class="shrink-0 text-[10px] font-semibold text-[#5558f6] bg-[#f3f3fe] px-1.5 py-0.5 rounded-md">
+              ${c.matchScore || 95}% fit
+            </span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function handleScanBrandSubmit() {
+      const input = document.getElementById('onbBrandUrlInput');
+      const soloChecked = document.getElementById('onbSoloNoWebsiteCheckbox')?.checked;
+      const rawUrl = input ? input.value.trim() : '';
+
+      // Rule 1: If "I'm solo, no website yet" is checked, do NOT show the "Building a UGC engine" page — proceed directly
+      if (soloChecked) {
+        localStorage.removeItem('sofia_brand_url');
+        await handleEngineContinue();
+        return;
+      }
+
+      // Rule 2: Require a website or app URL when not solo
+      if (!rawUrl) {
+        if (input) {
+          input.focus();
+          const box = input.parentElement;
+          if (box) {
+            box.classList.add('border-red-500');
+            setTimeout(() => box.classList.remove('border-red-500'), 1200);
+          }
+        }
+        return;
+      }
+
+      localStorage.setItem('sofia_brand_url', rawUrl);
+
+      const fallback = deriveBrandFallbackFromInput(rawUrl);
+      const brandTitleEl = document.getElementById('onbEngineBrandTitle');
+      const brandCardEl = document.getElementById('onbEngineBrandCard');
+      const descCardEl = document.getElementById('onbEngineDescCard');
+      const reactionsCardEl = document.getElementById('onbEngineReactionsCard');
+      const statusTextEl = document.getElementById('onbEngineStatusText');
+      const listEl = document.getElementById('onbSuitableCreatorsList');
+
+      if (brandTitleEl) brandTitleEl.textContent = fallback.brandName;
+      if (brandCardEl) brandCardEl.textContent = fallback.brandName;
+      if (descCardEl) descCardEl.textContent = 'Analyzing website & summarizing product...';
+      if (reactionsCardEl) reactionsCardEl.textContent = '...';
+      if (statusTextEl) statusTextEl.textContent = `Scanning ${rawUrl} & summarizing product...`;
+      if (listEl) {
+        listEl.innerHTML = `<div class="col-span-2 text-[11px] text-[#6b6860] py-2" style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;">Searching database for suitable creators for ${fallback.brandName}...</div>`;
+      }
+
+      // Transition in-place to "Building a UGC engine for <Brand>."
+      const mainContainer = document.getElementById('onbMainContainer');
+      const topHeader = document.getElementById('onbTopHeader');
+      const footerWrap = document.getElementById('onbFooterWrap');
+      const siteScreen = document.getElementById('onbScreenBrandSite');
+      const engineScreen = document.getElementById('onbScreenBuildingEngine');
+
+      if (mainContainer) {
+        mainContainer.classList.remove('max-w-[440px]');
+        mainContainer.classList.add('max-w-[520px]');
+      }
+      if (topHeader) topHeader.classList.add('hidden');
+      if (footerWrap) footerWrap.classList.add('hidden');
+      if (siteScreen) siteScreen.classList.add('hidden');
+      if (engineScreen) engineScreen.classList.remove('hidden');
+
+      // Call backend product analyzer & creator matcher
+      let result = fallback;
+      try {
+        const apiBase = typeof getBillingApiBase === 'function' ? getBillingApiBase() : 'http://localhost:3000';
+        const res = await fetch(`${apiBase}/api/ai/analyze-brand`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: rawUrl })
+        });
+        const data = await res.json();
+        if (data && data.success) {
+          result = data;
+        }
+      } catch (_) {}
+
+      if (brandTitleEl) brandTitleEl.textContent = result.brandName;
+      if (brandCardEl) brandCardEl.textContent = result.brandName;
+      if (descCardEl) {
+        descCardEl.textContent = result.displaySummary || result.summary;
+        descCardEl.title = result.summary || '';
+      }
+      if (reactionsCardEl) reactionsCardEl.textContent = String(result.reactionsMatched || 45);
+      if (statusTextEl) statusTextEl.textContent = 'Writing hooks in your voice...';
+
+      renderMatchedCreatorsList(result.suitableCreators, result.brandName, result.niche);
+
+      // Save analyzed product summary and matched creators for the order flow
+      localStorage.setItem('sofia_brand_name', result.brandName);
+      localStorage.setItem('sofia_about_brand', result.summary);
+      localStorage.setItem('sofia_matched_creators', JSON.stringify(result.suitableCreators || []));
+      localStorage.setItem('sofia_brand_analysis', JSON.stringify(result));
+    }
+
+    async function handleEngineContinue() {
+      const pendingRaw = localStorage.getItem('sofia_pending_checkout_plan');
+      if (pendingRaw) {
+        localStorage.removeItem('sofia_pending_checkout_plan');
+        try {
+          const pending = JSON.parse(pendingRaw);
+          if (pending && pending.planTier && typeof completePlanCheckoutAfterAuth === 'function') {
+            await completePlanCheckoutAfterAuth(pending.planTier, pending.billingInterval);
+          }
+        } catch (_) {}
+      }
+
+      closeOnboardingOverlay();
+      if (embeddedOnboardingRole === 'creator') {
+        window.location.href = 'creators.html';
+      } else {
+        window.location.href = 'order.html';
+      }
+    }
+
     // Search tag pills handler
     function setSearch(query) {
       if (window.heroSearchSetQuery) {
@@ -2086,12 +2589,6 @@
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
       }
-    }
-
-    // Chat Toggle
-    function toggleChat() {
-      const modal = document.getElementById('chatModal');
-      modal.classList.toggle('hidden');
     }
 
     // Mobile Menu
@@ -2150,9 +2647,17 @@
       console.error('Error initializing Supabase client:', e);
     }
 
-    async function openGoogleAuthPopup() {
+    async function openGoogleAuthPopup(pendingPlanTier = null) {
       // Close regular email login modal if open
       closeLoginModal();
+
+      if (pendingPlanTier) {
+        localStorage.setItem('sofia_pending_checkout_plan', JSON.stringify({
+          planTier: pendingPlanTier,
+          billingInterval: typeof currentBillingMode !== 'undefined' && currentBillingMode === 'yearly' ? 'year' : 'month'
+        }));
+      }
+      localStorage.setItem('sofia_show_onboarding_after_auth', '1');
 
       if (!supabaseClient && window.supabase && window.supabase.createClient) {
         supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -2164,6 +2669,7 @@
       }
 
       try {
+        // Redirect back to the exact same page (no new browser window)
         const redirectUrl = window.location.origin + window.location.pathname;
         const { data, error } = await supabaseClient.auth.signInWithOAuth({
           provider: 'google',
@@ -2185,7 +2691,7 @@
     // Alias for backward compatibility
     const openGoogleAuthModal = openGoogleAuthPopup;
 
-    // Listen for Supabase Auth state changes (after OAuth redirect)
+    // Listen for Supabase Auth state changes (after OAuth redirect in same window)
     if (supabaseClient) {
       supabaseClient.auth.onAuthStateChange((event, session) => {
         if (session && session.user) {
@@ -2197,8 +2703,21 @@
 
           const user = { name, email, initials, picture };
           localStorage.setItem('sofia_auth_user', JSON.stringify(user));
+          if (email) {
+            localStorage.setItem('sofia_billing_user_id', email);
+          }
           updateAuthStateUI();
-          showGoogleAuthToast(`Welcome, ${name}!`, email);
+
+          // Show the embedded "What brings you to Sofia?" view inside this page after Google sign-in
+          if (localStorage.getItem('sofia_show_onboarding_after_auth') === '1' || window.location.hash.includes('access_token')) {
+            localStorage.removeItem('sofia_show_onboarding_after_auth');
+            if (window.history && window.history.replaceState && window.location.hash.includes('access_token')) {
+              window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
+            }
+            openOnboardingOverlay();
+          } else {
+            showGoogleAuthToast(`Welcome, ${name}!`, email);
+          }
         } else if (event === 'SIGNED_OUT') {
           localStorage.removeItem('sofia_auth_user');
           updateAuthStateUI();
@@ -2493,7 +3012,248 @@
       }
     }
 
-    window.addEventListener('load', initBillingGlider);
+    const PLAN_CATALOG_FALLBACK = {
+      starter: { name: 'Starter', monthlyPriceUsd: 280, yearlyMonthlyPriceUsd: 224, yearlyTotalPriceUsd: 2688, monthlyCredits: 370, quarterlyBonusCredits: 70, approxClips: 35, maxSocialSets: 1, customOrderDiscountPct: 0, hasSofiaMcp: false, hasPublicApi: false },
+      growth: { name: 'Growth', monthlyPriceUsd: 880, yearlyMonthlyPriceUsd: 704, yearlyTotalPriceUsd: 8448, monthlyCredits: 1500, quarterlyBonusCredits: 210, approxClips: 110, maxSocialSets: 5, customOrderDiscountPct: 5, hasSofiaMcp: true, hasPublicApi: false },
+      scale: { name: 'Scale', monthlyPriceUsd: 2980, yearlyMonthlyPriceUsd: 2384, yearlyTotalPriceUsd: 28608, monthlyCredits: 3700, quarterlyBonusCredits: 650, approxClips: 350, maxSocialSets: 10, customOrderDiscountPct: 10, hasSofiaMcp: true, hasPublicApi: true }
+    };
+
+    function getBillingUserId() {
+      let uid = localStorage.getItem('sofia_billing_user_id');
+      if (!uid) {
+        uid = 'usr_' + Math.random().toString(36).substring(2, 10);
+        localStorage.setItem('sofia_billing_user_id', uid);
+      }
+      return uid;
+    }
+
+    function getBillingApiBase() {
+      if (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '3000')) {
+        return 'http://localhost:3000';
+      }
+      return '';
+    }
+
+    function renderBillingStatusUI(data) {
+      const bar = document.getElementById('activeSubscriptionBar');
+      if (!bar) return;
+
+      if (data && data.subscription && ['trialing', 'active'].includes(data.subscription.status)) {
+        bar.classList.remove('hidden');
+        const ent = data.entitlements || PLAN_CATALOG_FALLBACK[data.subscription.planTier] || PLAN_CATALOG_FALLBACK.growth;
+        const intervalLabel = data.subscription.billingInterval === 'year' ? 'Yearly (Save 20%)' : 'Monthly';
+        document.getElementById('subStatusBadge').textContent =
+          data.subscription.status === 'trialing' ? '7-Day Free Trial Active' : 'Active Subscription';
+        document.getElementById('subPlanSummary').textContent =
+          `${ent.name} Plan · ${intervalLabel}`;
+        const bal = data.wallet?.balance ?? (ent.monthlyCredits + ent.quarterlyBonusCredits);
+        document.getElementById('subEntitlementSummary').textContent =
+          `Wallet: ${bal.toLocaleString()} credits (≈ ${Math.floor(bal / 11)} clips) · ${ent.maxSocialSets} social set(s)${ent.customOrderDiscountPct ? ` · ${ent.customOrderDiscountPct}% off custom` : ''}`;
+
+        ['starter', 'growth', 'scale'].forEach(t => {
+          const btn = document.getElementById(`btn-checkout-${t}`);
+          if (!btn) return;
+          if (t === data.subscription.planTier) {
+            btn.textContent = 'Current Plan · Manage';
+          } else {
+            btn.textContent = 'Switch to ' + t.charAt(0).toUpperCase() + t.slice(1);
+          }
+        });
+      } else {
+        bar.classList.add('hidden');
+        ['starter', 'growth', 'scale'].forEach(t => {
+          const btn = document.getElementById(`btn-checkout-${t}`);
+          if (btn) btn.textContent = 'Get started';
+        });
+      }
+    }
+
+    async function refreshBillingStatus() {
+      try {
+        const userId = getBillingUserId();
+        const res = await fetch(`${getBillingApiBase()}/api/billing/subscription?userId=${encodeURIComponent(userId)}`);
+        if (res.ok) {
+          const data = await res.json();
+          localStorage.setItem('sofia_billing_state_cache', JSON.stringify(data));
+          renderBillingStatusUI(data);
+          return data;
+        }
+      } catch (_) {}
+      const cached = localStorage.getItem('sofia_billing_state_cache');
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached);
+          renderBillingStatusUI(parsed);
+          return parsed;
+        } catch (_) {}
+      }
+      return null;
+    }
+
+    function showBillingCheckoutModal(planTier, billingState) {
+      let modal = document.getElementById('sofiaBillingModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'sofiaBillingModal';
+        modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-xs p-4';
+        document.body.appendChild(modal);
+      }
+
+      const sub = billingState?.subscription;
+      const ent = billingState?.entitlements || PLAN_CATALOG_FALLBACK[planTier] || PLAN_CATALOG_FALLBACK.growth;
+      const wallet = billingState?.wallet || { balance: ent.monthlyCredits + ent.quarterlyBonusCredits };
+      const isYearly = (sub?.billingInterval || (currentBillingMode === 'yearly' ? 'year' : 'month')) === 'year';
+      const displayPrice = isYearly ? ent.yearlyMonthlyPriceUsd : ent.monthlyPriceUsd;
+      const ledgerRows = (billingState?.ledger || []).slice(0, 4);
+
+      modal.innerHTML = `
+        <div class="bg-white rounded-[28px] max-w-[480px] w-full p-6 sm:p-8 shadow-2xl border border-[#eee5d8] relative animate-fadeIn">
+          <button onclick="document.getElementById('sofiaBillingModal').remove()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 flex items-center justify-center text-zinc-600 cursor-pointer">✕</button>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#eff2fe] text-[#213ae7] mb-3">
+            <span>✓ 7-Day Free Trial Activated</span>
+          </div>
+          <h3 class="text-[22px] font-bold text-[#18181b] tracking-tight">${ent.name} Plan (${isYearly ? 'Yearly · Save 20%' : 'Monthly'})</h3>
+          <p class="text-[13px] text-[#71717a] mt-1 mb-5">$${displayPrice.toLocaleString()}/mo · $0.00 due today · Cancel anytime before trial ends</p>
+
+          <div class="p-4 rounded-[16px] bg-[#faf8f5] border border-[#eee5d8] mb-5">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[12px] font-semibold text-[#71717a] uppercase tracking-wider">Credit Wallet Balance</span>
+              <span class="text-[11px] font-bold text-[#213ae7] bg-[#eff2fe] px-2 py-0.5 rounded-full">+${ent.quarterlyBonusCredits} free/qtr included</span>
+            </div>
+            <div class="text-[28px] font-bold text-[#18181b] tracking-tight">${wallet.balance.toLocaleString()} <span class="text-[14px] font-medium text-[#71717a]">credits available</span></div>
+            <p class="text-[12px] text-[#71717a] mt-0.5">≈ ${Math.floor(wallet.balance / 11)} library clips at 11 credits each</p>
+          </div>
+
+          <div class="space-y-2 text-[12.5px] text-[#3f3f46] mb-6">
+            <div class="flex items-center justify-between py-1.5 border-b border-zinc-100">
+              <span>Social Sets Allowed</span>
+              <span class="font-semibold text-[#18181b]">${ent.maxSocialSets} social set(s)</span>
+            </div>
+            <div class="flex items-center justify-between py-1.5 border-b border-zinc-100">
+              <span>Sofia MCP + Agent Sofia skill</span>
+              <span class="font-semibold ${ent.hasSofiaMcp ? 'text-emerald-600' : 'text-zinc-400'}">${ent.hasSofiaMcp ? 'Unlocked' : 'Growth & Scale only'}</span>
+            </div>
+            <div class="flex items-center justify-between py-1.5 border-b border-zinc-100">
+              <span>Custom Order Discount</span>
+              <span class="font-semibold text-[#18181b]">${ent.customOrderDiscountPct}% off</span>
+            </div>
+            <div class="flex items-center justify-between py-1.5">
+              <span>Public API Access</span>
+              <span class="font-semibold ${ent.hasPublicApi ? 'text-emerald-600' : 'text-zinc-400'}">${ent.hasPublicApi ? 'Enabled' : 'Scale only'}</span>
+            </div>
+          </div>
+
+          ${ledgerRows.length > 0 ? `
+            <div class="mb-6">
+              <p class="text-[11px] font-semibold text-[#71717a] uppercase tracking-wider mb-2">Recent Credit Ledger</p>
+              <div class="space-y-1.5 max-h-[110px] overflow-y-auto pr-1">
+                ${ledgerRows.map(l => `
+                  <div class="flex items-center justify-between text-[11.5px] bg-zinc-50 px-3 py-1.5 rounded-lg">
+                    <span class="text-zinc-700 truncate mr-2">${l.description || l.type}</span>
+                    <span class="font-bold ${l.amount >= 0 ? 'text-emerald-600' : 'text-rose-600'} shrink-0">${l.amount >= 0 ? '+' : ''}${l.amount} cr</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
+
+          <div class="flex items-center gap-2.5">
+            <button onclick="document.getElementById('sofiaBillingModal').remove()" class="flex-1 bg-[#141312] hover:bg-black text-white text-[13px] font-semibold py-3 rounded-full cursor-pointer transition-all">
+              Continue to Dashboard
+            </button>
+            <button onclick="cancelSubscriptionNow(); document.getElementById('sofiaBillingModal').remove();" class="px-4 py-3 rounded-full border border-zinc-200 hover:border-red-300 text-[12.5px] font-semibold text-zinc-600 hover:text-red-600 cursor-pointer transition-all">
+              Cancel Trial
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    async function completePlanCheckoutAfterAuth(planTier, explicitInterval = null) {
+      const btn = document.getElementById(`btn-checkout-${planTier}`);
+      if (btn) btn.textContent = 'Starting 7-day trial...';
+
+      const userId = getBillingUserId();
+      const billingInterval = explicitInterval || (currentBillingMode === 'yearly' ? 'year' : 'month');
+      const ent = PLAN_CATALOG_FALLBACK[planTier] || PLAN_CATALOG_FALLBACK.growth;
+
+      try {
+        const res = await fetch(`${getBillingApiBase()}/api/billing/checkout`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId,
+            planTier,
+            billingInterval
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          if (data.checkout?.mode === 'stripe_live' && data.checkout.checkoutUrl) {
+            window.location.href = data.checkout.checkoutUrl;
+            return;
+          }
+          localStorage.setItem('sofia_billing_state_cache', JSON.stringify(data.billing));
+          renderBillingStatusUI(data.billing);
+          showBillingCheckoutModal(planTier, data.billing);
+          return;
+        }
+      } catch (e) {
+        console.warn('Using local offline billing state fallback:', e);
+      }
+
+      const fallbackState = {
+        userId,
+        subscription: {
+          planTier,
+          billingInterval,
+          status: 'trialing',
+          trialEnd: new Date(Date.now() + 7 * 86400000).toISOString()
+        },
+        wallet: {
+          balance: ent.monthlyCredits + ent.quarterlyBonusCredits,
+          approxClipsRemaining: Math.floor((ent.monthlyCredits + ent.quarterlyBonusCredits) / 11)
+        },
+        entitlements: ent,
+        ledger: [
+          { type: 'monthly_grant', amount: ent.monthlyCredits, description: `${ent.name} Plan monthly credit allocation` },
+          { type: 'quarterly_bonus', amount: ent.quarterlyBonusCredits, description: `${ent.name} Plan quarterly bonus (+${ent.quarterlyBonusCredits} free/qtr)` }
+        ]
+      };
+      localStorage.setItem('sofia_billing_state_cache', JSON.stringify(fallbackState));
+      renderBillingStatusUI(fallbackState);
+      showBillingCheckoutModal(planTier, fallbackState);
+    }
+
+    async function startSubscriptionCheckout(planTier) {
+      // Open the Google OAuth popup so the user connects with their Google account
+      await openGoogleAuthPopup(planTier);
+    }
+
+    async function openCustomerPortal() {
+      const state = await refreshBillingStatus();
+      if (state && state.subscription) {
+        showBillingCheckoutModal(state.subscription.planTier, state);
+      }
+    }
+
+    async function cancelSubscriptionNow() {
+      try {
+        const userId = getBillingUserId();
+        await fetch(`${getBillingApiBase()}/api/billing/portal`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId, action: 'cancel' })
+        });
+      } catch (_) {}
+      localStorage.removeItem('sofia_billing_state_cache');
+      renderBillingStatusUI(null);
+    }
+
+    window.addEventListener('load', () => {
+      initBillingGlider();
+      refreshBillingStatus();
+    });
     window.addEventListener('resize', initBillingGlider);
     document.addEventListener('DOMContentLoaded', initBillingGlider);
     setTimeout(initBillingGlider, 100);

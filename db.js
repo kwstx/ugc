@@ -2,11 +2,26 @@ const { DatabaseSync } = require('node:sqlite');
 const path = require('path');
 const fs = require('fs');
 
-const dbPath = path.join(__dirname, 'database.sqlite');
+const isVercel = process.env.VERCEL === '1' || process.env.AWS_LAMBDA_FUNCTION_NAME !== undefined;
+const localDbPath = path.join(__dirname, 'database.sqlite');
+const dbPath = isVercel ? path.join('/tmp', 'database.sqlite') : localDbPath;
+
+if (isVercel && !fs.existsSync(dbPath) && fs.existsSync(localDbPath)) {
+  try {
+    fs.copyFileSync(localDbPath, dbPath);
+  } catch (err) {
+    console.warn('Could not copy bundled database to /tmp:', err.message);
+  }
+}
+
 const db = new DatabaseSync(dbPath);
 
 // Enable WAL mode & foreign keys for performance and integrity
-db.exec('PRAGMA journal_mode = WAL;');
+try {
+  db.exec('PRAGMA journal_mode = WAL;');
+} catch (e) {
+  db.exec('PRAGMA journal_mode = DELETE;');
+}
 db.exec('PRAGMA foreign_keys = ON;');
 
 // Initialize tables
@@ -199,6 +214,18 @@ db.exec(`
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 
+  CREATE TABLE IF NOT EXISTS creator_payouts (
+    id TEXT PRIMARY KEY,
+    creator_id TEXT NOT NULL,
+    amount REAL NOT NULL,
+    currency TEXT DEFAULT 'USD',
+    stripe_account_id TEXT,
+    payout_method TEXT,
+    status TEXT DEFAULT 'completed',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(creator_id) REFERENCES creators(id)
+  );
+
   CREATE TABLE IF NOT EXISTS brand_sessions (
     id TEXT PRIMARY KEY,
     brand_name TEXT NOT NULL,
@@ -215,7 +242,121 @@ db.exec(`
     rate REAL NOT NULL,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
+
+  CREATE TABLE IF NOT EXISTS subscriptions (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    org_id TEXT,
+    stripe_customer_id TEXT,
+    stripe_subscription_id TEXT UNIQUE,
+    plan_tier TEXT NOT NULL CHECK(plan_tier IN ('starter', 'growth', 'scale')),
+    billing_interval TEXT NOT NULL CHECK(billing_interval IN ('month', 'year')),
+    status TEXT NOT NULL DEFAULT 'trialing' CHECK(status IN ('trialing', 'active', 'past_due', 'canceled')),
+    trial_end DATETIME,
+    current_period_start DATETIME DEFAULT CURRENT_TIMESTAMP,
+    current_period_end DATETIME NOT NULL,
+    cancel_at_period_end INTEGER DEFAULT 0,
+    last_monthly_grant_at DATETIME,
+    last_quarterly_grant_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS credit_wallets (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL UNIQUE,
+    org_id TEXT,
+    balance INTEGER NOT NULL DEFAULT 0 CHECK(balance >= 0),
+    lifetime_earned INTEGER NOT NULL DEFAULT 0,
+    lifetime_spent INTEGER NOT NULL DEFAULT 0,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS credit_ledger (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    wallet_id TEXT NOT NULL,
+    amount INTEGER NOT NULL,
+    balance_after INTEGER NOT NULL,
+    type TEXT NOT NULL CHECK(type IN ('monthly_grant', 'quarterly_bonus', 'clip_purchase', 'custom_order', 'expiration', 'refund', 'trial_grant')),
+    reference_id TEXT,
+    description TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(wallet_id) REFERENCES credit_wallets(id)
+  );
+
+  CREATE TABLE IF NOT EXISTS entitlements (
+    plan_tier TEXT PRIMARY KEY CHECK(plan_tier IN ('starter', 'growth', 'scale')),
+    name TEXT NOT NULL,
+    monthly_price_usd INTEGER NOT NULL,
+    yearly_monthly_price_usd INTEGER NOT NULL,
+    yearly_total_price_usd INTEGER NOT NULL,
+    monthly_credits INTEGER NOT NULL,
+    quarterly_bonus_credits INTEGER NOT NULL,
+    approx_clips INTEGER NOT NULL,
+    clip_credit_cost INTEGER NOT NULL DEFAULT 11,
+    max_social_sets INTEGER NOT NULL,
+    has_sofia_mcp INTEGER NOT NULL DEFAULT 0,
+    has_agent_sofia_dashboard INTEGER NOT NULL DEFAULT 1,
+    has_public_api INTEGER NOT NULL DEFAULT 0,
+    has_onboarding_call INTEGER NOT NULL DEFAULT 0,
+    custom_order_discount_pct INTEGER NOT NULL DEFAULT 0,
+    trial_days INTEGER NOT NULL DEFAULT 7
+  );
+
+  CREATE TABLE IF NOT EXISTS webhook_events (
+    id TEXT PRIMARY KEY,
+    provider TEXT NOT NULL DEFAULT 'stripe',
+    event_type TEXT NOT NULL,
+    payload TEXT,
+    status TEXT NOT NULL DEFAULT 'processed',
+    processed_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS social_sets (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    tiktok_handle TEXT,
+    instagram_handle TEXT,
+    youtube_handle TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
 `);
+
+// Seed default plan entitlements matching pricing.html
+try {
+  const upsertEntitlement = db.prepare(`
+    INSERT INTO entitlements (
+      plan_tier, name, monthly_price_usd, yearly_monthly_price_usd, yearly_total_price_usd,
+      monthly_credits, quarterly_bonus_credits, approx_clips, clip_credit_cost,
+      max_social_sets, has_sofia_mcp, has_agent_sofia_dashboard, has_public_api,
+      has_onboarding_call, custom_order_discount_pct, trial_days
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ON CONFLICT(plan_tier) DO UPDATE SET
+      name = excluded.name,
+      monthly_price_usd = excluded.monthly_price_usd,
+      yearly_monthly_price_usd = excluded.yearly_monthly_price_usd,
+      yearly_total_price_usd = excluded.yearly_total_price_usd,
+      monthly_credits = excluded.monthly_credits,
+      quarterly_bonus_credits = excluded.quarterly_bonus_credits,
+      approx_clips = excluded.approx_clips,
+      clip_credit_cost = excluded.clip_credit_cost,
+      max_social_sets = excluded.max_social_sets,
+      has_sofia_mcp = excluded.has_sofia_mcp,
+      has_agent_sofia_dashboard = excluded.has_agent_sofia_dashboard,
+      has_public_api = excluded.has_public_api,
+      has_onboarding_call = excluded.has_onboarding_call,
+      custom_order_discount_pct = excluded.custom_order_discount_pct,
+      trial_days = excluded.trial_days
+  `);
+
+  upsertEntitlement.run('starter', 'Starter', 280, 224, 2688, 370, 70, 35, 11, 1, 0, 1, 0, 0, 0, 7);
+  upsertEntitlement.run('growth', 'Growth', 880, 704, 8448, 1500, 210, 110, 11, 5, 1, 1, 0, 0, 5, 7);
+  upsertEntitlement.run('scale', 'Scale', 2980, 2384, 28608, 3700, 650, 350, 11, 10, 1, 1, 1, 1, 10, 7);
+} catch (e) {
+  console.warn('Entitlements seed note:', e.message);
+}
 
 // Seed default order format state if empty
 try {
@@ -241,45 +382,35 @@ if (!creatorCols.includes('completed_orders')) {
 if (!creatorCols.includes('shipping_address')) {
   db.exec("ALTER TABLE creators ADD COLUMN shipping_address TEXT;");
 }
-
-// Seed default creators if empty
-const countStmt = db.prepare('SELECT COUNT(*) as count FROM creators');
-const creatorCount = countStmt.get().count;
-
-if (creatorCount === 0) {
-  const insertCreator = db.prepare(`
-    INSERT INTO creators (id, name, handle, avatar, status, rate, formats, rating, shipping_address)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `);
-
-  const initialCreators = [
-    ['creator_1', 'Sofia', '@sofia.ugc', 'avatar_1.png', 'active', 30.00, JSON.stringify(['reaction', 'full_ugc']), '4.9 (48)', JSON.stringify({ street: '124 Market St #4', city: 'Austin', state: 'TX', zip: '78701' })],
-    ['creator_2', 'Maya', '@maya_creates', 'avatar_2.png', 'active', 30.00, JSON.stringify(['reaction']), '5.0 (34)', JSON.stringify({ street: '89 Sunset Blvd', city: 'Los Angeles', state: 'CA', zip: '90028' })],
-    ['creator_3', 'Robert', '@robert_visuals', 'avatar_3.png', 'active', 30.00, JSON.stringify(['full_ugc']), '4.8 (56)', JSON.stringify({ street: '450 Broadway', city: 'New York', state: 'NY', zip: '10013' })],
-    ['creator_4', 'Sarah', '@sarah_lifestyle', 'avatar_full.png', 'active', 30.00, JSON.stringify(['reaction', 'full_ugc']), '5.0 (29)', JSON.stringify({ street: '772 Ocean Dr', city: 'Miami', state: 'FL', zip: '33139' })]
-  ];
-
-  for (const c of initialCreators) {
-    insertCreator.run(...c);
-  }
+if (!creatorCols.includes('stripe_account_id')) {
+  db.exec("ALTER TABLE creators ADD COLUMN stripe_account_id TEXT;");
 }
-
-// Ensure creators have formats and ratings configured
-const updateCreatorStmt = db.prepare('UPDATE creators SET formats = ?, rating = ?, shipping_address = ? WHERE id = ?');
-try {
-  updateCreatorStmt.run(JSON.stringify(['reaction', 'full_ugc']), '4.9 (48)', JSON.stringify({ street: '124 Market St #4', city: 'Austin', state: 'TX', zip: '78701' }), 'creator_1');
-  updateCreatorStmt.run(JSON.stringify(['reaction']), '5.0 (34)', JSON.stringify({ street: '89 Sunset Blvd', city: 'Los Angeles', state: 'CA', zip: '90028' }), 'creator_2');
-  updateCreatorStmt.run(JSON.stringify(['full_ugc']), '4.8 (56)', JSON.stringify({ street: '450 Broadway', city: 'New York', state: 'NY', zip: '10013' }), 'creator_3');
-  updateCreatorStmt.run(JSON.stringify(['reaction', 'full_ugc']), '5.0 (29)', JSON.stringify({ street: '772 Ocean Dr', city: 'Miami', state: 'FL', zip: '33139' }), 'creator_4');
-
-  const insertOrIgnoreCreator = db.prepare(`
-    INSERT OR IGNORE INTO creators (id, name, handle, avatar, status, rate, formats, rating, completed_orders, shipping_address)
-    VALUES (?, ?, ?, ?, 'active', ?, ?, ?, 0, ?)
-  `);
-  insertOrIgnoreCreator.run('creator_5', 'Franci', '@franci_ugc', 'assets/order/thumb_shocked.png', 25.00, JSON.stringify(['reaction']), '4.9 (88)', JSON.stringify({ street: '210 Pine St', city: 'Seattle', state: 'WA', zip: '98101' }));
-  insertOrIgnoreCreator.run('creator_6', 'Marcus', '@marcus_fit', 'assets/library/clip_4.png', 35.00, JSON.stringify(['full_ugc']), '4.8 (26)', JSON.stringify({ street: '55 Boulder Way', city: 'Denver', state: 'CO', zip: '80202' }));
-} catch (e) {
-  console.warn('Creator update migration note:', e.message);
+if (!creatorCols.includes('stripe_connected')) {
+  db.exec("ALTER TABLE creators ADD COLUMN stripe_connected INTEGER DEFAULT 0;");
+}
+if (!creatorCols.includes('stripe_payout_details')) {
+  db.exec("ALTER TABLE creators ADD COLUMN stripe_payout_details TEXT;");
+}
+if (!creatorCols.includes('country')) {
+  db.exec("ALTER TABLE creators ADD COLUMN country TEXT;");
+}
+if (!creatorCols.includes('country_code')) {
+  db.exec("ALTER TABLE creators ADD COLUMN country_code TEXT;");
+}
+if (!creatorCols.includes('languages')) {
+  db.exec("ALTER TABLE creators ADD COLUMN languages TEXT;");
+}
+if (!creatorCols.includes('gender')) {
+  db.exec("ALTER TABLE creators ADD COLUMN gender TEXT;");
+}
+if (!creatorCols.includes('creator_type')) {
+  db.exec("ALTER TABLE creators ADD COLUMN creator_type TEXT;");
+}
+if (!creatorCols.includes('bio')) {
+  db.exec("ALTER TABLE creators ADD COLUMN bio TEXT;");
+}
+if (!creatorCols.includes('email')) {
+  db.exec("ALTER TABLE creators ADD COLUMN email TEXT;");
 }
 
 // Seed default library clips if empty

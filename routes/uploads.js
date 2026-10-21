@@ -18,9 +18,14 @@ const {
 } = require('../services/r2Client');
 
 // Ensure local uploads folder exists as local buffer/cache
-const uploadsDir = path.join(__dirname, '..', 'uploads');
+const isVercel = process.env.VERCEL === '1' || process.env.AWS_LAMBDA_FUNCTION_NAME !== undefined;
+const uploadsDir = isVercel ? path.join('/tmp', 'uploads') : path.join(__dirname, '..', 'uploads');
 if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
+  try {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  } catch (err) {
+    console.warn('Could not create uploads directory:', err.message);
+  }
 }
 
 // Multer storage configuration

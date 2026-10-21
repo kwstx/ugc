@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DansUGC - Open Order</title>
+  <title>Sofia - Open Order</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -329,10 +329,10 @@
       setTimeout(() => {
         // Save to localStorage
         try {
-          const list = JSON.parse(localStorage.getItem('dansugc_orders') || '[]');
+          const list = JSON.parse(localStorage.getItem('sofia_orders') || localStorage.getItem('dansugc_orders') || '[]');
           list.unshift(orderData);
-          localStorage.setItem('dansugc_orders', JSON.stringify(list));
-          localStorage.setItem('dansugc_last_published', JSON.stringify(orderData));
+          localStorage.setItem('sofia_orders', JSON.stringify(list));
+          localStorage.setItem('sofia_last_published', JSON.stringify(orderData));
         } catch (e) {}
 
         // Button success state

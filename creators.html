@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DansUGC - Find your creators</title>
+  <title>Sofia - Find your creators</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -100,8 +100,8 @@
   <!-- Top Header / Navigation -->
   <header class="w-full px-6 sm:px-10 h-[58px] flex items-center justify-between">
     <!-- Brand Logo -->
-    <a href="index.html" class="flex items-center gap-1 text-[17px] font-bold text-[#111827] tracking-tight hover:opacity-85 transition-opacity">
-      <span>DansUGC</span>
+    <a href="index.html" class="flex items-center text-[17px] font-bold text-[#111827] tracking-tight hover:opacity-85 transition-opacity">
+      <span>Sofia</span>
     </a>
 
     <!-- Stepper Navigation -->
@@ -162,31 +162,30 @@
       </a>
     </div>
 
-    <!-- Category Tabs Row -->
-    <div class="flex items-end gap-7 pt-4 pb-2.5">
-      <!-- Tab 1: All creators (Active) -->
-      <button class="flex items-end gap-1.5 cursor-pointer pb-1 border-b-[2.5px] border-black transition-all">
-        <span class="w-[2.5px] h-[21px] bg-black inline-block mr-1 mb-0.5"></span>
-        <span class="text-[25px] font-bold text-black lowercase leading-none tracking-tight">all</span>
-        <sup class="text-[11px] font-semibold text-black -top-2 relative">59</sup>
+    <!-- Category Tabs Row (Clickable Buttons) -->
+    <div class="flex items-center gap-2 pt-3 pb-3 flex-wrap">
+      <!-- Tab 1: all (Active) -->
+      <button id="tab-all" onclick="selectTab('all', event)" type="button" class="tab-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[13px] font-medium bg-[#141923] text-white border border-[#141923] shadow-xs cursor-pointer transition-all">
+        <span>all</span>
+        <span id="tab-count-all" class="tab-count text-[11px] font-semibold px-2 py-0.5 rounded-full bg-white/20 text-white leading-none">0</span>
       </button>
 
-      <!-- Tab 2: Top creators -->
-      <button class="flex items-end gap-0.5 cursor-pointer pb-1 border-b-[2.5px] border-transparent hover:opacity-80 transition-all">
-        <span class="text-[25px] font-bold text-black lowercase leading-none tracking-tight">top</span>
-        <sup class="text-[11px] font-semibold text-black -top-2 relative">12</sup>
+      <!-- Tab 2: top -->
+      <button id="tab-top" onclick="selectTab('top', event)" type="button" class="tab-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[13px] font-medium bg-white hover:bg-[#f4f3ef] text-[#716f6a] hover:text-[#141923] border border-[#dcd9d0] hover:border-[#b8b5ac] cursor-pointer transition-all">
+        <span>top</span>
+        <span id="tab-count-top" class="tab-count text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#f0eee6] text-[#716f6a] leading-none">0</span>
       </button>
 
-      <!-- Tab 3: New creators -->
-      <button class="flex items-end gap-0.5 cursor-pointer pb-1 border-b-[2.5px] border-transparent hover:opacity-80 transition-all">
-        <span class="text-[25px] font-bold text-black lowercase leading-none tracking-tight">new</span>
-        <sup class="text-[11px] font-semibold text-black -top-2 relative">18</sup>
+      <!-- Tab 3: new -->
+      <button id="tab-new" onclick="selectTab('new', event)" type="button" class="tab-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[13px] font-medium bg-white hover:bg-[#f4f3ef] text-[#716f6a] hover:text-[#141923] border border-[#dcd9d0] hover:border-[#b8b5ac] cursor-pointer transition-all">
+        <span>new</span>
+        <span id="tab-count-new" class="tab-count text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#f0eee6] text-[#716f6a] leading-none">0</span>
       </button>
 
-      <!-- Tab 4: Featured creators -->
-      <button class="flex items-end gap-0.5 cursor-pointer pb-1 border-b-[2.5px] border-transparent hover:opacity-80 transition-all">
-        <span class="text-[25px] font-bold text-black lowercase leading-none tracking-tight">featured</span>
-        <sup class="text-[11px] font-semibold text-black -top-2 relative">32</sup>
+      <!-- Tab 4: featured -->
+      <button id="tab-featured" onclick="selectTab('featured', event)" type="button" class="tab-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[13px] font-medium bg-white hover:bg-[#f4f3ef] text-[#716f6a] hover:text-[#141923] border border-[#dcd9d0] hover:border-[#b8b5ac] cursor-pointer transition-all">
+        <span>featured</span>
+        <span id="tab-count-featured" class="tab-count text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#f0eee6] text-[#716f6a] leading-none">0</span>
       </button>
     </div>
 
@@ -229,75 +228,11 @@
           <div class="max-h-[260px] overflow-y-auto space-y-0.5 px-1.5" id="country-list-options">
             <button type="button" onclick="selectCountry('all', 'All countries', event)" data-value="all" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
               <span class="flex items-center gap-2">
-                <span class="text-sm">🌐</span>
                 <span class="font-medium text-[#18181b]">All countries</span>
               </span>
               <div class="flex items-center gap-1.5">
-                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">5</span>
+                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
                 <span class="country-check text-[#0060df] text-xs font-bold">✓</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectCountry('Latvia', '🇱🇻 Latvia', event)" data-value="Latvia" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="flex items-center gap-2">
-                <span class="text-sm">🇱🇻</span>
-                <span class="text-[#333]">Latvia</span>
-              </span>
-              <div class="flex items-center gap-1.5">
-                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">2</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectCountry('Romania', '🇷🇴 Romania', event)" data-value="Romania" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="flex items-center gap-2">
-                <span class="text-sm">🇷🇴</span>
-                <span class="text-[#333]">Romania</span>
-              </span>
-              <div class="flex items-center gap-1.5">
-                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">1</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectCountry('Poland', '🇵🇱 Poland', event)" data-value="Poland" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="flex items-center gap-2">
-                <span class="text-sm">🇵🇱</span>
-                <span class="text-[#333]">Poland</span>
-              </span>
-              <div class="flex items-center gap-1.5">
-                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">1</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectCountry('Austria', '🇦🇹 Austria', event)" data-value="Austria" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="flex items-center gap-2">
-                <span class="text-sm">🇦🇹</span>
-                <span class="text-[#333]">Austria</span>
-              </span>
-              <div class="flex items-center gap-1.5">
-                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">1</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectCountry('United States', '🇺🇸 United States', event)" data-value="United States" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="flex items-center gap-2">
-                <span class="text-sm">🇺🇸</span>
-                <span class="text-[#333]">United States</span>
-              </span>
-              <div class="flex items-center gap-1.5">
-                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectCountry('United Kingdom', '🇬🇧 United Kingdom', event)" data-value="United Kingdom" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="flex items-center gap-2">
-                <span class="text-sm">🇬🇧</span>
-                <span class="text-[#333]">United Kingdom</span>
-              </span>
-              <div class="flex items-center gap-1.5">
-                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectCountry('Germany', '🇩🇪 Germany', event)" data-value="Germany" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="flex items-center gap-2">
-                <span class="text-sm">🇩🇪</span>
-                <span class="text-[#333]">Germany</span>
-              </span>
-              <div class="flex items-center gap-1.5">
-                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
               </div>
             </button>
           </div>
@@ -332,75 +267,11 @@
           <div class="max-h-[260px] overflow-y-auto space-y-0.5 px-1.5" id="language-list-options">
             <button type="button" onclick="selectLanguage('all', 'All languages', event)" data-value="all" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
               <span class="flex items-center gap-2">
-                <span class="text-sm">🌐</span>
                 <span class="font-medium text-[#18181b]">All languages</span>
               </span>
               <div class="flex items-center gap-1.5">
-                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">5</span>
+                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
                 <span class="lang-check text-[#0060df] text-xs font-bold">✓</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectLanguage('English', '🇬🇧 English', event)" data-value="English" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="flex items-center gap-2">
-                <span class="text-sm">🇬🇧</span>
-                <span class="text-[#333]">English</span>
-              </span>
-              <div class="flex items-center gap-1.5">
-                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">5</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectLanguage('Latvian', '🇱🇻 Latvian', event)" data-value="Latvian" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="flex items-center gap-2">
-                <span class="text-sm">🇱🇻</span>
-                <span class="text-[#333]">Latvian</span>
-              </span>
-              <div class="flex items-center gap-1.5">
-                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">2</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectLanguage('Romanian', '🇷🇴 Romanian', event)" data-value="Romanian" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="flex items-center gap-2">
-                <span class="text-sm">🇷🇴</span>
-                <span class="text-[#333]">Romanian</span>
-              </span>
-              <div class="flex items-center gap-1.5">
-                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">2</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectLanguage('Polish', '🇵🇱 Polish', event)" data-value="Polish" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="flex items-center gap-2">
-                <span class="text-sm">🇵🇱</span>
-                <span class="text-[#333]">Polish</span>
-              </span>
-              <div class="flex items-center gap-1.5">
-                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">1</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectLanguage('German', '🇩🇪 German', event)" data-value="German" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="flex items-center gap-2">
-                <span class="text-sm">🇩🇪</span>
-                <span class="text-[#333]">German</span>
-              </span>
-              <div class="flex items-center gap-1.5">
-                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">1</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectLanguage('Spanish', '🇪🇸 Spanish', event)" data-value="Spanish" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="flex items-center gap-2">
-                <span class="text-sm">🇪🇸</span>
-                <span class="text-[#333]">Spanish</span>
-              </span>
-              <div class="flex items-center gap-1.5">
-                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectLanguage('French', '🇫🇷 French', event)" data-value="French" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="flex items-center gap-2">
-                <span class="text-sm">🇫🇷</span>
-                <span class="text-[#333]">French</span>
-              </span>
-              <div class="flex items-center gap-1.5">
-                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
               </div>
             </button>
           </div>
@@ -435,20 +306,20 @@
             <button type="button" onclick="selectGender('all', 'All genders', event)" data-value="all" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
               <span class="font-medium text-[#18181b]">All genders</span>
               <div class="flex items-center gap-1.5">
-                <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">5</span>
+                <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
                 <span class="gender-check text-[#0060df] text-xs font-bold">✓</span>
               </div>
             </button>
             <button type="button" onclick="selectGender('female', 'Female', event)" data-value="female" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
               <span class="text-[#333]">Female</span>
               <div class="flex items-center gap-1.5">
-                <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">4</span>
+                <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
               </div>
             </button>
             <button type="button" onclick="selectGender('male', 'Male', event)" data-value="male" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
               <span class="text-[#333]">Male</span>
               <div class="flex items-center gap-1.5">
-                <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">1</span>
+                <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
               </div>
             </button>
             <button type="button" onclick="selectGender('non-binary', 'Non-binary', event)" data-value="non-binary" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
@@ -495,7 +366,7 @@
             <button type="button" onclick="selectCreatorType('all', 'All creator types', event)" data-value="all" class="type-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
               <span class="font-medium text-[#18181b]">All creator types</span>
               <div class="flex items-center gap-1.5">
-                <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">5</span>
+                <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
                 <span class="type-check text-[#0060df] text-xs font-bold">✓</span>
               </div>
             </button>
@@ -508,19 +379,19 @@
             <button type="button" onclick="selectCreatorType('exclusive', 'Exclusive', event)" data-value="exclusive" class="type-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
               <span class="text-[#333]">Exclusive</span>
               <div class="flex items-center gap-1.5">
-                <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">2</span>
+                <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
               </div>
             </button>
             <button type="button" onclick="selectCreatorType('standard', 'Standard', event)" data-value="standard" class="type-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
               <span class="text-[#333]">Standard</span>
               <div class="flex items-center gap-1.5">
-                <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">2</span>
+                <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
               </div>
             </button>
             <button type="button" onclick="selectCreatorType('viral', 'Viral', event)" data-value="viral" class="type-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
               <span class="text-[#333]">Viral</span>
               <div class="flex items-center gap-1.5">
-                <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">1</span>
+                <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
               </div>
             </button>
           </div>
@@ -528,162 +399,37 @@
       </div>
     </div>
 
-    <!-- Creators Grid Row 1 (Pixel-perfect outlines all around cards matching reference image) -->
-    <div id="creators-grid" class="grid grid-cols-5 gap-3.5 w-full mt-7 mb-3.5">
-      
-      <!-- Card 1: Kris (Latvia) -->
-      <div onclick="toggleCreator('kris')" id="creator-kris" data-country="Latvia" data-languages="English,Latvian" data-gender="male" data-creator-type="standard" class="creator-card cursor-pointer flex flex-col group">
-        <div id="frame-kris" class="card-frame unselected">
-          <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
-            <img id="img-kris" src="assets/creators_page/kris.png" alt="Kris" class="w-full h-full object-cover pointer-events-none" />
-            <div id="plus-kris" class="plus-btn">+</div>
-          </div>
-        </div>
-        <div class="mt-2 text-left">
-          <div class="flex items-center gap-1">
-            <span class="text-[13px] font-bold text-[#111827] leading-tight">Kris</span>
-            <span class="bg-[#ebeae5] text-[#706e68] text-[9.5px] font-semibold px-1.5 py-0.2 rounded-[4px] leading-tight">LV</span>
-          </div>
-          <p class="text-[10.5px] text-[#787671] font-normal leading-tight mt-0.5 truncate">Latvia · English, Latvian</p>
-        </div>
-      </div>
-
-      <!-- Card 2: Angelika (Romania) -->
-      <div onclick="toggleCreator('angelika')" id="creator-angelika" data-country="Romania" data-languages="English,Romanian" data-gender="female" data-creator-type="exclusive" class="creator-card cursor-pointer flex flex-col group">
-        <div id="frame-angelika" class="card-frame unselected">
-          <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
-            <img id="img-angelika" src="assets/creators_page/angelika.png" alt="Angelika" class="w-full h-full object-cover pointer-events-none" />
-            <div id="plus-angelika" class="plus-btn">+</div>
-          </div>
-        </div>
-        <div class="mt-2 text-left">
-          <div class="flex items-center gap-1">
-            <span class="text-[13px] font-bold text-[#111827] leading-tight">Angelika</span>
-            <span class="bg-[#ebeae5] text-[#706e68] text-[9.5px] font-semibold px-1.5 py-0.2 rounded-[4px] leading-tight flex items-center gap-0.5">🇷🇴 RO</span>
-          </div>
-          <p class="text-[10.5px] text-[#787671] font-normal leading-tight mt-0.5 truncate">Romania · English, Romanian</p>
-        </div>
-      </div>
-
-      <!-- Card 3: Franci (Latvia) -->
-      <div onclick="toggleCreator('franci')" id="creator-franci" data-country="Latvia" data-languages="English" data-gender="female" data-creator-type="viral" class="creator-card cursor-pointer flex flex-col group">
-        <div id="frame-franci" class="card-frame selected">
-          <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
-            <img id="img-franci" src="assets/creators_page/inner_franci.png" alt="Franci" class="w-full h-full object-cover pointer-events-none" />
-            <div id="plus-franci" class="plus-btn" style="display: none;">+</div>
-            <div id="check-franci" class="absolute bottom-0 right-0 w-[34px] h-[34px] bg-[#0060df] rounded-br-[15px] corner-check flex items-end justify-end p-1 z-10 pointer-events-none">
-              <svg class="w-3.5 h-3.5 text-white stroke-[3.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div class="mt-2 text-left">
-          <div class="flex items-center gap-1">
-            <span class="text-[13px] font-bold text-[#111827] leading-tight">Franci</span>
-            <span class="bg-[#ebeae5] text-[#706e68] text-[9.5px] font-semibold px-1.5 py-0.2 rounded-[4px] leading-tight flex items-center gap-0.5">🇱🇻 LV</span>
-          </div>
-          <p class="text-[10.5px] text-[#787671] font-normal leading-tight mt-0.5 truncate">Latvia · English</p>
-        </div>
-      </div>
-
-      <!-- Card 4: Emilia (Poland) -->
-      <div onclick="toggleCreator('emilia')" id="creator-emilia" data-country="Poland" data-languages="English,Latvian,Polish" data-gender="female" data-creator-type="standard" class="creator-card cursor-pointer flex flex-col group">
-        <div id="frame-emilia" class="card-frame selected">
-          <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
-            <img id="img-emilia" src="assets/creators_page/inner_emilia.png" alt="Emilia" class="w-full h-full object-cover pointer-events-none" />
-            <div id="plus-emilia" class="plus-btn" style="display: none;">+</div>
-            <div id="check-emilia" class="absolute bottom-0 right-0 w-[34px] h-[34px] bg-[#0060df] rounded-br-[15px] corner-check flex items-end justify-end p-1 z-10 pointer-events-none">
-              <svg class="w-3.5 h-3.5 text-white stroke-[3.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div class="mt-2 text-left">
-          <div class="flex items-center gap-1">
-            <span class="text-[13px] font-bold text-[#111827] leading-tight">Emilia</span>
-            <span class="bg-[#ebeae5] text-[#706e68] text-[9.5px] font-semibold px-1.5 py-0.2 rounded-[4px] leading-tight flex items-center gap-0.5">LA</span>
-          </div>
-          <p class="text-[10.5px] text-[#787671] font-normal leading-tight mt-0.5 truncate">Poland · English, Latvian</p>
-        </div>
-      </div>
-
-      <!-- Card 5: Andrea (Austria) -->
-      <div onclick="toggleCreator('andrea')" id="creator-andrea" data-country="Austria" data-languages="English,Romanian,German" data-gender="female" data-creator-type="exclusive" class="creator-card cursor-pointer flex flex-col group">
-        <div id="frame-andrea" class="card-frame unselected">
-          <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
-            <img id="img-andrea" src="assets/creators_page/andrea.png" alt="Andrea" class="w-full h-full object-cover pointer-events-none" />
-            <div id="plus-andrea" class="plus-btn">+</div>
-          </div>
-        </div>
-        <div class="mt-2 text-left">
-          <div class="flex items-center gap-1">
-            <span class="text-[13px] font-bold text-[#111827] leading-tight">Andrea</span>
-            <span class="bg-[#ebeae5] text-[#706e68] text-[9.5px] font-semibold px-1.5 py-0.2 rounded-[4px] leading-tight flex items-center gap-0.5">🇷🇴 RO</span>
-          </div>
-          <p class="text-[10.5px] text-[#787671] font-normal leading-tight mt-0.5 truncate">Austria · English, Romanian</p>
-        </div>
-      </div>
-
-      <!-- Empty State when no creators match country/language filter -->
-      <div id="no-creators-state" class="hidden col-span-5 text-center py-12 flex flex-col items-center justify-center">
-        <div class="w-12 h-12 rounded-full bg-[#f4f3ef] border border-[#e5e3dc] flex items-center justify-center text-[#787671] mb-2.5 mx-auto">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
-            <circle cx="11" cy="11" r="8"></circle>
-            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.3-4.3"/>
-          </svg>
-        </div>
-        <p class="text-[13px] font-semibold text-[#18181b]">No creators found</p>
-        <p class="text-[11px] text-[#716f6a] mt-0.5 max-w-[260px]">There are currently no active creators matching your filter criteria.</p>
-        <button type="button" onclick="resetFilters(event)" class="mt-3 text-[11px] font-medium text-[#0060df] hover:underline cursor-pointer">
-          Reset all filters
-        </button>
-      </div>
-
+    <!-- Dynamic Creators Grid -->
+    <div id="creators-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 w-full mt-7 mb-8">
+      <!-- Cards rendered dynamically from backend -->
     </div>
 
-    <!-- Row 2 Partial Peek (Matching reference image exactly) -->
-    <div id="row2-peek" class="grid grid-cols-5 gap-3.5 w-full h-[37px] overflow-hidden pointer-events-none mb-12">
-      <div class="rounded-t-[20px] p-[3.5px] pb-0 bg-white border-t border-x border-[#dcd9d0]">
-        <div class="rounded-t-[16px] overflow-hidden h-[34px]">
-          <img src="assets/creators_page/pixel_r2_1.png" class="w-full h-full object-cover" />
-        </div>
+    <!-- Empty State when no creators exist or match filters -->
+    <div id="no-creators-state" class="hidden w-full text-center py-16 flex flex-col items-center justify-center mb-12">
+      <div class="w-14 h-14 rounded-full bg-[#f4f3ef] border border-[#e5e3dc] flex items-center justify-center text-[#787671] mb-3 mx-auto">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.3-4.3"/>
+        </svg>
       </div>
-      <div class="rounded-t-[20px] p-[3.5px] pb-0 bg-white border-t border-x border-[#dcd9d0]">
-        <div class="rounded-t-[16px] overflow-hidden h-[34px]">
-          <img src="assets/creators_page/pixel_r2_2.png" class="w-full h-full object-cover" />
-        </div>
-      </div>
-      <div class="rounded-t-[20px] p-[3.5px] pb-0 bg-white border-t border-x border-[#dcd9d0]">
-        <div class="rounded-t-[16px] overflow-hidden h-[34px]">
-          <img src="assets/creators_page/pixel_r2_3.png" class="w-full h-full object-cover" />
-        </div>
-      </div>
-      <div class="rounded-t-[20px] p-[3.5px] pb-0 bg-white border-t border-x border-[#dcd9d0]">
-        <div class="rounded-t-[16px] overflow-hidden h-[34px]">
-          <img src="assets/creators_page/pixel_r2_4.png" class="w-full h-full object-cover" />
-        </div>
-      </div>
-      <div class="rounded-t-[20px] p-[3.5px] pb-0 bg-white border-t border-x border-[#dcd9d0]">
-        <div class="rounded-t-[16px] overflow-hidden h-[34px]">
-          <img src="assets/creators_page/pixel_r2_5.png" class="w-full h-full object-cover" />
-        </div>
-      </div>
+      <p id="no-creators-title" class="text-[14px] font-semibold text-[#18181b]">No creators found</p>
+      <p id="no-creators-desc" class="text-[12px] text-[#716f6a] mt-1 max-w-[340px]">
+        Creators will appear here after they create an account from the Creator Portal.
+      </p>
     </div>
 
   </div>
 
   <!-- Floating Bottom Selection Bar -->
   <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-white rounded-2xl shadow-[0_10px_35px_rgba(0,0,0,0.12)] border border-[#e5e3dc] py-1.5 px-3 flex items-center gap-3">
-    <!-- Overlapping Selected Avatars matching reference exactly -->
+    <!-- Overlapping Selected Avatars -->
     <div id="dock-avatars" class="flex items-center shrink-0">
-      <img src="assets/creators_page/dock_avatars_exact.png" alt="Selected Creators" class="h-[34px] w-auto object-contain" />
+      <span class="text-[11px] text-[#9ca3af] italic">None selected</span>
     </div>
 
     <!-- Selection Status Text -->
     <div class="flex flex-col text-left">
-      <span id="dock-counter" class="text-[12px] font-bold text-[#111827] leading-tight">2 creators selected</span>
+      <span id="dock-counter" class="text-[12px] font-bold text-[#111827] leading-tight">0 creators selected</span>
       <span class="text-[10px] text-[#716f6a] font-normal leading-tight mt-0.5">Minimum 5 videos across your order</span>
     </div>
 
@@ -695,18 +441,54 @@
   </div>
 
   <script>
-    const creatorMeta = {
-      kris: { id: 'kris', name: 'Kris', handle: '@kris_creator', avatar: 'assets/creators_page/kris.png', verified: true, country: 'Latvia', languages: ['English', 'Latvian'], gender: 'male', creatorType: 'standard' },
-      angelika: { id: 'angelika', name: 'Angelika', handle: '@angelika_ugc', avatar: 'assets/creators_page/angelika.png', verified: true, country: 'Romania', languages: ['English', 'Romanian'], gender: 'female', creatorType: 'exclusive' },
-      franci: { id: 'franci', name: 'Franci', handle: '@franci_ugc', avatar: 'assets/creators_page/franci.png', verified: true, country: 'Latvia', languages: ['English'], gender: 'female', creatorType: 'viral' },
-      emilia: { id: 'emilia', name: 'Emilia', handle: '@emilia_ugc', avatar: 'assets/creators_page/emilia.png', verified: true, country: 'Poland', languages: ['English', 'Latvian', 'Polish'], gender: 'female', creatorType: 'standard' },
-      andrea: { id: 'andrea', name: 'Andrea', handle: '@andrea_ugc', avatar: 'assets/creators_page/andrea.png', verified: true, country: 'Austria', languages: ['English', 'Romanian', 'German'], gender: 'female', creatorType: 'exclusive' }
-    };
+    const API_BASE = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+
+    let backendCreators = [];
+    let creatorMeta = {};
+    let creatorState = {};
 
     let currentSelectedCountry = 'all';
     let currentSelectedLanguage = 'all';
     let currentSelectedGender = 'all';
     let currentSelectedType = 'all';
+    let currentSelectedTab = 'all';
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function selectTab(tab, event) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      currentSelectedTab = tab;
+
+      const tabs = ['all', 'top', 'new', 'featured'];
+      tabs.forEach(t => {
+        const el = document.getElementById(`tab-${t}`);
+        if (!el) return;
+        const countBadge = document.getElementById(`tab-count-${t}`);
+        if (t === tab) {
+          el.className = 'tab-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[13px] font-medium bg-[#141923] text-white border border-[#141923] shadow-xs cursor-pointer transition-all';
+          if (countBadge) {
+            countBadge.className = 'tab-count text-[11px] font-semibold px-2 py-0.5 rounded-full bg-white/20 text-white leading-none';
+          }
+        } else {
+          el.className = 'tab-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[13px] font-medium bg-white hover:bg-[#f4f3ef] text-[#716f6a] hover:text-[#141923] border border-[#dcd9d0] hover:border-[#b8b5ac] cursor-pointer transition-all';
+          if (countBadge) {
+            countBadge.className = 'tab-count text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#f0eee6] text-[#716f6a] leading-none';
+          }
+        }
+      });
+
+      applyFilters();
+    }
 
     function closeCountryDropdown() {
       const menu = document.getElementById('country-dropdown-menu');
@@ -835,14 +617,12 @@
       }
       currentSelectedCountry = country;
 
-      // Update button label
       const btnLabel = document.getElementById('country-filter-label');
       const btn = document.getElementById('country-filter-btn');
       if (btnLabel) {
         btnLabel.textContent = country === 'all' ? 'All countries' : label;
       }
 
-      // Active visual styling on the filter pill
       if (btn) {
         if (country === 'all') {
           btn.classList.remove('border-[#0060df]', 'bg-[#eff6ff]', 'text-[#0060df]', 'font-medium');
@@ -853,7 +633,6 @@
         }
       }
 
-      // Update checkmarks in country popup
       const options = document.querySelectorAll('.country-opt');
       options.forEach(opt => {
         const val = opt.getAttribute('data-value');
@@ -864,11 +643,8 @@
             const check = document.createElement('span');
             check.className = 'country-check text-[#0060df] text-xs font-bold';
             check.textContent = '✓';
-            if (container) {
-              container.appendChild(check);
-            } else {
-              opt.appendChild(check);
-            }
+            if (container) container.appendChild(check);
+            else opt.appendChild(check);
           }
         } else {
           if (existingCheck) existingCheck.remove();
@@ -886,14 +662,12 @@
       }
       currentSelectedLanguage = language;
 
-      // Update button label
       const btnLabel = document.getElementById('language-filter-label');
       const btn = document.getElementById('language-filter-btn');
       if (btnLabel) {
         btnLabel.textContent = language === 'all' ? 'All languages' : label;
       }
 
-      // Active visual styling on the filter pill
       if (btn) {
         if (language === 'all') {
           btn.classList.remove('border-[#0060df]', 'bg-[#eff6ff]', 'text-[#0060df]', 'font-medium');
@@ -904,7 +678,6 @@
         }
       }
 
-      // Update checkmarks in language popup
       const options = document.querySelectorAll('.lang-opt');
       options.forEach(opt => {
         const val = opt.getAttribute('data-value');
@@ -915,11 +688,8 @@
             const check = document.createElement('span');
             check.className = 'lang-check text-[#0060df] text-xs font-bold';
             check.textContent = '✓';
-            if (container) {
-              container.appendChild(check);
-            } else {
-              opt.appendChild(check);
-            }
+            if (container) container.appendChild(check);
+            else opt.appendChild(check);
           }
         } else {
           if (existingCheck) existingCheck.remove();
@@ -937,14 +707,12 @@
       }
       currentSelectedGender = gender;
 
-      // Update button label
       const btnLabel = document.getElementById('gender-filter-label');
       const btn = document.getElementById('gender-filter-btn');
       if (btnLabel) {
         btnLabel.textContent = gender === 'all' ? 'All genders' : label;
       }
 
-      // Active visual styling on the filter pill
       if (btn) {
         if (gender === 'all') {
           btn.classList.remove('border-[#0060df]', 'bg-[#eff6ff]', 'text-[#0060df]', 'font-medium');
@@ -955,7 +723,6 @@
         }
       }
 
-      // Update checkmarks in gender popup
       const options = document.querySelectorAll('.gender-opt');
       options.forEach(opt => {
         const val = opt.getAttribute('data-value');
@@ -966,11 +733,8 @@
             const check = document.createElement('span');
             check.className = 'gender-check text-[#0060df] text-xs font-bold';
             check.textContent = '✓';
-            if (container) {
-              container.appendChild(check);
-            } else {
-              opt.appendChild(check);
-            }
+            if (container) container.appendChild(check);
+            else opt.appendChild(check);
           }
         } else {
           if (existingCheck) existingCheck.remove();
@@ -988,14 +752,12 @@
       }
       currentSelectedType = type;
 
-      // Update button label
       const btnLabel = document.getElementById('type-filter-label');
       const btn = document.getElementById('type-filter-btn');
       if (btnLabel) {
         btnLabel.textContent = type === 'all' ? 'All creator types' : label;
       }
 
-      // Active visual styling on the filter pill
       if (btn) {
         if (type === 'all') {
           btn.classList.remove('border-[#0060df]', 'bg-[#eff6ff]', 'text-[#0060df]', 'font-medium');
@@ -1006,7 +768,6 @@
         }
       }
 
-      // Update checkmarks in creator type popup
       const options = document.querySelectorAll('.type-opt');
       options.forEach(opt => {
         const val = opt.getAttribute('data-value');
@@ -1017,11 +778,8 @@
             const check = document.createElement('span');
             check.className = 'type-check text-[#0060df] text-xs font-bold';
             check.textContent = '✓';
-            if (container) {
-              container.appendChild(check);
-            } else {
-              opt.appendChild(check);
-            }
+            if (container) container.appendChild(check);
+            else opt.appendChild(check);
           }
         } else {
           if (existingCheck) existingCheck.remove();
@@ -1037,6 +795,7 @@
       selectLanguage('all', 'All languages', event);
       selectGender('all', 'All genders', event);
       selectCreatorType('all', 'All creator types', event);
+      selectTab('all', event);
       const searchInput = document.getElementById('creator-search-input');
       if (searchInput) searchInput.value = '';
       applyFilters();
@@ -1049,20 +808,31 @@
       let visibleCount = 0;
 
       cards.forEach(card => {
+        const id = card.getAttribute('data-id');
+        const creator = creatorMeta[id] || {};
         const cardCountry = (card.getAttribute('data-country') || '').toLowerCase();
         const cardLanguages = (card.getAttribute('data-languages') || '').toLowerCase().split(',').map(s => s.trim());
         const cardGender = (card.getAttribute('data-gender') || '').toLowerCase();
         const cardType = (card.getAttribute('data-creator-type') || '').toLowerCase();
         const nameEl = card.querySelector('span.text-\\[13px\\]');
-        const name = nameEl ? nameEl.textContent.trim().toLowerCase() : '';
+        const name = (nameEl ? nameEl.textContent.trim().toLowerCase() : '') + ' ' + (creator.handle || '').toLowerCase();
 
         const matchesCountry = (currentSelectedCountry === 'all' || cardCountry === currentSelectedCountry.toLowerCase());
-        const matchesLanguage = (currentSelectedLanguage === 'all' || cardLanguages.includes(currentSelectedLanguage.toLowerCase()));
+        const matchesLanguage = (currentSelectedLanguage === 'all' || cardLanguages.some(l => l.includes(currentSelectedLanguage.toLowerCase())));
         const matchesGender = (currentSelectedGender === 'all' || cardGender === currentSelectedGender.toLowerCase());
         const matchesType = (currentSelectedType === 'all' || cardType === currentSelectedType.toLowerCase());
-        const matchesSearch = !query || name.includes(query);
+        const matchesSearch = !query || name.includes(query) || cardCountry.includes(query);
 
-        if (matchesCountry && matchesLanguage && matchesGender && matchesType && matchesSearch) {
+        // Tab filter logic
+        let matchesTab = true;
+        if (currentSelectedTab === 'top') {
+          const ratingStr = String(creator.rating || '');
+          matchesTab = ratingStr.includes('5.0') || ratingStr.includes('4.9') || ratingStr.includes('Verified');
+        } else if (currentSelectedTab === 'featured') {
+          matchesTab = cardType === 'exclusive' || cardType === 'viral';
+        }
+
+        if (matchesCountry && matchesLanguage && matchesGender && matchesType && matchesSearch && matchesTab) {
           card.style.display = 'flex';
           visibleCount++;
         } else {
@@ -1076,37 +846,32 @@
         if (visibleCount === 0) {
           noState.classList.remove('hidden');
           noState.classList.add('flex');
+          const title = document.getElementById('no-creators-title');
+          const desc = document.getElementById('no-creators-desc');
+          if (backendCreators.length === 0) {
+            if (title) title.textContent = 'No creators found';
+            if (desc) desc.textContent = 'Creators will appear here after they create an account from the Creator Portal.';
+          } else {
+            if (title) title.textContent = 'No creators match your filter';
+            if (desc) desc.textContent = 'Try resetting your filter options or searching for a different name.';
+          }
         } else {
           noState.classList.add('hidden');
           noState.classList.remove('flex');
         }
-      }
-
-      // Row 2 partial peek visibility
-      const row2Peek = document.getElementById('row2-peek');
-      if (row2Peek) {
-        row2Peek.style.display = (currentSelectedCountry === 'all' && currentSelectedLanguage === 'all' && currentSelectedGender === 'all' && currentSelectedType === 'all' && !query) ? 'grid' : 'none';
       }
     }
 
     // Close dropdowns when clicking outside or pressing Escape
     document.addEventListener('click', (e) => {
       const countryWrapper = document.getElementById('country-dropdown-wrapper');
-      if (countryWrapper && !countryWrapper.contains(e.target)) {
-        closeCountryDropdown();
-      }
+      if (countryWrapper && !countryWrapper.contains(e.target)) closeCountryDropdown();
       const langWrapper = document.getElementById('language-dropdown-wrapper');
-      if (langWrapper && !langWrapper.contains(e.target)) {
-        closeLanguageDropdown();
-      }
+      if (langWrapper && !langWrapper.contains(e.target)) closeLanguageDropdown();
       const genderWrapper = document.getElementById('gender-dropdown-wrapper');
-      if (genderWrapper && !genderWrapper.contains(e.target)) {
-        closeGenderDropdown();
-      }
+      if (genderWrapper && !genderWrapper.contains(e.target)) closeGenderDropdown();
       const typeWrapper = document.getElementById('type-dropdown-wrapper');
-      if (typeWrapper && !typeWrapper.contains(e.target)) {
-        closeTypeDropdown();
-      }
+      if (typeWrapper && !typeWrapper.contains(e.target)) closeTypeDropdown();
     });
 
     document.addEventListener('keydown', (e) => {
@@ -1118,47 +883,15 @@
       }
     });
 
-    const creatorState = {
-      kris: {
-        selected: false,
-        imgUnselected: 'assets/creators_page/kris.png',
-        imgSelected: 'assets/creators_page/inner_kris.png'
-      },
-      angelika: {
-        selected: false,
-        imgUnselected: 'assets/creators_page/angelika.png',
-        imgSelected: 'assets/creators_page/inner_angelika.png'
-      },
-      franci: {
-        selected: true,
-        imgUnselected: 'assets/creators_page/franci.png',
-        imgSelected: 'assets/creators_page/inner_franci.png'
-      },
-      emilia: {
-        selected: true,
-        imgUnselected: 'assets/creators_page/emilia.png',
-        imgSelected: 'assets/creators_page/inner_emilia.png'
-      },
-      andrea: {
-        selected: false,
-        imgUnselected: 'assets/creators_page/andrea.png',
-        imgSelected: 'assets/creators_page/inner_andrea.png'
-      }
-    };
-
     function applyVisualState(id, isSelected) {
-      const state = creatorState[id];
-      if (!state) return;
       const frame = document.getElementById(`frame-${id}`);
       if (!frame) return;
       const inner = frame.querySelector('div');
-      const img = document.getElementById(`img-${id}`);
       const plus = document.getElementById(`plus-${id}`);
       let check = document.getElementById(`check-${id}`);
 
       if (isSelected) {
         frame.className = "card-frame selected";
-        if (img) img.src = state.imgSelected;
         if (plus) plus.style.display = "none";
         if (!check && inner) {
           const checkDiv = document.createElement('div');
@@ -1169,7 +902,6 @@
         }
       } else {
         frame.className = "card-frame unselected";
-        if (img) img.src = state.imgUnselected;
         if (plus) plus.style.display = "flex";
         if (check) check.remove();
       }
@@ -1177,32 +909,33 @@
 
     function saveSelection() {
       const selectedList = Object.keys(creatorState)
-        .filter(id => creatorState[id].selected)
-        .map(id => creatorMeta[id]);
-      
+        .filter(id => creatorState[id]?.selected)
+        .map(id => creatorMeta[id])
+        .filter(Boolean);
+
       const totalSelected = selectedList.length;
 
-      // Update counter in bottom floating dock
       const counterEl = document.getElementById('dock-counter');
       if (counterEl) {
         counterEl.innerText = `${totalSelected} creator${totalSelected === 1 ? '' : 's'} selected`;
       }
 
-      // Update dock avatars
       const dock = document.getElementById('dock-avatars');
       if (dock) {
-        if (selectedList.length === 2 && selectedList.some(c => c.id === 'franci') && selectedList.some(c => c.id === 'emilia')) {
-          dock.innerHTML = `<img src="assets/creators_page/dock_avatars_exact.png" alt="Selected Creators" class="h-[34px] w-auto object-contain" />`;
-        } else if (selectedList.length === 0) {
+        if (totalSelected === 0) {
           dock.innerHTML = `<span class="text-[11px] text-[#9ca3af] italic">None selected</span>`;
         } else {
           dock.innerHTML = `<div class="flex items-center -space-x-2">` +
-            selectedList.map(c => `<img src="${c.avatar}" alt="${c.name}" class="w-7 h-7 rounded-full border-2 border-white object-cover shadow-xs" />`).join('') +
+            selectedList.map(c => `
+              <img src="${escapeHtml(c.avatar || 'avatar_1.png')}"
+                   alt="${escapeHtml(c.name)}"
+                   class="w-7 h-7 rounded-full border-2 border-white object-cover shadow-xs bg-gray-100"
+                   onerror="this.onerror=null; this.src='creator_avatar.png';" />
+            `).join('') +
             `</div>`;
         }
       }
 
-      // Persist across all following pages
       try {
         localStorage.setItem('selectedCreatorsCount', totalSelected);
         localStorage.setItem('selectedCreators', JSON.stringify(selectedList));
@@ -1213,15 +946,268 @@
     }
 
     function toggleCreator(id) {
-      const state = creatorState[id];
-      if (!state) return;
-
-      state.selected = !state.selected;
-      applyVisualState(id, state.selected);
+      if (!creatorState[id]) {
+        creatorState[id] = { selected: false };
+      }
+      creatorState[id].selected = !creatorState[id].selected;
+      applyVisualState(id, creatorState[id].selected);
       saveSelection();
     }
 
-    const API_BASE = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+    function renderCreatorsGrid() {
+      const grid = document.getElementById('creators-grid');
+      const noState = document.getElementById('no-creators-state');
+      if (!grid) return;
+
+      if (!backendCreators || backendCreators.length === 0) {
+        grid.innerHTML = '';
+        if (noState) {
+          noState.classList.remove('hidden');
+          noState.classList.add('flex');
+          const title = document.getElementById('no-creators-title');
+          const desc = document.getElementById('no-creators-desc');
+          if (title) title.textContent = 'No creators found';
+          if (desc) desc.textContent = 'Creators will appear here after they create an account from the Creator Portal.';
+        }
+        updateTabsAndDropdowns();
+        saveSelection();
+        return;
+      }
+
+      if (noState) {
+        noState.classList.add('hidden');
+        noState.classList.remove('flex');
+      }
+
+      grid.innerHTML = backendCreators.map(c => {
+        const isSel = Boolean(creatorState[c.id]?.selected);
+        const avatarUrl = c.avatar || 'avatar_1.png';
+        const countryText = c.country || 'Global';
+        const countryCodeBadge = c.countryCode ? `<span class="bg-[#ebeae5] text-[#706e68] text-[9.5px] font-semibold px-1.5 py-0.2 rounded-[4px] leading-tight shrink-0 uppercase">${escapeHtml(c.countryCode)}</span>` : '';
+        const langText = c.languages || 'English';
+
+        return `
+          <div onclick="toggleCreator('${escapeHtml(c.id)}')"
+               id="creator-${escapeHtml(c.id)}"
+               data-id="${escapeHtml(c.id)}"
+               data-country="${escapeHtml(c.country || '')}"
+               data-languages="${escapeHtml(c.languages || '')}"
+               data-gender="${escapeHtml(c.gender || '')}"
+               data-creator-type="${escapeHtml(c.creatorType || 'standard')}"
+               class="creator-card cursor-pointer flex flex-col group">
+            <div id="frame-${escapeHtml(c.id)}" class="card-frame ${isSel ? 'selected' : 'unselected'}">
+              <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
+                <img id="img-${escapeHtml(c.id)}"
+                     src="${escapeHtml(avatarUrl)}"
+                     alt="${escapeHtml(c.name)}"
+                     class="w-full h-full object-cover pointer-events-none"
+                     onerror="this.onerror=null; this.src='creator_avatar.png';" />
+                <div id="plus-${escapeHtml(c.id)}" class="plus-btn" style="${isSel ? 'display: none !important;' : ''}">+</div>
+                ${isSel ? `
+                  <div id="check-${escapeHtml(c.id)}" class="absolute bottom-0 right-0 w-[34px] h-[34px] bg-[#0060df] rounded-br-[15px] corner-check flex items-end justify-end p-1 z-10 pointer-events-none">
+                    <svg class="w-3.5 h-3.5 text-white stroke-[3.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+            <div class="mt-2 text-left">
+              <div class="flex items-center gap-1">
+                <span class="text-[13px] font-bold text-[#111827] leading-tight truncate">${escapeHtml(c.name)}</span>
+                ${countryCodeBadge}
+              </div>
+              <p class="text-[10.5px] text-[#787671] font-normal leading-tight mt-0.5 truncate">${escapeHtml(countryText)} · ${escapeHtml(langText)}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      updateTabsAndDropdowns();
+      applyFilters();
+      saveSelection();
+    }
+
+    function updateTabsAndDropdowns() {
+      // 1. Tab Counts
+      const totalCount = backendCreators.length;
+      const topCount = backendCreators.filter(c => String(c.rating || '').includes('5.0') || String(c.rating || '').includes('4.9') || String(c.rating || '').includes('Verified')).length;
+      const newCount = backendCreators.length;
+      const featCount = backendCreators.filter(c => c.creatorType === 'exclusive' || c.creatorType === 'viral').length;
+
+      const tAll = document.getElementById('tab-count-all');
+      const tTop = document.getElementById('tab-count-top');
+      const tNew = document.getElementById('tab-count-new');
+      const tFeat = document.getElementById('tab-count-featured');
+      if (tAll) tAll.textContent = totalCount;
+      if (tTop) tTop.textContent = topCount;
+      if (tNew) tNew.textContent = newCount;
+      if (tFeat) tFeat.textContent = featCount;
+
+      // 2. Country Dropdown
+      const countryMenu = document.getElementById('country-list-options');
+      if (countryMenu) {
+        const countryCounts = {};
+        backendCreators.forEach(c => {
+          if (c.country) {
+            countryCounts[c.country] = (countryCounts[c.country] || 0) + 1;
+          }
+        });
+
+        const countryKeys = Object.keys(countryCounts);
+        let html = `
+          <button type="button" onclick="selectCountry('all', 'All countries', event)" data-value="all" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+            <span class="flex items-center gap-2">
+              <span class="font-medium text-[#18181b]">All countries</span>
+            </span>
+            <div class="flex items-center gap-1.5">
+              <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">${totalCount}</span>
+              ${currentSelectedCountry === 'all' ? '<span class="country-check text-[#0060df] text-xs font-bold">✓</span>' : ''}
+            </div>
+          </button>
+        `;
+
+        countryKeys.forEach(cntry => {
+          const isAct = currentSelectedCountry.toLowerCase() === cntry.toLowerCase();
+          html += `
+            <button type="button" onclick="selectCountry('${escapeHtml(cntry)}', '${escapeHtml(cntry)}', event)" data-value="${escapeHtml(cntry)}" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-[#333]">${escapeHtml(cntry)}</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">${countryCounts[cntry]}</span>
+                ${isAct ? '<span class="country-check text-[#0060df] text-xs font-bold">✓</span>' : ''}
+              </div>
+            </button>
+          `;
+        });
+        countryMenu.innerHTML = html;
+      }
+
+      // 3. Language Dropdown
+      const langMenu = document.getElementById('language-list-options');
+      if (langMenu) {
+        const langCounts = {};
+        backendCreators.forEach(c => {
+          if (c.languages) {
+            c.languages.split(',').map(s => s.trim()).forEach(l => {
+              if (l) langCounts[l] = (langCounts[l] || 0) + 1;
+            });
+          }
+        });
+
+        const langKeys = Object.keys(langCounts);
+        let html = `
+          <button type="button" onclick="selectLanguage('all', 'All languages', event)" data-value="all" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+            <span class="flex items-center gap-2">
+              <span class="font-medium text-[#18181b]">All languages</span>
+            </span>
+            <div class="flex items-center gap-1.5">
+              <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">${totalCount}</span>
+              ${currentSelectedLanguage === 'all' ? '<span class="lang-check text-[#0060df] text-xs font-bold">✓</span>' : ''}
+            </div>
+          </button>
+        `;
+
+        langKeys.forEach(lng => {
+          const isAct = currentSelectedLanguage.toLowerCase() === lng.toLowerCase();
+          html += `
+            <button type="button" onclick="selectLanguage('${escapeHtml(lng)}', '${escapeHtml(lng)}', event)" data-value="${escapeHtml(lng)}" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+              <span class="flex items-center gap-2">
+                <span class="text-[#333]">${escapeHtml(lng)}</span>
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">${langCounts[lng]}</span>
+                ${isAct ? '<span class="lang-check text-[#0060df] text-xs font-bold">✓</span>' : ''}
+              </div>
+            </button>
+          `;
+        });
+        langMenu.innerHTML = html;
+      }
+
+      // 4. Gender Counts
+      const fCount = backendCreators.filter(c => (c.gender || '').toLowerCase() === 'female').length;
+      const mCount = backendCreators.filter(c => (c.gender || '').toLowerCase() === 'male').length;
+      const nbCount = backendCreators.filter(c => (c.gender || '').toLowerCase() === 'non-binary').length;
+      const cCount = backendCreators.filter(c => (c.gender || '').toLowerCase() === 'couples').length;
+
+      const genderOptions = document.querySelectorAll('.gender-opt');
+      genderOptions.forEach(opt => {
+        const val = opt.getAttribute('data-value');
+        const badge = opt.querySelector('.gender-count');
+        if (!badge) return;
+        if (val === 'all') badge.textContent = totalCount;
+        else if (val === 'female') badge.textContent = fCount;
+        else if (val === 'male') badge.textContent = mCount;
+        else if (val === 'non-binary') badge.textContent = nbCount;
+        else if (val === 'couples') badge.textContent = cCount;
+      });
+
+      // 5. Creator Type Counts
+      const stdCount = backendCreators.filter(c => (c.creatorType || 'standard').toLowerCase() === 'standard').length;
+      const viralCount = backendCreators.filter(c => (c.creatorType || '').toLowerCase() === 'viral').length;
+      const exclCount = backendCreators.filter(c => (c.creatorType || '').toLowerCase() === 'exclusive').length;
+      const cpCount = backendCreators.filter(c => (c.creatorType || '').toLowerCase() === 'couples').length;
+
+      const typeOptions = document.querySelectorAll('.type-opt');
+      typeOptions.forEach(opt => {
+        const val = opt.getAttribute('data-value');
+        const badge = opt.querySelector('.type-count');
+        if (!badge) return;
+        if (val === 'all') badge.textContent = totalCount;
+        else if (val === 'standard') badge.textContent = stdCount;
+        else if (val === 'viral') badge.textContent = viralCount;
+        else if (val === 'exclusive') badge.textContent = exclCount;
+        else if (val === 'couples') badge.textContent = cpCount;
+      });
+    }
+
+    async function loadCreatorsFromBackend() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlFormat = urlParams.get('format');
+      let queryParam = '';
+      if (urlFormat) {
+        queryParam = `?format=${encodeURIComponent(urlFormat)}`;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/api/creators${queryParam}`);
+        const data = await res.json();
+        if (data && data.success && Array.isArray(data.creators)) {
+          backendCreators = data.creators;
+        } else {
+          backendCreators = [];
+        }
+      } catch (err) {
+        console.error('Failed to load creators from backend:', err);
+        backendCreators = [];
+      }
+
+      creatorMeta = {};
+      creatorState = {};
+      backendCreators.forEach(c => {
+        creatorMeta[c.id] = c;
+        creatorState[c.id] = { selected: false };
+      });
+
+      // Restore saved creator selection from localStorage if valid
+      const savedIds = localStorage.getItem('selectedCreatorIds');
+      if (savedIds) {
+        try {
+          const ids = JSON.parse(savedIds);
+          if (Array.isArray(ids)) {
+            ids.forEach(id => {
+              if (creatorState[id]) {
+                creatorState[id].selected = true;
+              }
+            });
+          }
+        } catch (e) {}
+      }
+
+      renderCreatorsGrid();
+    }
 
     function updateSelectedFormatUI() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -1253,7 +1239,7 @@
         sessionStorage.setItem('selectedFormatKey', key);
       } catch (e) {}
 
-      // Persist chosen format to backend API so edit_brief.html always has it
+      // Persist chosen format to backend API
       fetch(`${API_BASE}/api/orders/format`, {
         method: 'POST',
         keepalive: true,
@@ -1289,25 +1275,10 @@
       }
     }
 
-    // Initialize & restore saved creators on load
+    // Initialize on page load
     document.addEventListener('DOMContentLoaded', () => {
       updateSelectedFormatUI();
-
-      const savedIds = localStorage.getItem('selectedCreatorIds');
-      if (savedIds) {
-        try {
-          const ids = JSON.parse(savedIds);
-          if (Array.isArray(ids) && ids.length > 0) {
-            Object.keys(creatorState).forEach(id => {
-              creatorState[id].selected = ids.includes(id);
-              applyVisualState(id, creatorState[id].selected);
-            });
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      }
-      saveSelection();
+      loadCreatorsFromBackend();
     });
   </script>
 

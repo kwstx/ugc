@@ -26,4 +26,5 @@ temp_chrome_profile/
 node_modules/
 database.sqlite*
 uploads/
+scratch/
 .env

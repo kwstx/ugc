@@ -34,6 +34,29 @@ router.post('/open', (req, res) => {
     const orderId = req.body.id || generateOrderId();
     const sessionId = session.id;
 
+    // Check active subscription entitlements for custom_order_discount_pct (5% Growth, 10% Scale)
+    const { getUserBillingState, consumeCredits } = require('../services/billingService');
+    const billingState = getUserBillingState(sessionId);
+    const customDiscountPct = billingState.entitlements?.customOrderDiscountPct || 0;
+
+    let finalTotal = analysis.total;
+    if (customDiscountPct > 0) {
+      finalTotal = parseFloat((analysis.total * (1 - customDiscountPct / 100)).toFixed(2));
+    }
+
+    // If paying with subscription credits, atomically reserve & deduct from credit_wallets & credit_ledger
+    let creditTransaction = null;
+    if (req.body.paymentMethod === 'credits') {
+      const creditCost = Math.max(1, Math.round(finalTotal));
+      creditTransaction = consumeCredits(
+        sessionId,
+        creditCost,
+        'custom_order',
+        orderId,
+        `Custom order "${analysis.title}" (${orderId})${customDiscountPct > 0 ? ` with ${customDiscountPct}% ${billingState.entitlements.name} discount` : ''}`
+      );
+    }
+
     // Calculate due date if reaction (starts immediately)
     let dueAt = null;
     let initialStatus = 'open';
@@ -72,14 +95,14 @@ router.post('/open', (req, res) => {
       shippingStatus,
       analysis.creatorPay,
       analysis.platformFee,
-      analysis.total,
+      finalTotal,
       initialStatus,
       analysis.turnaroundHours,
       dueAt
     );
 
     // Initialize escrow hold upfront
-    const escrow = createEscrowHold(orderId, analysis.total, analysis.brandName, req.body.paymentMethod || 'card');
+    const escrow = createEscrowHold(orderId, finalTotal, analysis.brandName, req.body.paymentMethod || 'card');
 
     // Notify matching creators about new open brief
     const recommendedCreators = getMatchingCreators(analysis.formatType);
@@ -101,7 +124,7 @@ router.post('/open', (req, res) => {
       orderId,
       'order_published',
       'Open Order Published & Escrow Held',
-      `Your ${analysis.formatLabel} brief is live. Escrow of $${analysis.total.toFixed(2)} is secured and will be released only upon video approval.`
+      `Your ${analysis.formatLabel} brief is live. Escrow of $${finalTotal.toFixed(2)} is secured and will be released only upon video approval.`
     );
 
     res.json({
@@ -122,8 +145,15 @@ router.post('/open', (req, res) => {
       pricing: {
         creatorPay: analysis.creatorPay,
         platformFee: analysis.platformFee,
-        total: analysis.total
+        subtotal: analysis.total,
+        customOrderDiscountPct: customDiscountPct,
+        total: finalTotal
       },
+      creditTransaction: creditTransaction ? {
+        debitedCredits: Math.abs(creditTransaction.ledgerEntry.amount),
+        remainingBalance: creditTransaction.wallet.balance,
+        ledgerEntryId: creditTransaction.ledgerEntry.id
+      } : null,
       escrow: {
         status: escrow.escrowStatus,
         paymentIntentId: escrow.paymentIntentId,
@@ -133,6 +163,15 @@ router.post('/open', (req, res) => {
       createdAt: new Date().toISOString()
     });
   } catch (error) {
+    if (error.code === 'INSUFFICIENT_CREDITS') {
+      return res.status(402).json({
+        success: false,
+        code: 'INSUFFICIENT_CREDITS',
+        error: error.message,
+        availableCredits: error.available,
+        requiredCredits: error.required
+      });
+    }
     console.error('Error creating open order:', error);
     res.status(500).json({ success: false, error: error.message });
   }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DansUGC - Select Format</title>
+  <title>Sofia - Select Format</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -39,8 +39,8 @@
   <!-- Top Header / Navigation -->
   <header id="site-header" class="w-full bg-white border-b border-[#f1f1f4] px-6 sm:px-10 h-[58px] flex items-center justify-between">
     <!-- Brand Logo -->
-    <a href="index.html" class="flex items-center gap-1 text-[17px] font-bold text-[#111827] tracking-tight hover:opacity-85 transition-opacity">
-      <span>DansUGC</span>
+    <a href="index.html" class="flex items-center text-[17px] font-bold text-[#111827] tracking-tight hover:opacity-85 transition-opacity">
+      <span>Sofia</span>
     </a>
 
     <!-- Stepper Navigation -->
@@ -867,7 +867,7 @@
 
         // Save order to localStorage for offline access
         try {
-          const list = JSON.parse(localStorage.getItem('dansugc_orders') || '[]');
+          const list = JSON.parse(localStorage.getItem('sofia_orders') || localStorage.getItem('dansugc_orders') || '[]');
           list.unshift({
             id: data.orderId,
             title,
@@ -881,8 +881,8 @@
             status: 'Live & Accepting Creators',
             createdAt: new Date().toISOString()
           });
-          localStorage.setItem('dansugc_orders', JSON.stringify(list));
-          localStorage.setItem('dansugc_last_published', JSON.stringify(data));
+          localStorage.setItem('sofia_orders', JSON.stringify(list));
+          localStorage.setItem('sofia_last_published', JSON.stringify(data));
         } catch (e) {}
 
         // Button success state
@@ -915,7 +915,7 @@
       } catch (err) {
         console.error('Network or server error publishing order:', err);
         if (errorBox) {
-          errorBox.innerHTML = `<div>• Network error: Could not reach DansUGC backend server. Please verify server is running.</div>`;
+          errorBox.innerHTML = `<div>• Network error: Could not reach Sofia backend server. Please verify server is running.</div>`;
           errorBox.classList.remove('hidden');
         }
         btn.disabled = false;

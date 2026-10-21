@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sofia - Workspace Setup</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Newsreader, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Newsreader', 'Georgia', 'serif'],
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #111111;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .editorial-title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-weight: 400;
+      letter-spacing: -0.025em;
+      line-height: 1.08;
+    }
+
+    .mono-sub {
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: -0.01em;
+    }
+
+    .role-option-card {
+      border: 1px solid #e4e2dd;
+      border-radius: 14px;
+      background-color: #ffffff;
+      transition: all 0.16s ease;
+    }
+
+    .role-option-card:hover {
+      border-color: #c9c6be;
+    }
+
+    .role-option-card.selected {
+      border-color: #111111;
+      box-shadow: 0 0 0 1px #111111;
+    }
+
+    .radio-ring {
+      width: 18px;
+      height: 18px;
+      border-radius: 9999px;
+      border: 1.5px solid #c8c5be;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .role-option-card.selected .radio-ring {
+      border-color: #111111;
+      background-color: #111111;
+    }
+
+    .radio-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 9999px;
+      background-color: #ffffff;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.15s ease;
+    }
+
+    .role-option-card.selected .radio-dot {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .continue-btn {
+      background-color: #a3a3a3;
+      color: #ffffff;
+      cursor: not-allowed;
+      transition: background-color 0.18s ease, transform 0.12s ease;
+    }
+
+    .continue-btn.active {
+      background-color: #141312;
+      cursor: pointer;
+    }
+
+    .continue-btn.active:hover {
+      background-color: #000000;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center px-6 py-10 select-none">
+
+  <main id="onbMainContainer" class="w-full max-w-[440px] min-h-[540px] flex flex-col justify-between">
+    
+    <!-- Top Header: Brand Logo + Progress Indicator -->
+    <div id="onbTopHeader" class="flex items-center justify-between w-full">
+      <a href="index.html" class="inline-flex items-center text-[#111111] hover:opacity-85 transition-opacity">
+        <span class="text-[14px] font-medium tracking-[-0.01em] text-[#111111]">Sofia</span>
+      </a>
+
+      <!-- Top-Right 5-Step Progress Indicator -->
+      <div id="onbStepDots" class="hidden items-center gap-1.5">
+        <span class="w-[18px] h-[5px] rounded-full bg-[#27272a]"></span>
+        <span class="w-[5px] h-[5px] rounded-full bg-[#e4e2dd]"></span>
+        <span class="w-[5px] h-[5px] rounded-full bg-[#e4e2dd]"></span>
+        <span class="w-[5px] h-[5px] rounded-full bg-[#e4e2dd]"></span>
+        <span class="w-[5px] h-[5px] rounded-full bg-[#e4e2dd]"></span>
+      </div>
+    </div>
+
+    <!-- STEP A: Role Selection ("What brings you to Sofia?") -->
+    <div id="onbScreenRole" class="my-auto pt-12 pb-10">
+      <h1 class="editorial-title text-[38px] sm:text-[42px] text-[#111111] mb-3.5">
+        What brings you<br />
+        to Sofia?
+      </h1>
+
+      <p class="mono-sub text-[12px] text-[#6b6860] mb-7">
+        We'll set up the right workspace for you.
+      </p>
+
+      <!-- Selection Cards -->
+      <div class="flex flex-col gap-3 mb-5">
+        
+        <!-- Option 1: I'm growing a business -->
+        <button
+          type="button"
+          id="option-business"
+          onclick="selectWorkspaceRole('business')"
+          class="role-option-card w-full text-left px-5 py-4 flex items-center justify-between gap-4 cursor-pointer"
+        >
+          <div>
+            <div class="text-[14px] font-semibold text-[#111111] leading-snug">
+              I'm growing a business
+            </div>
+            <div class="mono-sub text-[11px] text-[#6b6860] mt-1">
+              I want UGC content made for my brand.
+            </div>
+          </div>
+          <div class="radio-ring">
+            <div class="radio-dot"></div>
+          </div>
+        </button>
+
+        <!-- Option 2: I'm a creator -->
+        <button
+          type="button"
+          id="option-creator"
+          onclick="selectWorkspaceRole('creator')"
+          class="role-option-card w-full text-left px-5 py-4 flex items-center justify-between gap-4 cursor-pointer"
+        >
+          <div>
+            <div class="text-[14px] font-semibold text-[#111111] leading-snug">
+              I'm a creator
+            </div>
+            <div class="mono-sub text-[11px] text-[#6b6860] mt-1">
+              I make UGC and want to get paid for it.
+            </div>
+          </div>
+          <div class="radio-ring">
+            <div class="radio-dot"></div>
+          </div>
+        </button>
+
+      </div>
+
+      <!-- Continue Button -->
+      <button
+        type="button"
+        id="continueBtn"
+        onclick="handleOnboardingContinue()"
+        disabled
+        class="continue-btn w-full py-3.5 rounded-[12px] text-[13px] font-semibold flex items-center justify-center gap-1.5"
+      >
+        <span id="continueBtnLabel">Continue</span>
+        <span class="text-[14px] leading-none">→</span>
+      </button>
+    </div>
+
+    <!-- STEP B: Step 1 of 5 ("Where does your brand live online?") -->
+    <div id="onbScreenBrandSite" class="hidden my-auto pt-12 pb-10">
+      <h1 class="editorial-title text-[38px] sm:text-[42px] text-[#111111] mb-3.5">
+        Where does your<br />
+        brand live online?
+      </h1>
+
+      <p class="mono-sub text-[12px] text-[#6b6860] leading-[1.6] mb-7">
+        Drop your site. We'll read it and make 10 reels<br />
+        before you set up anything. The first 3 are free.
+      </p>
+
+      <!-- Combined Input + "Scan my brand ->" Pill Box -->
+      <div class="w-full flex items-center justify-between gap-2 pl-4 pr-2 py-2 rounded-[14px] border border-[#e4e2dd] focus-within:border-[#111111] bg-white transition-colors mb-4">
+        <input
+          type="text"
+          id="onbBrandUrlInput"
+          placeholder="yourbrand.com or an App Store link"
+          class="mono-sub flex-1 min-w-0 bg-transparent text-[13px] text-[#111111] placeholder-[#a8a49c] outline-none"
+          onkeydown="if(event.key==='Enter') handleScanBrandSubmit()"
+        />
+        <button
+          type="button"
+          id="onbScanBrandBtn"
+          onclick="handleScanBrandSubmit()"
+          class="shrink-0 bg-[#22201e] hover:bg-black text-white text-[12.5px] font-semibold px-4 py-2.5 rounded-[10px] inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+        >
+          <span id="onbScanBrandBtnLabel">Scan my brand</span>
+          <span class="text-[13px] leading-none">→</span>
+        </button>
+      </div>
+
+      <!-- Checkbox: "I'm solo, no website yet" -->
+      <label class="inline-flex items-center gap-2.5 cursor-pointer select-none">
+        <input
+          type="checkbox"
+          id="onbSoloNoWebsiteCheckbox"
+          onchange="toggleSoloNoWebsite(this.checked)"
+          class="w-[15px] h-[15px] rounded-[4px] border border-[#9ca3af] accent-[#111111] cursor-pointer"
+        />
+        <span class="text-[12.5px] text-[#3f3d39] font-normal">I'm solo, no website yet</span>
+      </label>
+    </div>
+
+    <!-- STEP C: Building a UGC engine for Brand (Only shown when a website or app URL is provided, skipped when solo) -->
+    <div id="onbScreenBuildingEngine" class="hidden my-auto py-8 text-center w-full">
+      <!-- Rounded indigo icon (pulsing) -->
+      <div class="w-[58px] h-[58px] rounded-[18px] bg-[#eff0fe] flex items-center justify-center mx-auto mb-5 animate-pulse">
+        <div class="w-[42px] h-[42px] rounded-[13px] bg-[#5558f6] shadow-[0_2px_8px_rgba(85,88,246,0.28)]"></div>
+      </div>
+
+      <h1 class="editorial-title text-[38px] sm:text-[42px] text-[#111111] mb-5">
+        Building a UGC engine<br />
+        for <span id="onbEngineBrandTitle">Engram</span>.
+      </h1>
+
+      <div class="mono-sub inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#f3f3fe] text-[#6366f1] text-[11px] mb-8">
+        <svg class="w-3.5 h-3.5 animate-spin text-[#6366f1]" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-opacity="0.22" stroke-width="2.2"></circle>
+          <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
+        </svg>
+        <span id="onbEngineStatusText">Writing hooks in your voice...</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-left mb-5">
+        <div class="rounded-[14px] border border-[#e6e4df] bg-white p-3.5 min-h-[104px] flex flex-col justify-start">
+          <div class="mono-sub text-[10px] text-[#8a8780] mb-1.5">
+            Brand
+          </div>
+          <div id="onbEngineBrandCard" class="text-[13px] font-semibold text-[#111111] leading-snug">
+            Engram
+          </div>
+        </div>
+
+        <div class="rounded-[14px] border border-[#e6e4df] bg-white p-3.5 min-h-[104px] flex flex-col justify-start">
+          <div class="mono-sub text-[10px] text-[#8a8780] mb-1.5">
+            What you do
+          </div>
+          <div id="onbEngineDescCard" class="text-[12px] font-semibold text-[#111111] leading-[1.38] line-clamp-3">
+            Engram is a dating app that utilizes AI to help users find...
+          </div>
+        </div>
+
+        <div class="rounded-[14px] border border-dashed border-[#c7c9fe] bg-[#f8f8ff] p-3.5 min-h-[104px] flex flex-col justify-start">
+          <div class="mono-sub text-[10px] text-[#6366f1] mb-1.5">
+            Reactions matched
+          </div>
+          <div id="onbEngineReactionsCard" class="text-[13px] font-semibold text-[#111111] leading-snug">
+            45
+          </div>
+        </div>
+      </div>
+
+      <!-- Suitable Creators Found for Product -->
+      <div id="onbSuitableCreatorsWrap" class="text-left rounded-[14px] border border-[#e6e4df] bg-[#fafaf9] p-3.5 mb-10">
+        <div class="flex items-center justify-between mb-2.5">
+          <span class="mono-sub text-[10px] text-[#6b6860] uppercase tracking-wider">
+            Suitable creators matched for <span id="onbCreatorsBrandLabel" class="text-[#111111] font-semibold">your product</span>
+          </span>
+          <span id="onbCreatorsNicheBadge" class="mono-sub text-[10px] px-2 py-0.5 rounded-full bg-[#eef0ff] text-[#5558f6] font-medium">
+            Matching...
+          </span>
+        </div>
+        <div id="onbSuitableCreatorsList" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+      </div>
+
+      <div>
+        <p class="mono-sub text-[11px] text-[#6b6860] mb-3.5">
+          Wrong guess? You can edit everything in ReelClaw later.
+        </p>
+        <button
+          type="button"
+          onclick="handleEngineContinue()"
+          class="inline-flex items-center gap-1 text-[12.5px] font-semibold text-[#5558f6] hover:text-[#3d40d8] transition-colors cursor-pointer"
+        >
+          <span>Continue</span>
+          <span class="text-[13px] leading-none">→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Bottom Footer Note -->
+    <div id="onbFooterWrap" class="pt-6">
+      <p id="onbFooterText" class="mono-sub text-[11px] text-[#78756e]">
+        About 60 seconds to set up
+      </p>
+    </div>
+
+  </main>
+
+  <script>
+    let selectedRole = null;
+
+    function getBillingApiBase() {
+      if (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '3000')) {
+        return 'http://localhost:3000';
+      }
+      return '';
+    }
+
+    function selectWorkspaceRole(role) {
+      selectedRole = role;
+      const bizCard = document.getElementById('option-business');
+      const creatorCard = document.getElementById('option-creator');
+      const continueBtn = document.getElementById('continueBtn');
+
+      if (role === 'business') {
+        bizCard.classList.add('selected');
+        creatorCard.classList.remove('selected');
+      } else {
+        creatorCard.classList.add('selected');
+        bizCard.classList.remove('selected');
+      }
+
+      continueBtn.disabled = false;
+      continueBtn.classList.add('active');
+    }
+
+    function handleOnboardingContinue() {
+      if (!selectedRole) return;
+      localStorage.setItem('sofia_workspace_role', selectedRole);
+
+      const roleScreen = document.getElementById('onbScreenRole');
+      const siteScreen = document.getElementById('onbScreenBrandSite');
+      const dots = document.getElementById('onbStepDots');
+      const footer = document.getElementById('onbFooterText');
+
+      if (roleScreen) roleScreen.classList.add('hidden');
+      if (siteScreen) siteScreen.classList.remove('hidden');
+      if (dots) {
+        dots.classList.remove('hidden');
+        dots.classList.add('flex');
+      }
+      if (footer) footer.textContent = 'Step 1 of 5';
+
+      setTimeout(() => {
+        document.getElementById('onbBrandUrlInput')?.focus();
+      }, 60);
+    }
+
+    function toggleSoloNoWebsite(checked) {
+      const input = document.getElementById('onbBrandUrlInput');
+      const btnLabel = document.getElementById('onbScanBrandBtnLabel');
+      if (checked) {
+        if (input) {
+          input.value = '';
+          input.disabled = true;
+          input.placeholder = 'No website — continuing solo';
+        }
+        if (btnLabel) btnLabel.textContent = 'Continue';
+      } else {
+        if (input) {
+          input.disabled = false;
+          input.placeholder = 'yourbrand.com or an App Store link';
+        }
+        if (btnLabel) btnLabel.textContent = 'Scan my brand';
+      }
+    }
+
+    function deriveBrandFallbackFromInput(rawUrl) {
+      let cleaned = (rawUrl || '').trim().replace(/^https?:\/\//i, '').replace(/^www\./i, '').split('/')[0].split('?')[0];
+      let base = (cleaned.split('.')[0] || 'Engram').toLowerCase();
+      let formattedName = base.charAt(0).toUpperCase() + base.slice(1);
+      if (base === 'engram') {
+        return {
+          brandName: 'Engram',
+          niche: 'Dating & Relationships',
+          summary: 'Engram is a dating app that utilizes AI to help users find meaningful, compatible matches faster.',
+          displaySummary: 'Engram is a dating app that utilizes AI to help users find...',
+          reactionsMatched: 45,
+          suitableCreators: [
+            { id: 'creator_2', name: 'Maya', handle: '@maya_creates', rating: '5.0 (34)', matchScore: 98, matchReason: 'Dating & lifestyle reaction hooks' },
+            { id: 'creator_5', name: 'Franci', handle: '@franci_ugc', rating: '4.9 (88)', matchScore: 96, matchReason: 'High-retention viral reaction clips' },
+            { id: 'creator_4', name: 'Sarah', handle: '@sarah_lifestyle', rating: '5.0 (29)', matchScore: 94, matchReason: 'Relatable relationship storytelling' },
+            { id: 'creator_1', name: 'Sofia', handle: '@sofia.ugc', rating: '4.9 (48)', matchScore: 92, matchReason: 'App walkthroughs & social proof' }
+          ]
+        };
+      }
+      return {
+        brandName: formattedName,
+        niche: 'Productivity & AI Tech',
+        summary: `${formattedName} (${cleaned || rawUrl}) is a digital product that helps users streamline workflows and achieve results faster.`,
+        displaySummary: `${formattedName} is a digital product that helps users streamline workflows...`,
+        reactionsMatched: 42,
+        suitableCreators: [
+          { id: 'creator_1', name: 'Sofia', handle: '@sofia.ugc', rating: '4.9 (48)', matchScore: 97, matchReason: 'SaaS & mobile app green-screen demos' },
+          { id: 'creator_3', name: 'Robert', handle: '@robert_visuals', rating: '4.8 (56)', matchScore: 95, matchReason: 'Tech & product talking-head reviews' },
+          { id: 'creator_5', name: 'Franci', handle: '@franci_ugc', rating: '4.9 (88)', matchScore: 93, matchReason: 'Scroll-stopping reaction hooks' },
+          { id: 'creator_2', name: 'Maya', handle: '@maya_creates', rating: '5.0 (34)', matchScore: 91, matchReason: 'Creator workflow & app discovery clips' }
+        ]
+      };
+    }
+
+    function renderMatchedCreatorsList(creators, brandName, niche) {
+      const listEl = document.getElementById('onbSuitableCreatorsList');
+      const brandLabelEl = document.getElementById('onbCreatorsBrandLabel');
+      const nicheBadgeEl = document.getElementById('onbCreatorsNicheBadge');
+      if (brandLabelEl && brandName) brandLabelEl.textContent = brandName;
+      if (nicheBadgeEl && niche) nicheBadgeEl.textContent = niche;
+      if (!listEl) return;
+
+      listEl.innerHTML = (creators || []).map(c => {
+        const initials = (c.name || 'C').slice(0, 2).toUpperCase();
+        return `
+          <div class="flex items-start justify-between gap-2.5 p-2.5 rounded-[11px] bg-white border border-[#e6e4df]">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-8 h-8 rounded-full bg-[#eef0ff] text-[#5558f6] font-semibold text-[11px] flex items-center justify-center shrink-0">
+                ${initials}
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[12px] font-semibold text-[#111111] truncate">${c.name}</span>
+                  <span class="mono-sub text-[10px] text-[#8a8780]">★ ${String(c.rating || '5.0').split(' ')[0]}</span>
+                </div>
+                <div class="text-[10.5px] text-[#6b6860] truncate" title="${c.matchReason || ''}">
+                  ${c.matchReason || 'Verified UGC Creator'}
+                </div>
+              </div>
+            </div>
+            <span class="mono-sub shrink-0 text-[10px] font-semibold text-[#5558f6] bg-[#f3f3fe] px-1.5 py-0.5 rounded-md">
+              ${c.matchScore || 95}% fit
+            </span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function handleScanBrandSubmit() {
+      const input = document.getElementById('onbBrandUrlInput');
+      const soloChecked = document.getElementById('onbSoloNoWebsiteCheckbox')?.checked;
+      const rawUrl = input ? input.value.trim() : '';
+
+      // Rule 1: If "I'm solo, no website yet" is checked, do NOT show the "Building a UGC engine" page — proceed directly
+      if (soloChecked) {
+        localStorage.removeItem('sofia_brand_url');
+        await handleEngineContinue();
+        return;
+      }
+
+      // Rule 2: Require a website or app URL when not solo
+      if (!rawUrl) {
+        if (input) {
+          input.focus();
+          const box = input.parentElement;
+          if (box) {
+            box.classList.add('border-red-500');
+            setTimeout(() => box.classList.remove('border-red-500'), 1200);
+          }
+        }
+        return;
+      }
+
+      localStorage.setItem('sofia_brand_url', rawUrl);
+
+      const fallback = deriveBrandFallbackFromInput(rawUrl);
+      const brandTitleEl = document.getElementById('onbEngineBrandTitle');
+      const brandCardEl = document.getElementById('onbEngineBrandCard');
+      const descCardEl = document.getElementById('onbEngineDescCard');
+      const reactionsCardEl = document.getElementById('onbEngineReactionsCard');
+      const statusTextEl = document.getElementById('onbEngineStatusText');
+      const listEl = document.getElementById('onbSuitableCreatorsList');
+
+      if (brandTitleEl) brandTitleEl.textContent = fallback.brandName;
+      if (brandCardEl) brandCardEl.textContent = fallback.brandName;
+      if (descCardEl) descCardEl.textContent = 'Analyzing website & summarizing product...';
+      if (reactionsCardEl) reactionsCardEl.textContent = '...';
+      if (statusTextEl) statusTextEl.textContent = `Scanning ${rawUrl} & summarizing product...`;
+      if (listEl) {
+        listEl.innerHTML = `<div class="col-span-2 text-[11px] text-[#6b6860] py-2 mono-sub">Searching database for suitable creators for ${fallback.brandName}...</div>`;
+      }
+
+      const mainContainer = document.getElementById('onbMainContainer');
+      const topHeader = document.getElementById('onbTopHeader');
+      const footerWrap = document.getElementById('onbFooterWrap');
+      const siteScreen = document.getElementById('onbScreenBrandSite');
+      const engineScreen = document.getElementById('onbScreenBuildingEngine');
+
+      if (mainContainer) {
+        mainContainer.classList.remove('max-w-[440px]');
+        mainContainer.classList.add('max-w-[520px]');
+      }
+      if (topHeader) topHeader.classList.add('hidden');
+      if (footerWrap) footerWrap.classList.add('hidden');
+      if (siteScreen) siteScreen.classList.add('hidden');
+      if (engineScreen) engineScreen.classList.remove('hidden');
+
+      let result = fallback;
+      try {
+        const res = await fetch(`${getBillingApiBase()}/api/ai/analyze-brand`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: rawUrl })
+        });
+        const data = await res.json();
+        if (data && data.success) {
+          result = data;
+        }
+      } catch (_) {}
+
+      if (brandTitleEl) brandTitleEl.textContent = result.brandName;
+      if (brandCardEl) brandCardEl.textContent = result.brandName;
+      if (descCardEl) {
+        descCardEl.textContent = result.displaySummary || result.summary;
+        descCardEl.title = result.summary || '';
+      }
+      if (reactionsCardEl) reactionsCardEl.textContent = String(result.reactionsMatched || 45);
+      if (statusTextEl) statusTextEl.textContent = 'Writing hooks in your voice...';
+
+      renderMatchedCreatorsList(result.suitableCreators, result.brandName, result.niche);
+
+      localStorage.setItem('sofia_brand_name', result.brandName);
+      localStorage.setItem('sofia_about_brand', result.summary);
+      localStorage.setItem('sofia_matched_creators', JSON.stringify(result.suitableCreators || []));
+      localStorage.setItem('sofia_brand_analysis', JSON.stringify(result));
+    }
+
+    async function handleEngineContinue() {
+      const params = new URLSearchParams(window.location.search);
+      const pendingRaw = localStorage.getItem('sofia_pending_checkout_plan');
+      let pending = null;
+      try {
+        if (pendingRaw) pending = JSON.parse(pendingRaw);
+      } catch (_) {}
+
+      const planTier = params.get('plan') || pending?.planTier || null;
+      const billingInterval = params.get('interval') || pending?.billingInterval || 'month';
+      const userId = localStorage.getItem('sofia_billing_user_id') || 'usr_' + Math.random().toString(36).substring(2, 10);
+      localStorage.setItem('sofia_billing_user_id', userId);
+
+      if (planTier) {
+        try {
+          const res = await fetch(`${getBillingApiBase()}/api/billing/checkout`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId,
+              planTier,
+              billingInterval
+            })
+          });
+          const data = await res.json();
+          if (data && data.success && data.billing) {
+            localStorage.setItem('sofia_billing_state_cache', JSON.stringify(data.billing));
+          }
+        } catch (e) {
+          console.warn('Workspace plan provisioning note:', e);
+        }
+        localStorage.removeItem('sofia_pending_checkout_plan');
+      }
+
+      if (selectedRole === 'creator') {
+        window.location.href = 'creator_portal.html';
+      } else {
+        window.location.href = 'order.html';
+      }
+    }
+  </script>
+</body>
+</html>

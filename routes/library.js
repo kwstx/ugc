@@ -252,11 +252,11 @@ router.get('/clips/:id/download', (req, res) => {
 
 /**
  * POST /api/library/checkout
- * Checkout and Instant Licensing
+ * Checkout and Instant Licensing (supports credit wallet deduction at 11 credits/clip or card checkout)
  */
 router.post('/checkout', (req, res) => {
   try {
-    const { clipIds = [], sessionId = 'guest_session', email = 'customer@example.com' } = req.body;
+    const { clipIds = [], sessionId = 'guest_session', email = 'customer@example.com', paymentMethod = 'card' } = req.body;
 
     if (!Array.isArray(clipIds) || clipIds.length === 0) {
       return res.status(400).json({ success: false, error: 'At least one clip must be selected for checkout.' });
@@ -272,6 +272,19 @@ router.post('/checkout', (req, res) => {
     const pricing = calculateClipBundlePricing(clips);
     const orderId = 'LIB-' + Math.floor(100000 + Math.random() * 900000);
     const licenseKey = 'LIC-UGC-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+
+    let creditTransaction = null;
+    if (paymentMethod === 'credits') {
+      const { consumeCredits } = require('../services/billingService');
+      const creditsRequired = clips.length * 11; // 11 credits per library clip
+      creditTransaction = consumeCredits(
+        sessionId,
+        creditsRequired,
+        'clip_purchase',
+        orderId,
+        `Purchased ${clips.length} library clip(s) (${orderId})`
+      );
+    }
 
     const itemsSummary = clips.map(c => ({
       id: c.id,
@@ -302,11 +315,26 @@ router.post('/checkout', (req, res) => {
       orderId,
       licenseKey,
       email,
+      paymentMethod,
+      creditTransaction: creditTransaction ? {
+        debitedCredits: Math.abs(creditTransaction.ledgerEntry.amount),
+        remainingBalance: creditTransaction.wallet.balance,
+        ledgerEntryId: creditTransaction.ledgerEntry.id
+      } : null,
       pricing,
       items: itemsSummary,
       commercialUsageGrant: 'Full perpetual commercial rights for paid ads across Meta, TikTok, YouTube, and Google.'
     });
   } catch (err) {
+    if (err.code === 'INSUFFICIENT_CREDITS') {
+      return res.status(402).json({
+        success: false,
+        code: 'INSUFFICIENT_CREDITS',
+        error: err.message,
+        availableCredits: err.available,
+        requiredCredits: err.required
+      });
+    }
     console.error('Library checkout error:', err);
     res.status(500).json({ success: false, error: err.message });
   }

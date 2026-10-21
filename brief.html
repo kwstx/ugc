@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DansUGC - Brief & order</title>
+  <title>Sofia - Brief & order</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -39,8 +39,8 @@
   <!-- Top Header / Navigation -->
   <header class="w-full bg-white border-b border-[#f1f1f4] px-6 sm:px-10 h-[58px] flex items-center justify-between">
     <!-- Brand Logo -->
-    <a href="index.html" class="flex items-center gap-1 text-[17px] font-bold text-[#111827] tracking-tight hover:opacity-85 transition-opacity">
-      <span>DansUGC</span>
+    <a href="index.html" class="flex items-center text-[17px] font-bold text-[#111827] tracking-tight hover:opacity-85 transition-opacity">
+      <span>Sofia</span>
     </a>
 
     <!-- Stepper Navigation -->
@@ -104,17 +104,18 @@
       </span>
     </div>
 
-    <!-- Describe your order section -->
+    <!-- Describe your brief section -->
     <div class="w-full text-left">
-      <label class="block text-[13px] font-bold text-[#111827] mb-2.5">
-        Describe your order
+      <label for="brief-description-input" class="block text-[13px] font-bold text-[#111827] mb-2.5">
+        Describe your brief
       </label>
 
       <!-- Textarea Box -->
       <div class="relative w-full">
         <textarea
+          id="brief-description-input"
           rows="6"
-          placeholder="Tell us about your company and the videos you need. For example: We're a meal-planning app and need 5 natural reaction videos in a bright kitchen: 2 surprised, 2 excited and 1 relieved.."
+          placeholder="Tell us about your company and the videos you need. For example: We're a meal-planning app called FreshPlate and need 5 natural reaction videos in a bright kitchen: 2 surprised, 2 excited and 1 relieved.."
           class="w-full rounded-[18px] border border-[#e4e4e7] p-4 text-[13px] text-[#18181b] placeholder-[#a1a1aa] focus:outline-none focus:border-[#5b5af7] transition-all resize-y min-h-[175px] leading-relaxed shadow-[0_1px_2px_rgba(0,0,0,0.02)]"
         ></textarea>
       </div>
@@ -135,16 +136,16 @@
         <button
           id="generate-brief-btn"
           type="button"
-          onclick="window.location.href='edit_brief.html'"
+          onclick="handleGenerateBriefClick(event)"
           style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);"
           class="text-white text-[12.5px] font-medium px-6 py-2.5 rounded-xl flex items-center gap-2 shadow-[0_3px_12px_rgba(33,58,231,0.25)] hover:shadow-[0_6px_20px_rgba(33,58,231,0.4)] hover:brightness-105 active:scale-[0.98] transition-all cursor-pointer shrink-0"
         >
           <!-- Sparkles / AI Icon -->
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg id="gen-btn-icon" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v3m0 12v3m9-9h-3M6 12H3m14.364-6.364l-2.121 2.121M7.757 16.243l-2.121 2.121m12.728 0l-2.121-2.121M7.757 7.757L5.636 5.636"/>
           </svg>
-          <span>Generate my brief</span>
-          <span class="text-[13px] leading-none">&rarr;</span>
+          <span id="gen-btn-label">Generate my brief</span>
+          <span id="gen-btn-arrow" class="text-[13px] leading-none">&rarr;</span>
         </button>
       </div>
 
@@ -168,7 +169,88 @@
   <script>
     const API_BASE = (window.location.port === '3000') ? '' : 'http://localhost:3000';
 
+    async function handleGenerateBriefClick(event) {
+      if (event) event.preventDefault();
+      const descInput = document.getElementById('brief-description-input');
+      const text = (descInput ? descInput.value : '').trim();
+      const genBtn = document.getElementById('generate-brief-btn');
+      const btnLabel = document.getElementById('gen-btn-label');
+      const btnArrow = document.getElementById('gen-btn-arrow');
+      const btnIcon = document.getElementById('gen-btn-icon');
+
+      const format = localStorage.getItem('selectedFormat') || 'Reaction Video';
+      const formatKey = (format === 'Full UGC') ? 'full' : 'reaction';
+
+      let selectedCreators = [];
+      try {
+        selectedCreators = JSON.parse(localStorage.getItem('selectedCreators') || '[]');
+      } catch (e) {}
+
+      if (!text) {
+        if (descInput) {
+          descInput.focus();
+          descInput.classList.add('ring-2', 'ring-indigo-500');
+          setTimeout(() => descInput.classList.remove('ring-2', 'ring-indigo-500'), 1800);
+        }
+        return;
+      }
+
+      localStorage.setItem('sofia_brief_description', text);
+
+      // Loading state on button
+      if (genBtn) {
+        genBtn.disabled = true;
+        genBtn.style.opacity = '0.9';
+      }
+      if (btnLabel) {
+        btnLabel.textContent = 'Generating brief with AI...';
+      }
+      if (btnArrow) {
+        btnArrow.classList.add('hidden');
+      }
+      if (btnIcon) {
+        btnIcon.classList.add('animate-spin');
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/api/ai/generate-brief`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            description: text,
+            format,
+            selectedCreators
+          })
+        });
+
+        const data = await res.json();
+        if (data && data.success && data.briefId) {
+          localStorage.setItem('sofia_current_brief_id', data.briefId);
+          localStorage.setItem('sofia_generated_brief', JSON.stringify(data.brief));
+          window.location.href = `edit_brief.html?briefId=${encodeURIComponent(data.briefId)}&format=${formatKey}&ai=true`;
+          return;
+        }
+      } catch (err) {
+        console.error('Error generating brief with AI:', err);
+      }
+
+      // Fallback redirection
+      window.location.href = `edit_brief.html?format=${formatKey}`;
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
+      // Restore previously entered description if any
+      const descInput = document.getElementById('brief-description-input');
+      const savedDesc = localStorage.getItem('sofia_brief_description');
+      if (savedDesc && descInput) {
+        descInput.value = savedDesc;
+      }
+      if (descInput) {
+        descInput.addEventListener('input', (e) => {
+          localStorage.setItem('sofia_brief_description', e.target.value);
+        });
+      }
+
       const urlParams = new URLSearchParams(window.location.search);
       const urlFormat = urlParams.get('format');
       let savedFormat = null;
@@ -217,12 +299,6 @@
         formatBadge.textContent = savedFormat;
       }
 
-      const genBtn = document.getElementById('generate-brief-btn');
-      if (genBtn) {
-        genBtn.onclick = () => {
-          window.location.href = `edit_brief.html?format=${key}`;
-        };
-      }
       const writeLink = document.getElementById('write-brief-myself-link');
       if (writeLink) {
         writeLink.href = `edit_brief.html?format=${key}`;

@@ -11,7 +11,7 @@ async function run() {
     // Test a small test upload
     const testKey = `test-ping-${Date.now()}.txt`;
     console.log(`Uploading test file "${testKey}" to R2...`);
-    const uploadRes = await uploadToR2(testKey, Buffer.from('Cloudflare R2 ping test for DansUGC'), 'text/plain');
+    const uploadRes = await uploadToR2(testKey, Buffer.from('Cloudflare R2 ping test for Sofia'), 'text/plain');
     console.log('Upload to R2 successful:', uploadRes);
 
     // Clean up test file

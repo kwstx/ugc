@@ -1,5 +1,5 @@
 /**
- * DansUGC Library Frontend-Backend Client Integration
+ * Sofia Library Frontend-Backend Client Integration
  * Connects library.html with:
  * - GET /api/library/clips
  * - GET /api/library/search (Text & Social Link Hook Matching)
@@ -9,8 +9,8 @@
  */
 
 let backendClips = [];
-let currentSessionId = localStorage.getItem('dansugc_session_id') || ('sess_' + Math.random().toString(36).substring(2, 9));
-localStorage.setItem('dansugc_session_id', currentSessionId);
+let currentSessionId = localStorage.getItem('sofia_session_id') || localStorage.getItem('dansugc_session_id') || ('sess_' + Math.random().toString(36).substring(2, 9));
+localStorage.setItem('sofia_session_id', currentSessionId);
 
 document.addEventListener('DOMContentLoaded', async () => {
   await fetchLibraryClips();

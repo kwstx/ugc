@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DansUGC - Live Order Tracking</title>
+  <title>Sofia - Live Order Tracking</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -40,8 +40,8 @@
   <!-- Top Header / Navigation -->
   <header class="w-full bg-white border-b border-[#f1f1f4] px-6 sm:px-10 h-[58px] flex items-center justify-between sticky top-0 z-30">
     <!-- Brand Logo -->
-    <a href="index.html" class="flex items-center gap-1 text-[17px] font-bold text-[#111827] tracking-tight hover:opacity-85 transition-opacity">
-      <span>DansUGC</span>
+    <a href="index.html" class="flex items-center text-[17px] font-bold text-[#111827] tracking-tight hover:opacity-85 transition-opacity">
+      <span>Sofia</span>
     </a>
 
     <!-- Live Status Indicator Pill -->
@@ -348,7 +348,7 @@
           </p>
           <div class="text-[11px] text-[#64748b] flex items-center justify-between border-t border-[#e2e8f0] pt-2.5">
             <span>Support: live 24/7</span>
-            <a href="mailto:support@dansugc.com" class="text-[#4f46e5] font-semibold hover:underline">Contact Concierge</a>
+            <a href="mailto:support@sofia.com" class="text-[#4f46e5] font-semibold hover:underline">Contact Concierge</a>
           </div>
         </div>
 
@@ -439,7 +439,7 @@
 
       // Fallback to local storage if not loaded
       if (!order) {
-        const stored = localStorage.getItem('dansugc_last_finalized_order') || localStorage.getItem('dansugc_last_published') || localStorage.getItem('ugc_order_review');
+        const stored = localStorage.getItem('sofia_last_finalized_order') || localStorage.getItem('dansugc_last_finalized_order') || localStorage.getItem('sofia_last_published') || localStorage.getItem('dansugc_last_published') || localStorage.getItem('ugc_order_review');
         if (stored) {
           try {
             order = JSON.parse(stored);

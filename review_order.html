@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DansUGC - Review & Finalize Order</title>
+  <title>Sofia - Review & Finalize Order</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -39,8 +39,8 @@
   <!-- Top Header / Navigation -->
   <header class="w-full bg-white border-b border-[#f1f1f4] px-6 sm:px-10 h-[58px] flex items-center justify-between sticky top-0 z-30">
     <!-- Brand Logo -->
-    <a href="index.html" class="flex items-center gap-1 text-[17px] font-bold text-[#111827] tracking-tight hover:opacity-85 transition-opacity">
-      <span>DansUGC</span>
+    <a href="index.html" class="flex items-center text-[17px] font-bold text-[#111827] tracking-tight hover:opacity-85 transition-opacity">
+      <span>Sofia</span>
     </a>
 
     <!-- Stepper Navigation -->
@@ -598,14 +598,14 @@
 
         // Save to localStorage
         try {
-          const existing = JSON.parse(localStorage.getItem('dansugc_orders') || '[]');
+          const existing = JSON.parse(localStorage.getItem('sofia_orders') || localStorage.getItem('dansugc_orders') || '[]');
           existing.unshift(finalizedOrder);
-          localStorage.setItem('dansugc_orders', JSON.stringify(existing));
-          localStorage.setItem('dansugc_last_finalized_order', JSON.stringify(finalizedOrder));
+          localStorage.setItem('sofia_orders', JSON.stringify(existing));
+          localStorage.setItem('sofia_last_finalized_order', JSON.stringify(finalizedOrder));
 
           // Send to each chosen creator's platform inbox
           finalizedOrder.creators.forEach(c => {
-            const key = `dansugc_creator_inbox_${c.name.toLowerCase()}`;
+            const key = `sofia_creator_inbox_${c.name.toLowerCase()}`;
             localStorage.setItem(key, JSON.stringify({
               orderId: orderId,
               creatorName: c.name,
