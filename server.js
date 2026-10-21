@@ -99,6 +99,9 @@ app.get('/api/health', (req, res) => {
 });
 
 // Serve frontend static files from root directory
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 app.use(express.static(__dirname));
 
 // Global Error Handler
