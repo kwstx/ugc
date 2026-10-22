@@ -98,11 +98,48 @@ app.get('/api/health', (req, res) => {
   }
 });
 
-// Serve frontend static files from root directory
+// Serve frontend static files from root directory with clean URL support
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
-app.use(express.static(__dirname));
+
+// Explicit routes for HTML pages ensuring clean URLs resolve and bundlers trace them
+const htmlPages = [
+  'library',
+  'pricing',
+  'creator_portal',
+  'review_order',
+  'track_order',
+  'why_choose_us',
+  'sideshift',
+  'sofia',
+  'bitcoin',
+  'documentation',
+  'features',
+  'source_creators',
+  'track_results',
+  'comparison',
+  'edit_brief'
+];
+
+htmlPages.forEach(page => {
+  app.get([`/${page}`, `/${page}.html`], (req, res) => {
+    res.sendFile(path.join(__dirname, `${page}.html`));
+  });
+});
+
+// Enable static serving with .html extension resolution
+app.use(express.static(__dirname, { extensions: ['html', 'htm'] }));
+
+// Dynamic fallback for any other .html page requested without extension
+app.get('/:page', (req, res, next) => {
+  const page = req.params.page;
+  const filePath = path.join(__dirname, `${page}.html`);
+  if (fs.existsSync(filePath)) {
+    return res.sendFile(filePath);
+  }
+  next();
+});
 
 // Global Error Handler
 app.use((err, req, res, next) => {
