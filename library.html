@@ -224,8 +224,8 @@
     <!-- ================= SEARCH RESULTS STATUS BAR ================= -->
     <div id="searchMetaBar" class="flex items-center justify-between my-3 text-[12.5px] text-[#4b5563]">
       <div class="flex items-center gap-2 flex-wrap">
-        <span id="resultsCountBadge" class="font-bold text-[#111827]">12 clips</span>
-        <span id="searchDescriptionText">available in library</span>
+        <span id="resultsCountBadge" class="font-bold text-[#111827]">No clips yet!</span>
+        <span id="searchDescriptionText"></span>
       </div>
       <button id="clearFilterBtn" onclick="clearAllFilters()" class="hidden text-[12px] font-semibold text-[#4f46e5] hover:underline cursor-pointer">
         Reset to all clips
@@ -238,15 +238,19 @@
     </div>
 
     <!-- ================= EMPTY RESULTS STATE ================= -->
-    <div id="noResultsState" class="hidden py-16 flex flex-col items-center justify-center text-center">
+    <div id="noResultsState" class="py-16 flex flex-col items-center justify-center text-center">
       <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 mb-3">
         <svg class="w-6 h-6 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9A2.25 2.25 0 0013.5 5.25h-9A2.25 2.25 0 002.25 7.5v9A2.25 2.25 0 004.5 18.75z"/>
         </svg>
       </div>
-      <h3 class="text-[15px] font-bold text-gray-800 mb-1">No matching clips found</h3>
-      <p class="text-[12.5px] text-gray-500 max-w-sm mb-4">We couldn't find any clips matching your exact search. Try another expression or check out all clips.</p>
-      <button onclick="clearAllFilters()" class="px-4 py-2 bg-black text-white rounded-full text-[12px] font-medium hover:bg-zinc-800 transition-colors cursor-pointer">
+      <h3 id="noResultsTitle" class="text-[17px] font-bold text-gray-900 mb-1">No clips yet!</h3>
+      <p id="noResultsDesc" class="text-[13px] text-gray-500 max-w-sm mb-4">Clips will appear here once creators upload them from the creator portal.</p>
+      <a href="creator_portal.html" id="creatorPortalCtaBtn" class="px-5 py-2.5 bg-black text-white rounded-full text-[12.5px] font-medium hover:bg-zinc-800 transition-colors cursor-pointer inline-flex items-center gap-1.5">
+        <span>Go to Creator Portal</span>
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+      </a>
+      <button id="clearFiltersBtnEmpty" onclick="clearAllFilters()" class="hidden px-4 py-2 bg-black text-white rounded-full text-[12px] font-medium hover:bg-zinc-800 transition-colors cursor-pointer">
         View all clips
       </button>
     </div>
@@ -310,164 +314,7 @@
 
   <!-- ================= CLIPS DATA & SIMILARITY SEARCH SCRIPT ================= -->
   <script>
-    const clipsData = [
-      {
-        id: 'clip-1',
-        title: 'Guy laughing uncontrollably at his phone',
-        creator: 'Alex M.',
-        handle: '@alex_ugc',
-        category: 'Productivity & Work',
-        emotion: 'Laughing',
-        tags: ['laughing', 'guy', 'phone', 'laughing at phone', 'funny', 'skits', 'amused', 'smile', 'happy'],
-        duration: '0:04',
-        price: 15.00,
-        thumbnail: 'assets/library/clip_1.png',
-        rating: '5.0 (42)'
-      },
-      {
-        id: 'clip-2',
-        title: 'Shocked mouth wide open disbelief reaction',
-        creator: 'Franci',
-        handle: '@franci_ugc',
-        category: 'Women\'s Health',
-        emotion: 'Shocked',
-        tags: ['shocked', 'disbelief', 'mouth open', 'reaction', 'surprised', 'viral', 'hook', 'omg', 'jaw drop'],
-        duration: '0:03',
-        price: 15.00,
-        thumbnail: 'assets/order/thumb_shocked.png',
-        rating: '4.9 (88)'
-      },
-      {
-        id: 'clip-3',
-        title: 'Emotional crying tears of relief reaction',
-        creator: 'Sarah T.',
-        handle: '@sarah_ugc',
-        category: 'Sleep & Wellness',
-        emotion: 'Crying',
-        tags: ['crying', 'emotional', 'tears', 'sad', 'touching', 'relief', 'reaction', 'female'],
-        duration: '0:05',
-        price: 15.00,
-        thumbnail: 'assets/book_creator/creator_crying.png',
-        rating: '5.0 (31)'
-      },
-      {
-        id: 'clip-4',
-        title: 'Girl laughing and pointing at phone screen',
-        creator: 'Emilia',
-        handle: '@emilia_ugc',
-        category: 'Nutrition & Food',
-        emotion: 'Laughing',
-        tags: ['laughing', 'girl', 'phone', 'pointing', 'funny', 'happy', 'screen', 'laughing at phone'],
-        duration: '0:04',
-        price: 15.00,
-        thumbnail: 'assets/library/clip_2.png',
-        rating: '4.9 (64)'
-      },
-      {
-        id: 'clip-5',
-        title: 'Mind blown head grab surprised expression',
-        creator: 'Kris',
-        handle: '@kris_creator',
-        category: 'Productivity & Work',
-        emotion: 'Surprised',
-        tags: ['mind blown', 'surprised', 'shocked', 'head grab', 'wow', 'disbelief', 'talking head'],
-        duration: '0:03',
-        price: 15.00,
-        thumbnail: 'assets/order/thumb_surprised.png',
-        rating: '4.8 (52)'
-      },
-      {
-        id: 'clip-6',
-        title: 'Talking head direct camera hook explanation',
-        creator: 'Andrea',
-        handle: '@andrea_ugc',
-        category: 'Health & Fitness',
-        emotion: 'Talking head',
-        tags: ['talking head', 'explanation', 'hook', 'speaking', 'direct camera', 'review', 'skits'],
-        duration: '0:07',
-        price: 15.00,
-        thumbnail: 'assets/book_creator/creator_tank.png',
-        rating: '5.0 (79)'
-      },
-      {
-        id: 'clip-7',
-        title: 'Couple funny banter and relationship reaction',
-        creator: 'Maya & Dan',
-        handle: '@maya_dan',
-        category: 'Relationships',
-        emotion: 'Couples',
-        tags: ['couples', 'skits', 'couple', 'banter', 'relationship', 'dating', 'funny', 'skit'],
-        duration: '0:06',
-        price: 15.00,
-        thumbnail: 'assets/library/clip_3.png',
-        rating: '4.9 (45)'
-      },
-      {
-        id: 'clip-8',
-        title: 'Excited happy celebration jumping with joy',
-        creator: 'Robert K.',
-        handle: '@robert_k',
-        category: 'Health & Fitness',
-        emotion: 'Happy',
-        tags: ['happy', 'excited', 'celebrate', 'joy', 'win', 'laughing', 'smile'],
-        duration: '0:04',
-        price: 15.00,
-        thumbnail: 'assets/order/thumb_happy.png',
-        rating: '5.0 (19)'
-      },
-      {
-        id: 'clip-9',
-        title: 'Sneaky curious peek looking over shoulder',
-        creator: 'Angelika',
-        handle: '@angelika_ugc',
-        category: 'Dating',
-        emotion: 'Skits',
-        tags: ['peek', 'skits', 'curious', 'looking', 'phone', 'sneaky', 'suspicious'],
-        duration: '0:04',
-        price: 15.00,
-        thumbnail: 'assets/book_creator/creator_peek.png',
-        rating: '4.9 (37)'
-      },
-      {
-        id: 'clip-10',
-        title: 'Gym workout routine & energy check',
-        creator: 'Marcus',
-        handle: '@marcus_fit',
-        category: 'Health & Fitness',
-        emotion: 'Talking head',
-        tags: ['gym', 'fitness', 'workout', 'health', 'body', 'energy', 'health & fitness'],
-        duration: '0:05',
-        price: 15.00,
-        thumbnail: 'assets/library/clip_4.png',
-        rating: '4.8 (26)'
-      },
-      {
-        id: 'clip-11',
-        title: 'Green screen product demo with gestures',
-        creator: 'Alex M.',
-        handle: '@alex_ugc',
-        category: 'Gut Health',
-        emotion: 'Talking head',
-        tags: ['greenscreen', 'green screen', 'product demo', 'pointing', 'review', 'demo', 'pointing at screen'],
-        duration: '0:06',
-        price: 15.00,
-        thumbnail: 'assets/order/thumb_greenscreen.png',
-        rating: '5.0 (61)'
-      },
-      {
-        id: 'clip-12',
-        title: 'App demo live mobile walkthrough reaction',
-        creator: 'Emilia',
-        handle: '@emilia_ugc',
-        category: 'Education & Study',
-        emotion: 'Talking head',
-        tags: ['app demo', 'mobile', 'phone', 'tech', 'walkthrough', 'talking head', 'skits'],
-        duration: '0:08',
-        price: 15.00,
-        thumbnail: 'assets/order/thumb_app_demo.png',
-        rating: '4.9 (43)'
-      }
-    ];
+    let clipsData = [];
 
     let currentSelectedCategory = 'All clips';
     let currentSearchQuery = '';
@@ -526,9 +373,28 @@
       if (items.length === 0) {
         grid.innerHTML = '';
         noResults.classList.remove('hidden');
-        countBadge.innerText = '0 clips';
-        descText.innerText = currentSearchQuery ? `found for "${currentSearchQuery}"` : 'found in this category';
-        resetBtn.classList.remove('hidden');
+        const titleEl = document.getElementById('noResultsTitle');
+        const descEl = document.getElementById('noResultsDesc');
+        const ctaBtn = document.getElementById('creatorPortalCtaBtn');
+        const clearBtnEmpty = document.getElementById('clearFiltersBtnEmpty');
+
+        if (!clipsData || clipsData.length === 0) {
+          countBadge.innerText = 'No clips yet!';
+          descText.innerText = '';
+          if (titleEl) titleEl.innerText = 'No clips yet!';
+          if (descEl) descEl.innerText = 'Clips will appear here once creators upload them from the creator portal.';
+          if (ctaBtn) ctaBtn.classList.remove('hidden');
+          if (clearBtnEmpty) clearBtnEmpty.classList.add('hidden');
+          resetBtn.classList.add('hidden');
+        } else {
+          countBadge.innerText = '0 clips';
+          descText.innerText = currentSearchQuery ? `found for "${currentSearchQuery}"` : 'found in this category';
+          if (titleEl) titleEl.innerText = 'No matching clips found';
+          if (descEl) descEl.innerText = "We couldn't find any clips matching your exact search. Try another expression or check out all clips.";
+          if (ctaBtn) ctaBtn.classList.add('hidden');
+          if (clearBtnEmpty) clearBtnEmpty.classList.remove('hidden');
+          resetBtn.classList.remove('hidden');
+        }
         return;
       }
 

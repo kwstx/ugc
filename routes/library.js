@@ -100,6 +100,66 @@ router.get('/clips', (req, res) => {
 });
 
 /**
+ * POST /api/library/clips
+ * Upload a creator clip into the public library from Creator Portal
+ */
+router.post('/clips', (req, res) => {
+  try {
+    const {
+      title,
+      creator,
+      handle,
+      category = 'All clips',
+      emotion = 'Reaction',
+      tags = [],
+      duration = '0:05',
+      price = 15.00,
+      thumbnail,
+      videoUrl,
+      previewUrl
+    } = req.body;
+
+    if (!title || !creator) {
+      return res.status(400).json({ success: false, error: 'Title and creator name are required.' });
+    }
+
+    const clipId = 'lib_clip_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+    const parsedTags = Array.isArray(tags) ? JSON.stringify(tags) : JSON.stringify([tags]);
+
+    db.prepare(`
+      INSERT INTO library_clips (
+        id, title, creator, handle, category, emotion, tags, duration, price,
+        thumbnail, video_url, preview_url, rating, views_count, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '5.0 (New)', 0, CURRENT_TIMESTAMP)
+    `).run(
+      clipId,
+      title,
+      creator,
+      handle || ('@' + creator.toLowerCase().replace(/\s+/g, '_')),
+      category,
+      emotion,
+      parsedTags,
+      duration,
+      parseFloat(price) || 15.00,
+      thumbnail || 'assets/order/thumb_shocked.png',
+      videoUrl || '',
+      previewUrl || videoUrl || ''
+    );
+
+    const newClip = db.prepare('SELECT * FROM library_clips WHERE id = ?').get(clipId);
+
+    res.json({
+      success: true,
+      message: 'Clip published to library successfully!',
+      clip: parseClip(newClip)
+    });
+  } catch (err) {
+    console.error('Error adding clip to library:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
  * GET /api/library/search
  * Intelligent search & Social Link Matcher (Instagram / TikTok hook parsing)
  */

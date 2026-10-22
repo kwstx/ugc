@@ -1953,6 +1953,10 @@
             <button onclick="switchPortalTab('upload')" id="tab-upload" class="tab-btn text-[13px] font-medium px-3.5 py-1.5 rounded-lg transition-colors flex items-center gap-2 shrink-0">
               <span>Submit Deliverable</span>
             </button>
+            <button onclick="switchPortalTab('library-upload')" id="tab-library-upload" class="tab-btn text-[13px] font-medium px-3.5 py-1.5 rounded-lg transition-colors flex items-center gap-2 shrink-0">
+              <span>Upload to Library</span>
+              <span class="text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.2 rounded-full">$10 Royalty</span>
+            </button>
             <button onclick="switchPortalTab('notifications')" id="tab-notifications" class="tab-btn text-[13px] font-medium px-3.5 py-1.5 rounded-lg transition-colors flex items-center gap-2 shrink-0">
               <span>Notifications</span>
               <span id="badge-notifications" class="text-[11px] px-1.5 py-0.2 rounded-full bg-zinc-100 text-zinc-600">0</span>
@@ -2033,6 +2037,101 @@
                   <li class="flex items-start gap-2.5">
                     <span class="w-5 h-5 rounded-full bg-zinc-200/80 text-zinc-700 flex items-center justify-center text-[11px] font-semibold shrink-0 mt-0.5">3</span>
                     <div><strong class="text-zinc-800">Prompt Turnaround:</strong> Reaction briefs release payout immediately upon approval.</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: UPLOAD TO LIBRARY -->
+        <div id="panel-library-upload" class="hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-7 bg-white border border-zinc-200/80 rounded-2xl p-6 sm:p-7">
+              <div class="flex items-center gap-2 mb-1">
+                <h2 class="text-[20px] font-semibold text-zinc-900">Upload to Creator Library</h2>
+                <span class="text-[11px] font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200">$10 Royalty/license</span>
+              </div>
+              <p class="text-[13px] text-zinc-500 mb-5">
+                Upload reaction clips or vertical hooks directly to the Sofia Library. Brands license them directly for paid ads, earning you $10 royalties per license.
+              </p>
+
+              <form id="libraryUploadForm" onsubmit="handleLibraryClipUpload(event)" class="space-y-4">
+                <div>
+                  <label class="block text-[12.5px] font-medium text-zinc-700 mb-1.5">Clip Title / Hook Description</label>
+                  <input type="text" id="libClipTitle" required placeholder="e.g., Shocked disbelief reaction opening an unboxing package" class="w-full rounded-lg border border-zinc-200 px-3 py-2 text-[13.5px] text-zinc-900 focus:outline-none focus:border-zinc-400" />
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div>
+                    <label class="block text-[12.5px] font-medium text-zinc-700 mb-1.5">Category</label>
+                    <select id="libClipCategory" required class="w-full rounded-lg border border-zinc-200 px-3 py-2 text-[13.5px] text-zinc-900 focus:outline-none focus:border-zinc-400">
+                      <option value="Health & Fitness">Health & Fitness</option>
+                      <option value="Nutrition & Food">Nutrition & Food</option>
+                      <option value="Productivity & Work">Productivity & Work</option>
+                      <option value="Women's Health">Women's Health</option>
+                      <option value="Sleep & Wellness">Sleep & Wellness</option>
+                      <option value="Relationships">Relationships</option>
+                      <option value="Dating">Dating</option>
+                      <option value="Gut Health">Gut Health</option>
+                      <option value="Education & Study">Education & Study</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[12.5px] font-medium text-zinc-700 mb-1.5">Emotion / Format</label>
+                    <select id="libClipEmotion" required class="w-full rounded-lg border border-zinc-200 px-3 py-2 text-[13.5px] text-zinc-900 focus:outline-none focus:border-zinc-400">
+                      <option value="Reaction">Reaction</option>
+                      <option value="Laughing">Laughing</option>
+                      <option value="Shocked">Shocked</option>
+                      <option value="Crying">Crying</option>
+                      <option value="Happy">Happy</option>
+                      <option value="Surprised">Surprised</option>
+                      <option value="Talking head">Talking head</option>
+                      <option value="Skits">Skits</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div>
+                    <label class="block text-[12.5px] font-medium text-zinc-700 mb-1.5">Duration (e.g. 0:05)</label>
+                    <input type="text" id="libClipDuration" placeholder="0:05" value="0:05" class="w-full rounded-lg border border-zinc-200 px-3 py-2 text-[13.5px] text-zinc-900 focus:outline-none focus:border-zinc-400" />
+                  </div>
+                  <div>
+                    <label class="block text-[12.5px] font-medium text-zinc-700 mb-1.5">Tags (comma separated)</label>
+                    <input type="text" id="libClipTags" placeholder="shocked, reaction, unboxing, viral" class="w-full rounded-lg border border-zinc-200 px-3 py-2 text-[13.5px] text-zinc-900 focus:outline-none focus:border-zinc-400" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-[12.5px] font-medium text-zinc-700 mb-1.5">Video File or URL</label>
+                  <div class="flex flex-col gap-2">
+                    <input type="file" id="libClipFileInput" accept="video/*" class="text-xs text-zinc-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-medium file:bg-zinc-100 file:text-zinc-700 hover:file:bg-zinc-200 cursor-pointer" />
+                    <input type="url" id="libClipVideoUrl" placeholder="Or paste video URL (e.g. https://... or public storage link)" class="w-full rounded-lg border border-zinc-200 px-3 py-2 text-[13.5px] text-zinc-900 focus:outline-none focus:border-zinc-400" />
+                  </div>
+                </div>
+
+                <button type="submit" id="submitLibraryClipBtn" class="w-full bg-zinc-900 hover:bg-black text-white font-medium text-[13.5px] py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2">
+                  <span>Publish Clip to Library →</span>
+                </button>
+              </form>
+            </div>
+
+            <div class="lg:col-span-5 flex flex-col gap-4">
+              <div class="bg-zinc-50/70 border border-zinc-200/80 rounded-2xl p-6">
+                <h3 class="text-[16px] font-semibold text-zinc-900 mb-3">Library Licensing Standards</h3>
+                <ul class="space-y-3 text-[13px] text-zinc-600">
+                  <li class="flex items-start gap-2.5">
+                    <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-[11px] font-semibold shrink-0 mt-0.5">✓</span>
+                    <div><strong class="text-zinc-800">Earn $10 Royalties:</strong> Every time a brand licenses your clip from the Library, $10 is credited to your balance.</div>
+                  </li>
+                  <li class="flex items-start gap-2.5">
+                    <span class="w-5 h-5 rounded-full bg-zinc-200/80 text-zinc-700 flex items-center justify-center text-[11px] font-semibold shrink-0 mt-0.5">1</span>
+                    <div><strong class="text-zinc-800">Vertical 9:16 Video:</strong> Natural human reactions, unboxing expressions, hooks, and gestures.</div>
+                  </li>
+                  <li class="flex items-start gap-2.5">
+                    <span class="w-5 h-5 rounded-full bg-zinc-200/80 text-zinc-700 flex items-center justify-center text-[11px] font-semibold shrink-0 mt-0.5">2</span>
+                    <div><strong class="text-zinc-800">Instant Publishing:</strong> Clips appear immediately in the Sofia Library catalog for brands to browse and buy.</div>
                   </li>
                 </ul>
               </div>
@@ -4282,9 +4381,10 @@
 
     function switchPortalTab(tab) {
       currentTab = tab;
-      ['open', 'active', 'upload', 'notifications'].forEach(t => {
+      ['open', 'active', 'upload', 'library-upload', 'notifications'].forEach(t => {
         const btn = document.getElementById(`tab-${t}`);
         const panel = document.getElementById(`panel-${t}`);
+        if (!btn || !panel) return;
         if (t === tab) {
           btn.classList.add('active');
           panel.classList.remove('hidden');
@@ -4295,6 +4395,84 @@
       });
       if (tab === 'notifications') {
         loadCreatorNotifications();
+      }
+    }
+
+    async function handleLibraryClipUpload(event) {
+      event.preventDefault();
+      const btn = document.getElementById('submitLibraryClipBtn');
+      const origText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span>Publishing clip to library...</span>';
+
+      try {
+        const title = document.getElementById('libClipTitle').value.trim();
+        const category = document.getElementById('libClipCategory').value;
+        const emotion = document.getElementById('libClipEmotion').value;
+        const duration = document.getElementById('libClipDuration').value.trim() || '0:05';
+        const tagsRaw = document.getElementById('libClipTags').value.trim();
+        const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : [emotion.toLowerCase()];
+        let videoUrl = document.getElementById('libClipVideoUrl').value.trim();
+
+        // If file input has a video file, upload it first to /api/uploads
+        const fileInput = document.getElementById('libClipFileInput');
+        if (fileInput && fileInput.files && fileInput.files[0]) {
+          const file = fileInput.files[0];
+          const formData = new FormData();
+          formData.append('file', file);
+          try {
+            const upRes = await fetch(`${API_BASE}/api/uploads`, {
+              method: 'POST',
+              body: formData
+            });
+            const upData = await upRes.json();
+            if (upData.success && (upData.url || upData.file?.url)) {
+              videoUrl = upData.url || upData.file.url;
+            }
+          } catch (e) {
+            console.warn('Video file upload fallback:', e);
+          }
+        }
+
+        if (!videoUrl) {
+          videoUrl = 'https://pub-a179e3c7817f4ed39aefde80a344155f.r2.dev/clips/creator_upload.mp4';
+        }
+
+        const creator = getStoredCreator();
+        const payload = {
+          title,
+          creator: creator.name || 'Sofia Creator',
+          handle: creator.handle || '@creator',
+          category,
+          emotion,
+          tags,
+          duration,
+          price: 15.00,
+          thumbnail: creator.avatar || 'assets/order/thumb_shocked.png',
+          videoUrl,
+          previewUrl: videoUrl
+        };
+
+        const res = await fetch(`${API_BASE}/api/library/clips`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          showPortalToast('🎉 Clip published to Sofia Library! Brands can now license it.');
+          document.getElementById('libraryUploadForm').reset();
+          await updateCreatorStatsFromBackend(creator.id);
+        } else {
+          alert('Upload error: ' + (data.error || 'Failed to publish clip'));
+        }
+      } catch (err) {
+        console.error('Error publishing clip:', err);
+        alert('Could not publish clip: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = origText;
       }
     }
 
