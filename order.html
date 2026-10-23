@@ -262,41 +262,42 @@
   </main>
 
   <!-- Custom Order Page View (appears on 'Request custom' click) -->
-  <div id="custom-order-view" class="hidden w-full max-w-[1040px] mx-auto px-6 sm:px-10 pt-9 pb-20">
-    
-    <!-- Top Back Link -->
-    <div class="mb-6">
-      <a href="order.html" onclick="backToFormats(event)" class="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#4f46e5] hover:text-[#4338ca] transition-colors cursor-pointer">
-        <span class="text-[14px] leading-none">&larr;</span>
-        <span>Back to formats</span>
-      </a>
-    </div>
-
-    <!-- Page Title & Subtitle -->
-    <div class="mb-8">
-      <h1 class="hero-heading text-[32px] sm:text-[35px] text-[#18181b] mb-1.5">
-        Want something custom?
-      </h1>
-      <p class="text-[13.5px] text-[#52525b] font-normal">
-        Post an open project and let creators join. You only pay for videos you approve.
-      </p>
-    </div>
-
-    <!-- Main Grid: Form (Left) & Summary Card (Right) -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+  <div id="custom-order-view" class="hidden w-full overflow-x-hidden block">
+    <div id="custom-order-desktop-canvas" class="w-[1040px] min-w-[1040px] max-w-[1040px] px-10 pt-9 pb-20 origin-top-left mx-auto">
       
-      <!-- Left Column: Form Fields -->
-      <div class="lg:col-span-7 flex flex-col gap-5">
+      <!-- Top Back Link -->
+      <div class="mb-6">
+        <a href="order.html" onclick="backToFormats(event)" class="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#4f46e5] hover:text-[#4338ca] transition-colors cursor-pointer">
+          <span class="text-[14px] leading-none">&larr;</span>
+          <span>Back to formats</span>
+        </a>
+      </div>
+
+      <!-- Page Title & Subtitle -->
+      <div class="mb-8">
+        <h1 class="hero-heading text-[35px] text-[#18181b] mb-1.5">
+          Want something custom?
+        </h1>
+        <p class="text-[13.5px] text-[#52525b] font-normal">
+          Post an open project and let creators join. You only pay for videos you approve.
+        </p>
+      </div>
+
+      <!-- Main Grid: Form (Left) & Summary Card (Right) -->
+      <div class="grid grid-cols-12 gap-10 items-start">
         
-        <!-- Field 1: What kind of video do you need? -->
-        <div>
-          <label class="block text-[13px] font-semibold text-[#18181b] mb-2">
-            What kind of video do you need?
-          </label>
+        <!-- Left Column: Form Fields -->
+        <div class="col-span-7 flex flex-col gap-5">
           
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-            <!-- Option 1: Raw Video / Reaction -->
-            <div id="card-raw" onclick="selectCustomVideoType('raw')" class="cursor-pointer rounded-[12px] p-4 border-[1.5px] border-[#5046e5] bg-[#fbfbfe] flex items-center gap-3 transition-all">
+          <!-- Field 1: What kind of video do you need? -->
+          <div>
+            <label class="block text-[13px] font-semibold text-[#18181b] mb-2">
+              What kind of video do you need?
+            </label>
+            
+            <div class="grid grid-cols-2 gap-3.5">
+              <!-- Option 1: Raw Video / Reaction -->
+              <div id="card-raw" onclick="selectCustomVideoType('raw')" class="cursor-pointer rounded-[12px] p-4 border-[1.5px] border-[#5046e5] bg-[#fbfbfe] flex items-center gap-3 transition-all">
               <div id="radio-raw" class="w-[18px] h-[18px] rounded-full border-[1.5px] border-[#5046e5] flex items-center justify-center shrink-0">
                 <div class="w-[8px] h-[8px] rounded-full bg-[#5046e5]"></div>
               </div>
@@ -462,8 +463,8 @@
       </div>
 
       <!-- Right Column: How open orders work card -->
-      <div class="lg:col-span-5 w-full max-w-[370px]">
-        <div class="bg-[#f9fafb] rounded-[20px] p-6 sm:p-7 border border-[#f1f1f4]">
+      <div class="col-span-5 w-full max-w-[370px]">
+        <div class="bg-[#f9fafb] rounded-[20px] p-7 border border-[#f1f1f4]">
           
           <!-- Card Title -->
           <h2 class="text-[16px] font-bold text-[#18181b] mb-4 tracking-[-0.01em]">
@@ -523,6 +524,7 @@
     </div>
 
   </div>
+</div>
 
   <script>
     let currentSelection = 'reaction';
@@ -605,12 +607,39 @@
       }
     });
 
+    function scaleCustomOrderView() {
+      const wrapper = document.getElementById('custom-order-view');
+      const canvas = document.getElementById('custom-order-desktop-canvas');
+      if (!wrapper || !canvas || wrapper.classList.contains('hidden')) return;
+
+      const baseWidth = 1040;
+      const clientWidth = document.documentElement.clientWidth || window.innerWidth;
+
+      if (clientWidth < baseWidth) {
+        const scale = clientWidth / baseWidth;
+        canvas.style.transform = `scale(${scale})`;
+        canvas.style.transformOrigin = 'top left';
+        canvas.style.margin = '0';
+        wrapper.style.height = `${canvas.offsetHeight * scale}px`;
+        wrapper.style.width = '100vw';
+        wrapper.style.overflow = 'hidden';
+      } else {
+        canvas.style.transform = 'none';
+        canvas.style.transformOrigin = 'top center';
+        canvas.style.margin = '0 auto';
+        wrapper.style.height = 'auto';
+        wrapper.style.width = '100%';
+        wrapper.style.overflow = 'visible';
+      }
+    }
+
     // Toggle to Custom Order View
     function openCustomView(e) {
       if (e) e.preventDefault();
       document.getElementById('site-header').classList.add('hidden');
       document.getElementById('formats-main').classList.add('hidden');
       document.getElementById('custom-order-view').classList.remove('hidden');
+      scaleCustomOrderView();
       window.scrollTo(0, 0);
       try {
         history.pushState({ view: 'custom' }, '', '#custom');
@@ -628,6 +657,9 @@
         history.pushState({ view: 'formats' }, '', window.location.pathname.split('#')[0]);
       } catch (err) {}
     }
+
+    window.addEventListener('resize', scaleCustomOrderView);
+    window.addEventListener('orientationchange', scaleCustomOrderView);
 
     window.addEventListener('popstate', function() {
       if (window.location.hash === '#custom') {

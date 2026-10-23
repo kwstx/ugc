@@ -1056,66 +1056,67 @@
   <section id="custom-orders" class="w-full bg-white pt-2 pb-24 sm:pb-32 px-4 sm:px-6 md:px-8 flex flex-col items-center select-none overflow-hidden scroll-mt-6">
     <div id="bookCreatorSection"></div>
     
-    <!-- Outer Card Container -->
-    <div class="w-full max-w-[960px] bg-[#f6f5f3] rounded-[24px] sm:rounded-[28px] pt-8 sm:pt-9 px-6 sm:px-9 md:px-10 pb-0 flex flex-col overflow-hidden relative">
-      
-      <!-- Top Content: Heading, Bullet List, CTA Button -->
-      <div class="flex flex-col items-start w-full">
+    <!-- Outer Scaler Wrapper for Mobile & Desktop -->
+    <div id="custom-orders-scale-wrapper" class="w-full flex justify-center items-start overflow-hidden">
+      <div id="custom-orders-card" class="w-[960px] min-w-[960px] max-w-[960px] bg-[#f6f5f3] rounded-[28px] pt-9 px-10 pb-0 flex flex-col overflow-hidden relative origin-top">
         
-        <!-- Main Heading -->
-        <h2 class="font-serif text-[28px] sm:text-[36px] md:text-[42px] font-normal text-[#111111] tracking-[-0.028em] leading-tight mb-5 sm:mb-6">
-          Can’t find the exact face? Book a creator.
-        </h2>
-
-        <!-- Bullet List (3 Items with Purple-Blue Checkmarks) -->
-        <div class="flex flex-col gap-2.5 sm:gap-2.5 mb-6 sm:mb-7">
+        <!-- Top Content: Heading, Bullet List, CTA Button -->
+        <div class="flex flex-col items-start w-full">
           
-          <div class="flex items-center gap-2.5">
-            <svg class="w-3.5 h-3.5 text-[#5b5af7] shrink-0" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 7.5L5.5 11L12 3.5"/>
-            </svg>
-            <span class="text-[#525252] text-[13.5px] sm:text-[14.5px] font-normal tracking-[-0.01em]">
-              40+ vetted creators, any niche, any language
-            </span>
+          <!-- Main Heading -->
+          <h2 class="font-serif text-[42px] font-normal text-[#111111] tracking-[-0.028em] leading-tight mb-6">
+            Can’t find the exact face? Book a creator.
+          </h2>
+
+          <!-- Bullet List (3 Items with Purple-Blue Checkmarks) -->
+          <div class="flex flex-col gap-2.5 mb-7">
+            
+            <div class="flex items-center gap-2.5">
+              <svg class="w-3.5 h-3.5 text-[#5b5af7] shrink-0" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 7.5L5.5 11L12 3.5"/>
+              </svg>
+              <span class="text-[#525252] text-[14.5px] font-normal tracking-[-0.01em]">
+                40+ vetted creators, any niche, any language
+              </span>
+            </div>
+
+            <div class="flex items-center gap-2.5">
+              <svg class="w-3.5 h-3.5 text-[#5b5af7] shrink-0" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 7.5L5.5 11L12 3.5"/>
+              </svg>
+              <span class="text-[#525252] text-[14.5px] font-normal tracking-[-0.01em]">
+                Most orders delivered in under 48 hours
+              </span>
+            </div>
+
+            <div class="flex items-center gap-2.5">
+              <svg class="w-3.5 h-3.5 text-[#5b5af7] shrink-0" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 7.5L5.5 11L12 3.5"/>
+              </svg>
+              <span class="text-[#525252] text-[14.5px] font-normal tracking-[-0.01em]">
+                Full commercial rights, exclusivity on request
+              </span>
+            </div>
+
           </div>
 
-          <div class="flex items-center gap-2.5">
-            <svg class="w-3.5 h-3.5 text-[#5b5af7] shrink-0" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 7.5L5.5 11L12 3.5"/>
-            </svg>
-            <span class="text-[#525252] text-[13.5px] sm:text-[14.5px] font-normal tracking-[-0.01em]">
-              Most orders delivered in under 48 hours
-            </span>
-          </div>
-
-          <div class="flex items-center gap-2.5">
-            <svg class="w-3.5 h-3.5 text-[#5b5af7] shrink-0" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 7.5L5.5 11L12 3.5"/>
-            </svg>
-            <span class="text-[#525252] text-[13.5px] sm:text-[14.5px] font-normal tracking-[-0.01em]">
-              Full commercial rights, exclusivity on request
+          <!-- CTA Button & Pricing Note -->
+          <div class="flex flex-nowrap items-center gap-5 mb-9">
+            <button onclick="window.location.href='order.html'" class="bg-[#141312] hover:bg-black text-white text-[14px] font-bold px-6 h-[44px] rounded-full flex items-center gap-2.5 shadow-sm hover:shadow active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer tracking-[-0.01em]">
+              <span>Start a custom order</span>
+              <svg class="w-3.5 h-3.5 text-white" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 7H13M13 7L8 2M13 7L8 12"/>
+              </svg>
+            </button>
+            <span class="text-[#7c7772] text-[13.5px] font-normal tracking-[-0.01em] whitespace-nowrap">
+              from $25 per video · $250 minimum
             </span>
           </div>
 
         </div>
 
-        <!-- CTA Button & Pricing Note -->
-        <div class="flex flex-wrap items-center gap-4 sm:gap-5 mb-8 sm:mb-9">
-          <button onclick="window.location.href='order.html'" class="bg-[#141312] hover:bg-black text-white text-[13.5px] sm:text-[14px] font-bold px-5 sm:px-6 h-[44px] rounded-full flex items-center gap-2.5 shadow-sm hover:shadow active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer tracking-[-0.01em]">
-            <span>Start a custom order</span>
-            <svg class="w-3.5 h-3.5 text-white" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M1 7H13M13 7L8 2M13 7L8 12"/>
-            </svg>
-          </button>
-          <span class="text-[#7c7772] text-[13px] sm:text-[13.5px] font-normal tracking-[-0.01em]">
-            from $25 per video · $250 minimum
-          </span>
-        </div>
-
-      </div>
-
-      <!-- Visual Showcase: 3-Column Creator Video Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full items-start relative">
+        <!-- Visual Showcase: 3-Column Creator Video Grid -->
+        <div class="grid grid-cols-3 gap-3 w-full items-start relative">
         
         <!-- Column 1 -->
         <div class="flex flex-col gap-3 w-full">
@@ -1282,7 +1283,44 @@
 
       </div>
 
+      </div>
     </div>
+
+    <script>
+      function scaleCustomOrdersCard() {
+        const wrapper = document.getElementById('custom-orders-scale-wrapper');
+        const card = document.getElementById('custom-orders-card');
+        if (!wrapper || !card) return;
+
+        const baseWidth = 960;
+        const clientWidth = document.documentElement.clientWidth || window.innerWidth;
+        const availableWidth = Math.min(baseWidth, clientWidth - 24);
+
+        if (availableWidth < baseWidth) {
+          const scale = availableWidth / baseWidth;
+          card.style.transform = `scale(${scale})`;
+          card.style.transformOrigin = 'top center';
+          wrapper.style.height = `${card.offsetHeight * scale}px`;
+          wrapper.style.overflow = 'hidden';
+        } else {
+          card.style.transform = 'none';
+          card.style.transformOrigin = 'top center';
+          wrapper.style.height = 'auto';
+          wrapper.style.overflow = 'visible';
+        }
+      }
+
+      scaleCustomOrdersCard();
+      window.addEventListener('resize', scaleCustomOrdersCard);
+      window.addEventListener('orientationchange', scaleCustomOrdersCard);
+      document.addEventListener('DOMContentLoaded', scaleCustomOrdersCard);
+      window.addEventListener('load', scaleCustomOrdersCard);
+
+      if (window.ResizeObserver) {
+        const cardEl = document.getElementById('custom-orders-card');
+        if (cardEl) new ResizeObserver(scaleCustomOrdersCard).observe(cardEl);
+      }
+    </script>
 
   </section>
 
