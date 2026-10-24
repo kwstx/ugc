@@ -105,6 +105,8 @@ app.get('/', (req, res) => {
 
 // Explicit routes for HTML pages ensuring clean URLs resolve and bundlers trace them
 const htmlPages = [
+  'order',
+  'custom_order',
   'library',
   'pricing',
   'creator_portal',
