@@ -413,6 +413,35 @@ if (!creatorCols.includes('email')) {
   db.exec("ALTER TABLE creators ADD COLUMN email TEXT;");
 }
 
+// Seed default creators if empty or missing specialists
+try {
+  const insertCreatorStmt = db.prepare(`
+    INSERT OR IGNORE INTO creators (
+      id, name, handle, avatar, status, rate, formats, rating, completed_orders,
+      country, country_code, languages, gender, creator_type, bio
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `);
+
+  const initialCreators = [
+    ['kris', 'Kris', '@kris_creator', 'assets/creators_page/kris.png', 'active', 30.00, JSON.stringify(['reaction', 'full_ugc']), '5.0 (28)', 14, 'Latvia', 'LV', 'English, Latvian', 'male', 'standard', 'High energy relatable tech & lifestyle creator'],
+    ['angelika', 'Angelika', '@angelika_ugc', 'assets/creators_page/angelika.png', 'active', 35.00, JSON.stringify(['reaction', 'full_ugc']), '4.9 (42)', 22, 'Romania', 'RO', 'English, Romanian', 'female', 'exclusive', 'Beauty, lifestyle & viral hook reactions'],
+    ['franci', 'Franci', '@franci_ugc', 'assets/creators_page/franci.png', 'active', 35.00, JSON.stringify(['reaction', 'full_ugc']), '5.0 (65)', 31, 'Latvia', 'LV', 'English', 'female', 'viral', 'Viral reaction specialist with 10M+ views'],
+    ['emilia', 'Emilia', '@emilia_ugc', 'assets/creators_page/emilia.png', 'active', 30.00, JSON.stringify(['reaction', 'full_ugc']), '4.8 (19)', 9, 'Poland', 'PL', 'English, Latvian, Polish', 'female', 'standard', 'Authentic student & Gen-Z product demos'],
+    ['andrea', 'Andrea', '@andrea_ugc', 'assets/creators_page/andrea.png', 'active', 40.00, JSON.stringify(['reaction', 'full_ugc']), '5.0 (31)', 18, 'Austria', 'AT', 'English, Romanian, German', 'female', 'exclusive', 'Fashion, fitness and luxury UGC producer'],
+    ['creator_1', 'Sofia', '@sofia.ugc', 'avatar_1.png', 'active', 30.00, JSON.stringify(['reaction', 'full_ugc']), '5.0 (25)', 12, 'United States', 'US', 'English', 'female', 'exclusive', 'App walkthroughs & social proof'],
+    ['creator_2', 'Maya', '@maya_creates', 'avatar_2.png', 'active', 30.00, JSON.stringify(['reaction']), '5.0 (20)', 15, 'United States', 'US', 'English', 'female', 'viral', 'Dating & lifestyle reaction hooks'],
+    ['creator_3', 'Robert', '@robert_visuals', 'avatar_3.png', 'active', 50.00, JSON.stringify(['full_ugc']), '5.0 (35)', 20, 'United Kingdom', 'GB', 'English', 'male', 'exclusive', 'Professional studio with 4K setup and high conversion track record.'],
+    ['creator_4', 'Sarah', '@sarah_lifestyle', 'avatar_full.png', 'active', 30.00, JSON.stringify(['full_ugc']), '4.9 (18)', 11, 'Canada', 'CA', 'English', 'female', 'standard', 'Wellness & daily routine testimonials'],
+    ['creator_5', 'Franci', '@franci_reactions', 'assets/creators_page/franci.png', 'active', 35.00, JSON.stringify(['reaction']), '5.0 (50)', 28, 'Latvia', 'LV', 'English', 'female', 'viral', 'Ready to shoot reaction clips and curiosity hooks']
+  ];
+
+  for (const c of initialCreators) {
+    insertCreatorStmt.run(...c);
+  }
+} catch (e) {
+  console.warn('Creators seed note:', e.message);
+}
+
 // Ensure any legacy fake clips are cleared from library
 try {
   db.prepare("DELETE FROM library_favorites WHERE clip_id LIKE 'clip-%'").run();

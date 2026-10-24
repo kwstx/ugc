@@ -93,106 +93,128 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+
+    @media (max-width: 640px) {
+      .card-frame {
+        border-radius: 16px;
+      }
+      .card-frame.unselected {
+        padding: 3px;
+      }
+      .card-frame.selected {
+        padding: 2px;
+      }
+      .plus-btn {
+        width: 22px;
+        height: 22px;
+        font-size: 14px;
+        top: 5px;
+        right: 5px;
+      }
+    }
   </style>
 </head>
 <body class="bg-white text-[#18181b] min-h-screen flex flex-col select-none relative overflow-x-hidden">
 
   <!-- Top Header / Navigation -->
-  <header class="w-full px-6 sm:px-10 h-[58px] flex items-center justify-between">
+  <header class="w-full px-3.5 sm:px-10 h-[56px] sm:h-[58px] flex items-center justify-between">
     <!-- Brand Logo -->
-    <a href="index.html" class="flex items-center text-[17px] font-bold text-[#111827] tracking-tight hover:opacity-85 transition-opacity">
+    <a href="index.html" class="flex items-center text-[16px] sm:text-[17px] font-bold text-[#111827] tracking-tight hover:opacity-85 transition-opacity shrink-0">
       <span>Sofia</span>
     </a>
 
     <!-- Stepper Navigation -->
-    <nav class="flex items-center gap-6 sm:gap-7 text-[12.5px]">
+    <nav class="flex items-center gap-2 sm:gap-7 text-[12px] sm:text-[12.5px]">
       <!-- Step 1: Format (Completed) -->
-      <a id="header-format-nav" href="order.html" class="flex items-center gap-2 text-[#52525b] hover:text-black transition-colors cursor-pointer">
-        <span class="w-[21px] h-[21px] rounded-full bg-[#f1f2f4] flex items-center justify-center text-[#52525b]">
-          <svg class="w-3 h-3 text-[#4b5563]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <a id="header-format-nav" href="order.html" class="flex items-center gap-1.5 sm:gap-2 text-[#52525b] hover:text-black transition-colors cursor-pointer shrink-0">
+        <span class="w-[20px] h-[20px] sm:w-[21px] sm:h-[21px] rounded-full bg-[#f1f2f4] flex items-center justify-center text-[#52525b] shrink-0">
+          <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#4b5563]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
           </svg>
         </span>
-        <span class="font-normal text-[12.5px]">Format</span>
+        <span class="font-normal text-[11.5px] sm:text-[12.5px]">Format</span>
       </a>
 
       <!-- Step 2: Creators (Active) -->
-      <div class="flex items-center gap-2 text-[#5b5af7] font-semibold cursor-default">
-        <span class="w-[21px] h-[21px] rounded-full bg-[#5b5af7] text-white flex items-center justify-center text-[11.5px] font-bold">2</span>
-        <span class="text-[12.5px]">Creators</span>
+      <div class="flex items-center gap-1.5 sm:gap-2 text-[#5b5af7] font-semibold cursor-default shrink-0">
+        <span class="w-[20px] h-[20px] sm:w-[21px] sm:h-[21px] rounded-full bg-[#5b5af7] text-white flex items-center justify-center text-[11px] sm:text-[11.5px] font-bold shrink-0">2</span>
+        <span class="text-[11.5px] sm:text-[12.5px]">Creators</span>
       </div>
 
       <!-- Step 3: Brief & order (Upcoming) -->
-      <a href="brief.html" class="flex items-center gap-2 text-[#9ca3af] hover:text-[#18181b] font-normal transition-colors cursor-pointer">
-        <span class="w-[21px] h-[21px] rounded-full bg-[#f3f4f6] text-[#9ca3af] flex items-center justify-center text-[11.5px] font-normal">3</span>
-        <span class="text-[12.5px]">Brief & order</span>
+      <a href="brief.html" class="flex items-center gap-1.5 sm:gap-2 text-[#9ca3af] hover:text-[#18181b] font-normal transition-colors cursor-pointer shrink-0">
+        <span class="w-[20px] h-[20px] sm:w-[21px] sm:h-[21px] rounded-full bg-[#f3f4f6] text-[#9ca3af] flex items-center justify-center text-[11px] sm:text-[11.5px] font-normal shrink-0">3</span>
+        <span class="hidden sm:inline text-[12.5px]">Brief & order</span>
+        <span class="sm:hidden text-[11.5px]">Brief</span>
       </a>
     </nav>
 
     <!-- Save & Exit Button -->
-    <a href="index.html" class="text-[12.5px] font-medium text-[#4b5563] hover:text-black transition-colors">
+    <a href="index.html" class="text-[11.5px] sm:text-[12.5px] font-medium text-[#4b5563] hover:text-black transition-colors shrink-0 whitespace-nowrap">
       Save & exit
     </a>
   </header>
 
   <!-- Container for standard full width content alignment (774px canvas matching reference) -->
-  <div class="w-full max-w-[774px] mx-auto px-4 pt-3 flex-1 flex flex-col">
+  <div class="w-full max-w-[774px] mx-auto px-3.5 sm:px-4 pt-2 sm:pt-3 pb-24 sm:pb-12 flex-1 flex flex-col">
 
     <!-- Title and Format Badge Row -->
-    <div class="flex items-start justify-between mt-2 mb-4">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0 mt-1 sm:mt-2 mb-3.5 sm:mb-4">
       <div>
-        <h1 class="text-[34px] sm:text-[38px] font-normal text-[#111111] font-serif-title">
+        <h1 class="text-[28px] sm:text-[38px] font-normal text-[#111111] font-serif-title leading-[1.12]">
           Find your creators
         </h1>
-        <p class="text-[12.5px] text-[#716f6a] font-normal mt-1.5">
+        <p class="text-[12px] sm:text-[12.5px] text-[#716f6a] font-normal mt-1 sm:mt-1.5">
           Great videos start with the right people.
         </p>
       </div>
 
       <!-- Format Badge with fieldset/legend style border cut-out matching reference exactly -->
-      <a id="selected-format-btn" href="order.html" class="relative inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-[9px] border border-[#d5d2cb] bg-white hover:border-[#b8b5ac] transition-colors mt-1 shadow-[0_1px_2px_rgba(0,0,0,0.02)] cursor-pointer">
-        <span class="absolute -top-2 left-1/2 -translate-x-1/2 bg-white px-1.5 text-[10.5px] text-[#716f6a] font-normal whitespace-nowrap leading-none select-none">
-          Selected format
-        </span>
-        <span id="selected-format-display" class="text-[14px] text-[#18181b] font-normal leading-normal">Reaction Video</span>
-        <svg class="w-3.5 h-3.5 text-[#18181b] stroke-[1.6]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M13.5 3.5l3 3L6 17H3v-3L13.5 3.5z"/>
-          <line x1="3" y1="18.5" x2="10.5" y2="18.5"/>
-        </svg>
-      </a>
+      <div class="self-start sm:self-auto pt-1 sm:pt-0">
+        <a id="selected-format-btn" href="order.html" class="relative inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 rounded-[9px] border border-[#d5d2cb] bg-white hover:border-[#b8b5ac] transition-colors shadow-[0_1px_2px_rgba(0,0,0,0.02)] cursor-pointer">
+          <span class="absolute -top-2 left-1/2 -translate-x-1/2 bg-white px-1.5 text-[10px] sm:text-[10.5px] text-[#716f6a] font-normal whitespace-nowrap leading-none select-none">
+            Selected format
+          </span>
+          <span id="selected-format-display" class="text-[13px] sm:text-[14px] text-[#18181b] font-normal leading-normal">Reaction Video</span>
+          <svg class="w-3.5 h-3.5 text-[#18181b] stroke-[1.6] shrink-0" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13.5 3.5l3 3L6 17H3v-3L13.5 3.5z"/>
+            <line x1="3" y1="18.5" x2="10.5" y2="18.5"/>
+          </svg>
+        </a>
+      </div>
     </div>
 
     <!-- Category Tabs Row (Clickable Buttons) -->
-    <div class="flex items-center gap-2 pt-3 pb-3 flex-wrap">
+    <div class="flex items-center gap-1.5 sm:gap-2 pt-2 sm:pt-3 pb-2 sm:pb-3 overflow-x-auto no-scrollbar sm:flex-wrap">
       <!-- Tab 1: all (Active) -->
-      <button id="tab-all" onclick="selectTab('all', event)" type="button" class="tab-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[13px] font-medium bg-[#141923] text-white border border-[#141923] shadow-xs cursor-pointer transition-all">
+      <button id="tab-all" onclick="selectTab('all', event)" type="button" class="tab-btn inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-full text-[12px] sm:text-[13px] font-medium bg-[#141923] text-white border border-[#141923] shadow-xs cursor-pointer transition-all shrink-0">
         <span>all</span>
-        <span id="tab-count-all" class="tab-count text-[11px] font-semibold px-2 py-0.5 rounded-full bg-white/20 text-white leading-none">0</span>
+        <span id="tab-count-all" class="tab-count text-[10.5px] sm:text-[11px] font-semibold px-1.5 sm:px-2 py-0.5 rounded-full bg-white/20 text-white leading-none">0</span>
       </button>
 
       <!-- Tab 2: top -->
-      <button id="tab-top" onclick="selectTab('top', event)" type="button" class="tab-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[13px] font-medium bg-white hover:bg-[#f4f3ef] text-[#716f6a] hover:text-[#141923] border border-[#dcd9d0] hover:border-[#b8b5ac] cursor-pointer transition-all">
+      <button id="tab-top" onclick="selectTab('top', event)" type="button" class="tab-btn inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-full text-[12px] sm:text-[13px] font-medium bg-white hover:bg-[#f4f3ef] text-[#716f6a] hover:text-[#141923] border border-[#dcd9d0] hover:border-[#b8b5ac] cursor-pointer transition-all shrink-0">
         <span>top</span>
-        <span id="tab-count-top" class="tab-count text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#f0eee6] text-[#716f6a] leading-none">0</span>
+        <span id="tab-count-top" class="tab-count text-[10.5px] sm:text-[11px] font-semibold px-1.5 sm:px-2 py-0.5 rounded-full bg-[#f0eee6] text-[#716f6a] leading-none">0</span>
       </button>
 
       <!-- Tab 3: new -->
-      <button id="tab-new" onclick="selectTab('new', event)" type="button" class="tab-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[13px] font-medium bg-white hover:bg-[#f4f3ef] text-[#716f6a] hover:text-[#141923] border border-[#dcd9d0] hover:border-[#b8b5ac] cursor-pointer transition-all">
+      <button id="tab-new" onclick="selectTab('new', event)" type="button" class="tab-btn inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-full text-[12px] sm:text-[13px] font-medium bg-white hover:bg-[#f4f3ef] text-[#716f6a] hover:text-[#141923] border border-[#dcd9d0] hover:border-[#b8b5ac] cursor-pointer transition-all shrink-0">
         <span>new</span>
-        <span id="tab-count-new" class="tab-count text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#f0eee6] text-[#716f6a] leading-none">0</span>
+        <span id="tab-count-new" class="tab-count text-[10.5px] sm:text-[11px] font-semibold px-1.5 sm:px-2 py-0.5 rounded-full bg-[#f0eee6] text-[#716f6a] leading-none">0</span>
       </button>
 
       <!-- Tab 4: featured -->
-      <button id="tab-featured" onclick="selectTab('featured', event)" type="button" class="tab-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[13px] font-medium bg-white hover:bg-[#f4f3ef] text-[#716f6a] hover:text-[#141923] border border-[#dcd9d0] hover:border-[#b8b5ac] cursor-pointer transition-all">
+      <button id="tab-featured" onclick="selectTab('featured', event)" type="button" class="tab-btn inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-full text-[12px] sm:text-[13px] font-medium bg-white hover:bg-[#f4f3ef] text-[#716f6a] hover:text-[#141923] border border-[#dcd9d0] hover:border-[#b8b5ac] cursor-pointer transition-all shrink-0">
         <span>featured</span>
-        <span id="tab-count-featured" class="tab-count text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#f0eee6] text-[#716f6a] leading-none">0</span>
+        <span id="tab-count-featured" class="tab-count text-[10.5px] sm:text-[11px] font-semibold px-1.5 sm:px-2 py-0.5 rounded-full bg-[#f0eee6] text-[#716f6a] leading-none">0</span>
       </button>
     </div>
 
     <!-- Filter Bar Card (Relative z-30 to allow dropdown popup to display seamlessly) -->
-    <div class="w-full rounded-[14px] border border-[#dcd9d0] bg-transparent px-2.5 py-1.5 flex items-center justify-between gap-1 mt-1 mb-8 relative z-30">
+    <div class="w-full rounded-[14px] border border-[#dcd9d0] bg-transparent p-2 sm:px-2.5 sm:py-1.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-1 mt-1 mb-6 sm:mb-8 relative z-30">
       <!-- Search Input Pill -->
-      <div class="relative flex items-center border border-[#dedbd3] bg-transparent rounded-full px-3 py-1 w-[150px] shrink-0">
+      <div class="relative flex items-center border border-[#dedbd3] bg-transparent rounded-full px-3 py-1.5 sm:py-1 w-full sm:w-[150px] shrink-0">
         <svg class="w-3.5 h-3.5 text-[#8a8882] shrink-0 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
           <circle cx="11" cy="11" r="8"></circle>
           <path d="m21 21-4.3-4.3"></path>
@@ -200,220 +222,224 @@
         <input id="creator-search-input" oninput="applyFilters()" type="text" placeholder="search by name" class="w-full bg-transparent text-[11.5px] text-[#18181b] placeholder-[#9ca3af] focus:outline-none" />
       </div>
 
-      <!-- Filter: From All countries with Dropdown Popup -->
-      <span class="text-[11px] text-[#716f6a] shrink-0 font-normal">From</span>
-      <div class="relative inline-block text-left" id="country-dropdown-wrapper">
-        <button 
-          id="country-filter-btn" 
-          type="button" 
-          onclick="toggleCountryDropdown(event)" 
-          class="border border-[#dedbd3] bg-transparent hover:border-[#b8b5ac] rounded-full px-2.5 py-1 text-[11px] text-[#18181b] flex items-center gap-1.5 shrink-0 transition-all cursor-pointer select-none focus:outline-none"
-        >
-          <span id="country-filter-label">All countries</span>
-          <svg id="country-filter-chevron" class="w-2.5 h-2.5 text-[#222] stroke-[2.2] transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
-          </svg>
-        </button>
+      <!-- Filters Container on Mobile, Inline on Desktop -->
+      <div class="flex items-center gap-1.5 flex-wrap sm:flex-nowrap sm:gap-1">
+        <!-- Filter: From All countries with Dropdown Popup -->
+        <span class="text-[11px] text-[#716f6a] shrink-0 font-normal hidden sm:inline">From</span>
+        <div class="relative inline-block text-left" id="country-dropdown-wrapper">
+          <button 
+            id="country-filter-btn" 
+            type="button" 
+            onclick="toggleCountryDropdown(event)" 
+            class="border border-[#dedbd3] bg-transparent hover:border-[#b8b5ac] rounded-full px-2.5 py-1 text-[11px] text-[#18181b] flex items-center gap-1.5 shrink-0 transition-all cursor-pointer select-none focus:outline-none"
+          >
+            <span class="sm:hidden text-[#716f6a]">From:</span>
+            <span id="country-filter-label">All countries</span>
+            <svg id="country-filter-chevron" class="w-2.5 h-2.5 text-[#222] stroke-[2.2] transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+            </svg>
+          </button>
 
-        <!-- Dropdown Popup Menu -->
-        <div 
-          id="country-dropdown-menu" 
-          class="hidden absolute left-0 top-full mt-2 w-56 rounded-[14px] bg-white border border-[#dcd9d0] shadow-[0_12px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.05)] py-1.5 z-50 text-[11.5px] text-[#18181b]"
-          style="min-width: 210px;"
-        >
-          <div class="px-3 py-1.5 text-[10px] font-semibold tracking-wider text-[#8e8c85] uppercase border-b border-[#f0eee6] mb-1 flex items-center justify-between">
-            <span>Filter by country</span>
-            <span class="text-[9px] lowercase font-normal text-[#9ca3af]">click to filter</span>
-          </div>
-          <div class="max-h-[260px] overflow-y-auto space-y-0.5 px-1.5" id="country-list-options">
-            <button type="button" onclick="selectCountry('all', 'All countries', event)" data-value="all" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="flex items-center gap-2">
-                <span class="font-medium text-[#18181b]">All countries</span>
-              </span>
-              <div class="flex items-center gap-1.5">
-                <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
-                <span class="country-check text-[#0060df] text-xs font-bold">✓</span>
-              </div>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Filter: speaking All languages with Dropdown Popup -->
-      <span class="text-[11px] text-[#716f6a] shrink-0 font-normal">, speaking</span>
-      <div class="relative inline-block text-left" id="language-dropdown-wrapper">
-        <button 
-          id="language-filter-btn" 
-          type="button" 
-          onclick="toggleLanguageDropdown(event)" 
-          class="border border-[#dedbd3] bg-transparent hover:border-[#b8b5ac] rounded-full px-2.5 py-1 text-[11px] text-[#18181b] flex items-center gap-1.5 shrink-0 transition-all cursor-pointer select-none focus:outline-none"
-        >
-          <span id="language-filter-label">All languages</span>
-          <svg id="language-filter-chevron" class="w-2.5 h-2.5 text-[#222] stroke-[2.2] transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
-          </svg>
-        </button>
-
-        <!-- Dropdown Popup Menu -->
-        <div 
-          id="language-dropdown-menu" 
-          class="hidden absolute left-0 top-full mt-2 w-56 rounded-[14px] bg-white border border-[#dcd9d0] shadow-[0_12px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.05)] py-1.5 z-50 text-[11.5px] text-[#18181b]"
-          style="min-width: 210px;"
-        >
-          <div class="px-3 py-1.5 text-[10px] font-semibold tracking-wider text-[#8e8c85] uppercase border-b border-[#f0eee6] mb-1 flex items-center justify-between">
-            <span>Filter by language</span>
-            <span class="text-[9px] lowercase font-normal text-[#9ca3af]">click to filter</span>
-          </div>
-          <div class="max-h-[260px] overflow-y-auto space-y-0.5 px-1.5" id="language-list-options">
-            <button type="button" onclick="selectLanguage('all', 'All languages', event)" data-value="all" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="flex items-center gap-2">
-                <span class="font-medium text-[#18181b]">All languages</span>
-              </span>
-              <div class="flex items-center gap-1.5">
-                <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
-                <span class="lang-check text-[#0060df] text-xs font-bold">✓</span>
-              </div>
-            </button>
+          <!-- Dropdown Popup Menu -->
+          <div 
+            id="country-dropdown-menu" 
+            class="hidden absolute left-0 top-full mt-2 w-56 max-w-[calc(100vw-2.5rem)] rounded-[14px] bg-white border border-[#dcd9d0] shadow-[0_12px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.05)] py-1.5 z-50 text-[11.5px] text-[#18181b]"
+            style="min-width: 200px;"
+          >
+            <div class="px-3 py-1.5 text-[10px] font-semibold tracking-wider text-[#8e8c85] uppercase border-b border-[#f0eee6] mb-1 flex items-center justify-between">
+              <span>Filter by country</span>
+              <span class="text-[9px] lowercase font-normal text-[#9ca3af]">click to filter</span>
+            </div>
+            <div class="max-h-[260px] overflow-y-auto space-y-0.5 px-1.5" id="country-list-options">
+              <button type="button" onclick="selectCountry('all', 'All countries', event)" data-value="all" class="country-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+                <span class="flex items-center gap-2">
+                  <span class="font-medium text-[#18181b]">All countries</span>
+                </span>
+                <div class="flex items-center gap-1.5">
+                  <span class="country-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+                  <span class="country-check text-[#0060df] text-xs font-bold">✓</span>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Filter: All genders with Dropdown Popup -->
-      <div class="relative inline-block text-left" id="gender-dropdown-wrapper">
-        <button 
-          id="gender-filter-btn" 
-          type="button" 
-          onclick="toggleGenderDropdown(event)" 
-          class="border border-[#dedbd3] bg-transparent hover:border-[#b8b5ac] rounded-full px-2.5 py-1 text-[11px] text-[#18181b] flex items-center gap-1.5 shrink-0 transition-all cursor-pointer select-none focus:outline-none"
-        >
-          <span id="gender-filter-label">All genders</span>
-          <svg id="gender-filter-chevron" class="w-2.5 h-2.5 text-[#222] stroke-[2.2] transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
-          </svg>
-        </button>
+        <!-- Filter: speaking All languages with Dropdown Popup -->
+        <span class="text-[11px] text-[#716f6a] shrink-0 font-normal hidden sm:inline">, speaking</span>
+        <div class="relative inline-block text-left" id="language-dropdown-wrapper">
+          <button 
+            id="language-filter-btn" 
+            type="button" 
+            onclick="toggleLanguageDropdown(event)" 
+            class="border border-[#dedbd3] bg-transparent hover:border-[#b8b5ac] rounded-full px-2.5 py-1 text-[11px] text-[#18181b] flex items-center gap-1.5 shrink-0 transition-all cursor-pointer select-none focus:outline-none"
+          >
+            <span id="language-filter-label">All languages</span>
+            <svg id="language-filter-chevron" class="w-2.5 h-2.5 text-[#222] stroke-[2.2] transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+            </svg>
+          </button>
 
-        <!-- Gender Dropdown Popup Menu -->
-        <div 
-          id="gender-dropdown-menu" 
-          class="hidden absolute left-0 top-full mt-2 w-52 rounded-[14px] bg-white border border-[#dcd9d0] shadow-[0_12px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.05)] py-1.5 z-50 text-[11.5px] text-[#18181b]"
-          style="min-width: 195px;"
-        >
-          <div class="px-3 py-1.5 text-[10px] font-semibold tracking-wider text-[#8e8c85] uppercase border-b border-[#f0eee6] mb-1 flex items-center justify-between">
-            <span>Filter by gender</span>
-            <span class="text-[9px] lowercase font-normal text-[#9ca3af]">click to filter</span>
-          </div>
-          <div class="space-y-0.5 px-1.5" id="gender-list-options">
-            <button type="button" onclick="selectGender('all', 'All genders', event)" data-value="all" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="font-medium text-[#18181b]">All genders</span>
-              <div class="flex items-center gap-1.5">
-                <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
-                <span class="gender-check text-[#0060df] text-xs font-bold">✓</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectGender('female', 'Female', event)" data-value="female" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="text-[#333]">Female</span>
-              <div class="flex items-center gap-1.5">
-                <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectGender('male', 'Male', event)" data-value="male" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="text-[#333]">Male</span>
-              <div class="flex items-center gap-1.5">
-                <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectGender('non-binary', 'Non-binary', event)" data-value="non-binary" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="text-[#333]">Non-binary</span>
-              <div class="flex items-center gap-1.5">
-                <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectGender('couples', 'Couples / Duos', event)" data-value="couples" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="text-[#333]">Couples / Duos</span>
-              <div class="flex items-center gap-1.5">
-                <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
-              </div>
-            </button>
+          <!-- Dropdown Popup Menu -->
+          <div 
+            id="language-dropdown-menu" 
+            class="hidden absolute left-0 sm:left-0 top-full mt-2 w-56 max-w-[calc(100vw-2.5rem)] rounded-[14px] bg-white border border-[#dcd9d0] shadow-[0_12px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.05)] py-1.5 z-50 text-[11.5px] text-[#18181b]"
+            style="min-width: 200px;"
+          >
+            <div class="px-3 py-1.5 text-[10px] font-semibold tracking-wider text-[#8e8c85] uppercase border-b border-[#f0eee6] mb-1 flex items-center justify-between">
+              <span>Filter by language</span>
+              <span class="text-[9px] lowercase font-normal text-[#9ca3af]">click to filter</span>
+            </div>
+            <div class="max-h-[260px] overflow-y-auto space-y-0.5 px-1.5" id="language-list-options">
+              <button type="button" onclick="selectLanguage('all', 'All languages', event)" data-value="all" class="lang-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+                <span class="flex items-center gap-2">
+                  <span class="font-medium text-[#18181b]">All languages</span>
+                </span>
+                <div class="flex items-center gap-1.5">
+                  <span class="lang-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+                  <span class="lang-check text-[#0060df] text-xs font-bold">✓</span>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Filter: All creator types with Dropdown Popup (NO EMOJIS) -->
-      <div class="relative inline-block text-left" id="type-dropdown-wrapper">
-        <button 
-          id="type-filter-btn" 
-          type="button" 
-          onclick="toggleTypeDropdown(event)" 
-          class="border border-[#dedbd3] bg-transparent hover:border-[#b8b5ac] rounded-full px-2.5 py-1 text-[11px] text-[#18181b] flex items-center gap-1.5 shrink-0 transition-all cursor-pointer select-none focus:outline-none"
-        >
-          <span id="type-filter-label">All creator types</span>
-          <svg id="type-filter-chevron" class="w-2.5 h-2.5 text-[#222] stroke-[2.2] transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
-          </svg>
-        </button>
+        <!-- Filter: All genders with Dropdown Popup -->
+        <div class="relative inline-block text-left" id="gender-dropdown-wrapper">
+          <button 
+            id="gender-filter-btn" 
+            type="button" 
+            onclick="toggleGenderDropdown(event)" 
+            class="border border-[#dedbd3] bg-transparent hover:border-[#b8b5ac] rounded-full px-2.5 py-1 text-[11px] text-[#18181b] flex items-center gap-1.5 shrink-0 transition-all cursor-pointer select-none focus:outline-none"
+          >
+            <span id="gender-filter-label">All genders</span>
+            <svg id="gender-filter-chevron" class="w-2.5 h-2.5 text-[#222] stroke-[2.2] transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+            </svg>
+          </button>
 
-        <!-- Creator Type Dropdown Popup Menu (NO EMOJIS) -->
-        <div 
-          id="type-dropdown-menu" 
-          class="hidden absolute right-0 top-full mt-2 w-52 rounded-[14px] bg-white border border-[#dcd9d0] shadow-[0_12px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.05)] py-1.5 z-50 text-[11.5px] text-[#18181b]"
-          style="min-width: 195px;"
-        >
-          <div class="px-3 py-1.5 text-[10px] font-semibold tracking-wider text-[#8e8c85] uppercase border-b border-[#f0eee6] mb-1 flex items-center justify-between">
-            <span>Filter by creator type</span>
-            <span class="text-[9px] lowercase font-normal text-[#9ca3af]">click to filter</span>
+          <!-- Gender Dropdown Popup Menu -->
+          <div 
+            id="gender-dropdown-menu" 
+            class="hidden absolute left-0 sm:left-auto top-full mt-2 w-52 max-w-[calc(100vw-2.5rem)] rounded-[14px] bg-white border border-[#dcd9d0] shadow-[0_12px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.05)] py-1.5 z-50 text-[11.5px] text-[#18181b]"
+            style="min-width: 195px;"
+          >
+            <div class="px-3 py-1.5 text-[10px] font-semibold tracking-wider text-[#8e8c85] uppercase border-b border-[#f0eee6] mb-1 flex items-center justify-between">
+              <span>Filter by gender</span>
+              <span class="text-[9px] lowercase font-normal text-[#9ca3af]">click to filter</span>
+            </div>
+            <div class="space-y-0.5 px-1.5" id="gender-list-options">
+              <button type="button" onclick="selectGender('all', 'All genders', event)" data-value="all" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+                <span class="font-medium text-[#18181b]">All genders</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+                  <span class="gender-check text-[#0060df] text-xs font-bold">✓</span>
+                </div>
+              </button>
+              <button type="button" onclick="selectGender('female', 'Female', event)" data-value="female" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+                <span class="text-[#333]">Female</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+                </div>
+              </button>
+              <button type="button" onclick="selectGender('male', 'Male', event)" data-value="male" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+                <span class="text-[#333]">Male</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+                </div>
+              </button>
+              <button type="button" onclick="selectGender('non-binary', 'Non-binary', event)" data-value="non-binary" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+                <span class="text-[#333]">Non-binary</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+                </div>
+              </button>
+              <button type="button" onclick="selectGender('couples', 'Couples / Duos', event)" data-value="couples" class="gender-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+                <span class="text-[#333]">Couples / Duos</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="gender-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+                </div>
+              </button>
+            </div>
           </div>
-          <div class="space-y-0.5 px-1.5" id="type-list-options">
-            <button type="button" onclick="selectCreatorType('all', 'All creator types', event)" data-value="all" class="type-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="font-medium text-[#18181b]">All creator types</span>
-              <div class="flex items-center gap-1.5">
-                <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
-                <span class="type-check text-[#0060df] text-xs font-bold">✓</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectCreatorType('couples', 'Couples', event)" data-value="couples" class="type-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="text-[#333]">Couples</span>
-              <div class="flex items-center gap-1.5">
-                <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectCreatorType('exclusive', 'Exclusive', event)" data-value="exclusive" class="type-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="text-[#333]">Exclusive</span>
-              <div class="flex items-center gap-1.5">
-                <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectCreatorType('standard', 'Standard', event)" data-value="standard" class="type-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="text-[#333]">Standard</span>
-              <div class="flex items-center gap-1.5">
-                <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
-              </div>
-            </button>
-            <button type="button" onclick="selectCreatorType('viral', 'Viral', event)" data-value="viral" class="type-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
-              <span class="text-[#333]">Viral</span>
-              <div class="flex items-center gap-1.5">
-                <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
-              </div>
-            </button>
+        </div>
+
+        <!-- Filter: All creator types with Dropdown Popup (NO EMOJIS) -->
+        <div class="relative inline-block text-left" id="type-dropdown-wrapper">
+          <button 
+            id="type-filter-btn" 
+            type="button" 
+            onclick="toggleTypeDropdown(event)" 
+            class="border border-[#dedbd3] bg-transparent hover:border-[#b8b5ac] rounded-full px-2.5 py-1 text-[11px] text-[#18181b] flex items-center gap-1.5 shrink-0 transition-all cursor-pointer select-none focus:outline-none"
+          >
+            <span id="type-filter-label">All creator types</span>
+            <svg id="type-filter-chevron" class="w-2.5 h-2.5 text-[#222] stroke-[2.2] transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+            </svg>
+          </button>
+
+          <!-- Creator Type Dropdown Popup Menu (NO EMOJIS) -->
+          <div 
+            id="type-dropdown-menu" 
+            class="hidden absolute right-0 top-full mt-2 w-52 max-w-[calc(100vw-2.5rem)] rounded-[14px] bg-white border border-[#dcd9d0] shadow-[0_12px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.05)] py-1.5 z-50 text-[11.5px] text-[#18181b]"
+            style="min-width: 195px;"
+          >
+            <div class="px-3 py-1.5 text-[10px] font-semibold tracking-wider text-[#8e8c85] uppercase border-b border-[#f0eee6] mb-1 flex items-center justify-between">
+              <span>Filter by creator type</span>
+              <span class="text-[9px] lowercase font-normal text-[#9ca3af]">click to filter</span>
+            </div>
+            <div class="space-y-0.5 px-1.5" id="type-list-options">
+              <button type="button" onclick="selectCreatorType('all', 'All creator types', event)" data-value="all" class="type-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+                <span class="font-medium text-[#18181b]">All creator types</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+                  <span class="type-check text-[#0060df] text-xs font-bold">✓</span>
+                </div>
+              </button>
+              <button type="button" onclick="selectCreatorType('couples', 'Couples', event)" data-value="couples" class="type-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+                <span class="text-[#333]">Couples</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+                </div>
+              </button>
+              <button type="button" onclick="selectCreatorType('exclusive', 'Exclusive', event)" data-value="exclusive" class="type-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+                <span class="text-[#333]">Exclusive</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+                </div>
+              </button>
+              <button type="button" onclick="selectCreatorType('standard', 'Standard', event)" data-value="standard" class="type-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+                <span class="text-[#333]">Standard</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+                </div>
+              </button>
+              <button type="button" onclick="selectCreatorType('viral', 'Viral', event)" data-value="viral" class="type-opt w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#f5f4ef] text-left transition-colors cursor-pointer group">
+                <span class="text-[#333]">Viral</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="type-count text-[10px] font-medium text-[#8e8c85] bg-[#f0eee6] px-1.5 py-0.5 rounded-full">0</span>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Dynamic Creators Grid -->
-    <div id="creators-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 w-full mt-7 mb-8">
+    <div id="creators-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 sm:gap-3.5 w-full mt-4 sm:mt-7 mb-6 sm:mb-8">
       <!-- Cards rendered dynamically from backend -->
     </div>
 
     <!-- Empty State when no creators exist or match filters -->
-    <div id="no-creators-state" class="hidden w-full text-center py-16 flex flex-col items-center justify-center mb-12">
-      <div class="w-14 h-14 rounded-full bg-[#f4f3ef] border border-[#e5e3dc] flex items-center justify-center text-[#787671] mb-3 mx-auto">
-        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+    <div id="no-creators-state" class="hidden w-full text-center py-12 sm:py-16 flex flex-col items-center justify-center mb-8 sm:mb-12">
+      <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#f4f3ef] border border-[#e5e3dc] flex items-center justify-center text-[#787671] mb-3 mx-auto">
+        <svg class="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
           <circle cx="11" cy="11" r="8"></circle>
           <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.3-4.3"/>
         </svg>
       </div>
-      <p id="no-creators-title" class="text-[14px] font-semibold text-[#18181b]">No creators found</p>
-      <p id="no-creators-desc" class="text-[12px] text-[#716f6a] mt-1 max-w-[340px]">
+      <p id="no-creators-title" class="text-[13.5px] sm:text-[14px] font-semibold text-[#18181b]">No creators found</p>
+      <p id="no-creators-desc" class="text-[11.5px] sm:text-[12px] text-[#716f6a] mt-1 max-w-[340px] px-4">
         Creators will appear here after they create an account from the Creator Portal.
       </p>
     </div>
@@ -421,20 +447,20 @@
   </div>
 
   <!-- Floating Bottom Selection Bar -->
-  <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-white rounded-2xl shadow-[0_10px_35px_rgba(0,0,0,0.12)] border border-[#e5e3dc] py-1.5 px-3 flex items-center gap-3">
+  <div id="selection-dock-bar" class="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-50 bg-white rounded-2xl shadow-[0_10px_35px_rgba(0,0,0,0.12)] border border-[#e5e3dc] py-1.5 px-2.5 sm:px-3 flex items-center justify-between sm:justify-start gap-2 sm:gap-3 w-[calc(100%-24px)] sm:w-auto max-w-[460px] sm:max-w-none">
     <!-- Overlapping Selected Avatars -->
     <div id="dock-avatars" class="flex items-center shrink-0">
-      <span class="text-[11px] text-[#9ca3af] italic">None selected</span>
+      <span class="text-[10.5px] sm:text-[11px] text-[#9ca3af] italic">None selected</span>
     </div>
 
     <!-- Selection Status Text -->
-    <div class="flex flex-col text-left">
-      <span id="dock-counter" class="text-[12px] font-bold text-[#111827] leading-tight">0 creators selected</span>
-      <span class="text-[10px] text-[#716f6a] font-normal leading-tight mt-0.5">Minimum 5 videos across your order</span>
+    <div class="flex flex-col text-left min-w-0 flex-1 sm:flex-initial">
+      <span id="dock-counter" class="text-[11.5px] sm:text-[12px] font-bold text-[#111827] leading-tight truncate">0 creators selected</span>
+      <span class="text-[9.5px] sm:text-[10px] text-[#716f6a] font-normal leading-tight mt-0.5 truncate hidden min-[360px]:block">Minimum 5 videos across your order</span>
     </div>
 
     <!-- CTA Button -->
-    <button id="write-brief-btn" onclick="window.location.href='brief.html'" style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);" class="text-white text-[12px] font-medium px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all shadow-[0_3px_12px_rgba(33,58,231,0.25)] hover:shadow-[0_6px_20px_rgba(33,58,231,0.4)] hover:brightness-105 active:scale-[0.98] ml-1 cursor-pointer">
+    <button id="write-brief-btn" onclick="window.location.href='brief.html'" style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);" class="text-white text-[11.5px] sm:text-[12px] font-medium px-3 sm:px-4 py-2 rounded-xl flex items-center gap-1 sm:gap-1.5 transition-all shadow-[0_3px_12px_rgba(33,58,231,0.25)] hover:shadow-[0_6px_20px_rgba(33,58,231,0.4)] hover:brightness-105 active:scale-[0.98] shrink-0 whitespace-nowrap cursor-pointer">
       <span>Write your brief</span>
       <span class="text-[13px] leading-none">&rarr;</span>
     </button>
@@ -896,8 +922,8 @@
         if (!check && inner) {
           const checkDiv = document.createElement('div');
           checkDiv.id = `check-${id}`;
-          checkDiv.className = "absolute bottom-0 right-0 w-[34px] h-[34px] bg-[#0060df] rounded-br-[15px] corner-check flex items-end justify-end p-1 z-10 pointer-events-none";
-          checkDiv.innerHTML = `<svg class="w-3.5 h-3.5 text-white stroke-[3.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`;
+          checkDiv.className = "absolute bottom-0 right-0 w-[30px] h-[30px] sm:w-[34px] sm:h-[34px] bg-[#0060df] rounded-br-[13px] sm:rounded-br-[15px] corner-check flex items-end justify-end p-0.5 sm:p-1 z-10 pointer-events-none";
+          checkDiv.innerHTML = `<svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white stroke-[3.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`;
           inner.appendChild(checkDiv);
         }
       } else {
@@ -923,15 +949,19 @@
       const dock = document.getElementById('dock-avatars');
       if (dock) {
         if (totalSelected === 0) {
-          dock.innerHTML = `<span class="text-[11px] text-[#9ca3af] italic">None selected</span>`;
+          dock.innerHTML = `<span class="text-[10.5px] sm:text-[11px] text-[#9ca3af] italic whitespace-nowrap">None selected</span>`;
         } else {
-          dock.innerHTML = `<div class="flex items-center -space-x-2">` +
-            selectedList.map(c => `
+          const maxAvatars = 4;
+          const shown = selectedList.slice(0, maxAvatars);
+          const extra = totalSelected - maxAvatars;
+          dock.innerHTML = `<div class="flex items-center -space-x-2 shrink-0">` +
+            shown.map(c => `
               <img src="${escapeHtml(c.avatar || 'avatar_1.png')}"
                    alt="${escapeHtml(c.name)}"
-                   class="w-7 h-7 rounded-full border-2 border-white object-cover shadow-xs bg-gray-100"
+                   class="w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 border-white object-cover shadow-xs bg-gray-100"
                    onerror="this.onerror=null; this.src='creator_avatar.png';" />
             `).join('') +
+            (extra > 0 ? `<span class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#f0eee6] border-2 border-white text-[9.5px] sm:text-[10px] font-bold text-[#716f6a] flex items-center justify-center shrink-0">+${extra}</span>` : '') +
             `</div>`;
         }
       }
@@ -996,7 +1026,7 @@
                data-creator-type="${escapeHtml(c.creatorType || 'standard')}"
                class="creator-card cursor-pointer flex flex-col group">
             <div id="frame-${escapeHtml(c.id)}" class="card-frame ${isSel ? 'selected' : 'unselected'}">
-              <div class="w-full h-full rounded-[16px] overflow-hidden relative bg-gray-100">
+              <div class="w-full h-full rounded-[14px] sm:rounded-[16px] overflow-hidden relative bg-gray-100">
                 <img id="img-${escapeHtml(c.id)}"
                      src="${escapeHtml(avatarUrl)}"
                      alt="${escapeHtml(c.name)}"
@@ -1004,8 +1034,8 @@
                      onerror="this.onerror=null; this.src='creator_avatar.png';" />
                 <div id="plus-${escapeHtml(c.id)}" class="plus-btn" style="${isSel ? 'display: none !important;' : ''}">+</div>
                 ${isSel ? `
-                  <div id="check-${escapeHtml(c.id)}" class="absolute bottom-0 right-0 w-[34px] h-[34px] bg-[#0060df] rounded-br-[15px] corner-check flex items-end justify-end p-1 z-10 pointer-events-none">
-                    <svg class="w-3.5 h-3.5 text-white stroke-[3.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div id="check-${escapeHtml(c.id)}" class="absolute bottom-0 right-0 w-[30px] h-[30px] sm:w-[34px] sm:h-[34px] bg-[#0060df] rounded-br-[13px] sm:rounded-br-[15px] corner-check flex items-end justify-end p-0.5 sm:p-1 z-10 pointer-events-none">
+                    <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white stroke-[3.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
