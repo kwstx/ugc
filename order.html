@@ -584,6 +584,19 @@
         console.warn('Could not persist format to backend:', err);
       });
 
+      // Synchronize with unified draft order backend
+      fetch(`${API_BASE}/api/orders/draft`, {
+        method: 'POST',
+        keepalive: true,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          format: currentSelection,
+          qty: (currentSelection === 'full') ? 1 : 6
+        })
+      }).catch(err => {
+        console.warn('Could not persist draft to backend:', err);
+      });
+
       const chooseBtn = document.getElementById('choose-creators-link');
       if (chooseBtn) {
         chooseBtn.href = `creators.html?format=${currentSelection}`;

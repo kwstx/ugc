@@ -6,6 +6,12 @@ const { analyzeScript } = require('../services/scriptEstimator');
 const { checkCreatorsAvailability } = require('../services/creatorService');
 
 const { getReactionTemplates } = require('../services/briefAiGenerator');
+const {
+  getReactionBriefViewData,
+  submitAndLockReactionBrief,
+  getOrCreateDraftOrder,
+  updateDraftOrder
+} = require('../services/draftOrderService');
 
 // Helper to generate IDs
 function generateId(prefix = 'brief') {
@@ -120,6 +126,49 @@ router.get('/draft', (req, res) => {
     res.json({ success: true, draft: null });
   } catch (error) {
     console.error('Error loading prompt draft:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/briefs/reaction
+ * Dedicated endpoint to load reaction brief view with authoritative pricing and creator checks
+ */
+router.get('/reaction', (req, res) => {
+  try {
+    const sessionId = req.query.sessionId || req.headers['x-session-id'] || 'default_session';
+    const orderId = req.query.orderId || req.query.briefId || null;
+    const format = req.query.format || 'reaction';
+
+    const data = getReactionBriefViewData({
+      orderId,
+      sessionId,
+      format
+    });
+
+    res.json(data);
+  } catch (error) {
+    console.error('Error in /api/briefs/reaction:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * POST /api/briefs/reaction-submit
+ * Validates reaction brief inputs, locks verified pricing snapshot, and advances status
+ */
+router.post('/reaction-submit', (req, res) => {
+  try {
+    const sessionId = req.body.sessionId || req.headers['x-session-id'] || 'default_session';
+    const orderId = req.body.orderId || req.body.id || getOrCreateDraftOrder({ sessionId }).id;
+
+    const result = submitAndLockReactionBrief(orderId, req.body, { id: sessionId });
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+    res.json(result);
+  } catch (error) {
+    console.error('Error in /api/briefs/reaction-submit:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });

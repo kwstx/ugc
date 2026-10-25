@@ -180,6 +180,74 @@
           ></textarea>
         </div>
 
+        <!-- Format-Specific Reaction Video Requirements Block -->
+        <div id="reaction-spec-container" class="flex flex-col gap-4 bg-gradient-to-b from-[#f8f9ff] to-white border border-[#c7d2fe] rounded-[14px] p-4 sm:p-5 shadow-xs">
+          <div class="flex items-center justify-between border-b border-[#e0e7ff] pb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-[#4f46e5] text-white flex items-center justify-center text-[11px] font-bold">🎬</span>
+              <h3 class="text-[13.5px] font-bold text-[#1e1b4b]">Reaction Video Specifications</h3>
+            </div>
+            <span class="text-[10px] font-semibold tracking-wider text-[#4338ca] bg-[#e0e7ff] px-2.5 py-0.5 rounded-full uppercase">Format: Reaction</span>
+          </div>
+
+          <!-- Source Media URL -->
+          <div class="flex flex-col">
+            <label class="text-[12px] font-bold text-[#111827] mb-1 flex items-center justify-between">
+              <span>Source Media Link to React To <span class="text-[#ef4444]">*</span></span>
+              <span class="text-[10.5px] text-[#6b7280] font-normal">TikTok, YouTube, MP4 or Drive</span>
+            </label>
+            <input 
+              type="url" 
+              id="source-asset-url-input"
+              placeholder="https://www.tiktok.com/@brand/video/... or https://youtube.com/shorts/..."
+              oninput="if(typeof checkBriefValidity === 'function') checkBriefValidity(); if(typeof scheduleAutosave === 'function') scheduleAutosave();"
+              class="w-full bg-white border border-[#cbd5e1] rounded-[10px] px-3.5 py-2.5 text-[12.5px] text-[#18181b] focus:outline-none focus:border-[#4f46e5] shadow-xs font-mono"
+            />
+            <p class="text-[11px] text-[#64748b] mt-1">Creators stream or watch this video asset to film authentic split-screen / picture-in-picture reactions.</p>
+          </div>
+
+          <!-- Deliverable Layout Preference & Timestamps Callouts in 2 Cols -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Layout Preference -->
+            <div class="flex flex-col">
+              <label class="text-[12px] font-bold text-[#111827] mb-1">Reaction Layout Style</label>
+              <select 
+                id="layout-preference-select" 
+                onchange="if(typeof checkBriefValidity === 'function') checkBriefValidity(); if(typeof scheduleAutosave === 'function') scheduleAutosave();"
+                class="w-full bg-white border border-[#cbd5e1] rounded-[10px] px-3 py-2 text-[12.5px] text-[#18181b] focus:outline-none focus:border-[#4f46e5] shadow-xs cursor-pointer"
+              >
+                <option value="split_screen" selected>Split Screen (50/50 Top &amp; Bottom - Recommended)</option>
+                <option value="picture_in_picture">Picture-in-Picture (PiP Floating Corner)</option>
+                <option value="side_by_side">Side-by-Side (Left / Right Comparison)</option>
+              </select>
+            </div>
+
+            <!-- Key Timestamps / Callouts -->
+            <div class="flex flex-col">
+              <label class="text-[12px] font-bold text-[#111827] mb-1">Key Timestamps / Callouts</label>
+              <input 
+                type="text" 
+                id="timestamps-callouts-input"
+                placeholder="e.g. 0:10 - shock face, 0:35 - point to link"
+                oninput="if(typeof scheduleAutosave === 'function') scheduleAutosave();"
+                class="w-full bg-white border border-[#cbd5e1] rounded-[10px] px-3.5 py-2 text-[12.5px] text-[#18181b] focus:outline-none focus:border-[#4f46e5] shadow-xs"
+              />
+            </div>
+          </div>
+
+          <!-- Reaction Style & Facial Expression Guidelines -->
+          <div class="flex flex-col">
+            <label class="text-[12px] font-bold text-[#111827] mb-1">Reaction Style &amp; Guidelines</label>
+            <input 
+              type="text" 
+              id="reaction-style-input"
+              value="Authentic skepticism turning into astonished belief, high relatable energy"
+              oninput="if(typeof scheduleAutosave === 'function') scheduleAutosave();"
+              class="w-full bg-white border border-[#cbd5e1] rounded-[10px] px-3.5 py-2 text-[12.5px] text-[#18181b] focus:outline-none focus:border-[#4f46e5] shadow-xs"
+            />
+          </div>
+        </div>
+
         <!-- Order details Box -->
         <div class="flex flex-col">
           <label class="text-[12px] font-bold text-[#111827] mb-1.5">Order details</label>
@@ -1201,6 +1269,7 @@
       const brandName = document.getElementById('brand-name-input')?.value.trim();
       const aboutBrand = document.getElementById('about-brand-input')?.value.trim();
       const filmingInstructions = document.getElementById('filming-instructions-input')?.value.trim();
+      const sourceAssetUrl = document.getElementById('source-asset-url-input')?.value.trim();
       
       const scriptTextareas = document.querySelectorAll('.concept-script-textarea');
       let allScriptsFilled = scriptTextareas.length > 0;
@@ -1208,7 +1277,10 @@
         if (!ta.value.trim()) allScriptsFilled = false;
       });
 
-      const isValid = Boolean(brandName && aboutBrand && filmingInstructions && allScriptsFilled);
+      const isReaction = (window.currentFormat !== 'Full UGC');
+      const reactionValid = !isReaction || Boolean(sourceAssetUrl);
+
+      const isValid = Boolean(brandName && aboutBrand && filmingInstructions && allScriptsFilled && reactionValid);
       updateValidationUI(isValid);
       return isValid;
     }
@@ -1246,7 +1318,10 @@
       } else {
         if (banner) {
           banner.className = "w-full bg-[#fef2f2] border border-[#fecaca] rounded-[10px] px-4 py-2.5 mb-6 text-[12px] text-[#dc2626] transition-colors";
-          banner.innerHTML = `Complete the brand details, each video and the filming instructions.`;
+          const isReaction = (window.currentFormat !== 'Full UGC');
+          banner.innerHTML = isReaction
+            ? `Complete the brand details, source media URL to react to, filming instructions, and video scripts.`
+            : `Complete the brand details, each video and the filming instructions.`;
         }
         const inactiveSidebarClass = "w-full bg-[#9fa2fb] hover:bg-[#8e91f9] active:scale-[0.99] text-white text-[12.5px] font-semibold py-3 px-4 rounded-[12px] flex items-center justify-center gap-1.5 transition-all shadow-sm cursor-pointer mb-2.5 opacity-80";
         const inactiveFloatingClass = "bg-[#9fa2fb] hover:bg-[#8e91f9] text-white text-[12px] font-semibold px-4 py-2 rounded-[10px] flex items-center gap-1.5 transition-all cursor-pointer opacity-80";
@@ -1266,10 +1341,13 @@
       const brandNameInput = document.getElementById('brand-name-input');
       const aboutBrandInput = document.getElementById('about-brand-input');
       const filmingInstructionsInput = document.getElementById('filming-instructions-input');
+      const sourceAssetUrlInput = document.getElementById('source-asset-url-input');
       const scriptTextareas = document.querySelectorAll('.concept-script-textarea');
+      const isReaction = (window.currentFormat !== 'Full UGC');
 
       let firstEmpty = null;
       if (!brandNameInput?.value.trim()) firstEmpty = brandNameInput;
+      else if (isReaction && !sourceAssetUrlInput?.value.trim()) firstEmpty = sourceAssetUrlInput;
       else if (!aboutBrandInput?.value.trim()) firstEmpty = aboutBrandInput;
       else {
         for (let ta of scriptTextareas) {

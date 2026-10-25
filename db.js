@@ -268,6 +268,39 @@ db.exec(`
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 
+  CREATE TABLE IF NOT EXISTS draft_orders (
+    id TEXT PRIMARY KEY,
+    session_id TEXT NOT NULL,
+    format TEXT NOT NULL DEFAULT 'Reaction Video',
+    format_key TEXT NOT NULL DEFAULT 'reaction',
+    status TEXT NOT NULL DEFAULT 'draft',
+    creator_ids TEXT DEFAULT '[]',
+    selected_creators TEXT DEFAULT '[]',
+    qty INTEGER NOT NULL DEFAULT 6,
+    turnaround_hours INTEGER DEFAULT 48,
+    layout_preference TEXT DEFAULT 'split_screen',
+    source_asset_url TEXT,
+    timestamps_callouts TEXT,
+    reaction_style_guidelines TEXT,
+    brand_name TEXT,
+    about_brand TEXT,
+    filming_instructions TEXT,
+    concepts TEXT DEFAULT '[]',
+    hooks TEXT,
+    talking_points TEXT,
+    pricing_snapshot TEXT,
+    subtotal REAL DEFAULT 0.0,
+    platform_fee REAL DEFAULT 0.0,
+    tax REAL DEFAULT 0.0,
+    discount REAL DEFAULT 0.0,
+    total REAL DEFAULT 0.0,
+    currency TEXT DEFAULT 'USD',
+    prerequisites_completed INTEGER DEFAULT 0,
+    locked INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
   CREATE TABLE IF NOT EXISTS subscriptions (
     id TEXT PRIMARY KEY,
     user_id TEXT NOT NULL,

@@ -89,7 +89,189 @@ function calculatePricing(quantity, creatorCount = 2, explicitFormat = null) {
   };
 }
 
+/**
+ * Lookup verified creator info & current base rate from database
+ */
+function getCreatorPricingInfo(creatorIdOrObj) {
+  const id = typeof creatorIdOrObj === 'object' ? creatorIdOrObj.id : creatorIdOrObj;
+  if (!id) return null;
+  try {
+    const creator = db.prepare('SELECT id, name, handle, avatar, status, rate, formats FROM creators WHERE id = ?').get(id);
+    if (creator) {
+      let formats = ['reaction'];
+      try { formats = JSON.parse(creator.formats || '["reaction"]'); } catch (e) {}
+      return {
+        id: creator.id,
+        name: creator.name,
+        handle: creator.handle || `@${creator.name.toLowerCase()}_ugc`,
+        avatar: creator.avatar,
+        status: creator.status || 'active',
+        available: creator.status === 'active',
+        rate: parseFloat(creator.rate) || 25.00,
+        formats
+      };
+    }
+  } catch (e) {
+    console.warn('Error fetching creator pricing info:', e.message);
+  }
+  if (typeof creatorIdOrObj === 'object') {
+    return {
+      id: creatorIdOrObj.id || 'creator_unknown',
+      name: creatorIdOrObj.name || 'Creator',
+      handle: creatorIdOrObj.handle || '@creator_ugc',
+      avatar: creatorIdOrObj.avatar || 'creator_avatar.png',
+      status: 'active',
+      available: true,
+      rate: 25.00,
+      formats: ['reaction']
+    };
+  }
+  return null;
+}
+
+/**
+ * Authoritative Server-Side Pricing Engine
+ * Calculates itemized pricing using fresh database creator rates, format multipliers,
+ * turnaround premiums, volume discounts, licensing fees, and platform fees.
+ */
+function calculateAuthoritativePricing({
+  creatorIds = [],
+  quantity = 6,
+  format = 'reaction',
+  turnaroundHours = 48,
+  licensingTier = 'standard',
+  customDiscountPct = 0
+}) {
+  const isFullUgc = String(format).toLowerCase().includes('full');
+  const formatKey = isFullUgc ? 'full' : 'reaction';
+  const formatLabel = isFullUgc ? 'Full UGC' : 'Reaction Video';
+  const minVideos = isFullUgc ? 1 : 5;
+
+  let qty = parseInt(quantity, 10);
+  if (isNaN(qty) || qty < minVideos) {
+    qty = minVideos;
+  }
+
+  // Resolve verified creator records from database
+  const idList = Array.isArray(creatorIds) ? creatorIds : [];
+  const verifiedCreators = [];
+  for (const c of idList) {
+    const info = getCreatorPricingInfo(c);
+    if (info) verifiedCreators.push(info);
+  }
+
+  const creatorCount = Math.max(1, verifiedCreators.length);
+  const tiers = getTierConfigs(creatorCount);
+
+  // Volume discount calculation
+  let volumeDiscountPct = 0;
+  let discountLabel = 'Starter order';
+  if (qty >= tiers.tier3) {
+    volumeDiscountPct = 16.7;
+    discountLabel = 'Save 16.7% / video';
+  } else if (qty >= tiers.tier2) {
+    volumeDiscountPct = 8.3;
+    discountLabel = 'Save 8.3% / video';
+  }
+
+  // Allocate videos per creator
+  const basePerCreator = Math.floor(qty / creatorCount);
+  let remainder = qty % creatorCount;
+
+  let creatorBaseSubtotal = 0;
+  const creatorLineItems = [];
+
+  if (verifiedCreators.length > 0) {
+    verifiedCreators.forEach((creator) => {
+      const assignedVideos = basePerCreator + (remainder > 0 ? 1 : 0);
+      if (remainder > 0) remainder--;
+
+      // Base rate for format: for reaction format, use creator.rate (or min 25.00)
+      const baseRate = isFullUgc ? Math.max(100.00, creator.rate * 3) : Math.max(25.00, creator.rate);
+      const lineCost = parseFloat((assignedVideos * baseRate).toFixed(2));
+      creatorBaseSubtotal += lineCost;
+
+      creatorLineItems.push({
+        id: creator.id,
+        name: creator.name,
+        handle: creator.handle,
+        avatar: creator.avatar,
+        status: creator.status,
+        available: creator.available,
+        baseRate,
+        assignedVideos,
+        subtotal: lineCost
+      });
+    });
+  } else {
+    // Default placeholder rate if no creators picked yet
+    const defaultRate = isFullUgc ? 100.00 : 25.00;
+    creatorBaseSubtotal = parseFloat((qty * defaultRate).toFixed(2));
+  }
+
+  creatorBaseSubtotal = parseFloat(creatorBaseSubtotal.toFixed(2));
+
+  // Volume discount amount
+  const volumeDiscountAmount = parseFloat((creatorBaseSubtotal * (volumeDiscountPct / 100)).toFixed(2));
+  const subtotalAfterVolume = parseFloat((creatorBaseSubtotal - volumeDiscountAmount).toFixed(2));
+
+  // Turnaround premium (15% if rush <= 24 hours, standard 48h has 0%)
+  const turnaroundHoursNum = parseInt(turnaroundHours, 10) || 48;
+  const isRushTurnaround = turnaroundHoursNum <= 24;
+  const turnaroundPremium = isRushTurnaround ? parseFloat((subtotalAfterVolume * 0.15).toFixed(2)) : 0.00;
+
+  // Format licensing fee (standard ad license included $0; extended broadcast license $49 flat)
+  const isExtendedLicensing = licensingTier === 'extended_commercial' || licensingTier === 'broadcast';
+  const licensingFee = isExtendedLicensing ? 49.00 : 0.00;
+
+  // Custom order subscription discount (e.g. 5% Growth, 10% Scale)
+  const customDiscountAmount = (customDiscountPct > 0)
+    ? parseFloat((subtotalAfterVolume * (customDiscountPct / 100)).toFixed(2))
+    : 0.00;
+
+  // Platform fee: 5% of net order spend (minimum $5.00)
+  const netBeforePlatform = subtotalAfterVolume - customDiscountAmount + turnaroundPremium + licensingFee;
+  const platformFee = parseFloat((Math.max(5.00, netBeforePlatform * 0.05)).toFixed(2));
+
+  // Tax: 0% standard export digital service
+  const tax = 0.00;
+
+  // Grand Total
+  const total = parseFloat((netBeforePlatform + platformFee + tax).toFixed(2));
+  const effectiveRatePerVideo = parseFloat((total / qty).toFixed(2));
+
+  return {
+    format: formatLabel,
+    formatKey,
+    quantity: qty,
+    minVideos,
+    creatorCount,
+    perCreator: Math.max(1, Math.ceil(qty / creatorCount)),
+    turnaroundHours: turnaroundHoursNum,
+    isRushTurnaround,
+    licensingTier,
+    discountLabel,
+    volumeDiscountPercent: volumeDiscountPct,
+    volumeDiscountAmount,
+    customDiscountPercent: customDiscountPct,
+    customDiscountAmount,
+    turnaroundPremium,
+    licensingFee,
+    creatorBaseSubtotal,
+    subtotal: subtotalAfterVolume,
+    platformFee,
+    tax,
+    total,
+    effectiveRatePerVideo,
+    creators: creatorLineItems,
+    currency: 'USD'
+  };
+}
+
 module.exports = {
   calculatePricing,
+  calculateAuthoritativePricing,
+  getCreatorPricingInfo,
   getActiveFormatFromDb
 };
+

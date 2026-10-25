@@ -970,6 +970,22 @@
         localStorage.setItem('selectedCreatorsCount', totalSelected);
         localStorage.setItem('selectedCreators', JSON.stringify(selectedList));
         localStorage.setItem('selectedCreatorIds', JSON.stringify(selectedList.map(c => c.id)));
+
+        // Synchronize with authoritative backend draft order state
+        const urlParams = new URLSearchParams(window.location.search);
+        const formatKey = urlParams.get('format') || localStorage.getItem('selectedFormatKey') || 'reaction';
+        fetch(`${API_BASE}/api/orders/draft`, {
+          method: 'POST',
+          keepalive: true,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            format: formatKey,
+            creatorIds: selectedList.map(c => c.id),
+            selectedCreators: selectedList
+          })
+        }).catch(err => {
+          console.warn('Sync draft creators note:', err.message);
+        });
       } catch (e) {
         console.error(e);
       }

@@ -9,6 +9,13 @@ const { getMatchingCreators, claimOpenOrder } = require('../services/creatorEngi
 const { updateShippingInfo, getCreatorShippingAddress } = require('../services/logisticsService');
 const { notify, getNotifications, markAsRead } = require('../services/notificationService');
 const { resolveSession, getBrandAccountSummary } = require('../services/authService');
+const {
+  getOrCreateDraftOrder,
+  updateDraftOrder,
+  getReactionBriefViewData,
+  submitAndLockReactionBrief,
+  parseDraftOrder
+} = require('../services/draftOrderService');
 
 function generateOrderId() {
   return 'ORD-' + Math.floor(100000 + Math.random() * 900000);
@@ -754,6 +761,154 @@ router.get('/session', (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 });
+
+/**
+ * POST /api/orders/draft
+ * 1. Unified Draft Order State: Persists selections from creators and order pages
+ */
+router.post('/draft', (req, res) => {
+  try {
+    const session = resolveSession(req);
+    const {
+      orderId,
+      format,
+      creatorIds,
+      selectedCreators,
+      qty,
+      turnaroundHours,
+      layoutPreference,
+      sourceAssetUrl,
+      timestampsCallouts,
+      reactionStyleGuidelines,
+      brandName,
+      aboutBrand,
+      filmingInstructions,
+      concepts,
+      hooks,
+      talkingPoints
+    } = req.body;
+
+    const draft = getOrCreateDraftOrder({
+      orderId,
+      sessionId: session.id,
+      format: format || 'reaction'
+    });
+
+    let effectiveCreatorIds = undefined;
+    if (Array.isArray(creatorIds)) {
+      effectiveCreatorIds = creatorIds;
+    } else if (Array.isArray(selectedCreators)) {
+      effectiveCreatorIds = selectedCreators.map(c => typeof c === 'object' ? c.id : c).filter(Boolean);
+    }
+
+    const updated = updateDraftOrder(draft.id, {
+      format,
+      creatorIds: effectiveCreatorIds,
+      qty,
+      turnaroundHours,
+      layoutPreference,
+      sourceAssetUrl,
+      timestampsCallouts,
+      reactionStyleGuidelines,
+      brandName,
+      aboutBrand,
+      filmingInstructions,
+      concepts,
+      hooks,
+      talkingPoints
+    });
+
+    res.json({
+      success: true,
+      message: 'Draft order saved to unified state.',
+      orderId: draft.id,
+      draft: updated.draft,
+      pricing: updated.pricing
+    });
+  } catch (error) {
+    console.error('Error updating draft order:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/orders/draft
+ * Retrieves latest unified draft order for active session
+ */
+router.get('/draft', (req, res) => {
+  try {
+    const session = resolveSession(req);
+    const format = req.query.format || 'reaction';
+    const draft = getOrCreateDraftOrder({ sessionId: session.id, format });
+
+    res.json({
+      success: true,
+      draft
+    });
+  } catch (error) {
+    console.error('Error getting draft order:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/orders/draft/brief
+ * GET /api/orders/:order_id/brief
+ * 3. Dedicated Endpoint for the Edit Brief View (?format=reaction)
+ * Performs verification, fresh rate lookup, authoritative pricing, and reaction brief customization
+ */
+const handleGetBriefView = (req, res) => {
+  try {
+    const session = resolveSession(req);
+    const orderId = (req.params.order_id && req.params.order_id !== 'draft') ? req.params.order_id : null;
+    const format = req.query.format || 'reaction';
+
+    const data = getReactionBriefViewData({
+      orderId,
+      sessionId: session.id,
+      format
+    });
+
+    res.json(data);
+  } catch (error) {
+    console.error('Error generating reaction brief view:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+router.get('/draft/brief', handleGetBriefView);
+router.get('/:order_id/brief', handleGetBriefView);
+
+/**
+ * POST /api/orders/draft/brief
+ * POST /api/orders/:order_id/brief
+ * PATCH /api/orders/:order_id/brief
+ * 5. Final Brief Submission & Validation
+ * Validates mandatory reaction brief fields, locks pricing snapshot, and advances status to ready_for_checkout
+ */
+const handleSubmitBrief = (req, res) => {
+  try {
+    const session = resolveSession(req);
+    const orderId = (req.params.order_id && req.params.order_id !== 'draft')
+      ? req.params.order_id
+      : (req.body.orderId || getOrCreateDraftOrder({ sessionId: session.id }).id);
+
+    const result = submitAndLockReactionBrief(orderId, req.body, session);
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    res.json(result);
+  } catch (error) {
+    console.error('Error finalizing brief submission:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+router.post('/draft/brief', handleSubmitBrief);
+router.post('/:order_id/brief', handleSubmitBrief);
+router.patch('/:order_id/brief', handleSubmitBrief);
 
 /**
  * GET /api/orders/:id

@@ -1,30 +1,28 @@
 /**
  * Sofia Brief Backend Client Integration
  * Handles:
- * - Draft Autosave (POST /api/briefs/save-draft, PUT /api/briefs/:id)
- * - Brief Retrieval (GET /api/briefs/:id)
- * - Server-side Validation & Review (POST /api/briefs/:id/review)
- * - AI Script Assistant (POST /api/ai/script-helper)
- * - Real-time script pacing & duration estimation
+ * - Unified Draft Order Sync & Autosave (POST /api/orders/draft)
+ * - Reaction Brief Retrieval & Prerequisite Verification (GET /api/orders/:order_id/brief?format=reaction)
+ * - Authoritative Server-Side Pricing & Creator Rate Display
+ * - Reaction Format Specification Field Handling (source asset link, layout, callouts)
+ * - Final Brief Submission & Pricing Lock-In (POST /api/orders/:order_id/brief)
+ * - AI Script Assistant & Real-time Script Pacing
  */
 
 const BRIEF_API_BASE = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+let currentOrderId = null;
 let currentBriefId = null;
 let autosaveTimeout = null;
+let latestAuthoritativePricing = null;
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', async () => {
-  // Check for explicit briefId in URL or localStorage
   const urlParams = new URLSearchParams(window.location.search);
-  const paramId = urlParams.get('briefId') || urlParams.get('id') || (urlParams.get('ai') === 'true' ? localStorage.getItem('sofia_current_brief_id') : null);
+  const format = urlParams.get('format') || localStorage.getItem('selectedFormatKey') || 'reaction';
+  const paramId = urlParams.get('orderId') || urlParams.get('briefId') || urlParams.get('id') ||
+                  localStorage.getItem('sofia_current_order_id') || localStorage.getItem('sofia_current_brief_id') || 'draft';
 
-  if (paramId) {
-    await loadBriefFromBackend(paramId);
-  } else if (urlParams.get('ai') === 'true' || localStorage.getItem('sofia_generated_brief')) {
-    await loadBriefFromBackend(localStorage.getItem('sofia_current_brief_id') || 'local_generated');
-  }
-
-  // Hook up inputs for autosave
+  await loadBriefFromBackend(paramId, format);
   setupAutosaveListeners();
 });
 
@@ -32,13 +30,26 @@ document.addEventListener('DOMContentLoaded', async () => {
  * Hook up input events for debounced autosave
  */
 function setupAutosaveListeners() {
-  const inputs = ['brand-name-input', 'about-brand-input', 'filming-instructions-input'];
-  inputs.forEach(id => {
+  const inputIds = [
+    'brand-name-input',
+    'about-brand-input',
+    'filming-instructions-input',
+    'source-asset-url-input',
+    'timestamps-callouts-input',
+    'reaction-style-input'
+  ];
+
+  inputIds.forEach(id => {
     const el = document.getElementById(id);
     if (el) {
       el.addEventListener('input', () => scheduleAutosave());
     }
   });
+
+  const layoutSelect = document.getElementById('layout-preference-select');
+  if (layoutSelect) {
+    layoutSelect.addEventListener('change', () => scheduleAutosave());
+  }
 
   document.addEventListener('input', (e) => {
     if (
@@ -86,13 +97,14 @@ function collectBriefPayload() {
   const brandName = document.getElementById('brand-name-input')?.value.trim() || '';
   const aboutBrand = document.getElementById('about-brand-input')?.value.trim() || '';
   const filmingInstructions = document.getElementById('filming-instructions-input')?.value.trim() || '';
+  const sourceAssetUrl = document.getElementById('source-asset-url-input')?.value.trim() || '';
+  const layoutPreference = document.getElementById('layout-preference-select')?.value || 'split_screen';
+  const timestampsCallouts = document.getElementById('timestamps-callouts-input')?.value.trim() || '';
+  const reactionStyleGuidelines = document.getElementById('reaction-style-input')?.value.trim() || '';
 
   const creatorCount = (window.selectedCreators && window.selectedCreators.length) || 2;
   const format = window.currentFormat || localStorage.getItem('selectedFormat') || 'Reaction Video';
-  const fallbackBase = (format === 'Full UGC') ? 100.00 : 25.00;
-  const rate = (typeof window.getRateForQty === 'function')
-    ? window.getRateForQty(window.currentQty || 6)
-    : fallbackBase;
+  const formatKey = String(format).toLowerCase().includes('full') ? 'full' : 'reaction';
 
   const concepts = [];
   let summedPerCreator = 0;
@@ -104,15 +116,12 @@ function collectBriefPayload() {
     const script = block.querySelector('.concept-script-textarea')?.value.trim() || '';
     const perCreator = Math.max(1, parseInt(block.querySelector('.per-creator-input')?.value.trim(), 10) || 1);
     summedPerCreator += perCreator;
-    const conceptQty = perCreator * creatorCount;
-    const conceptSubtotal = parseFloat((conceptQty * rate).toFixed(2));
     concepts.push({
       title,
       type,
       script,
       perCreator,
-      qty: conceptQty,
-      subtotal: conceptSubtotal
+      qty: perCreator * creatorCount
     });
   });
 
@@ -120,158 +129,284 @@ function collectBriefPayload() {
   const qty = totalPerCreator * creatorCount;
   window.currentQty = qty;
 
+  const creatorIds = (window.selectedCreators || []).map(c => typeof c === 'object' ? c.id : c).filter(Boolean);
+
   return {
-    id: currentBriefId,
+    orderId: currentOrderId || currentBriefId,
+    id: currentOrderId || currentBriefId,
+    format,
+    formatKey,
     brandName,
     aboutBrand,
     filmingInstructions,
+    sourceAssetUrl,
+    layoutPreference,
+    timestampsCallouts,
+    reactionStyleGuidelines,
     qty,
     perCreator: totalPerCreator,
-    format,
+    creatorIds,
     selectedCreators: window.selectedCreators || [],
     concepts
   };
 }
 
 /**
- * POST /api/briefs/save-draft
+ * 1. Unified Draft Order State: Persist draft to backend database
  */
 async function saveDraftToBackend(showExplicitAlert = false) {
   const payload = collectBriefPayload();
   try {
-    const response = await fetch(`${BRIEF_API_BASE}/api/briefs/save-draft`, {
+    const response = await fetch(`${BRIEF_API_BASE}/api/orders/draft`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
 
-    if (!response.ok) throw new Error('Failed to save brief to backend');
+    if (!response.ok) throw new Error('Failed to save draft to backend');
 
     const result = await response.json();
-    if (result.success && result.briefId) {
-      currentBriefId = result.briefId;
-      localStorage.setItem('sofia_current_brief_id', currentBriefId);
+    if (result.success && result.orderId) {
+      currentOrderId = result.orderId;
+      currentBriefId = result.orderId;
+      localStorage.setItem('sofia_current_order_id', currentOrderId);
+      localStorage.setItem('sofia_current_brief_id', currentOrderId);
+
+      if (result.pricing) {
+        latestAuthoritativePricing = result.pricing;
+        renderAuthoritativePricing(result.pricing);
+      }
+
       showAutosaveBadge('All changes saved to backend', 'saved');
       if (showExplicitAlert) {
         alert('Draft saved successfully to backend!');
       }
     }
   } catch (err) {
-    console.warn('Backend autosave fallback to localStorage:', err);
+    console.warn('Backend draft autosave fallback:', err);
     showAutosaveBadge('Saved locally', 'saved');
   }
 }
 
 /**
- * GET /api/briefs/:id
+ * 3. Dedicated Endpoint for the Edit Brief View (?format=reaction)
+ * Loads authoritative state, checks prerequisites, performs fresh creator rate lookups,
+ * and formats reaction-specific brief fields.
  */
-async function loadBriefFromBackend(briefId) {
+async function loadBriefFromBackend(orderOrBriefId, formatKey = 'reaction') {
   try {
-    showAutosaveBadge('Loading brief...', 'saving');
-    let b = null;
-    if (briefId && briefId !== 'local_generated') {
-      try {
-        const response = await fetch(`${BRIEF_API_BASE}/api/briefs/${briefId}`);
-        if (response.ok) {
-          const result = await response.json();
-          if (result.success && result.brief) {
-            b = result.brief;
+    showAutosaveBadge('Loading verified brief...', 'saving');
+
+    const targetParam = (orderOrBriefId && orderOrBriefId !== 'local_generated') ? orderOrBriefId : 'draft';
+    const response = await fetch(`${BRIEF_API_BASE}/api/orders/${targetParam}/brief?format=${encodeURIComponent(formatKey)}`);
+
+    if (response.ok) {
+      const result = await response.json();
+      if (result.success) {
+        currentOrderId = result.orderId;
+        currentBriefId = result.orderId;
+        localStorage.setItem('sofia_current_order_id', currentOrderId);
+        localStorage.setItem('sofia_current_brief_id', currentOrderId);
+
+        // 1. Verify and notify prerequisites
+        handlePrerequisitesUI(result.prerequisites, formatKey);
+
+        // 2. Fresh Rate Lookup & Creator population
+        if (Array.isArray(result.verifiedCreators) && result.verifiedCreators.length > 0) {
+          window.selectedCreators = result.verifiedCreators;
+          try {
+            localStorage.setItem('selectedCreators', JSON.stringify(result.verifiedCreators));
+            localStorage.setItem('selectedCreatorIds', JSON.stringify(result.verifiedCreators.map(c => c.id)));
+            localStorage.setItem('selectedCreatorsCount', result.verifiedCreators.length);
+          } catch (e) {}
+        }
+
+        // 3. Populate Format & Quantities
+        if (result.format) {
+          window.currentFormat = result.format;
+        }
+        if (result.orderSummary && result.orderSummary.qty) {
+          window.currentQty = result.orderSummary.qty;
+        }
+
+        // 4. Authoritative Pricing Display
+        if (result.pricing) {
+          latestAuthoritativePricing = result.pricing;
+          renderAuthoritativePricing(result.pricing);
+        }
+
+        // 5. Pre-fill Brief details and Format-Specific Reaction fields
+        const brief = result.brief || {};
+        const brandInput = document.getElementById('brand-name-input');
+        const aboutInput = document.getElementById('about-brand-input');
+        const filmingInput = document.getElementById('filming-instructions-input');
+        const sourceUrlInput = document.getElementById('source-asset-url-input');
+        const layoutSelect = document.getElementById('layout-preference-select');
+        const timestampsInput = document.getElementById('timestamps-callouts-input');
+        const styleInput = document.getElementById('reaction-style-input');
+
+        if (brandInput && brief.brandName) brandInput.value = brief.brandName;
+        if (aboutInput && brief.aboutBrand) aboutInput.value = brief.aboutBrand;
+        if (filmingInput && brief.filmingInstructions) filmingInput.value = brief.filmingInstructions;
+        if (sourceUrlInput && brief.sourceAssetUrl) sourceUrlInput.value = brief.sourceAssetUrl;
+        if (layoutSelect && brief.layoutPreference) layoutSelect.value = brief.layoutPreference;
+        if (timestampsInput && brief.timestampsCallouts) timestampsInput.value = brief.timestampsCallouts;
+        if (styleInput && brief.reactionStyleGuidelines) styleInput.value = brief.reactionStyleGuidelines;
+
+        // 6. Populate Concepts
+        if (Array.isArray(brief.concepts) && brief.concepts.length > 0) {
+          const container = document.getElementById('concepts-container');
+          while (container && container.children.length < brief.concepts.length && typeof window.addNewConcept === 'function') {
+            window.addNewConcept();
           }
+          const blocks = document.querySelectorAll('#concepts-container > div');
+          brief.concepts.forEach((c, idx) => {
+            const block = blocks[idx];
+            if (!block) return;
+            const ta = block.querySelector('.concept-script-textarea');
+            if (ta && c.script !== undefined) ta.value = c.script;
+            const pcInput = block.querySelector('.per-creator-input');
+            if (pcInput && c.perCreator !== undefined) pcInput.value = c.perCreator;
+            const titleEl = block.querySelector('.concept-title-text');
+            if (titleEl && c.title) titleEl.textContent = c.title;
+            const typeEl = block.querySelector('[id^="selected-video-type-text-"]');
+            if (typeEl && c.type) typeEl.textContent = c.type;
+          });
         }
-      } catch (e) {
-        console.warn('Network error loading brief from backend:', e);
+
+        if (typeof window.updateFormatUI === 'function') window.updateFormatUI();
+        if (typeof window.updateUI === 'function') window.updateUI(true);
+        if (typeof window.checkBriefValidity === 'function') window.checkBriefValidity();
+
+        showAutosaveBadge('Verified backend brief ready', 'saved');
+        return;
       }
     }
-
-    if (!b) {
-      try {
-        b = JSON.parse(localStorage.getItem('sofia_generated_brief') || 'null');
-      } catch (_) {}
-    }
-
-    if (b) {
-      currentBriefId = b.id || briefId;
-      localStorage.setItem('sofia_current_brief_id', currentBriefId);
-
-      const brandInput = document.getElementById('brand-name-input');
-      const aboutInput = document.getElementById('about-brand-input');
-      const filmingInput = document.getElementById('filming-instructions-input');
-
-      if (brandInput && b.brandName) brandInput.value = b.brandName;
-      if (aboutInput && b.aboutBrand) aboutInput.value = b.aboutBrand;
-      if (filmingInput && b.filmingInstructions) filmingInput.value = b.filmingInstructions;
-
-      if (b.format) {
-        window.currentFormat = b.format;
-        const key = (b.format === 'Full UGC') ? 'full' : 'reaction';
-        try {
-          localStorage.setItem('selectedFormat', b.format);
-          localStorage.setItem('selectedFormatKey', key);
-          sessionStorage.setItem('selectedFormat', b.format);
-          sessionStorage.setItem('selectedFormatKey', key);
-        } catch (_) {}
-      }
-
-      if (b.concepts && b.concepts.length > 0) {
-        const container = document.getElementById('concepts-container');
-        while (container && container.children.length < b.concepts.length && typeof window.addNewConcept === 'function') {
-          window.addNewConcept();
-        }
-        const blocks = document.querySelectorAll('#concepts-container > div');
-        b.concepts.forEach((c, idx) => {
-          const block = blocks[idx];
-          if (!block) return;
-          const ta = block.querySelector('.concept-script-textarea');
-          if (ta && c.script !== undefined) ta.value = c.script;
-          const pcInput = block.querySelector('.per-creator-input');
-          if (pcInput && c.perCreator !== undefined) pcInput.value = c.perCreator;
-          const titleEl = block.querySelector('.concept-title-text');
-          if (titleEl && c.title) titleEl.textContent = c.title;
-          const typeEl = block.querySelector('[id^="selected-video-type-text-"]');
-          if (typeEl && c.type) typeEl.textContent = c.type;
-          const subEl = block.querySelector('.concept-subtitle');
-          if (subEl) subEl.textContent = `${window.currentFormat || 'Reaction Video'} · ${c.type || 'Reaction / footage'}`;
-        });
-      }
-
-      if (b.qty && typeof window.selectTier === 'function') {
-        window.currentQty = b.qty;
-      }
-
-      if (typeof window.updateFormatUI === 'function') {
-        window.updateFormatUI();
-      }
-
-      if (typeof window.updateUI === 'function') {
-        window.updateUI(true);
-      }
-
-      if (typeof window.checkBriefValidity === 'function') {
-        window.checkBriefValidity();
-      }
-
-      showAutosaveBadge('AI brief loaded', 'saved');
-      return;
-    }
-
-    showAutosaveBadge('Ready', 'saved');
   } catch (err) {
-    console.warn('Error restoring brief state:', err);
-    showAutosaveBadge('Ready', 'saved');
+    console.warn('Error fetching brief view from backend, falling back to local state:', err);
+  }
+
+  showAutosaveBadge('Ready', 'saved');
+}
+
+/**
+ * Handle Prerequisite verification banner
+ */
+function handlePrerequisitesUI(prerequisites, formatKey) {
+  const banner = document.getElementById('validation-banner');
+  if (!banner || !prerequisites) return;
+
+  if (!prerequisites.allMet && prerequisites.missing && prerequisites.missing.length > 0) {
+    const isMissingCreators = !prerequisites.creatorsVerified;
+    banner.className = "w-full bg-[#fffbeb] border border-[#fde68a] rounded-[10px] p-3 sm:p-3.5 mb-6 text-[12px] text-[#92400e] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs";
+    banner.innerHTML = `
+      <div class="flex items-start gap-2.5">
+        <svg class="w-4 h-4 text-[#d97706] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <div>
+          <span class="font-bold text-[#78350f]">Prerequisite configuration required:</span>
+          <span class="text-[#92400e] ml-1">${prerequisites.missing.join(' ')}</span>
+        </div>
+      </div>
+      ${isMissingCreators ? `
+        <a href="creators.html?format=${encodeURIComponent(formatKey)}" class="px-3 py-1.5 bg-[#d97706] hover:bg-[#b45309] text-white text-[11.5px] font-semibold rounded-[8px] transition-all whitespace-nowrap shrink-0 shadow-xs cursor-pointer">
+          Pick Creators &rarr;
+        </a>
+      ` : ''}
+    `;
   }
 }
 
+/**
+ * Authoritative Server-Side Pricing Renderer
+ */
+function renderAuthoritativePricing(pricing) {
+  if (!pricing) return;
+
+  // Sidebar creators list with authoritative rates
+  const creatorsListEl = document.getElementById('brief-selected-creators-list');
+  if (creatorsListEl && Array.isArray(pricing.creators) && pricing.creators.length > 0) {
+    creatorsListEl.innerHTML = pricing.creators.map(c => `
+      <div class="flex items-center justify-between py-1 border-b border-[#f3f4f6] last:border-0">
+        <div class="flex items-center gap-2.5">
+          <img src="${c.avatar || 'creator_avatar.png'}" alt="${c.name}" class="w-7 h-7 rounded-full object-cover border border-[#e5e7eb]" onerror="this.onerror=null; this.src='creator_avatar.png';" />
+          <div>
+            <div class="text-[12px] font-bold text-[#18181b] leading-tight flex items-center gap-1">
+              <span>${c.name}</span>
+              <span class="text-[9.5px] font-medium text-[#16a34a] bg-[#dcfce7] px-1.5 py-0.2 rounded-full">Active</span>
+            </div>
+            <div class="text-[10.5px] text-[#71717a] mt-0.5">${c.assignedVideos} videos &middot; $${c.baseRate.toFixed(2)}/vid</div>
+          </div>
+        </div>
+        <span class="text-[11.5px] font-bold text-[#111827]">$${c.subtotal.toFixed(2)}</span>
+      </div>
+    `).join('');
+  }
+
+  // Live estimate calc line
+  const calcQty = document.getElementById('estimate-calc-qty');
+  const calcTotal = document.getElementById('estimate-calc-total');
+  if (calcQty) {
+    calcQty.innerHTML = `${pricing.quantity} videos &middot; ${pricing.creators.length || 2} creators`;
+  }
+  if (calcTotal) {
+    calcTotal.textContent = `$${pricing.creatorBaseSubtotal.toFixed(2)}`;
+  }
+
+  // Total price display
+  const estTotal = document.getElementById('estimate-total-price');
+  if (estTotal) {
+    estTotal.textContent = `$${pricing.total.toFixed(2)}`;
+  }
+
+  // Floating bottom bar price
+  const floatingBarPrice = document.getElementById('floating-bar-price');
+  if (floatingBarPrice) {
+    floatingBarPrice.textContent = `${pricing.quantity} videos · $${pricing.total.toFixed(2)}`;
+  }
+
+  // Discount / fee notice
+  const estimateSubtitle = document.getElementById('estimate-subtitle');
+  if (estimateSubtitle) {
+    const discountText = pricing.volumeDiscountAmount > 0 ? ` &middot; Includes -$${pricing.volumeDiscountAmount.toFixed(2)} discount` : '';
+    estimateSubtitle.textContent = `${pricing.quantity} videos · ${pricing.turnaroundHours}h turnaround${discountText}`;
+  }
+}
 
 /**
- * POST /api/briefs/:id/review
- * Server-side Validation & Submission
+ * 5. Final Brief Submission & Validation
+ * Submits completed brief, validates mandatory fields, locks price snapshot,
+ * and advances order status to ready_for_checkout
  */
 async function submitReviewToBackend() {
   const payload = collectBriefPayload();
-  const targetId = currentBriefId || 'draft_' + Date.now();
+  const targetId = currentOrderId || currentBriefId || 'draft';
+
+  // Client-side pre-validation for immediate UI feedback
+  if (!payload.brandName) {
+    alert('Please enter your Brand Name.');
+    const input = document.getElementById('brand-name-input');
+    if (input) { input.focus(); input.classList.add('ring-2', 'ring-[#ef4444]'); }
+    return;
+  }
+
+  if (payload.formatKey === 'reaction' && !payload.sourceAssetUrl) {
+    alert('Reaction video format requires a Source Media URL (video clip to react to).');
+    const input = document.getElementById('source-asset-url-input');
+    if (input) {
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      input.focus();
+      input.classList.add('ring-2', 'ring-[#ef4444]', 'border-[#ef4444]');
+      setTimeout(() => input.classList.remove('ring-2', 'ring-[#ef4444]', 'border-[#ef4444]'), 2500);
+    }
+    return;
+  }
+
+  showAutosaveBadge('Validating and locking brief...', 'saving');
 
   try {
-    const response = await fetch(`${BRIEF_API_BASE}/api/briefs/${targetId}/review`, {
+    const response = await fetch(`${BRIEF_API_BASE}/api/orders/${targetId}/brief`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -280,27 +415,29 @@ async function submitReviewToBackend() {
     const data = await response.json();
 
     if (!response.ok || !data.success) {
-      throw new Error(data.error || (data.details ? data.details.join('\n') : 'Validation failed on server'));
+      const errorMsg = data.validationErrors ? data.validationErrors.join('\n') : (data.error || 'Validation failed on server');
+      throw new Error(errorMsg);
     }
 
-    // Save server-verified payload to review order
+    // Save locked and verified order
     localStorage.setItem('ugc_order_review', JSON.stringify(data.verifiedOrder));
-    localStorage.setItem('sofia_current_brief_id', targetId);
-    window.location.href = 'review_order.html';
+    localStorage.setItem('sofia_current_order_id', data.orderId);
+    localStorage.setItem('sofia_current_brief_id', data.orderId);
+
+    // Redirect to checkout review
+    window.location.href = data.verifiedOrder?.checkoutUrl || `review_order.html?orderId=${encodeURIComponent(data.orderId)}&format=reaction`;
   } catch (err) {
-    console.warn('Server review validation error, falling back to local review flow:', err);
-    // If backend is unavailable, proceed with local payload
-    const fallbackBase = (payload.format === 'Full UGC') ? 100.00 : 25.00;
-    const localRate = window.getRateForQty ? window.getRateForQty(payload.qty) : fallbackBase;
-    const localPayload = {
-      ...payload,
-      rate: localRate.toFixed(2),
-      total: (payload.qty * localRate).toFixed(2),
-      perCreator: payload.perCreator || Math.ceil(payload.qty / (payload.selectedCreators.length || 2)),
-      selectedCreatorsCount: payload.selectedCreators.length || 2
-    };
-    localStorage.setItem('ugc_order_review', JSON.stringify(localPayload));
-    window.location.href = 'review_order.html';
+    console.error('Final brief submission error:', err);
+    showAutosaveBadge('Validation failed', 'error');
+
+    const banner = document.getElementById('validation-banner');
+    if (banner) {
+      banner.className = "w-full bg-[#fef2f2] border border-[#fecaca] rounded-[10px] px-4 py-3 mb-6 text-[12px] text-[#dc2626]";
+      banner.innerHTML = `<strong>Please correct the following:</strong><br/>${err.message.replace(/\n/g, '<br/>')}`;
+      banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      alert(`Brief validation error:\n${err.message}`);
+    }
   }
 }
 
@@ -392,3 +529,4 @@ window.saveDraftToBackend = saveDraftToBackend;
 window.submitReviewToBackend = submitReviewToBackend;
 window.callAiScriptHelper = callAiScriptHelper;
 window.updateScriptPacing = updateScriptPacing;
+window.renderAuthoritativePricing = renderAuthoritativePricing;
