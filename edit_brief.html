@@ -105,7 +105,7 @@
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-3">
         <div>
           <h2 class="text-[13px] font-bold text-[#111827] leading-tight">More videos. Better value.</h2>
-          <p id="tier-subtitle" class="text-[11.5px] text-[#71717a] mt-0.5">6 videos · 3 per creator</p>
+          <p id="tier-subtitle" class="text-[11.5px] text-[#71717a] mt-0.5">0 creators selected · Minimum 5 videos</p>
         </div>
 
         <div class="flex items-center gap-2.5 flex-wrap">
@@ -252,7 +252,7 @@
         <div class="flex flex-col">
           <label class="text-[12px] font-bold text-[#111827] mb-1.5">Order details</label>
           <div class="w-full bg-[#f9fafb] border border-[#f3f4f6] rounded-[10px] p-4 text-[12px] text-[#4b5563] leading-relaxed">
-            <p id="order-details-summary" class="font-normal text-[#18181b]">6 videos · 2 creators · 1 concept</p>
+            <p id="order-details-summary" class="font-normal text-[#18181b]">0 creators selected · Pick creators on creators page</p>
             <p class="text-[#71717a] mt-0.5">Each creator films the quantities listed below.</p>
           </div>
         </div>
@@ -477,38 +477,29 @@
           <!-- Estimate Item -->
           <div class="mb-4">
             <div id="estimate-format-name" class="text-[13px] font-bold text-[#111827]">Reaction Video</div>
-            <div id="estimate-subtitle" class="text-[11.5px] text-[#71717a]">6 videos · 1 concepts</div>
+            <div id="estimate-subtitle" class="text-[11.5px] text-[#71717a]">0 creators selected · Minimum 5 videos</div>
           </div>
 
           <!-- Selected Creators Avatars & Video counts -->
           <div id="brief-selected-creators-list" class="flex flex-col gap-3 pt-1 pb-4">
             <!-- Populated dynamically from saved creators -->
-            <div class="flex items-center gap-3">
-              <img src="assets/creators_page/franci.png" alt="Franci" class="w-8 h-8 rounded-full object-cover" />
-              <div>
-                <div class="text-[12px] font-bold text-[#18181b] leading-tight">Franci</div>
-                <div class="text-[11px] text-[#71717a]">3 videos</div>
-              </div>
-            </div>
-            <div class="flex items-center gap-3">
-              <img src="assets/creators_page/emilia.png" alt="Emilia" class="w-8 h-8 rounded-full object-cover" />
-              <div>
-                <div class="text-[12px] font-bold text-[#18181b] leading-tight">Emilia</div>
-                <div class="text-[11px] text-[#71717a]">3 videos</div>
-              </div>
+            <div class="p-3 bg-[#f9fafb] border border-[#e5e7eb] rounded-[10px] text-center text-[#71717a] text-[12px]">
+              <p class="font-medium text-[#374151]">0 creators selected</p>
+              <p class="text-[11px] mt-0.5">Pick creators on the creators page</p>
+              <a href="creators.html?format=reaction" class="inline-block mt-2 text-[#7c66ff] hover:text-[#6852ee] font-semibold text-[11.5px]">Pick creators &rarr;</a>
             </div>
           </div>
 
           <!-- Calculation Line -->
           <div id="estimate-calc-line" class="pt-3 pb-5 border-t border-[#f3f4f6] flex items-center justify-between text-[11.5px] text-[#4b5563]">
-            <span id="estimate-calc-qty">6 videos &times; $30.00</span>
-            <span id="estimate-calc-total" class="text-[#18181b] font-medium">= $180.00</span>
+            <span id="estimate-calc-qty">0 creators selected</span>
+            <span id="estimate-calc-total" class="text-[#18181b] font-medium">= $0.00</span>
           </div>
 
           <!-- Estimated Total -->
           <div class="pt-1 pb-5 border-t border-[#f3f4f6] flex items-center justify-between">
             <span class="text-[12.5px] font-bold text-[#111827]">Estimated total</span>
-            <span id="estimate-total-price" class="text-[20px] font-bold text-[#111827] tracking-tight">$180.00</span>
+            <span id="estimate-total-price" class="text-[20px] font-bold text-[#111827] tracking-tight">$0.00</span>
           </div>
 
           <!-- Primary Action Button -->
@@ -546,7 +537,7 @@
         </svg>
       </button>
       <div class="text-left pr-1 sm:pr-2 shrink-0">
-        <div id="floating-bar-price" class="text-[11.5px] sm:text-[12px] font-bold text-[#111827] leading-tight">6 videos · $180.00</div>
+        <div id="floating-bar-price" class="text-[11.5px] sm:text-[12px] font-bold text-[#111827] leading-tight">0 creators · $0.00</div>
         <div class="text-[9.5px] sm:text-[10px] text-[#71717a] leading-tight mt-0.5">Review before you pay</div>
       </div>
       <button 
@@ -563,12 +554,12 @@
   </main>
 
   <script>
-    let selectedCreators = [
-      { id: 'franci', name: 'Franci', handle: '@franci_ugc', avatar: 'assets/creators_page/franci.png' },
-      { id: 'emilia', name: 'Emilia', handle: '@emilia_ugc', avatar: 'assets/creators_page/emilia.png' }
-    ];
+    let selectedCreators = [];
 
     function getTierConfigs(count) {
+      if (!count || count <= 0) {
+        return { tier1: 0, tier2: 0, tier3: 0, inc: 0 };
+      }
       if (count === 1) {
         return { tier1: 5, tier2: 10, tier3: 20, inc: 5 };
       }
@@ -622,12 +613,13 @@
     }
 
     function getRateForQty(qty) {
+      const creatorCount = (selectedCreators && selectedCreators.length) || 0;
+      if (creatorCount === 0) return 0.00;
       const base = getBaseRate();
-      const creatorCount = (selectedCreators && selectedCreators.length) || 2;
       const tiers = getTierConfigs(creatorCount);
-      if (qty >= tiers.tier3) {
+      if (qty >= tiers.tier3 && tiers.tier3 > 0) {
         return parseFloat((base * (1 - 0.1666666667)).toFixed(2)); // Save 16.7% / video
-      } else if (qty >= tiers.tier2) {
+      } else if (qty >= tiers.tier2 && tiers.tier2 > 0) {
         return parseFloat((base * (1 - 0.0833333333)).toFixed(2)); // Save 8.3% / video
       } else {
         return base; // Starter order
@@ -732,21 +724,29 @@
       if (stored) {
         try {
           const list = JSON.parse(stored);
-          if (Array.isArray(list) && list.length > 0) {
+          if (Array.isArray(list)) {
             selectedCreators = list;
           }
         } catch (e) {
           console.error(e);
+          selectedCreators = [];
         }
+      } else {
+        selectedCreators = [];
       }
       window.selectedCreators = selectedCreators;
-      const count = selectedCreators.length || 2;
-      const tiers = getTierConfigs(count);
-      currentQty = tiers.tier1;
+      const count = selectedCreators.length;
+      if (count === 0) {
+        currentQty = 0;
+      } else {
+        const tiers = getTierConfigs(count);
+        currentQty = tiers.tier1;
+      }
       window.currentQty = currentQty;
     }
 
     function selectTier(qty) {
+      if (!selectedCreators || selectedCreators.length === 0) return;
       currentQty = qty;
       window.currentQty = currentQty;
       updateUI();
@@ -754,6 +754,7 @@
     }
 
     function addMoreVideos(increment) {
+      if (!selectedCreators || selectedCreators.length === 0) return;
       currentQty += increment;
       window.currentQty = currentQty;
       updateUI();
@@ -763,7 +764,8 @@
     function updateFromPerCreator(val) {
       const parsed = parseInt(val, 10);
       if (isNaN(parsed) || parsed < 1) return;
-      const creatorCount = selectedCreators.length || 2;
+      const creatorCount = (selectedCreators && selectedCreators.length) || 0;
+      if (creatorCount === 0) return;
       const totalPerCreator = sumConceptsPerCreator();
       currentQty = totalPerCreator * creatorCount;
       window.currentQty = currentQty;
@@ -773,8 +775,94 @@
 
     function updateUI(skipInputSync = false) {
       updateFormatUI();
-      const creatorCount = selectedCreators.length || 2;
+      const creatorCount = (selectedCreators && selectedCreators.length) || 0;
       const tiers = getTierConfigs(creatorCount);
+
+      if (creatorCount === 0) {
+        currentQty = 0;
+        window.currentQty = 0;
+        const formattedRate = '$0.00';
+        const formattedTotal = '$0.00';
+
+        // 1. Tier subtitle
+        const tierSubtitle = document.getElementById('tier-subtitle');
+        if (tierSubtitle) {
+          tierSubtitle.textContent = '0 creators selected · Minimum 5 videos';
+        }
+
+        // 2. Button states & dynamic labels
+        const btn6 = document.getElementById('btn-tier-6');
+        const btn10 = document.getElementById('btn-tier-10');
+        const btn20 = document.getElementById('btn-tier-20');
+        const btnAdd = document.getElementById('btn-tier-add');
+        const inactiveClass = "border border-[#e5e7eb] bg-white rounded-[9px] px-3 py-1.5 text-center min-w-[76px] opacity-60 cursor-not-allowed";
+        if (btn6) btn6.className = inactiveClass;
+        if (btn10) btn10.className = inactiveClass;
+        if (btn20) btn20.className = inactiveClass;
+        if (btnAdd) btnAdd.className = inactiveClass;
+
+        // 3. Order details summary
+        const orderDetailsSummary = document.getElementById('order-details-summary');
+        if (orderDetailsSummary) {
+          orderDetailsSummary.textContent = '0 creators selected · Pick creators on creators page';
+        }
+
+        // 4. Update all concept unit prices
+        document.querySelectorAll('.concept-unit-price').forEach(el => {
+          el.textContent = '$0.00 / video';
+        });
+
+        // 6. Concept footer prices
+        document.querySelectorAll('#concepts-container > div').forEach(block => {
+          const footerEl = block.querySelector('.concept-footer-price');
+          if (footerEl) {
+            footerEl.textContent = '0 videos · $0.00';
+          }
+        });
+
+        // 7. Live estimate subtitle
+        const estimateSubtitle = document.getElementById('estimate-subtitle');
+        if (estimateSubtitle) {
+          estimateSubtitle.textContent = '0 creators selected · Minimum 5 videos';
+        }
+
+        // 8. Dynamic sidebar creators list
+        const creatorsListEl = document.getElementById('brief-selected-creators-list');
+        if (creatorsListEl) {
+          creatorsListEl.innerHTML = `
+            <div class="p-3 bg-[#f9fafb] border border-[#e5e7eb] rounded-[10px] text-center text-[#71717a] text-[12px]">
+              <p class="font-medium text-[#374151]">0 creators selected</p>
+              <p class="text-[11px] mt-0.5">Pick creators on the creators page</p>
+              <a href="creators.html?format=reaction" class="inline-block mt-2 text-[#7c66ff] hover:text-[#6852ee] font-semibold text-[11.5px]">Pick creators &rarr;</a>
+            </div>
+          `;
+        }
+
+        // 9. Calculation line
+        const calcQty = document.getElementById('estimate-calc-qty');
+        const calcTotal = document.getElementById('estimate-calc-total');
+        if (calcQty) calcQty.innerHTML = `0 creators selected`;
+        if (calcTotal) calcTotal.textContent = `= $0.00`;
+
+        // 10. Estimated total
+        const estTotal = document.getElementById('estimate-total-price');
+        if (estTotal) estTotal.textContent = '$0.00';
+
+        // 11. Floating bottom bar price
+        const floatingBarPrice = document.getElementById('floating-bar-price');
+        if (floatingBarPrice) {
+          floatingBarPrice.textContent = `0 creators · $0.00`;
+        }
+
+        // 12. Update visibility of delete buttons
+        updateConceptDeleteButtons();
+
+        // 13. Update form completion state & button readiness
+        if (typeof checkBriefValidity === 'function') {
+          checkBriefValidity();
+        }
+        return;
+      }
 
       // 5. Per creator inputs sync (when triggered by tier buttons or initial load)
       if (!skipInputSync) {
@@ -970,10 +1058,10 @@
       const container = document.getElementById('concepts-container');
       if (!container) return;
 
-      const creatorCount = selectedCreators.length || 2;
+      const creatorCount = (selectedCreators && selectedCreators.length) || 0;
       const currentRate = getRateForQty(currentQty);
       const rate = currentRate.toFixed(2);
-      const perCreator = 1;
+      const perCreator = creatorCount > 0 ? 1 : 0;
       const conceptQty = perCreator * creatorCount;
       const conceptTotal = (conceptQty * currentRate).toFixed(2);
       const currentConceptNum = container.children.length + 1;
@@ -1160,7 +1248,7 @@
       const block = document.getElementById(`concept-block-${idx}`);
       if (block) {
         block.remove();
-        const creatorCount = selectedCreators.length || 2;
+        const creatorCount = (selectedCreators && selectedCreators.length) || 0;
         const totalPerCreator = sumConceptsPerCreator();
         currentQty = totalPerCreator * creatorCount;
         window.currentQty = currentQty;
@@ -1277,10 +1365,12 @@
         if (!ta.value.trim()) allScriptsFilled = false;
       });
 
+      const creatorCount = (selectedCreators && selectedCreators.length) || 0;
+      const creatorsValid = creatorCount > 0;
       const isReaction = (window.currentFormat !== 'Full UGC');
       const reactionValid = !isReaction || Boolean(sourceAssetUrl);
 
-      const isValid = Boolean(brandName && aboutBrand && filmingInstructions && allScriptsFilled && reactionValid);
+      const isValid = Boolean(creatorsValid && brandName && aboutBrand && filmingInstructions && allScriptsFilled && reactionValid);
       updateValidationUI(isValid);
       return isValid;
     }
@@ -1289,8 +1379,40 @@
       const banner = document.getElementById('validation-banner');
       const btnSidebar = document.getElementById('save-review-btn-sidebar');
       const btnFloating = document.getElementById('save-review-btn-floating');
+      const creatorCount = (selectedCreators && selectedCreators.length) || 0;
+
+      if (creatorCount === 0) {
+        if (banner) {
+          banner.className = "w-full bg-[#fffbeb] border border-[#fde68a] rounded-[10px] px-4 py-2.5 mb-6 text-[12px] text-[#92400e] flex items-center justify-between shadow-2xs";
+          banner.innerHTML = `
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#d97706] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span class="font-bold text-[#78350f]">0 creators selected:</span>
+              <span class="text-[#92400e]">Please choose your creators before finalizing the brief.</span>
+            </div>
+            <a href="creators.html?format=${encodeURIComponent(window.currentFormat === 'Full UGC' ? 'full' : 'reaction')}" class="px-3 py-1 bg-[#d97706] hover:bg-[#b45309] text-white text-[11px] font-semibold rounded-[6px] transition-all whitespace-nowrap">
+              Pick Creators &rarr;
+            </a>
+          `;
+        }
+        if (btnSidebar) {
+          btnSidebar.disabled = true;
+          btnSidebar.style.cssText = "";
+          btnSidebar.className = "w-full bg-[#9fa2fb] text-white text-[12.5px] font-semibold py-3 px-4 rounded-[12px] flex items-center justify-center gap-1.5 opacity-60 cursor-not-allowed mb-2.5";
+        }
+        if (btnFloating) {
+          btnFloating.disabled = true;
+          btnFloating.style.cssText = "";
+          btnFloating.className = "bg-[#9fa2fb] text-white text-[12px] font-semibold px-4 py-2 rounded-[10px] flex items-center gap-1.5 opacity-60 cursor-not-allowed";
+        }
+        return;
+      }
 
       if (isValid) {
+        if (btnSidebar) btnSidebar.disabled = false;
+        if (btnFloating) btnFloating.disabled = false;
         if (banner) {
           banner.className = "w-full bg-[#ecfdf5] border border-[#a7f3d0] rounded-[10px] px-4 py-2.5 mb-6 text-[12px] text-[#065f46] flex items-center justify-between transition-colors";
           banner.innerHTML = `
@@ -1316,6 +1438,8 @@
           btnFloating.className = activeFloatingClass;
         }
       } else {
+        if (btnSidebar) btnSidebar.disabled = false;
+        if (btnFloating) btnFloating.disabled = false;
         if (banner) {
           banner.className = "w-full bg-[#fef2f2] border border-[#fecaca] rounded-[10px] px-4 py-2.5 mb-6 text-[12px] text-[#dc2626] transition-colors";
           const isReaction = (window.currentFormat !== 'Full UGC');
@@ -1338,6 +1462,12 @@
     }
 
     function handleSaveAndReview() {
+      if (!selectedCreators || selectedCreators.length === 0) {
+        alert('Please pick creators on the creators page before finalizing your order.');
+        window.location.href = `creators.html?format=${encodeURIComponent(window.currentFormat === 'Full UGC' ? 'full' : 'reaction')}`;
+        return;
+      }
+
       const brandNameInput = document.getElementById('brand-name-input');
       const aboutBrandInput = document.getElementById('about-brand-input');
       const filmingInstructionsInput = document.getElementById('filming-instructions-input');
@@ -1372,7 +1502,7 @@
       }
 
       // Collect complete order brief details
-      const creatorCount = selectedCreators.length || 2;
+      const creatorCount = (selectedCreators && selectedCreators.length) || 0;
       const rate = getRateForQty(currentQty);
       const concepts = [];
       let summedPerCreator = 0;

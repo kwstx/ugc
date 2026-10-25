@@ -9,7 +9,7 @@ function generateDraftOrderId() {
 /**
  * 1. Unified Draft Order State: Get or create single source of truth
  */
-function getOrCreateDraftOrder({ orderId = null, sessionId = 'default_session', format = 'reaction' }) {
+function getOrCreateDraftOrder({ orderId = null, sessionId = 'default_session', format = 'reaction', includeLocked = false }) {
   let draft = null;
 
   if (orderId) {
@@ -17,7 +17,11 @@ function getOrCreateDraftOrder({ orderId = null, sessionId = 'default_session', 
   }
 
   if (!draft && sessionId) {
-    draft = db.prepare('SELECT * FROM draft_orders WHERE session_id = ? ORDER BY updated_at DESC LIMIT 1').get(sessionId);
+    if (includeLocked) {
+      draft = db.prepare('SELECT * FROM draft_orders WHERE session_id = ? ORDER BY updated_at DESC LIMIT 1').get(sessionId);
+    } else {
+      draft = db.prepare('SELECT * FROM draft_orders WHERE session_id = ? AND locked = 0 ORDER BY updated_at DESC LIMIT 1').get(sessionId);
+    }
   }
 
   if (draft) {
@@ -231,7 +235,7 @@ function getReactionBriefViewData({ orderId = null, sessionId = 'default_session
   const activeFormatLabel = isReaction ? 'Reaction Video' : 'Full UGC';
 
   // Find or create draft order
-  const draft = getOrCreateDraftOrder({ orderId, sessionId, format: activeFormatKey });
+  const draft = getOrCreateDraftOrder({ orderId, sessionId, format: activeFormatKey, includeLocked: true });
 
   // Fresh rate lookup for all creators directly from creators table
   const freshCreators = [];

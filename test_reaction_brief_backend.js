@@ -3,12 +3,13 @@ const assert = require('assert');
 const app = require('./server');
 
 const TEST_PORT = 3009;
+const RUN_SESSION_ID = 'test_session_reaction_' + Date.now();
 
 function request(path, method = 'GET', body = null, headers = {}) {
   return new Promise((resolve, reject) => {
     const defaultHeaders = {
       'Content-Type': 'application/json',
-      'x-session-id': 'test_session_reaction_123',
+      'x-session-id': RUN_SESSION_ID,
       ...headers
     };
 
@@ -129,17 +130,22 @@ const server = app.listen(TEST_PORT, async () => {
     assert.strictEqual(briefViewRes.verifiedCreators[1].baseRate, 30.00);
     console.log('✔ 3a. GET /api/orders/:order_id/brief?format=reaction returns verified creators with fresh rates & pricing breakdown');
 
-    // Test prerequisite missing detection when no creators selected
+    // Test prerequisite missing detection and $0.00 pricing when no creators selected
     const emptyDraftRes = await request('/api/orders/draft', 'POST', {
       format: 'reaction',
       creatorIds: [],
       qty: 6
-    }, { 'x-session-id': 'new_empty_session_999' });
-    const emptyBriefRes = await request(`/api/orders/${emptyDraftRes.orderId}/brief?format=reaction`, 'GET', null, { 'x-session-id': 'new_empty_session_999' });
+    }, { 'x-session-id': 'new_empty_session_' + Date.now() });
+    assert.strictEqual(emptyDraftRes.pricing.total, 0.00, '0 creators must have total = $0.00');
+    assert.strictEqual(emptyDraftRes.pricing.creatorCount, 0, '0 creators count must be 0');
+
+    const emptyBriefRes = await request(`/api/orders/${emptyDraftRes.orderId}/brief?format=reaction`, 'GET', null, { 'x-session-id': 'new_empty_session_' + Date.now() });
     assert.strictEqual(emptyBriefRes.prerequisites.allMet, false);
     assert.strictEqual(emptyBriefRes.prerequisites.creatorsVerified, false);
+    assert.strictEqual(emptyBriefRes.verifiedCreators.length, 0, 'verifiedCreators must be empty');
+    assert.strictEqual(emptyBriefRes.pricing.total, 0.00, 'pricing.total must be $0.00');
     assert.ok(emptyBriefRes.prerequisites.missing.some(m => m.includes('creators page')));
-    console.log('✔ 3b. Prerequisite verification correctly flags when no creators are selected');
+    console.log('✔ 3b. Prerequisite verification and $0.00 pricing correctly verified when 0 creators are selected');
 
     // =========================================================================
     // 4. Format-Specific Field Customization
@@ -225,6 +231,8 @@ const server = app.listen(TEST_PORT, async () => {
     console.error('Test suite failed:', error);
     process.exit(1);
   } finally {
-    server.close();
+    server.close(() => {
+      process.exit(0);
+    });
   }
 });

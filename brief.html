@@ -101,7 +101,7 @@
         Reaction Video
       </span>
       <span id="brief-creators-badge" class="px-3 py-1 rounded-md bg-[#f4f4f5] text-[11px] sm:text-[11.5px] font-medium text-[#3f3f46] max-w-full truncate sm:truncate-none">
-        Franci, Emilia · Minimum 5 videos
+        0 creators selected · Minimum 5 videos
       </span>
     </div>
 
@@ -294,7 +294,7 @@
             description: text,
             format,
             selectedCreators,
-            creatorCount: selectedCreators.length || 2
+            creatorCount: selectedCreators.length
           })
         });
 
@@ -402,19 +402,47 @@
         backLink.href = `creators.html?format=${key}`;
       }
 
-      const stored = localStorage.getItem('selectedCreators');
-      if (stored) {
-        try {
-          const list = JSON.parse(stored);
-          if (Array.isArray(list) && list.length > 0) {
-            const names = list.map(c => c.name).join(', ');
-            const badge = document.getElementById('brief-creators-badge');
-            if (badge) {
-              badge.textContent = `${names} · Minimum 5 videos`;
+      const badge = document.getElementById('brief-creators-badge');
+      let creatorNames = '';
+      let creatorCount = 0;
+
+      // 1. First check backend session/draft
+      try {
+        const draftRes = await fetch(`${API_BASE}/api/orders/draft?format=${key}`);
+        if (draftRes.ok) {
+          const dData = await draftRes.json();
+          if (dData && dData.draft && Array.isArray(dData.draft.selectedCreators)) {
+            creatorCount = dData.draft.selectedCreators.length;
+            if (creatorCount > 0) {
+              creatorNames = dData.draft.selectedCreators.map(c => c.name).join(', ');
             }
           }
-        } catch (e) {
-          console.error(e);
+        }
+      } catch (_) {}
+
+      // 2. Fallback to localStorage if not found in backend
+      if (creatorCount === 0) {
+        const stored = localStorage.getItem('selectedCreators');
+        if (stored) {
+          try {
+            const list = JSON.parse(stored);
+            if (Array.isArray(list)) {
+              creatorCount = list.length;
+              if (creatorCount > 0) {
+                creatorNames = list.map(c => c.name).join(', ');
+              }
+            }
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      }
+
+      if (badge) {
+        if (creatorCount > 0 && creatorNames) {
+          badge.textContent = `${creatorNames} · Minimum 5 videos`;
+        } else {
+          badge.textContent = `0 creators selected · Minimum 5 videos`;
         }
       }
     });

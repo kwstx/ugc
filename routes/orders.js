@@ -646,7 +646,7 @@ router.post('/session', (req, res) => {
     const minVideos = isFull ? 1 : 5;
 
     const creatorsList = Array.isArray(selectedCreators) ? selectedCreators : [];
-    const creatorCount = Math.max(1, creatorsList.length);
+    const creatorCount = creatorsList.length;
     const requestedQty = parseInt(qty, 10);
     const effectiveQty = Math.max(minVideos, isNaN(requestedQty) ? 6 : requestedQty);
 
@@ -723,8 +723,10 @@ router.get('/session', (req, res) => {
       try { selectedCreators = JSON.parse(row.selected_creators || '[]'); } catch (e) {}
       try { pricing = JSON.parse(row.pricing_data || 'null'); } catch (e) {}
 
-      if (!pricing) {
-        pricing = calculatePricing(row.qty, Math.max(1, selectedCreators.length), row.format_choice);
+      if (selectedCreators.length === 0) {
+        pricing = calculatePricing(row.qty, 0, row.format_choice);
+      } else if (!pricing) {
+        pricing = calculatePricing(row.qty, selectedCreators.length, row.format_choice);
       }
 
       return res.json({
@@ -733,27 +735,27 @@ router.get('/session', (req, res) => {
         format: row.format_choice,
         formatKey: row.format_key,
         selectedCreators,
-        creatorCount: selectedCreators.length || 2,
+        creatorCount: selectedCreators.length,
         qty: row.qty,
         minVideos: row.min_videos || (row.format_key === 'full' ? 1 : 5),
-        rate: row.rate,
+        rate: selectedCreators.length === 0 ? 0.00 : row.rate,
         pricing,
         updatedAt: row.updated_at
       });
     }
 
-    // Default fallback
-    const defaultPricing = calculatePricing(6, 2, 'Reaction Video');
+    // Default fallback when session has no selected creators
+    const defaultPricing = calculatePricing(6, 0, 'Reaction Video');
     res.json({
       success: true,
       sessionId: session.id,
       format: 'Reaction Video',
       formatKey: 'reaction',
       selectedCreators: [],
-      creatorCount: 2,
+      creatorCount: 0,
       qty: 6,
       minVideos: 5,
-      rate: 25.00,
+      rate: 0.00,
       pricing: defaultPricing
     });
   } catch (error) {

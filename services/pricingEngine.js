@@ -35,7 +35,36 @@ function calculatePricing(quantity, creatorCount = 2, explicitFormat = null) {
     qty = 5;
   }
 
-  const validCreatorCount = Math.max(1, parseInt(creatorCount, 10) || 1);
+  const countNum = parseInt(creatorCount, 10);
+  if (countNum === 0) {
+    let chosenFormat = explicitFormat;
+    if (!chosenFormat) {
+      const active = getActiveFormatFromDb();
+      chosenFormat = active.format_choice;
+    }
+    const isFullUgc = (
+      chosenFormat &&
+      (chosenFormat === 'Full UGC' ||
+        String(chosenFormat).toLowerCase().includes('full'))
+    );
+    const baseRate = isFullUgc ? 100.00 : 25.00;
+    const formatLabel = isFullUgc ? 'Full UGC' : 'Reaction Video';
+    const minVideos = isFullUgc ? 1 : 5;
+    return {
+      format: formatLabel,
+      quantity: qty,
+      minVideos,
+      creatorCount: 0,
+      rate: 0.00,
+      baseRate,
+      total: 0.00,
+      perCreator: 0,
+      discountPercent: 0,
+      discountLabel: '0 creators selected'
+    };
+  }
+
+  const validCreatorCount = Math.max(1, countNum || 1);
 
   let chosenFormat = explicitFormat;
   if (!chosenFormat) {
@@ -160,7 +189,37 @@ function calculateAuthoritativePricing({
     if (info) verifiedCreators.push(info);
   }
 
-  const creatorCount = Math.max(1, verifiedCreators.length);
+  // If 0 creators selected, return $0.00
+  if (verifiedCreators.length === 0) {
+    return {
+      format: formatLabel,
+      formatKey,
+      quantity: qty,
+      minVideos,
+      creatorCount: 0,
+      perCreator: 0,
+      turnaroundHours: parseInt(turnaroundHours, 10) || 48,
+      isRushTurnaround: false,
+      licensingTier,
+      discountLabel: '0 creators selected',
+      volumeDiscountPercent: 0,
+      volumeDiscountAmount: 0.00,
+      customDiscountPercent: 0,
+      customDiscountAmount: 0.00,
+      turnaroundPremium: 0.00,
+      licensingFee: 0.00,
+      creatorBaseSubtotal: 0.00,
+      subtotal: 0.00,
+      platformFee: 0.00,
+      tax: 0.00,
+      total: 0.00,
+      effectiveRatePerVideo: 0.00,
+      creators: [],
+      currency: 'USD'
+    };
+  }
+
+  const creatorCount = verifiedCreators.length;
   const tiers = getTierConfigs(creatorCount);
 
   // Volume discount calculation

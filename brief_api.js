@@ -212,7 +212,7 @@ async function loadBriefFromBackend(orderOrBriefId, formatKey = 'reaction') {
         handlePrerequisitesUI(result.prerequisites, formatKey);
 
         // 2. Fresh Rate Lookup & Creator population
-        if (Array.isArray(result.verifiedCreators) && result.verifiedCreators.length > 0) {
+        if (Array.isArray(result.verifiedCreators)) {
           window.selectedCreators = result.verifiedCreators;
           try {
             localStorage.setItem('selectedCreators', JSON.stringify(result.verifiedCreators));
@@ -324,34 +324,50 @@ function handlePrerequisitesUI(prerequisites, formatKey) {
 function renderAuthoritativePricing(pricing) {
   if (!pricing) return;
 
+  const creatorCount = (pricing.creators && pricing.creators.length) !== undefined ? pricing.creators.length : (pricing.creatorCount || 0);
+
   // Sidebar creators list with authoritative rates
   const creatorsListEl = document.getElementById('brief-selected-creators-list');
-  if (creatorsListEl && Array.isArray(pricing.creators) && pricing.creators.length > 0) {
-    creatorsListEl.innerHTML = pricing.creators.map(c => `
-      <div class="flex items-center justify-between py-1 border-b border-[#f3f4f6] last:border-0">
-        <div class="flex items-center gap-2.5">
-          <img src="${c.avatar || 'creator_avatar.png'}" alt="${c.name}" class="w-7 h-7 rounded-full object-cover border border-[#e5e7eb]" onerror="this.onerror=null; this.src='creator_avatar.png';" />
-          <div>
-            <div class="text-[12px] font-bold text-[#18181b] leading-tight flex items-center gap-1">
-              <span>${c.name}</span>
-              <span class="text-[9.5px] font-medium text-[#16a34a] bg-[#dcfce7] px-1.5 py-0.2 rounded-full">Active</span>
+  if (creatorsListEl) {
+    if (creatorCount > 0 && Array.isArray(pricing.creators)) {
+      creatorsListEl.innerHTML = pricing.creators.map(c => `
+        <div class="flex items-center justify-between py-1 border-b border-[#f3f4f6] last:border-0">
+          <div class="flex items-center gap-2.5">
+            <img src="${c.avatar || 'creator_avatar.png'}" alt="${c.name}" class="w-7 h-7 rounded-full object-cover border border-[#e5e7eb]" onerror="this.onerror=null; this.src='creator_avatar.png';" />
+            <div>
+              <div class="text-[12px] font-bold text-[#18181b] leading-tight flex items-center gap-1">
+                <span>${c.name}</span>
+                <span class="text-[9.5px] font-medium text-[#16a34a] bg-[#dcfce7] px-1.5 py-0.2 rounded-full">Active</span>
+              </div>
+              <div class="text-[10.5px] text-[#71717a] mt-0.5">${c.assignedVideos} videos &middot; $${c.baseRate.toFixed(2)}/vid</div>
             </div>
-            <div class="text-[10.5px] text-[#71717a] mt-0.5">${c.assignedVideos} videos &middot; $${c.baseRate.toFixed(2)}/vid</div>
           </div>
+          <span class="text-[11.5px] font-bold text-[#111827]">$${c.subtotal.toFixed(2)}</span>
         </div>
-        <span class="text-[11.5px] font-bold text-[#111827]">$${c.subtotal.toFixed(2)}</span>
-      </div>
-    `).join('');
+      `).join('');
+    } else {
+      creatorsListEl.innerHTML = `
+        <div class="p-3 bg-[#f9fafb] border border-[#e5e7eb] rounded-[10px] text-center text-[#71717a] text-[12px]">
+          <p class="font-medium text-[#374151]">0 creators selected</p>
+          <p class="text-[11px] mt-0.5">Pick creators on the creators page</p>
+          <a href="creators.html?format=${encodeURIComponent(window.currentFormatKey || 'reaction')}" class="inline-block mt-2 text-[#7c66ff] hover:text-[#6852ee] font-semibold text-[11.5px]">Pick creators &rarr;</a>
+        </div>
+      `;
+    }
   }
 
   // Live estimate calc line
   const calcQty = document.getElementById('estimate-calc-qty');
   const calcTotal = document.getElementById('estimate-calc-total');
   if (calcQty) {
-    calcQty.innerHTML = `${pricing.quantity} videos &middot; ${pricing.creators.length || 2} creators`;
+    if (creatorCount === 0) {
+      calcQty.innerHTML = `0 creators selected`;
+    } else {
+      calcQty.innerHTML = `${pricing.quantity} videos &middot; ${creatorCount} creators`;
+    }
   }
   if (calcTotal) {
-    calcTotal.textContent = `$${pricing.creatorBaseSubtotal.toFixed(2)}`;
+    calcTotal.textContent = creatorCount === 0 ? `$0.00` : `$${pricing.creatorBaseSubtotal.toFixed(2)}`;
   }
 
   // Total price display
@@ -363,14 +379,22 @@ function renderAuthoritativePricing(pricing) {
   // Floating bottom bar price
   const floatingBarPrice = document.getElementById('floating-bar-price');
   if (floatingBarPrice) {
-    floatingBarPrice.textContent = `${pricing.quantity} videos · $${pricing.total.toFixed(2)}`;
+    if (creatorCount === 0) {
+      floatingBarPrice.textContent = `0 creators · $0.00`;
+    } else {
+      floatingBarPrice.textContent = `${pricing.quantity} videos · $${pricing.total.toFixed(2)}`;
+    }
   }
 
   // Discount / fee notice
   const estimateSubtitle = document.getElementById('estimate-subtitle');
   if (estimateSubtitle) {
-    const discountText = pricing.volumeDiscountAmount > 0 ? ` &middot; Includes -$${pricing.volumeDiscountAmount.toFixed(2)} discount` : '';
-    estimateSubtitle.textContent = `${pricing.quantity} videos · ${pricing.turnaroundHours}h turnaround${discountText}`;
+    if (creatorCount === 0) {
+      estimateSubtitle.textContent = `0 creators selected · Minimum 5 videos`;
+    } else {
+      const discountText = pricing.volumeDiscountAmount > 0 ? ` &middot; Includes -$${pricing.volumeDiscountAmount.toFixed(2)} discount` : '';
+      estimateSubtitle.textContent = `${pricing.quantity} videos · ${pricing.turnaroundHours}h turnaround${discountText}`;
+    }
   }
 }
 
