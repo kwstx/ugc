@@ -30,9 +30,9 @@ function getTierConfigs(count) {
 }
 
 function calculatePricing(quantity, creatorCount = 2, explicitFormat = null) {
-  const qty = parseInt(quantity, 10);
+  let qty = parseInt(quantity, 10);
   if (isNaN(qty) || qty < 1) {
-    throw new Error('Invalid video quantity. Must be at least 1.');
+    qty = 5;
   }
 
   const validCreatorCount = Math.max(1, parseInt(creatorCount, 10) || 1);
@@ -50,6 +50,12 @@ function calculatePricing(quantity, creatorCount = 2, explicitFormat = null) {
   );
   const baseRate = isFullUgc ? 100.00 : 25.00;
   const formatLabel = isFullUgc ? 'Full UGC' : 'Reaction Video';
+  const minVideos = isFullUgc ? 1 : 5;
+
+  // Enforce minimum order rule (minimum 5 videos for Reaction Video)
+  if (qty < minVideos) {
+    qty = minVideos;
+  }
 
   const tiers = getTierConfigs(validCreatorCount);
   let rate = baseRate;
@@ -72,6 +78,7 @@ function calculatePricing(quantity, creatorCount = 2, explicitFormat = null) {
   return {
     format: formatLabel,
     quantity: qty,
+    minVideos,
     creatorCount: validCreatorCount,
     rate: parseFloat(rate.toFixed(2)),
     baseRate,

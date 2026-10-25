@@ -5,10 +5,124 @@ const { calculatePricing } = require('../services/pricingEngine');
 const { analyzeScript } = require('../services/scriptEstimator');
 const { checkCreatorsAvailability } = require('../services/creatorService');
 
+const { getReactionTemplates } = require('../services/briefAiGenerator');
+
 // Helper to generate IDs
 function generateId(prefix = 'brief') {
   return `${prefix}_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
 }
+
+/**
+ * GET /api/briefs/templates
+ * Provides pre-built reaction prompt templates tailored to e-commerce, mobile applications, or beauty products.
+ */
+router.get('/templates', (req, res) => {
+  try {
+    const { format = 'reaction', niche = null } = req.query;
+    const templates = getReactionTemplates(niche, format);
+    res.json({
+      success: true,
+      format: format.toLowerCase().includes('full') ? 'Full UGC' : 'Reaction Video',
+      templates
+    });
+  } catch (error) {
+    console.error('Error fetching brief templates:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * POST /api/briefs/draft
+ * Persists user's raw prompt text and links it to an active order or temporary session ID
+ * before they navigate to the brief editor.
+ */
+router.post('/draft', (req, res) => {
+  try {
+    const {
+      sessionId = 'guest_session',
+      promptText = '',
+      description = '',
+      format = 'Reaction Video',
+      formatKey = 'reaction',
+      brandName = '',
+      selectedCreators = [],
+      briefId = null
+    } = req.body;
+
+    const textToSave = (promptText || description || '').trim();
+    const draftId = `draft_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    const effectiveBriefId = briefId || generateId('brief');
+
+    const insertStmt = db.prepare(`
+      INSERT INTO prompt_drafts (
+        id, session_id, format, format_key, prompt_text,
+        brand_name, selected_creators, brief_id, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+    `);
+
+    insertStmt.run(
+      draftId,
+      sessionId,
+      format,
+      formatKey,
+      textToSave,
+      brandName,
+      JSON.stringify(selectedCreators),
+      effectiveBriefId
+    );
+
+    res.json({
+      success: true,
+      draftId,
+      briefId: effectiveBriefId,
+      promptText: textToSave,
+      format,
+      formatKey,
+      savedAt: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error saving prompt draft:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/briefs/draft
+ * Retrieves latest prompt draft for the active session
+ */
+router.get('/draft', (req, res) => {
+  try {
+    const sessionId = req.query.sessionId || req.headers['x-session-id'] || 'guest_session';
+    let row = db.prepare('SELECT * FROM prompt_drafts WHERE session_id = ? ORDER BY updated_at DESC LIMIT 1').get(sessionId);
+    if (!row) {
+      row = db.prepare('SELECT * FROM prompt_drafts ORDER BY updated_at DESC LIMIT 1').get();
+    }
+
+    if (row) {
+      let selectedCreators = [];
+      try { selectedCreators = JSON.parse(row.selected_creators || '[]'); } catch (e) {}
+      return res.json({
+        success: true,
+        draft: {
+          id: row.id,
+          sessionId: row.session_id,
+          format: row.format,
+          formatKey: row.format_key,
+          promptText: row.prompt_text,
+          brandName: row.brand_name,
+          selectedCreators,
+          briefId: row.brief_id,
+          updatedAt: row.updated_at
+        }
+      });
+    }
+
+    res.json({ success: true, draft: null });
+  } catch (error) {
+    console.error('Error loading prompt draft:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 /**
  * POST /api/briefs/save-draft

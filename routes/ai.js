@@ -462,21 +462,35 @@ router.post('/analyze-brand', async (req, res) => {
   }
 });
 
-const { generateAiBrief } = require('../services/briefAiGenerator');
+const { generateAiBrief, suggestReactions } = require('../services/briefAiGenerator');
 
 /**
  * POST /api/ai/generate-brief
  * Generates a full brief with concepts, scripts, and filming instructions
- * based on user description text.
+ * based on user description text and brand parameters.
  */
 router.post('/generate-brief', async (req, res) => {
   try {
-    const { description = '', format = 'Reaction Video', selectedCreators = [] } = req.body;
+    const {
+      description = '',
+      brandName = '',
+      brandDetails = '',
+      aboutBrand = '',
+      format = 'Reaction Video',
+      selectedCreators = [],
+      creatorCount = null,
+      requestedQty = null
+    } = req.body;
 
     const result = await generateAiBrief({
       description,
+      brandName,
+      brandDetails,
+      aboutBrand,
       format,
-      selectedCreators
+      selectedCreators,
+      creatorCount,
+      requestedQty
     });
 
     res.json({
@@ -487,6 +501,22 @@ router.post('/generate-brief', async (req, res) => {
     });
   } catch (error) {
     console.error('Error in AI brief generator:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * POST /api/ai/suggest-reactions
+ * Prompt enhancement service that suggests proven high-converting reaction
+ * concepts, facial expressions, and emotional hooks.
+ */
+router.post('/suggest-reactions', async (req, res) => {
+  try {
+    const { description = '', productUrl = '', brandName = '', niche = '' } = req.body;
+    const result = suggestReactions({ description, productUrl, brandName, niche });
+    res.json(result);
+  } catch (error) {
+    console.error('Error suggesting reaction hooks:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });

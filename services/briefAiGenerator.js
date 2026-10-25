@@ -147,74 +147,157 @@ function extractRequestedQty(text, defaultQty = 6) {
 }
 
 /**
+ * Curated Niche Reaction Templates
+ */
+const REACTION_TEMPLATES = [
+  {
+    id: 'ecommerce_unboxing',
+    name: 'E-Commerce Gadget & Unboxing',
+    niche: 'E-commerce',
+    format: 'Reaction Video',
+    description: 'Natural high-converting reactions unboxing or testing a viral physical product.',
+    promptText: "We sell an innovative magnetic wireless charger called MagSnap. We need 5 candid reaction videos in a clean bedroom or desk: 2 shocked at how fast it snaps into place, 2 excited first impressions, and 1 relieved at ditching cable clutter.",
+    sampleAngles: ['Shocked Magnet Grip', 'Clean Desk Relief', 'Travel Setup Excitement'],
+    creatorCount: 2,
+    suggestedQty: 6
+  },
+  {
+    id: 'mobile_app_workflow',
+    name: 'Mobile App / SaaS Time-Saver',
+    niche: 'Mobile Applications',
+    format: 'Reaction Video',
+    description: 'Authentic creator reactions discovering an effortless AI productivity or lifestyle app.',
+    promptText: "We are an AI calendar and meal-planning app called FreshPlate. We need 5 natural reaction videos in a bright kitchen: 2 surprised at how fast meal plans generate, 2 excited about saving grocery money, and 1 relieved that dinner stress is solved.",
+    sampleAngles: ['Jaw-Drop Speed', 'Instant Relief', 'High-Energy First Impression'],
+    creatorCount: 2,
+    suggestedQty: 6
+  },
+  {
+    id: 'beauty_skincare_glow',
+    name: 'Beauty & Skincare Instant Glow',
+    niche: 'Beauty & Skincare',
+    format: 'Reaction Video',
+    description: 'Raw, filter-free reactions testing texture and visible hydration on camera.',
+    promptText: "We are Lumiere Skin, a barrier-repair hydration serum. We need 5 candid mirror reaction videos: 2 surprised at the instant dewy finish with zero stickiness, 2 excited about the 3-day glow, and 1 relieved after dealing with winter dryness.",
+    sampleAngles: ['Zero-Stickiness Surprise', 'Glass-Skin Excitement', 'Calm Skin Relief'],
+    creatorCount: 2,
+    suggestedQty: 6
+  },
+  {
+    id: 'fitness_nutrition_taste',
+    name: 'Fitness & Nutrition Taste Test',
+    niche: 'Food & Nutrition',
+    format: 'Reaction Video',
+    description: 'Genuine taste-test and energy boost reactions without scripted corporate vibes.',
+    promptText: "We make clean plant protein bars called RawFuel that actually taste like brownie dough. We need 6 honest reaction clips: 2 surprised disbelief at the taste with zero chalkiness, 2 pumped post-workout hype, and 2 relieved that daily macros are easy.",
+    sampleAngles: ['Chalk-Free Disbelief', 'Post-Workout Energy Hype', 'Macro Relief'],
+    creatorCount: 2,
+    suggestedQty: 6
+  }
+];
+
+/**
  * Main AI Brief Generator
  */
 async function generateAiBrief({
   description = '',
+  brandName = '',
+  brandDetails = '',
+  aboutBrand = '',
   format = 'Reaction Video',
-  selectedCreators = []
+  selectedCreators = [],
+  creatorCount = null,
+  requestedQty = null
 }) {
-  const cleanDesc = description.trim();
-  const brandName = extractBrandName(cleanDesc);
+  const cleanDesc = (description || '').trim();
+  const detectedBrand = brandName ? brandName.trim() : extractBrandName(cleanDesc);
   const filmingSetting = extractFilmingSetting(cleanDesc);
-  const isFullUgc = format && format.toLowerCase().includes('full');
+  const isFullUgc = Boolean(format && format.toLowerCase().includes('full'));
+  const effectiveFormat = isFullUgc ? 'Full UGC' : 'Reaction Video';
 
   // Match or detect niche
   let matchedNiche = NICHE_PATTERNS.find(p => p.regex.test(cleanDesc)) || NICHE_PATTERNS[0];
 
   // Synthesize "About the brand"
-  let aboutBrand = '';
-  if (cleanDesc.length > 30) {
-    // Incorporate user description into a polished corporate/brand bio
-    aboutBrand = `${brandName} is an innovative ${matchedNiche.niche.toLowerCase()} product. ${cleanDesc.charAt(0).toUpperCase() + cleanDesc.slice(1)}. Built to deliver measurable results, ${brandName} focuses on simplicity, top-tier quality, and delightful customer experiences.`;
-  } else {
-    aboutBrand = `${brandName} is a leading ${matchedNiche.niche.toLowerCase()} brand designed to solve everyday customer problems with ${matchedNiche.features.join(', ')}.`;
+  let synthesizedAbout = (aboutBrand || brandDetails || '').trim();
+  if (!synthesizedAbout) {
+    if (cleanDesc.length > 25) {
+      synthesizedAbout = `${detectedBrand} is an innovative ${matchedNiche.niche.toLowerCase()} product. ${cleanDesc.charAt(0).toUpperCase() + cleanDesc.slice(1)}. Designed to provide authentic customer delight and tangible daily results.`;
+    } else {
+      synthesizedAbout = `${detectedBrand} is a leading ${matchedNiche.niche.toLowerCase()} brand designed to solve everyday customer problems with ${matchedNiche.features.join(', ')}.`;
+    }
   }
 
-  // Synthesize Filming Instructions
+  // Synthesize Filming Instructions (Tailored 9:16 vertical guidelines)
+  const verticalGuidelines = [
+    'Film vertically in 9:16 portrait orientation (1080x1920 minimum, 60fps preferred).',
+    'Eye-level camera framing with face clearly in focus and clean natural lighting.',
+    'Hold your phone or product clearly visible in hands within the first 2 seconds.',
+    'Zero background echo and no background music; crisp, audible voice audio only.',
+    'Deliver candid, unedited raw takes with natural facial expressions (gasps, genuine smiles, disbelief).'
+  ];
+
   const filmingInstructions = isFullUgc
     ? `Film vertically (9:16) in 1080p 60fps or 4K in a ${filmingSetting}. Ensure audio is clean and clear with zero background echo. Show product or screen clearly in hands within the first 2 seconds. Deliver 3 smooth camera angles: direct conversational hook, hands-on demonstration B-roll, and final enthusiastic payoff.`
-    : `Film vertically (9:16) with eye-level framing in a ${filmingSetting}. Deliver high-energy, authentic, and candid facial expressions. Audio must be clear with no background music. Hold your phone or product clearly visible in frame during the first 2 seconds. Reactions should feel genuine and unscripted.`;
+    : `Film vertically (9:16) with eye-level framing in a ${filmingSetting}. Deliver high-energy, authentic, and candid facial expressions. Audio must be clear with no background music. Hold your phone or product clearly visible in frame during the first 2 seconds. Reactions should feel genuine, candid, and unscripted.\n\nKey 9:16 Guidelines:\n• ${verticalGuidelines.join('\n• ')}`;
 
   // Parse specific requested emotions / angles (e.g. "2 surprised, 2 excited, 1 relieved")
-  const hasSurprised = /surpris|shock|disbelief|jaw/i.test(cleanDesc);
-  const hasExcited = /excit|happy|pumped|love|energy/i.test(cleanDesc);
-  const hasRelieved = /relie|peace|stress|easy|effortless/i.test(cleanDesc);
-  const hasReview = /review|opinion|honest|thoughts|talking/i.test(cleanDesc);
+  const hasSurprised = /surpris|shock|disbelief|jaw|gasp|whoa|what/i.test(cleanDesc);
+  const hasExcited = /excit|happy|pumped|love|energy|best|hyped/i.test(cleanDesc);
+  const hasRelieved = /relie|peace|stress|easy|effortless|finally|calm/i.test(cleanDesc);
+  const hasCurious = /curious|skeptic|wonder|honest|doubt|try/i.test(cleanDesc);
 
   const conceptTemplates = [];
 
-  if (hasSurprised || (!hasExcited && !hasRelieved && !hasReview)) {
+  // Concept 1: Surprise / Shocked Disbelief
+  if (hasSurprised || (!hasExcited && !hasRelieved && !hasCurious)) {
     conceptTemplates.push({
       title: 'Concept 1: Shocked Disbelief Hook',
       type: 'Reaction / footage',
-      hookText: `Wait... are you kidding me right now?! Look at ${brandName}.`,
-      script: `[0-3s Hook] (Gasps while looking directly into camera/screen, eyes wide open) 'Wait... are you kidding me right now?!'\n[3-10s Core Reaction] (Shows screen/product clearly in hands) 'I thought everyone was exaggerating about ${brandName}, but it literally solved my biggest issue in two minutes.'\n[10-18s Value Demonstration] 'The interface is so seamless, look how easy this is to navigate.'\n[18-25s Strong CTA] 'Do not sleep on this. Check the link below before their current offer ends!'`
+      emotionalAngle: 'Surprise / Shocked Disbelief',
+      facialExpression: 'Gasps while looking directly into camera/screen, eyes wide open, authentic jaw-drop',
+      cameraFraming: '9:16 Vertical eye-level portrait framing',
+      hookText: `Wait... are you kidding me right now?! Look at ${detectedBrand}.`,
+      script: `[0-3s Facial Expression & Hook] (Gasps while looking directly into camera/screen, eyes wide open, showing genuine disbelief) 'Wait... are you kidding me right now?!'\n[3-10s Core Reaction] (Holds phone/product clearly visible in hands) 'I thought everyone was exaggerating about ${detectedBrand}, but it literally solved my biggest issue in two minutes.'\n[10-18s Value Demonstration] (Tilts camera to product/screen in natural light) 'The interface is so seamless, look how easy this is to navigate.'\n[18-25s Natural CTA] 'Do not sleep on this. Check the link below before their current batch sells out!'`
     });
   }
 
+  // Concept 2: High-Energy First Impression / Excitement
   if (hasExcited || conceptTemplates.length < 2) {
     conceptTemplates.push({
       title: 'Concept 2: High-Energy First Impression',
       type: isFullUgc ? 'Talking script' : 'Reaction / footage',
+      emotionalAngle: 'Excitement / High-Energy Hype',
+      facialExpression: 'Huge genuine smile, animated hand gestures, head nod of approval',
+      cameraFraming: '9:16 Vertical medium close-up, dynamic natural light',
       hookText: `Best decision I've made all month, hands down.`,
-      script: `[0-3s Hook] (Huge genuine smile, showing excitement) 'Best decision I have made all month, hands down.'\n[3-10s Story/Pain Point] 'I was so skeptical because I have tried practically everything on the market, but ${brandName} actually delivers.'\n[10-18s Solution & Benefit] 'It saves me hours every single week, and the quality is completely unmatched.'\n[18-25s Strong CTA] 'Stop overthinking it—tap the link below and try ${brandName} for yourself today!'`
+      script: `[0-3s Facial Expression & Hook] (Huge genuine smile, showing excitement and nodding) 'Best decision I have made all month, hands down.'\n[3-10s Story/Pain Point] (Holds up ${detectedBrand} proudly) 'I was so skeptical because I have tried practically everything on the market, but this actually delivered on day one.'\n[10-18s Solution & Benefit] 'It saves me hours every single week, and the quality is completely unmatched.'\n[18-25s Strong CTA] 'Stop overthinking it—tap the link below and try ${detectedBrand} for yourself today!'`
     });
   }
 
+  // Concept 3: Relief & Routine Problem-Solver
   if (hasRelieved || conceptTemplates.length < 3) {
     conceptTemplates.push({
       title: 'Concept 3: Relief & Routine Problem-Solver',
       type: isFullUgc ? 'Talking script' : 'Reaction / footage',
+      emotionalAngle: 'Relief & Effortless Satisfaction',
+      facialExpression: 'Exhales with a relaxed smile, leaning back comfortably in chair/couch',
+      cameraFraming: '9:16 Vertical eye-level relaxed framing',
       hookText: `That feeling when your daily routine is finally effortless.`,
-      script: `[0-3s Hook] (Exhales with a relaxed smile, leaning back comfortably) 'That feeling when you finally find something that just works.'\n[3-10s Empathy & Relatability] 'Dealing with everyday stress used to feel overwhelming until I incorporated ${brandName} into my routine.'\n[10-18s Transformation] 'It takes all the friction away. It feels like having a personal assistant in your pocket.'\n[18-25s Soft CTA] 'Save your sanity and check out ${brandName} at the link below. You will thank me later.'`
+      script: `[0-3s Facial Expression & Hook] (Exhales with a relaxed smile, shoulders dropping with relief) 'That feeling when you finally find something that just works.'\n[3-10s Empathy & Relatability] 'Dealing with everyday stress used to feel overwhelming until I incorporated ${detectedBrand} into my routine.'\n[10-18s Transformation] (Shows calm, easy interaction with product) 'It takes all the friction away. It feels like having a personal assistant in your pocket.'\n[18-25s Soft CTA] 'Save your sanity and check out ${detectedBrand} at the link below. You will thank me later.'`
     });
   }
 
-  // Calculate pricing & quantities
-  const creatorCount = (Array.isArray(selectedCreators) && selectedCreators.length > 0) ? selectedCreators.length : 2;
-  const requestedQty = extractRequestedQty(cleanDesc, creatorCount * 3);
-  const pricing = calculatePricing(requestedQty, creatorCount, format);
+  // Calculate creators and quantities (Enforce 5-video minimum for Reaction format)
+  const validCreatorCount = creatorCount
+    ? Math.max(1, parseInt(creatorCount, 10))
+    : (Array.isArray(selectedCreators) && selectedCreators.length > 0 ? selectedCreators.length : 2);
+
+  const parsedRequested = requestedQty ? parseInt(requestedQty, 10) : extractRequestedQty(cleanDesc, validCreatorCount * 3);
+  const minRequired = isFullUgc ? 1 : 5;
+  const effectiveQty = Math.max(minRequired, isNaN(parsedRequested) ? 6 : parsedRequested);
+
+  const pricing = calculatePricing(effectiveQty, validCreatorCount, effectiveFormat);
 
   // Distribute per-creator count among concepts
   const totalConcepts = Math.max(1, conceptTemplates.length);
@@ -225,12 +308,16 @@ async function generateAiBrief({
     const conceptPerCreator = basePerCreator + (remainder > 0 ? 1 : 0);
     if (remainder > 0) remainder--;
 
-    const conceptQty = conceptPerCreator * creatorCount;
+    const conceptQty = conceptPerCreator * validCreatorCount;
     const subtotal = parseFloat((conceptQty * pricing.rate).toFixed(2));
 
     return {
       title: tmpl.title,
       type: tmpl.type,
+      emotionalAngle: tmpl.emotionalAngle,
+      facialExpression: tmpl.facialExpression,
+      cameraFraming: tmpl.cameraFraming,
+      hookText: tmpl.hookText,
       script: tmpl.script,
       perCreator: conceptPerCreator,
       qty: conceptQty,
@@ -253,8 +340,8 @@ async function generateAiBrief({
 
     insertStmt.run(
       briefId,
-      brandName,
-      aboutBrand,
+      detectedBrand,
+      synthesizedAbout,
       filmingInstructions,
       pricing.quantity,
       pricing.rate,
@@ -271,23 +358,90 @@ async function generateAiBrief({
     briefId,
     brief: {
       id: briefId,
-      brandName,
-      aboutBrand,
+      brandName: detectedBrand,
+      aboutBrand: synthesizedAbout,
       filmingInstructions,
-      format,
+      format: effectiveFormat,
       qty: pricing.quantity,
+      minVideos: minRequired,
       rate: pricing.rate,
       total: pricing.total,
       perCreator: pricing.perCreator,
       selectedCreators,
+      verticalGuidelines,
+      emotionalAngles: conceptTemplates.map(c => ({ angle: c.emotionalAngle, facialExpression: c.facialExpression, hook: c.hookText })),
       concepts: analyzedConcepts,
       createdAt: new Date().toISOString()
     }
   };
 }
 
+/**
+ * Suggest reaction concepts and emotional hooks for a brand/product
+ */
+function suggestReactions({ description = '', productUrl = '', brandName = '', niche = '' }) {
+  const text = `${description} ${niche} ${productUrl}`.trim();
+  const resolvedBrand = brandName || extractBrandName(text);
+
+  return {
+    success: true,
+    brandName: resolvedBrand,
+    suggestions: [
+      {
+        angle: 'Shocked Disbelief',
+        hook: `Wait... are you kidding me right now?! Look at ${resolvedBrand}.`,
+        facialExpression: 'Eyes wide open, instant gasp, holding up screen or product with authentic astonishment.',
+        visualCue: 'Direct eye contact in first 2s, quick cut to demonstration.',
+        sampleContext: 'Ideal for instant results, innovative gadgets, or surprising features.'
+      },
+      {
+        angle: 'High-Energy First Impression',
+        hook: `Best decision I've made all month, hands down.`,
+        facialExpression: 'Enthusiastic smile, energetic nod, unscripted laugh of joy.',
+        visualCue: 'Unboxing or hands-on use in natural 9:16 portrait framing.',
+        sampleContext: 'High-converting for beauty glow, fashion, food taste test, or gaming.'
+      },
+      {
+        angle: 'Relief / Problem-Solver',
+        hook: `That feeling when your daily routine is finally effortless.`,
+        facialExpression: 'Deep exhale, relaxed smile, visible tension leaving face.',
+        visualCue: 'Comfortable indoor setting (kitchen, living room, clean desk).',
+        sampleContext: 'Perfect for productivity apps, organization tools, and wellness.'
+      },
+      {
+        angle: 'Skeptic Turned Believer',
+        hook: `I 100% thought this was another hyped-up gimmick... until I tested it.`,
+        facialExpression: 'Slight head shake turning into an appreciative grin and eyebrow raise.',
+        visualCue: 'Side-by-side or hands-on comparison with raw unfiltered audio.',
+        sampleContext: 'Great for conquering buyer skepticism and building immediate trust.'
+      }
+    ],
+    verticalFilmingTips: [
+      'Record in native 9:16 vertical resolution at 60fps.',
+      'Ensure the face is positioned in the upper two-thirds to avoid UI button overlay obstruction.',
+      'Deliver genuine expressions without robotic pauses or scripted rehearsed cadence.'
+    ]
+  };
+}
+
+/**
+ * Retrieve curated niche templates
+ */
+function getReactionTemplates(niche = null, format = 'reaction') {
+  if (!niche) return REACTION_TEMPLATES;
+  const filtered = REACTION_TEMPLATES.filter(t =>
+    t.niche.toLowerCase().includes(niche.toLowerCase()) ||
+    t.name.toLowerCase().includes(niche.toLowerCase())
+  );
+  return filtered.length > 0 ? filtered : REACTION_TEMPLATES;
+}
+
 module.exports = {
   generateAiBrief,
   extractBrandName,
-  extractFilmingSetting
+  extractFilmingSetting,
+  suggestReactions,
+  getReactionTemplates,
+  REACTION_TEMPLATES
 };
+

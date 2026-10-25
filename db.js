@@ -243,6 +243,31 @@ db.exec(`
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 
+  CREATE TABLE IF NOT EXISTS order_session_state (
+    session_id TEXT PRIMARY KEY,
+    format_choice TEXT NOT NULL DEFAULT 'Reaction Video',
+    format_key TEXT NOT NULL DEFAULT 'reaction',
+    selected_creators TEXT DEFAULT '[]',
+    qty INTEGER DEFAULT 6,
+    rate REAL DEFAULT 25.00,
+    min_videos INTEGER DEFAULT 5,
+    pricing_data TEXT,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS prompt_drafts (
+    id TEXT PRIMARY KEY,
+    session_id TEXT,
+    format TEXT DEFAULT 'Reaction Video',
+    format_key TEXT DEFAULT 'reaction',
+    prompt_text TEXT,
+    brand_name TEXT,
+    selected_creators TEXT,
+    brief_id TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
   CREATE TABLE IF NOT EXISTS subscriptions (
     id TEXT PRIMARY KEY,
     user_id TEXT NOT NULL,

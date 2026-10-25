@@ -14,12 +14,14 @@ let autosaveTimeout = null;
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', async () => {
-  // Check for explicit briefId in URL
+  // Check for explicit briefId in URL or localStorage
   const urlParams = new URLSearchParams(window.location.search);
-  const paramId = urlParams.get('briefId') || urlParams.get('id');
+  const paramId = urlParams.get('briefId') || urlParams.get('id') || (urlParams.get('ai') === 'true' ? localStorage.getItem('sofia_current_brief_id') : null);
 
   if (paramId) {
     await loadBriefFromBackend(paramId);
+  } else if (urlParams.get('ai') === 'true' || localStorage.getItem('sofia_generated_brief')) {
+    await loadBriefFromBackend(localStorage.getItem('sofia_current_brief_id') || 'local_generated');
   }
 
   // Hook up inputs for autosave
@@ -166,14 +168,30 @@ async function saveDraftToBackend(showExplicitAlert = false) {
 async function loadBriefFromBackend(briefId) {
   try {
     showAutosaveBadge('Loading brief...', 'saving');
-    const response = await fetch(`${BRIEF_API_BASE}/api/briefs/${briefId}`);
-    if (!response.ok) throw new Error('Brief not found on server');
+    let b = null;
+    if (briefId && briefId !== 'local_generated') {
+      try {
+        const response = await fetch(`${BRIEF_API_BASE}/api/briefs/${briefId}`);
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && result.brief) {
+            b = result.brief;
+          }
+        }
+      } catch (e) {
+        console.warn('Network error loading brief from backend:', e);
+      }
+    }
 
-    const result = await response.json();
-    if (result.success && result.brief) {
-      const b = result.brief;
-      currentBriefId = b.id;
-      localStorage.setItem('sofia_current_brief_id', b.id);
+    if (!b) {
+      try {
+        b = JSON.parse(localStorage.getItem('sofia_generated_brief') || 'null');
+      } catch (_) {}
+    }
+
+    if (b) {
+      currentBriefId = b.id || briefId;
+      localStorage.setItem('sofia_current_brief_id', currentBriefId);
 
       const brandInput = document.getElementById('brand-name-input');
       const aboutInput = document.getElementById('about-brand-input');
@@ -182,6 +200,17 @@ async function loadBriefFromBackend(briefId) {
       if (brandInput && b.brandName) brandInput.value = b.brandName;
       if (aboutInput && b.aboutBrand) aboutInput.value = b.aboutBrand;
       if (filmingInput && b.filmingInstructions) filmingInput.value = b.filmingInstructions;
+
+      if (b.format) {
+        window.currentFormat = b.format;
+        const key = (b.format === 'Full UGC') ? 'full' : 'reaction';
+        try {
+          localStorage.setItem('selectedFormat', b.format);
+          localStorage.setItem('selectedFormatKey', key);
+          sessionStorage.setItem('selectedFormat', b.format);
+          sessionStorage.setItem('selectedFormatKey', key);
+        } catch (_) {}
+      }
 
       if (b.concepts && b.concepts.length > 0) {
         const container = document.getElementById('concepts-container');
@@ -200,7 +229,13 @@ async function loadBriefFromBackend(briefId) {
           if (titleEl && c.title) titleEl.textContent = c.title;
           const typeEl = block.querySelector('[id^="selected-video-type-text-"]');
           if (typeEl && c.type) typeEl.textContent = c.type;
+          const subEl = block.querySelector('.concept-subtitle');
+          if (subEl) subEl.textContent = `${window.currentFormat || 'Reaction Video'} · ${c.type || 'Reaction / footage'}`;
         });
+      }
+
+      if (b.qty && typeof window.selectTier === 'function') {
+        window.currentQty = b.qty;
       }
 
       if (typeof window.updateFormatUI === 'function') {
@@ -216,41 +251,16 @@ async function loadBriefFromBackend(briefId) {
       }
 
       showAutosaveBadge('AI brief loaded', 'saved');
+      return;
     }
+
+    showAutosaveBadge('Ready', 'saved');
   } catch (err) {
-    console.warn('Could not load from backend, using local state:', err);
-    try {
-      const localGenerated = JSON.parse(localStorage.getItem('sofia_generated_brief') || 'null');
-      if (localGenerated) {
-        const brandInput = document.getElementById('brand-name-input');
-        const aboutInput = document.getElementById('about-brand-input');
-        const filmingInput = document.getElementById('filming-instructions-input');
-        if (brandInput && localGenerated.brandName) brandInput.value = localGenerated.brandName;
-        if (aboutInput && localGenerated.aboutBrand) aboutInput.value = localGenerated.aboutBrand;
-        if (filmingInput && localGenerated.filmingInstructions) filmingInput.value = localGenerated.filmingInstructions;
-        if (localGenerated.concepts && localGenerated.concepts.length > 0) {
-          const container = document.getElementById('concepts-container');
-          while (container && container.children.length < localGenerated.concepts.length && typeof window.addNewConcept === 'function') {
-            window.addNewConcept();
-          }
-          const blocks = document.querySelectorAll('#concepts-container > div');
-          localGenerated.concepts.forEach((c, idx) => {
-            const block = blocks[idx];
-            if (!block) return;
-            const ta = block.querySelector('.concept-script-textarea');
-            if (ta && c.script !== undefined) ta.value = c.script;
-            const titleEl = block.querySelector('.concept-title-text');
-            if (titleEl && c.title) titleEl.textContent = c.title;
-          });
-        }
-        if (typeof window.updateFormatUI === 'function') window.updateFormatUI();
-        if (typeof window.updateUI === 'function') window.updateUI(true);
-        if (typeof window.checkBriefValidity === 'function') window.checkBriefValidity();
-      }
-    } catch (_) {}
-    showAutosaveBadge('Loaded local draft', 'saved');
+    console.warn('Error restoring brief state:', err);
+    showAutosaveBadge('Ready', 'saved');
   }
 }
+
 
 /**
  * POST /api/briefs/:id/review

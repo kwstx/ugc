@@ -595,10 +595,12 @@ router.get('/format', (req, res) => {
     }
 
     if (row) {
+      const minVideos = row.format_key === 'full' ? 1 : 5;
       return res.json({
         success: true,
         format: row.format_choice,
         formatKey: row.format_key,
+        minVideos,
         rate: row.rate
       });
     }
@@ -607,10 +609,148 @@ router.get('/format', (req, res) => {
       success: true,
       format: 'Reaction Video',
       formatKey: 'reaction',
+      minVideos: 5,
       rate: 25.00
     });
   } catch (error) {
     console.error('Error getting order format:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * POST /api/orders/session
+ * Reliably sync format, selected creators, enforce minimum order rules (5 videos min for reaction),
+ * and calculate pricing tiers on the server.
+ */
+router.post('/session', (req, res) => {
+  try {
+    const session = resolveSession(req);
+    const {
+      format = 'Reaction Video',
+      formatKey = 'reaction',
+      selectedCreators = [],
+      qty = 6
+    } = req.body;
+
+    const isFull = (formatKey === 'full' || format === 'Full UGC' || format === 'full_ugc');
+    const formatChoice = isFull ? 'Full UGC' : 'Reaction Video';
+    const key = isFull ? 'full' : 'reaction';
+    const minVideos = isFull ? 1 : 5;
+
+    const creatorsList = Array.isArray(selectedCreators) ? selectedCreators : [];
+    const creatorCount = Math.max(1, creatorsList.length);
+    const requestedQty = parseInt(qty, 10);
+    const effectiveQty = Math.max(minVideos, isNaN(requestedQty) ? 6 : requestedQty);
+
+    const pricing = calculatePricing(effectiveQty, creatorCount, formatChoice);
+
+    const upsertSessionStmt = db.prepare(`
+      INSERT INTO order_session_state (
+        session_id, format_choice, format_key, selected_creators,
+        qty, rate, min_videos, pricing_data, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+      ON CONFLICT(session_id) DO UPDATE SET
+        format_choice = excluded.format_choice,
+        format_key = excluded.format_key,
+        selected_creators = excluded.selected_creators,
+        qty = excluded.qty,
+        rate = excluded.rate,
+        min_videos = excluded.min_videos,
+        pricing_data = excluded.pricing_data,
+        updated_at = CURRENT_TIMESTAMP
+    `);
+
+    const jsonCreators = JSON.stringify(creatorsList);
+    const jsonPricing = JSON.stringify(pricing);
+
+    upsertSessionStmt.run(session.id, formatChoice, key, jsonCreators, effectiveQty, pricing.rate, minVideos, jsonPricing);
+    upsertSessionStmt.run('default_session', formatChoice, key, jsonCreators, effectiveQty, pricing.rate, minVideos, jsonPricing);
+
+    // Keep order_format_state in sync as well
+    const upsertFormatStmt = db.prepare(`
+      INSERT INTO order_format_state (session_id, format_choice, format_key, rate, updated_at)
+      VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+      ON CONFLICT(session_id) DO UPDATE SET
+        format_choice = excluded.format_choice,
+        format_key = excluded.format_key,
+        rate = excluded.rate,
+        updated_at = CURRENT_TIMESTAMP
+    `);
+    upsertFormatStmt.run(session.id, formatChoice, key, pricing.rate);
+    upsertFormatStmt.run('default_session', formatChoice, key, pricing.rate);
+
+    res.json({
+      success: true,
+      sessionId: session.id,
+      format: formatChoice,
+      formatKey: key,
+      selectedCreators: creatorsList,
+      creatorCount,
+      qty: effectiveQty,
+      minVideos,
+      rate: pricing.rate,
+      pricing
+    });
+  } catch (error) {
+    console.error('Error saving order session:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * GET /api/orders/session
+ * Retrieve active session state (format, selected creators, minimums, pricing)
+ */
+router.get('/session', (req, res) => {
+  try {
+    const session = resolveSession(req);
+    let row = db.prepare('SELECT * FROM order_session_state WHERE session_id = ?').get(session.id);
+    if (!row) {
+      row = db.prepare('SELECT * FROM order_session_state WHERE session_id = ?').get('default_session');
+    }
+
+    if (row) {
+      let selectedCreators = [];
+      let pricing = null;
+      try { selectedCreators = JSON.parse(row.selected_creators || '[]'); } catch (e) {}
+      try { pricing = JSON.parse(row.pricing_data || 'null'); } catch (e) {}
+
+      if (!pricing) {
+        pricing = calculatePricing(row.qty, Math.max(1, selectedCreators.length), row.format_choice);
+      }
+
+      return res.json({
+        success: true,
+        sessionId: row.session_id,
+        format: row.format_choice,
+        formatKey: row.format_key,
+        selectedCreators,
+        creatorCount: selectedCreators.length || 2,
+        qty: row.qty,
+        minVideos: row.min_videos || (row.format_key === 'full' ? 1 : 5),
+        rate: row.rate,
+        pricing,
+        updatedAt: row.updated_at
+      });
+    }
+
+    // Default fallback
+    const defaultPricing = calculatePricing(6, 2, 'Reaction Video');
+    res.json({
+      success: true,
+      sessionId: session.id,
+      format: 'Reaction Video',
+      formatKey: 'reaction',
+      selectedCreators: [],
+      creatorCount: 2,
+      qty: 6,
+      minVideos: 5,
+      rate: 25.00,
+      pricing: defaultPricing
+    });
+  } catch (error) {
+    console.error('Error getting order session:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });

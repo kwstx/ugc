@@ -107,9 +107,15 @@
 
     <!-- Describe your brief section -->
     <div class="w-full text-left">
-      <label for="brief-description-input" class="block text-[13px] font-bold text-[#111827] mb-2 sm:mb-2.5">
-        Describe your brief
-      </label>
+      <div class="flex items-center justify-between mb-2">
+        <label for="brief-description-input" class="block text-[13px] font-bold text-[#111827]">
+          Describe your brief
+        </label>
+        <div id="prompt-draft-indicator" class="hidden text-[11px] text-[#10b981] font-medium flex items-center gap-1.5 transition-opacity">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse"></span>
+          <span>Draft autosaved</span>
+        </div>
+      </div>
 
       <!-- Textarea Box -->
       <div class="relative w-full">
@@ -169,7 +175,49 @@
 
   <script>
     const API_BASE = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+    let draftAutosaveTimer = null;
 
+    // Auto-resize description textarea
+    function autoResize(el) {
+      if (!el) return;
+      el.style.height = 'auto';
+      const minHeight = window.innerWidth < 640 ? 160 : 175;
+      el.style.height = Math.max(minHeight, el.scrollHeight) + 'px';
+    }
+
+    // Debounced draft autosave to backend
+    function triggerDraftAutosave(text) {
+      clearTimeout(draftAutosaveTimer);
+      draftAutosaveTimer = setTimeout(async () => {
+        if (!text || text.trim().length < 5) return;
+        const format = localStorage.getItem('selectedFormat') || 'Reaction Video';
+        const key = (format === 'Full UGC') ? 'full' : 'reaction';
+        let selectedCreators = [];
+        try { selectedCreators = JSON.parse(localStorage.getItem('selectedCreators') || '[]'); } catch (_) {}
+
+        try {
+          const res = await fetch(`${API_BASE}/api/briefs/draft`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              promptText: text,
+              format,
+              formatKey: key,
+              selectedCreators
+            })
+          });
+          if (res.ok) {
+            const ind = document.getElementById('prompt-draft-indicator');
+            if (ind) {
+              ind.classList.remove('hidden');
+              setTimeout(() => ind.classList.add('hidden'), 2500);
+            }
+          }
+        } catch (_) {}
+      }, 700);
+    }
+
+    // Handle "Generate my brief"
     async function handleGenerateBriefClick(event) {
       if (event) event.preventDefault();
       const descInput = document.getElementById('brief-description-input');
@@ -214,13 +262,39 @@
       }
 
       try {
+        // 1. Sync session state and enforce 5-video minimum on backend
+        fetch(`${API_BASE}/api/orders/session`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            format,
+            formatKey,
+            selectedCreators,
+            qty: 6
+          })
+        }).catch(() => {});
+
+        // 2. Persist prompt draft to backend
+        fetch(`${API_BASE}/api/briefs/draft`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            promptText: text,
+            format,
+            formatKey,
+            selectedCreators
+          })
+        }).catch(() => {});
+
+        // 3. Generate AI brief
         const res = await fetch(`${API_BASE}/api/ai/generate-brief`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             description: text,
             format,
-            selectedCreators
+            selectedCreators,
+            creatorCount: selectedCreators.length || 2
           })
         });
 
@@ -236,21 +310,27 @@
       }
 
       // Fallback redirection
-      window.location.href = `edit_brief.html?format=${formatKey}`;
+      window.location.href = `edit_brief.html?format=${formatKey}&ai=true`;
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
-      // Restore previously entered description if any
       const descInput = document.getElementById('brief-description-input');
       const savedDesc = localStorage.getItem('sofia_brief_description');
       if (savedDesc && descInput) {
         descInput.value = savedDesc;
       }
-      function autoResize(el) {
-        if (!el) return;
-        el.style.height = 'auto';
-        const minHeight = window.innerWidth < 640 ? 160 : 175;
-        el.style.height = Math.max(minHeight, el.scrollHeight) + 'px';
+
+      // If empty in localStorage, attempt to restore from backend draft
+      if (descInput && !descInput.value) {
+        try {
+          const draftRes = await fetch(`${API_BASE}/api/briefs/draft`);
+          if (draftRes.ok) {
+            const dData = await draftRes.json();
+            if (dData && dData.draft && dData.draft.promptText) {
+              descInput.value = dData.draft.promptText;
+            }
+          }
+        } catch (_) {}
       }
 
       if (descInput) {
@@ -258,6 +338,7 @@
         descInput.addEventListener('input', (e) => {
           localStorage.setItem('sofia_brief_description', e.target.value);
           autoResize(e.target);
+          triggerDraftAutosave(e.target.value);
         });
         window.addEventListener('resize', () => autoResize(descInput));
       }
@@ -278,15 +359,16 @@
         }
       }
 
-      if (!savedFormat) {
-        try {
-          const res = await fetch(`${API_BASE}/api/orders/format`);
-          if (res.ok) {
-            const data = await res.json();
-            if (data && data.format) savedFormat = data.format;
+      // Sync session state from backend
+      try {
+        const sessRes = await fetch(`${API_BASE}/api/orders/session`);
+        if (sessRes.ok) {
+          const sessData = await sessRes.json();
+          if (sessData && sessData.format && !urlFormat) {
+            savedFormat = sessData.format;
           }
-        } catch (e) {}
-      }
+        }
+      } catch (e) {}
 
       if (!savedFormat) savedFormat = 'Reaction Video';
       const key = (savedFormat === 'Full UGC') ? 'full' : 'reaction';
@@ -298,7 +380,8 @@
         sessionStorage.setItem('selectedFormatKey', key);
       } catch (e) {}
 
-      fetch(`${API_BASE}/api/orders/format`, {
+      // Save active format and session
+      fetch(`${API_BASE}/api/orders/session`, {
         method: 'POST',
         keepalive: true,
         headers: { 'Content-Type': 'application/json' },
