@@ -380,6 +380,57 @@ db.exec(`
     youtube_handle TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
+
+  -- ============================================================================
+  -- Stripe Connect Integration Tables
+  -- ============================================================================
+  -- Stores mapping from platform user object to Stripe Connected Account ID (acct_...)
+  CREATE TABLE IF NOT EXISTS connect_accounts (
+    id TEXT PRIMARY KEY, -- Stripe Account ID (acct_...)
+    user_id TEXT NOT NULL, -- Platform user ID
+    display_name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    country TEXT DEFAULT 'us',
+    dashboard TEXT DEFAULT 'express',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  -- Stores platform-level products mapped to connected account destination
+  CREATE TABLE IF NOT EXISTS connect_products (
+    id TEXT PRIMARY KEY, -- Stripe Product ID (prod_...)
+    name TEXT NOT NULL,
+    description TEXT,
+    price_in_cents INTEGER NOT NULL,
+    currency TEXT DEFAULT 'usd',
+    connected_account_id TEXT NOT NULL, -- Destination connected account ID
+    stripe_price_id TEXT, -- Stripe Default Price ID (price_...)
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  -- Stores orders and destination charges
+  CREATE TABLE IF NOT EXISTS connect_orders (
+    id TEXT PRIMARY KEY, -- Stripe Checkout Session ID (cs_...)
+    payment_intent_id TEXT,
+    product_id TEXT NOT NULL,
+    connected_account_id TEXT NOT NULL,
+    amount_cents INTEGER NOT NULL,
+    application_fee_cents INTEGER NOT NULL,
+    currency TEXT DEFAULT 'usd',
+    quantity INTEGER DEFAULT 1,
+    customer_email TEXT,
+    status TEXT DEFAULT 'pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  -- Stores thin webhook event notifications and full retrieved events
+  CREATE TABLE IF NOT EXISTS connect_webhook_logs (
+    id TEXT PRIMARY KEY, -- Stripe Event ID (evt_...)
+    type TEXT NOT NULL,
+    related_account_id TEXT,
+    payload TEXT, -- JSON representation of the retrieved event
+    received_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
 `);
 
 // Seed default plan entitlements matching pricing.html

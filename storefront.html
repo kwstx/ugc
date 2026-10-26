@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creator Storefront · Sofia</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    .serif-heading {
+      font-family: 'Newsreader', Georgia, serif;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col text-slate-900 bg-[#f8fafc]">
+
+  <!-- Top Navigation Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2 group">
+          <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:bg-indigo-700 transition">
+            S
+          </div>
+          <span class="font-bold text-slate-900 tracking-tight text-lg">Sofia</span>
+        </a>
+        <span class="text-slate-300">/</span>
+        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 flex items-center gap-1.5">
+          <svg class="w-3 h-3 fill-emerald-600" viewBox="0 0 16 16">
+            <path d="M8 0a8 8 0 100 16A8 8 0 008 0zm3.5 6l-4 4.5a.5.5 0 01-.7 0l-2-2a.5.5 0 01.7-.7L7.15 9.4 10.8 5.3a.5.5 0 01.7.7z"/>
+          </svg>
+          Creator Storefront
+        </span>
+      </div>
+
+      <nav class="flex items-center gap-4">
+        <a href="/connect_portal.html" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-[#635BFF]" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M7.7 2C4.5 2 2.5 3.6 2.5 6.3c0 4.6 6.3 3.9 6.3 5.9 0 .8-.7 1.3-1.8 1.3-1.6 0-3.3-.7-4.5-1.5l-.5 2.5c1.4.8 3.3 1.2 5 1.2 3.6 0 5.8-1.7 5.8-4.5 0-5-6.3-4.1-6.3-6.1 0-.7.6-1.2 1.6-1.2 1.3 0 2.8.5 3.9 1.1l.6-2.4C11.3 2.3 9.4 2 7.7 2z"/>
+          </svg>
+          Connect Dashboard
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Cancel Notification if checkout was cancelled -->
+  <div id="checkoutCanceledAlert" class="hidden bg-amber-50 border-b border-amber-200 text-amber-900 px-4 py-3 text-center text-xs sm:text-sm">
+    <span>Payment was canceled or interrupted. You can select another product below whenever you are ready.</span>
+  </div>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+
+    <!-- Storefront Banner -->
+    <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-8 sm:p-10 text-white shadow-xl relative overflow-hidden">
+      <div class="max-w-2xl relative z-10">
+        <span class="text-xs uppercase tracking-widest font-semibold text-indigo-400 bg-indigo-500/20 px-3 py-1 rounded-full border border-indigo-400/30">
+          Stripe Destination Charges
+        </span>
+        <h1 class="text-3xl sm:text-4xl font-normal mt-4 tracking-tight serif-heading">
+          Official Creator Catalog &amp; Storefront
+        </h1>
+        <p class="text-sm text-slate-300 mt-2 leading-relaxed">
+          Browse products created on the platform and fulfill payments directly to verified Stripe Connect sellers. The platform retains an application fee on each transaction.
+        </p>
+      </div>
+      <!-- Background Glow -->
+      <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-indigo-600/30 rounded-full blur-3xl pointer-events-none"></div>
+    </div>
+
+    <!-- Connected Sellers Section -->
+    <div>
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-lg font-semibold text-slate-900">Connected Sellers</h2>
+          <p class="text-xs text-slate-500">All registered Stripe Connect merchant accounts on this platform.</p>
+        </div>
+        <span id="sellersCountBadge" class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full font-medium">0 sellers</span>
+      </div>
+
+      <div id="sellersGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+
+    <!-- Products Catalog Section -->
+    <div>
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-lg font-semibold text-slate-900">Products for Purchase</h2>
+          <p class="text-xs text-slate-500">Purchasing a product creates a Stripe Hosted Checkout session with transfer to the connected seller.</p>
+        </div>
+        <span id="productsCountBadge" class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full font-medium">0 products</span>
+      </div>
+
+      <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Checkout Redirect Modal / Spinner -->
+  <div id="checkoutModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl">
+      <div class="w-12 h-12 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6 animate-spin" viewBox="0 0 24 24" fill="none">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </div>
+      <h3 class="text-base font-semibold text-slate-900 mb-1">Redirecting to Stripe Checkout</h3>
+      <p class="text-xs text-slate-500">Preparing destination charge session with application fee...</p>
+    </div>
+  </div>
+
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400">
+    Sofia Platform · Stripe Connect V2 Integration Demo · Destination Charges &amp; Thin Events
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check for canceled checkout query parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('canceled') === 'true') {
+        document.getElementById('checkoutCanceledAlert').classList.remove('hidden');
+      }
+
+      loadStorefrontData();
+    });
+
+    async function loadStorefrontData() {
+      await Promise.all([loadSellers(), loadProducts()]);
+    }
+
+    async function loadSellers() {
+      try {
+        const res = await fetch('/api/connect/accounts');
+        const data = await res.json();
+        const sellers = data.accounts || [];
+
+        const countBadge = document.getElementById('sellersCountBadge');
+        countBadge.textContent = `${sellers.length} seller${sellers.length === 1 ? '' : 's'}`;
+
+        const grid = document.getElementById('sellersGrid');
+        if (sellers.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full bg-white p-6 rounded-2xl border border-slate-200 text-center text-slate-400 text-xs">
+              No connected sellers registered yet. <a href="/connect_portal.html" class="text-indigo-600 underline font-semibold">Create one in the Connect Dashboard</a>.
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = sellers.map(s => {
+          const isReady = s.live?.readyToReceivePayments;
+          return `
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 font-bold text-sm flex-shrink-0">
+                ${s.display_name.charAt(0).toUpperCase()}
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="text-xs font-semibold text-slate-900 truncate">${escapeHtml(s.display_name)}</div>
+                <div class="text-[11px] text-slate-400 font-mono truncate">${s.id}</div>
+                <div class="mt-1">
+                  ${isReady 
+                    ? '<span class="text-[10px] text-emerald-600 font-medium">● Ready for Payouts</span>'
+                    : '<span class="text-[10px] text-amber-500 font-medium">○ Onboarding Pending</span>'}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error('Failed to load sellers:', err);
+      }
+    }
+
+    async function loadProducts() {
+      try {
+        const res = await fetch('/api/connect/products');
+        const data = await res.json();
+        const products = data.products || [];
+
+        const countBadge = document.getElementById('productsCountBadge');
+        countBadge.textContent = `${products.length} product${products.length === 1 ? '' : 's'}`;
+
+        const grid = document.getElementById('productsGrid');
+        if (products.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full bg-white p-12 rounded-3xl border border-slate-200 text-center">
+              <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                </svg>
+              </div>
+              <h3 class="text-sm font-semibold text-slate-900 mb-1">No products created yet</h3>
+              <p class="text-xs text-slate-500 max-w-sm mx-auto mb-4">Create your first platform product mapped to a connected seller to test Destination Charges.</p>
+              <a href="/connect_portal.html" class="inline-flex items-center gap-1.5 px-4 h-9 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm transition">
+                Create Product in Dashboard &rarr;
+              </a>
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = products.map(prod => {
+          const priceFormatted = `$${(prod.price_in_cents / 100).toFixed(2)}`;
+          const feeEstimate = `$${((prod.price_in_cents * 0.10) / 100).toFixed(2)}`;
+          const sellerNet = `$${((prod.price_in_cents * 0.90) / 100).toFixed(2)}`;
+
+          return `
+            <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 flex flex-col justify-between hover:border-slate-300 transition">
+              <div>
+                <!-- Seller Badge -->
+                <div class="flex items-center justify-between mb-3">
+                  <span class="text-[10px] font-semibold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                    Sold by: ${escapeHtml(prod.seller_name || 'Verified Creator')}
+                  </span>
+                  <span class="text-[10px] font-mono text-slate-400">${prod.connected_account_id}</span>
+                </div>
+
+                <!-- Product Title & Description -->
+                <h3 class="text-base font-bold text-slate-900">${escapeHtml(prod.name)}</h3>
+                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                  ${escapeHtml(prod.description || 'Custom creator deliverable processed via platform destination charge.')}
+                </p>
+
+                <!-- Fee Transparency Box -->
+                <div class="mt-4 p-3 rounded-xl bg-slate-50 border border-slate-100 text-[11px] space-y-1">
+                  <div class="flex justify-between text-slate-500">
+                    <span>Platform Fee (10%):</span>
+                    <span class="font-mono text-slate-700 font-semibold">${feeEstimate}</span>
+                  </div>
+                  <div class="flex justify-between text-slate-500">
+                    <span>Transferred to Seller (90%):</span>
+                    <span class="font-mono text-emerald-700 font-semibold">${sellerNet}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Purchase Action -->
+              <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+                <div>
+                  <span class="text-[10px] uppercase font-bold text-slate-400 block">Total</span>
+                  <span class="text-xl font-bold text-slate-900">${priceFormatted}</span>
+                </div>
+
+                <button
+                  onclick="buyProduct('${prod.id}')"
+                  class="h-10 px-4 rounded-xl bg-[#635BFF] hover:bg-[#5249e0] active:scale-[0.99] text-white text-xs font-semibold shadow-sm transition flex items-center gap-2 cursor-pointer"
+                >
+                  <span>Buy with Stripe</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error('Failed to load products:', err);
+      }
+    }
+
+    async function buyProduct(productId) {
+      const modal = document.getElementById('checkoutModal');
+      modal.classList.remove('hidden');
+
+      try {
+        const res = await fetch('/api/connect/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            productId,
+            quantity: 1,
+            feePercentage: 10
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          throw new Error(data.error || 'Failed to initialize Stripe Checkout');
+        }
+
+        // Redirect to Stripe Hosted Checkout
+        window.location.href = data.url;
+      } catch (err) {
+        modal.classList.add('hidden');
+        alert('Checkout Initialization Error: ' + err.message);
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+  </script>
+</body>
+</html>

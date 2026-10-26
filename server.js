@@ -15,6 +15,7 @@ const notificationsRouter = require('./routes/notifications');
 const { billingRouter, stripeWebhookHandler } = require('./routes/billing');
 const authRouter = require('./routes/auth');
 const creatorsRouter = require('./routes/creators');
+const connectRouter = require('./routes/connect');
 const { runRecurringCreditDripJob } = require('./services/subscriptionCron');
 const { runRetentionCleanup, getStorageQuotaReport } = require('./services/storageGuard');
 
@@ -56,6 +57,7 @@ app.use('/api/notifications', notificationsRouter);
 app.use('/api/billing', billingRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/creators', creatorsRouter);
+app.use('/api/connect', connectRouter);
 app.post('/api/webhooks/stripe', stripeWebhookHandler);
 
 // Storage Quota and Cloudflare Free-Tier Safeguard Monitoring Endpoint
@@ -121,13 +123,35 @@ const htmlPages = [
   'source_creators',
   'track_results',
   'comparison',
-  'edit_brief'
+  'edit_brief',
+  'connect_portal',
+  'storefront',
+  'connect_success',
+  'onboard_complete',
+  'onboard_refresh'
 ];
 
 htmlPages.forEach(page => {
   app.get([`/${page}`, `/${page}.html`], (req, res) => {
     res.sendFile(path.join(__dirname, `${page}.html`));
   });
+});
+
+// Clean aliases for Stripe Connect flows
+app.get(['/connect', '/connect/portal', '/connect/index.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'connect_portal.html'));
+});
+app.get(['/connect/storefront', '/connect/storefront.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'storefront.html'));
+});
+app.get(['/connect/success', '/connect/success.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'connect_success.html'));
+});
+app.get('/connect/onboard_complete.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'onboard_complete.html'));
+});
+app.get('/connect/onboard_refresh.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'onboard_refresh.html'));
 });
 
 // Enable static serving with .html extension resolution
@@ -170,6 +194,8 @@ if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`===============================================`);
     console.log(`Sofia Backend running at http://localhost:${PORT}`);
+    console.log(`Stripe Connect Portal: http://localhost:${PORT}/connect_portal.html`);
+    console.log(`Creator Storefront: http://localhost:${PORT}/storefront.html`);
     console.log(`Pricing & Subscriptions: http://localhost:${PORT}/pricing.html`);
     console.log(`Edit Brief: http://localhost:${PORT}/edit_brief.html`);
     console.log(`API Health: http://localhost:${PORT}/api/health`);

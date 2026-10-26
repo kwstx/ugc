@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Refreshing Onboarding Session · Sofia Connect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  </style>
+</head>
+<body class="min-h-full flex flex-col items-center justify-center p-4 bg-[#f8fafc] text-slate-900">
+
+  <div class="max-w-md w-full bg-white rounded-3xl border border-slate-200/90 shadow-xl p-8 text-center space-y-4">
+    <div class="w-12 h-12 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
+      <svg class="w-6 h-6 animate-spin" viewBox="0 0 24 24" fill="none">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+    </div>
+
+    <h1 class="text-lg font-bold text-slate-900">Refreshing Onboarding Link</h1>
+    <p class="text-xs text-slate-500">Your onboarding session expired. Generating a fresh Stripe Account Link...</p>
+
+    <div id="refreshError" class="hidden text-xs text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-200"></div>
+
+    <a
+      href="/connect_portal.html"
+      class="inline-block text-xs text-slate-400 hover:text-slate-600 underline pt-2"
+    >
+      Cancel and return to dashboard
+    </a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const accountId = urlParams.get('accountId');
+
+      if (!accountId) {
+        document.getElementById('refreshError').textContent = 'No accountId provided in refresh URL.';
+        document.getElementById('refreshError').classList.remove('hidden');
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/connect/accounts/${accountId}/onboard`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          throw new Error(data.error || 'Failed to generate new onboarding link');
+        }
+
+        // Forward to the new account link URL
+        window.location.href = data.url;
+      } catch (err) {
+        const errEl = document.getElementById('refreshError');
+        errEl.textContent = 'Error: ' + err.message;
+        errEl.classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>

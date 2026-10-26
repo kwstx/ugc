@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stripe Connect Portal · Sofia</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    .serif-heading {
+      font-family: 'Newsreader', Georgia, serif;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col text-slate-900 bg-[#f8fafc]">
+
+  <!-- Top Navigation Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2 group">
+          <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:bg-indigo-700 transition">
+            S
+          </div>
+          <span class="font-bold text-slate-900 tracking-tight text-lg">Sofia</span>
+        </a>
+        <span class="text-slate-300">/</span>
+        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100 flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 fill-[#635BFF]" viewBox="0 0 16 16">
+            <path d="M7.7 2C4.5 2 2.5 3.6 2.5 6.3c0 4.6 6.3 3.9 6.3 5.9 0 .8-.7 1.3-1.8 1.3-1.6 0-3.3-.7-4.5-1.5l-.5 2.5c1.4.8 3.3 1.2 5 1.2 3.6 0 5.8-1.7 5.8-4.5 0-5-6.3-4.1-6.3-6.1 0-.7.6-1.2 1.6-1.2 1.3 0 2.8.5 3.9 1.1l.6-2.4C11.3 2.3 9.4 2 7.7 2z"/>
+          </svg>
+          Stripe Connect V2
+        </span>
+      </div>
+
+      <nav class="flex items-center gap-4">
+        <a href="/storefront.html" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.25A2.25 2.25 0 010 18.75V10.5m18 10.5h3.75A2.25 2.25 0 0024 18.75V10.5M2.25 10.5l9-7.5 9 7.5M3.75 10.5v8.25m16.5-8.25v8.25" />
+          </svg>
+          Storefront
+        </a>
+        <div id="apiConfigBadge" class="text-xs px-2.5 py-1 rounded-md font-medium flex items-center gap-1.5 bg-slate-100 text-slate-600">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          Checking Stripe API Key...
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- API Key Warning Banner (Shown if STRIPE_SECRET_KEY is missing or placeholder) -->
+  <div id="configWarningBanner" class="hidden bg-amber-50 border-b border-amber-200 text-amber-900 px-4 py-3">
+    <div class="max-w-7xl mx-auto flex items-start justify-between gap-3 text-xs sm:text-sm">
+      <div class="flex items-start gap-2.5">
+        <svg class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+        </svg>
+        <div>
+          <span class="font-semibold text-amber-950">Stripe API Key Required:</span>
+          <span id="configWarningText">Please configure your Stripe Secret Key in <code class="font-mono bg-amber-100/70 px-1.5 py-0.5 rounded text-amber-950">.env</code> to perform live requests.</span>
+        </div>
+      </div>
+      <a href="https://dashboard.stripe.com/test/apikeys" target="_blank" class="font-semibold underline hover:text-amber-700 whitespace-nowrap">
+        Stripe Dashboard &rarr;
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+
+    <!-- Hero Title -->
+    <div>
+      <h1 class="text-3xl font-medium tracking-tight text-slate-900 serif-heading">
+        Stripe Connect Dashboard &amp; Onboarding
+      </h1>
+      <p class="mt-1 text-sm text-slate-500 max-w-3xl leading-relaxed">
+        Manage platform connected accounts using the Stripe V2 API. Onboard creators with Stripe Express, inspect live account capabilities, create platform products, and listen for thin webhook notifications.
+      </p>
+    </div>
+
+    <!-- Grid: Section 1 & Section 3 (Account Creation & Product Creation) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+      <!-- ==================================================================== -->
+      <!-- 1. CREATE CONNECTED ACCOUNT (V2 CORE ACCOUNTS) -->
+      <!-- ==================================================================== -->
+      <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">V2 API</span>
+              <h2 class="text-base font-semibold text-slate-900 mt-1">1. Create Connected Account</h2>
+            </div>
+            <span class="text-xs text-slate-400 font-mono">POST /api/connect/accounts</span>
+          </div>
+
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">
+            Creates a connected account where the platform is responsible for pricing and fee collection (<code class="bg-slate-100 px-1 py-0.5 rounded text-slate-700">fees_collector: 'application'</code>).
+          </p>
+
+          <form id="createAccountForm" onsubmit="handleCreateAccount(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Display Name (User / Creator)</label>
+              <input
+                type="text"
+                id="accDisplayName"
+                required
+                placeholder="e.g. Alex Morgan Studios"
+                class="w-full h-10 px-3 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 focus:outline-none transition"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Contact Email</label>
+              <input
+                type="email"
+                id="accEmail"
+                required
+                placeholder="alex@example.com"
+                class="w-full h-10 px-3 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 focus:outline-none transition"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">User Identifier (Optional)</label>
+              <input
+                type="text"
+                id="accUserId"
+                placeholder="usr_creator_123"
+                class="w-full h-10 px-3 font-mono text-xs rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 focus:outline-none transition"
+              />
+              <p class="text-[11px] text-slate-400 mt-1">Maps our platform user object to the new Stripe Account ID.</p>
+            </div>
+
+            <button
+              type="submit"
+              id="btnCreateAccount"
+              class="w-full h-10 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white text-xs font-semibold shadow-sm transition flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>Create V2 Connected Account</span>
+              <svg id="createAccSpinner" class="hidden w-4 h-4 animate-spin text-white" viewBox="0 0 24 24" fill="none">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </button>
+          </form>
+        </div>
+
+        <div id="accountCreateResult" class="hidden mt-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- ==================================================================== -->
+      <!-- 2. CREATE PLATFORM PRODUCT (MAPPED TO CONNECTED ACCOUNT) -->
+      <!-- ==================================================================== -->
+      <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">Platform Level</span>
+              <h2 class="text-base font-semibold text-slate-900 mt-1">2. Create Product</h2>
+            </div>
+            <span class="text-xs text-slate-400 font-mono">POST /api/connect/products</span>
+          </div>
+
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">
+            Creates a product on the platform Stripe account. The mapping to the seller's connected account is stored in metadata and database.
+          </p>
+
+          <form id="createProductForm" onsubmit="handleCreateProduct(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Product Name</label>
+              <input
+                type="text"
+                id="prodName"
+                required
+                placeholder="e.g. 60s TikTok Reaction Clip License"
+                class="w-full h-10 px-3 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 focus:outline-none transition"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Description</label>
+              <input
+                type="text"
+                id="prodDesc"
+                placeholder="High-energy UGC testimonial clip with raw footage license"
+                class="w-full h-10 px-3 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 focus:outline-none transition"
+              />
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Price (in Cents)</label>
+                <input
+                  type="number"
+                  id="prodPriceInCents"
+                  required
+                  min="100"
+                  step="50"
+                  value="3000"
+                  class="w-full h-10 px-3 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 focus:outline-none transition font-mono"
+                />
+                <span class="text-[10px] text-slate-400">3000 = $30.00 USD</span>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Currency</label>
+                <select
+                  id="prodCurrency"
+                  class="w-full h-10 px-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-600 focus:outline-none transition"
+                >
+                  <option value="usd" selected>USD ($)</option>
+                  <option value="eur">EUR (€)</option>
+                  <option value="gbp">GBP (£)</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Connected Seller Account</label>
+              <select
+                id="prodConnectedAccountId"
+                required
+                class="w-full h-10 px-2.5 text-xs font-mono rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-600 focus:outline-none transition"
+              >
+                <option value="" disabled selected>-- Select Connected Account --</option>
+              </select>
+            </div>
+
+            <button
+              type="submit"
+              id="btnCreateProduct"
+              class="w-full h-10 rounded-xl bg-slate-900 hover:bg-black active:scale-[0.99] text-white text-xs font-semibold shadow-sm transition flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>Create Product &amp; Link Seller</span>
+              <svg id="createProdSpinner" class="hidden w-4 h-4 animate-spin text-white" viewBox="0 0 24 24" fill="none">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </button>
+          </form>
+        </div>
+
+        <div id="productCreateResult" class="hidden mt-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================================================================== -->
+    <!-- 3. CONNECTED ACCOUNTS & ONBOARDING STATUS LIST -->
+    <!-- ==================================================================== -->
+    <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden">
+      <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-base font-semibold text-slate-900">3. Connected Accounts &amp; Onboarding</h2>
+            <span id="accountCountBadge" class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-medium">0 accounts</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">
+            Onboard accounts via V2 Account Links. Status is queried directly from the Stripe Accounts API in real-time.
+          </p>
+        </div>
+
+        <button
+          onclick="loadAccounts()"
+          class="px-3.5 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+          Refresh Live Status
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-50/80 text-slate-500 font-semibold uppercase tracking-wider text-[11px] border-b border-slate-100">
+            <tr>
+              <th class="py-3 px-6">User / Account</th>
+              <th class="py-3 px-6">Account ID</th>
+              <th class="py-3 px-6">Transfers Status</th>
+              <th class="py-3 px-6">Requirements Status</th>
+              <th class="py-3 px-6 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="accountsTableBody" class="divide-y divide-slate-100">
+            <tr>
+              <td colspan="5" class="py-8 text-center text-slate-400">Loading connected accounts...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ==================================================================== -->
+    <!-- 4. THIN WEBHOOK EVENT DESTINATION & LOGS -->
+    <!-- ==================================================================== -->
+    <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-6">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-4 mb-4">
+        <div>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2 py-0.5 rounded">Thin Events</span>
+          <h2 class="text-base font-semibold text-slate-900 mt-1">4. Account Requirements &amp; Capability Webhooks</h2>
+          <p class="text-xs text-slate-500 mt-0.5">
+            Listens for <code class="font-mono bg-slate-100 px-1 py-0.5 rounded text-slate-700">v2.core.account[requirements].updated</code> and <code class="font-mono bg-slate-100 px-1 py-0.5 rounded text-slate-700">v2.core.account[.recipient].capability_status_updated</code>.
+          </p>
+        </div>
+
+        <button
+          onclick="loadWebhookLogs()"
+          class="px-3 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+          Refresh Logs
+        </button>
+      </div>
+
+      <!-- CLI Command Helper Box -->
+      <div class="bg-slate-900 rounded-xl p-4 text-slate-200 mb-5">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+          <span class="font-mono flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            Forward thin events locally using Stripe CLI:
+          </span>
+          <button onclick="copyCliCommand()" class="text-indigo-400 hover:text-indigo-300 text-xs">Copy</button>
+        </div>
+        <pre id="cliCommandBox" class="text-xs font-mono text-emerald-300 overflow-x-auto p-2 bg-slate-950/80 rounded-lg">stripe listen --thin-events 'v2.core.account[requirements].updated,v2.core.account[.recipient].capability_status_updated' --forward-thin-to http://localhost:3000/api/connect/webhook</pre>
+      </div>
+
+      <!-- Webhook Logs Table -->
+      <div class="overflow-x-auto border border-slate-100 rounded-xl">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-50 text-slate-500 font-semibold uppercase text-[10px]">
+            <tr>
+              <th class="py-2.5 px-4">Event ID</th>
+              <th class="py-2.5 px-4">Type</th>
+              <th class="py-2.5 px-4">Account ID</th>
+              <th class="py-2.5 px-4">Timestamp</th>
+            </tr>
+          </thead>
+          <tbody id="webhookLogsBody" class="divide-y divide-slate-100 font-mono">
+            <tr>
+              <td colspan="4" class="py-6 text-center text-slate-400 font-sans">No thin webhook events received yet.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400">
+    Sofia Platform · Stripe Connect V2 Integration Demo · Destination Charges &amp; Thin Events
+  </footer>
+
+  <!-- Client-side Logic Script -->
+  <script>
+    // State
+    let accountsList = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkConfig();
+      loadAccounts();
+      loadWebhookLogs();
+    });
+
+    async function checkConfig() {
+      try {
+        const res = await fetch('/api/connect/config');
+        const data = await res.json();
+        const badge = document.getElementById('apiConfigBadge');
+        const banner = document.getElementById('configWarningBanner');
+        const bannerText = document.getElementById('configWarningText');
+
+        if (data.configured) {
+          badge.className = 'text-xs px-2.5 py-1 rounded-md font-medium flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-100';
+          badge.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Stripe API Live';
+          banner.classList.add('hidden');
+        } else {
+          badge.className = 'text-xs px-2.5 py-1 rounded-md font-medium flex items-center gap-1.5 bg-amber-50 text-amber-800 border border-amber-200';
+          badge.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-500"></span> Missing Key';
+          bannerText.textContent = data.message;
+          banner.classList.remove('hidden');
+        }
+      } catch (e) {
+        console.error('Config check failed:', e);
+      }
+    }
+
+    async function loadAccounts() {
+      try {
+        const res = await fetch('/api/connect/accounts');
+        const data = await res.json();
+        accountsList = data.accounts || [];
+
+        const tbody = document.getElementById('accountsTableBody');
+        const countBadge = document.getElementById('accountCountBadge');
+        const select = document.getElementById('prodConnectedAccountId');
+
+        countBadge.textContent = `${accountsList.length} account${accountsList.length === 1 ? '' : 's'}`;
+
+        // Update Product Creation Dropdown
+        select.innerHTML = '<option value="" disabled selected>-- Select Connected Account --</option>';
+        accountsList.forEach(acc => {
+          const opt = document.createElement('option');
+          opt.value = acc.id;
+          opt.textContent = `${acc.display_name} (${acc.id})`;
+          select.appendChild(opt);
+        });
+
+        if (accountsList.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="5" class="py-8 text-center text-slate-400">
+                No connected accounts created yet. Use form above to create your first V2 connected account.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = accountsList.map(acc => {
+          const live = acc.live || {};
+          const isReady = live.readyToReceivePayments;
+          const isComplete = live.onboardingComplete;
+          const reqStatus = live.requirementsStatus || 'none';
+
+          const readyBadge = isReady
+            ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Active (Ready)
+               </span>`
+            : `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                 <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Inactive
+               </span>`;
+
+          const reqBadge = isComplete
+            ? `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                 Complete
+               </span>`
+            : `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+                 ${reqStatus === 'none' ? 'Action Required' : reqStatus}
+               </span>`;
+
+          return `
+            <tr class="hover:bg-slate-50/50 transition">
+              <td class="py-4 px-6">
+                <div class="font-semibold text-slate-900">${escapeHtml(acc.display_name)}</div>
+                <div class="text-slate-400 text-[11px]">${escapeHtml(acc.email)}</div>
+              </td>
+              <td class="py-4 px-6 font-mono text-slate-600">
+                ${acc.id}
+              </td>
+              <td class="py-4 px-6">
+                ${readyBadge}
+              </td>
+              <td class="py-4 px-6">
+                ${reqBadge}
+              </td>
+              <td class="py-4 px-6 text-right">
+                <button
+                  onclick="handleStartOnboarding('${acc.id}')"
+                  class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs shadow-sm transition inline-flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span>Onboard to collect payments</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error('Failed to load accounts:', err);
+      }
+    }
+
+    async function handleCreateAccount(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnCreateAccount');
+      const spinner = document.getElementById('createAccSpinner');
+      const resultBox = document.getElementById('accountCreateResult');
+
+      const displayName = document.getElementById('accDisplayName').value;
+      const email = document.getElementById('accEmail').value;
+      const userId = document.getElementById('accUserId').value;
+
+      btn.disabled = true;
+      spinner.classList.remove('hidden');
+      resultBox.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/connect/accounts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ displayName, email, userId })
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          throw new Error(data.error || 'Failed to create account');
+        }
+
+        resultBox.className = 'mt-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900';
+        resultBox.innerHTML = `
+          <strong>Account Created!</strong> Stripe ID: <code class="font-mono bg-emerald-100 px-1 py-0.5 rounded">${data.account.id}</code>.
+          Click "Onboard to collect payments" below to complete Express onboarding.
+        `;
+        resultBox.classList.remove('hidden');
+
+        document.getElementById('createAccountForm').reset();
+        await loadAccounts();
+      } catch (err) {
+        resultBox.className = 'mt-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-900';
+        resultBox.textContent = `Error: ${err.message}`;
+        resultBox.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        spinner.classList.add('hidden');
+      }
+    }
+
+    async function handleStartOnboarding(accountId) {
+      try {
+        const res = await fetch(`/api/connect/accounts/${accountId}/onboard`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          throw new Error(data.error || 'Failed to generate onboarding link');
+        }
+
+        // Redirect to Stripe Express onboarding flow
+        window.location.href = data.url;
+      } catch (err) {
+        alert('Onboarding Error: ' + err.message);
+      }
+    }
+
+    async function handleCreateProduct(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnCreateProduct');
+      const spinner = document.getElementById('createProdSpinner');
+      const resultBox = document.getElementById('productCreateResult');
+
+      const name = document.getElementById('prodName').value;
+      const description = document.getElementById('prodDesc').value;
+      const priceInCents = document.getElementById('prodPriceInCents').value;
+      const currency = document.getElementById('prodCurrency').value;
+      const connectedAccountId = document.getElementById('prodConnectedAccountId').value;
+
+      btn.disabled = true;
+      spinner.classList.remove('hidden');
+      resultBox.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/connect/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, description, priceInCents, currency, connectedAccountId })
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          throw new Error(data.error || 'Failed to create product');
+        }
+
+        resultBox.className = 'mt-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900';
+        resultBox.innerHTML = `
+          <strong>Product Created!</strong> Stripe Product: <code class="font-mono bg-emerald-100 px-1 py-0.5 rounded">${data.product.id}</code>.
+          Mapped to seller: <code class="font-mono bg-emerald-100 px-1 py-0.5 rounded">${data.product.connectedAccountId}</code>.
+          <a href="/storefront.html" class="underline font-semibold ml-1">View Storefront &rarr;</a>
+        `;
+        resultBox.classList.remove('hidden');
+
+        document.getElementById('createProductForm').reset();
+      } catch (err) {
+        resultBox.className = 'mt-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-900';
+        resultBox.textContent = `Error: ${err.message}`;
+        resultBox.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        spinner.classList.add('hidden');
+      }
+    }
+
+    async function loadWebhookLogs() {
+      try {
+        const res = await fetch('/api/connect/webhook/logs');
+        const data = await res.json();
+        const tbody = document.getElementById('webhookLogsBody');
+
+        if (!data.logs || data.logs.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="4" class="py-6 text-center text-slate-400 font-sans">
+                No thin webhook events received yet. Run Stripe CLI to stream live events.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = data.logs.map(log => `
+          <tr class="hover:bg-slate-50">
+            <td class="py-2.5 px-4 font-mono text-indigo-600">${escapeHtml(log.id)}</td>
+            <td class="py-2.5 px-4 font-semibold text-slate-800">${escapeHtml(log.type)}</td>
+            <td class="py-2.5 px-4 text-slate-500">${escapeHtml(log.related_account_id || '-')}</td>
+            <td class="py-2.5 px-4 text-slate-400 text-[11px] font-sans">${new Date(log.received_at).toLocaleTimeString()}</td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error('Failed to load webhook logs:', err);
+      }
+    }
+
+    function copyCliCommand() {
+      const text = document.getElementById('cliCommandBox').textContent;
+      navigator.clipboard.writeText(text);
+      alert('Copied Stripe CLI thin-events command to clipboard!');
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+  </script>
+</body>
+</html>
