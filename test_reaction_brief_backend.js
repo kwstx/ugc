@@ -165,17 +165,16 @@ const server = app.listen(TEST_PORT, async () => {
     // =========================================================================
     console.log('\n--- 5. Testing Final Brief Submission & Pricing Lock-In ---');
 
-    // 5a. Validation failure: missing Source Media URL for reaction format
+    // 5a. Validation failure: missing brand name
     const invalidSubmitRes = await request(`/api/orders/${orderId}/brief`, 'POST', {
-      brandName: 'HydroGlow Skin',
-      sourceAssetUrl: '', // missing
+      brandName: '', // missing
       aboutBrand: 'Hydrating aloe vera moisturizer',
       filmingInstructions: 'Hold bottle, express genuine surprise',
       concepts: [{ title: 'Reaction 1', script: 'Wow look at that texture!' }]
     });
     assert.strictEqual(invalidSubmitRes.success, false);
-    assert.ok(invalidSubmitRes.validationErrors.some(e => e.includes('Source Media URL')), 'Must require Source Media URL for reaction');
-    console.log('✔ 5a. Mandatory Source Media URL enforced for reaction brief');
+    assert.ok(invalidSubmitRes.validationErrors.some(e => e.includes('Brand name')), 'Must require Brand name');
+    console.log('✔ 5a. Mandatory Brand name enforced for brief submission');
 
     // 5b. Validation failure: invalid URL
     const badUrlRes = await request(`/api/orders/${orderId}/brief`, 'POST', {

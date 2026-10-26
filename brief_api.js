@@ -415,7 +415,7 @@ async function submitReviewToBackend() {
     return;
   }
 
-  if (payload.formatKey === 'reaction' && !payload.sourceAssetUrl) {
+  if (payload.formatKey === 'reaction' && document.getElementById('source-asset-url-input') && !payload.sourceAssetUrl) {
     alert('Reaction video format requires a Source Media URL (video clip to react to).');
     const input = document.getElementById('source-asset-url-input');
     if (input) {

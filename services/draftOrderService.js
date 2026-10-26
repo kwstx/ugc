@@ -399,10 +399,8 @@ function submitAndLockReactionBrief(orderId, briefData, session = { id: 'default
     validationErrors.push('Brand name is required.');
   }
 
-  // Validate Source Asset URL for reaction brief
-  if (!sourceAssetUrl) {
-    validationErrors.push('Reaction video format requires a Source Media URL (video to react to).');
-  } else {
+  // Validate Source Asset URL for reaction brief if provided
+  if (sourceAssetUrl) {
     try {
       const parsedUrl = new URL(sourceAssetUrl);
       if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
