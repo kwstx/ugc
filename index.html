@@ -347,7 +347,7 @@
 
 <body class="bg-white min-h-screen flex flex-col justify-between selection:bg-indigo-100 selection:text-indigo-900 relative">
 
-  <!-- ================= LIGHTREEL TOP HERO SECTION (PIXEL PERFECT COPY) ================= -->
+  <!-- ================= SOFIA TOP HERO SECTION ================= -->
   <div class="w-full max-w-[1560px] mx-auto px-2 sm:px-4 md:px-6 py-2 sm:py-3.5 relative select-none">
     
     <!-- Hero Card Container with Background Image -->
@@ -413,7 +413,7 @@
                 
                 <!-- Query Prompt with Dynamic Typewriter -->
                 <div class="text-[#64748b] text-[14px] sm:text-[15.5px] font-normal leading-relaxed min-h-[50px] select-none flex items-start">
-                  <span id="lightreelTypewriter"></span>
+                  <span id="sofiaTypewriter"></span>
                   <span class="custom-cursor-blink inline-block w-[1.5px] h-[19px] bg-[#64748b] align-middle ml-0.5"></span>
                 </div>
 
@@ -438,7 +438,7 @@
                         </svg>
                       </span>
                     </div>
-                    <span id="lightreelCounter" class="text-[11.5px] sm:text-[12px] text-[#52525b] font-medium tracking-tight whitespace-nowrap">
+                    <span id="sofiaCounter" class="text-[11.5px] sm:text-[12px] text-[#52525b] font-medium tracking-tight whitespace-nowrap">
                       5.665 videos watched today
                     </span>
                   </div>
@@ -474,7 +474,7 @@
 
   <!-- Interactive Typewriter & Counter Script -->
   <script>
-    (function initLightreelHero() {
+    (function initSofiaHero() {
       const phrases = [
         "What trending sounds should I use for my skincare brand?",
         "Find UGC hooks for a fitness brand",
@@ -484,8 +484,8 @@
       let phraseIdx = 0;
       let charIdx = 0;
       let isDeleting = false;
-      const textEl = document.getElementById("lightreelTypewriter");
-      const counterEl = document.getElementById("lightreelCounter");
+      const textEl = document.getElementById("sofiaTypewriter");
+      const counterEl = document.getElementById("sofiaCounter");
 
       function typeLoop() {
         if (!textEl) return;
