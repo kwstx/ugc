@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="h-full bg-white scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sofia - Real creators, reactions that convert</title>
+  <title>LightReel - the first AI that doomscrolls</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -318,247 +318,339 @@
         opacity: 1;
       }
     }
-    .mobile-backdrop-anim {
-      animation: backdropFadeIn 0.3s ease-out both !important;
-      will-change: opacity;
+    @keyframes cursorBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .custom-cursor-blink {
+      animation: cursorBlink 0.9s infinite;
+    }
+
+    @keyframes marqueeScroll {
+      0% {
+        transform: translate3d(0, 0, 0);
+      }
+      100% {
+        transform: translate3d(-50%, 0, 0);
+      }
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marqueeScroll 28s linear infinite;
+    }
+    .marquee-track:hover {
+      animation-play-state: paused;
     }
   </style>
 </head>
 
 <body class="bg-white min-h-screen flex flex-col justify-between selection:bg-indigo-100 selection:text-indigo-900 relative">
 
-  <!-- ================= TOP HERO SECTION (TINY NOTCH UP) ================= -->
-  <div class="w-full flex flex-col items-center justify-start pt-5 md:pt-7 px-4 sm:px-6 relative">
+  <!-- ================= LIGHTREEL TOP HERO SECTION (PIXEL PERFECT COPY) ================= -->
+  <div class="w-full max-w-[1280px] mx-auto p-3 sm:p-5 md:p-6 lg:p-7 relative select-none">
     
-    <!-- 1. FLOATING NAVIGATION BAR -->
-    <header class="w-full max-w-[910px] mb-7 sm:mb-9">
+    <!-- Big Blue Hero Card Container with Rounded Corners -->
+    <div style="background: radial-gradient(120% 120% at 50% 0%, #0a70ff 0%, #0064ff 45%, #0252e8 100%);" class="w-full rounded-[28px] sm:rounded-[36px] md:rounded-[42px] px-6 sm:px-10 md:px-14 lg:px-16 pt-7 sm:pt-8 md:pt-10 pb-10 sm:pb-12 shadow-[0_20px_60px_-15px_rgba(0,102,255,0.35)] relative overflow-hidden flex flex-col justify-between">
       
-      <!-- Mobile: Sofia on top-left, Burger icon with three lines on top-right -->
-      <div class="flex md:hidden items-center justify-between w-full">
-        <a href="#" class="flex items-center pl-1 group">
-          <span class="font-switzer font-bold text-[17px] tracking-[-0.02em] text-black">Sofia</span>
-        </a>
-        <button id="mobileMenuBtn" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu" class="w-10 h-10 bg-white border border-[#eaeaea] rounded-full flex flex-col items-center justify-center gap-[4.5px] shadow-nav hover:bg-zinc-50 active:scale-95 transition-all">
-          <span class="w-[18px] h-[2px] bg-[#111111] rounded-full"></span>
-          <span class="w-[18px] h-[2px] bg-[#111111] rounded-full"></span>
-          <span class="w-[18px] h-[2px] bg-[#111111] rounded-full"></span>
-        </button>
-      </div>
-
-      <!-- Desktop: Full floating navbar -->
-      <nav class="hidden md:flex w-full bg-white border border-[#eaeaea] rounded-full px-4 sm:px-5 py-2 sm:py-2.5 items-center justify-between shadow-nav">
-        
-        <!-- Brand Logo -->
-        <a href="#" class="flex items-center pl-0.5 group">
-          <span class="font-switzer font-bold text-[15.5px] sm:text-[16px] tracking-[-0.02em] text-black">Sofia</span>
+      <!-- 1. NAVIGATION BAR -->
+      <nav class="w-full flex items-center justify-between z-10">
+        <!-- Logo -->
+        <a href="#" class="flex items-center group">
+          <span class="text-white font-extrabold text-[22px] sm:text-[24px] md:text-[25px] tracking-[-0.03em] font-sans">LightReel</span>
         </a>
 
-        <!-- Center Nav Links -->
-        <div class="flex items-center gap-6 lg:gap-7 text-[14px] text-[#374151] font-medium">
-          <a href="library.html" class="hover:text-black transition-colors">Library</a>
-          <a href="sofia.html" class="flex items-center gap-1.5 hover:text-black transition-colors">
-            <span>AI agents</span>
-            <span class="bg-[#e9ebff] text-[#5e54f3] text-[9.5px] font-bold px-1.5 py-[1px] rounded-full uppercase tracking-wider">NEW</span>
+        <!-- Right Action Links -->
+        <div class="flex items-center gap-4 sm:gap-7">
+          <a href="#manage-subscription" class="text-white text-[13.5px] sm:text-[14px] font-semibold hover:text-white/80 transition-colors">
+            Manage subscription
           </a>
-          <a href="#custom-orders" onclick="document.getElementById('custom-orders')?.scrollIntoView({ behavior: 'smooth' })" class="hover:text-black transition-colors">Custom orders</a>
-          <a href="#pricingSection" onclick="document.getElementById('pricingSection')?.scrollIntoView({ behavior: 'smooth' })" class="hover:text-black transition-colors">Pricing</a>
-          <a href="creator_portal.html" class="hover:text-black transition-colors">Creators portal</a>
-        </div>
-
-        <!-- Right Buttons -->
-        <div id="desktopNavAuth" class="flex items-center gap-3.5 sm:gap-4 pr-0.5">
-          <a href="#login" onclick="openLoginModal()" class="text-[14px] text-[#222222] font-medium hover:text-black transition-colors px-1">Log in</a>
-          <a href="#signup" onclick="openLoginModal()" class="bg-[#111111] hover:bg-black text-white text-[13px] sm:text-[13.5px] font-semibold pl-4 pr-3.5 py-1.5 sm:py-2 rounded-full flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]">
-            <span>Start free</span>
-            <svg class="w-3.5 h-3.5 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-            </svg>
+          <a href="#start-free" class="bg-white hover:bg-zinc-50 active:scale-95 text-[#111111] font-bold text-[13.5px] sm:text-[14px] px-5 sm:px-6 py-2.5 rounded-full shadow-sm transition-all whitespace-nowrap">
+            Start for free
           </a>
         </div>
-
       </nav>
-    </header>
 
-    <!-- Mobile Menu Drawer / Overlay -->
-    <div id="mobileMenuDrawer" class="hidden fixed inset-0 z-50 md:hidden">
-      <!-- Backdrop -->
-      <div id="mobileMenuBackdrop" onclick="closeMobileMenu()" class="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity mobile-backdrop-anim"></div>
-      
-      <!-- Dropdown Panel -->
-      <div id="mobileMenuCard" class="fixed top-4 right-4 left-4 bg-white rounded-3xl p-6 shadow-2xl border border-zinc-100 flex flex-col gap-5 z-10 mobile-menu-card-anim">
-        <!-- Header with close button -->
-        <div class="flex justify-end">
-          <button onclick="closeMobileMenu()" aria-label="Close menu" class="w-8 h-8 rounded-full bg-zinc-100 text-zinc-600 hover:text-black hover:bg-zinc-200 flex items-center justify-center text-sm font-semibold transition-colors">
-            ✕
-          </button>
+      <!-- 2. MAIN TWO-COLUMN HERO CONTENT -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center mt-12 sm:mt-16 md:mt-20 mb-12 sm:mb-16 md:mb-20 z-10">
+        
+        <!-- Left Hero Column -->
+        <div class="lg:col-span-7 flex flex-col items-start text-left">
+          <!-- Main Headline -->
+          <h1 class="text-[42px] sm:text-[56px] md:text-[66px] lg:text-[72px] font-black text-white tracking-[-0.04em] leading-[1.01]">
+            the first AI that<br />
+            doomscrolls
+          </h1>
+
+          <!-- Subheadline -->
+          <p class="mt-4 sm:mt-5 text-[16px] sm:text-[17.5px] md:text-[18px] text-white/90 font-normal leading-[1.4] max-w-[460px]">
+            Lightreel develops content strategies,<br class="hidden sm:inline" />
+            finds creators, and helps you go viral
+          </p>
+
+          <!-- Pill CTA Button -->
+          <div class="mt-7 sm:mt-8">
+            <a href="#try" class="inline-flex items-center gap-3 bg-white text-[#111111] font-bold text-[15px] sm:text-[16px] px-6 sm:px-7 py-3 sm:py-3.5 rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.12)] hover:bg-zinc-50 hover:scale-[1.02] active:scale-[0.98] transition-all">
+              <span class="underline decoration-2 underline-offset-4">try 3 days free</span>
+              <span class="text-lg leading-none">→</span>
+            </a>
+          </div>
         </div>
 
-        <!-- Links -->
-        <div class="flex flex-col gap-3.5 text-[15px] font-medium text-[#222222]">
-          <a href="library.html" onclick="closeMobileMenu()" class="py-1 hover:text-black transition-colors flex items-center justify-between">
-            <span>Library</span>
-            <span class="text-xs text-zinc-400">→</span>
-          </a>
-          <a href="sofia.html" onclick="closeMobileMenu()" class="py-1 hover:text-black transition-colors flex items-center justify-between">
-            <span class="flex items-center gap-2">
-              <span>AI agents</span>
-              <span class="bg-[#e9ebff] text-[#5e54f3] text-[9.5px] font-bold px-1.5 py-[1px] rounded-full uppercase tracking-wider">NEW</span>
-            </span>
-            <span class="text-xs text-zinc-400">→</span>
-          </a>
-          <a href="#custom-orders" onclick="closeMobileMenu(); document.getElementById('custom-orders')?.scrollIntoView({ behavior: 'smooth' })" class="py-1 hover:text-black transition-colors flex items-center justify-between">
-            <span>Custom orders</span>
-            <span class="text-xs text-zinc-400">→</span>
-          </a>
-          <a href="#pricingSection" onclick="closeMobileMenu(); document.getElementById('pricingSection')?.scrollIntoView({ behavior: 'smooth' })" class="py-1 hover:text-black transition-colors flex items-center justify-between">
-            <span>Pricing</span>
-            <span class="text-xs text-zinc-400">→</span>
-          </a>
-          <a href="creator_portal.html" onclick="closeMobileMenu()" class="py-1 hover:text-black transition-colors flex items-center justify-between">
-            <span>Creators portal</span>
-            <span class="text-xs text-zinc-400">→</span>
-          </a>
+        <!-- Right Interactive AI Card Column -->
+        <div class="lg:col-span-5 flex flex-col items-center lg:items-end justify-center w-full">
+          <div class="w-full max-w-[460px]">
+            
+            <!-- Outer Translucent Card Frame -->
+            <div class="p-2 sm:p-2.5 rounded-[24px] sm:rounded-[26px] bg-white/[0.12] border border-white/25 shadow-2xl backdrop-blur-xs">
+              
+              <!-- Inner White Prompt Card -->
+              <div class="w-full bg-white rounded-[18px] sm:rounded-[20px] p-5 sm:p-6 shadow-md flex flex-col justify-between min-h-[165px] sm:min-h-[180px]">
+                
+                <!-- Query Prompt with Dynamic Typewriter -->
+                <div class="text-[#64748b] text-[14px] sm:text-[15.5px] font-normal leading-relaxed min-h-[46px] select-none flex items-start">
+                  <span id="lightreelTypewriter"></span>
+                  <span class="custom-cursor-blink inline-block w-[1.5px] h-[19px] bg-[#64748b] align-middle ml-0.5"></span>
+                </div>
+
+                <!-- Bottom Row Inside White Card -->
+                <div class="flex items-center justify-between mt-6 pt-1">
+                  
+                  <!-- Videos Watched Pill Badge -->
+                  <div class="inline-flex items-center gap-2 bg-[#f4f4f5] border border-zinc-200/70 rounded-full pl-2 pr-3 py-1 sm:py-1.5 shadow-2xs">
+                    <div class="flex items-center gap-1 shrink-0">
+                      <!-- TikTok Icon Badge -->
+                      <span class="w-[19px] h-[19px] rounded-full bg-black flex items-center justify-center shrink-0 shadow-2xs">
+                        <svg class="w-2.5 h-2.5 fill-white" viewBox="0 0 24 24">
+                          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 3.13-4.52V9.39a6.34 6.34 0 0 0-5.36 2.13 6.34 6.34 0 0 0 1.25 8.8 6.34 6.34 0 0 0 8.63-1.42 6.34 6.34 0 0 0 1-3.42V8.82a8.21 8.21 0 0 0 4.77 1.52V6.9a4.81 4.81 0 0 1-1-.21z"/>
+                        </svg>
+                      </span>
+                      <!-- Instagram Icon Badge -->
+                      <span class="w-[19px] h-[19px] rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center shrink-0 shadow-2xs">
+                        <svg class="w-2.5 h-2.5 text-white stroke-current fill-none stroke-[2]" viewBox="0 0 24 24">
+                          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                          <circle cx="12" cy="12" r="4"/>
+                          <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/>
+                        </svg>
+                      </span>
+                    </div>
+                    <span id="lightreelCounter" class="text-[11.5px] sm:text-[12px] text-[#52525b] font-medium tracking-tight whitespace-nowrap">
+                      5.665 videos watched today
+                    </span>
+                  </div>
+
+                  <!-- Send / Up-Arrow Button -->
+                  <button aria-label="Submit prompt" class="w-8 h-8 rounded-full bg-[#f4f4f5] hover:bg-[#e4e4e7] text-zinc-400 hover:text-zinc-700 flex items-center justify-center transition-all active:scale-95 shrink-0">
+                    <svg class="w-4 h-4 stroke-[2.4]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 19.5V4.5m0 0l-6 6m6-6l6 6"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Try our api Link Below White Box -->
+            <div class="w-full flex justify-center mt-3 sm:mt-3.5">
+              <a href="#api" class="inline-flex items-center gap-1.5 font-mono text-[13px] text-white/95 hover:text-white transition-opacity group">
+                <span class="font-bold tracking-tight">&lt;/&gt;</span>
+                <span class="underline decoration-1 underline-offset-4 group-hover:decoration-2">try our api</span>
+              </a>
+            </div>
+
+          </div>
         </div>
 
-        <!-- Buttons -->
-        <div id="mobileNavAuth" class="pt-3 border-t border-zinc-100 flex flex-col gap-2.5">
-          <a href="#login" onclick="closeMobileMenu(); openLoginModal()" class="w-full text-center py-2.5 rounded-full border border-zinc-200 text-[14px] font-medium text-zinc-800 hover:bg-zinc-50 transition-colors">
-            Log in
-          </a>
-          <a href="#signup" onclick="closeMobileMenu(); openLoginModal()" class="w-full bg-[#111111] hover:bg-black text-white text-[14px] font-semibold py-2.5 rounded-full flex items-center justify-center gap-2 shadow-sm transition-transform active:scale-[0.98]">
-            <span>Start free</span>
-            <svg class="w-3.5 h-3.5 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-            </svg>
-          </a>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- 2. LIVE PILL BADGE -->
-    <div class="inline-flex items-center gap-2 bg-[#f0f8f2] border border-[#d8eedf] rounded-full pl-1.5 pr-3.5 py-0.5 mb-5 sm:mb-7 shadow-sm transition-transform hover:scale-[1.01]">
-      <span class="inline-flex items-center gap-1 bg-[#d6f2dc] text-[#15803d] text-[10.5px] font-bold px-2 py-0.5 rounded-full tracking-wider uppercase">
-        <span class="w-1.5 h-1.5 rounded-full bg-[#16a34a] dot-pulse"></span>
-        LIVE
-      </span>
-      <span class="text-[13px] text-[#4b5563] font-medium">
-        Real-human reactions · 0 made by AI
-      </span>
-    </div>
-
-
-    <!-- 3. HERO HEADLINE -->
-    <h1 class="hero-heading text-[42px] sm:text-[54px] md:text-[62px] lg:text-[68px] max-w-4xl mx-auto mb-4 sm:mb-5">
-      <!-- Line 1: Real creators, -->
-      <span class="block hero-title-line-1">
-        Real creators,
-      </span>
-      
-      <!-- Line 2: reactions that convert. -->
-      <span class="block mt-0.5 sm:mt-1 hero-title-line-2">
-        reactions that 
-        <span class="relative inline-block whitespace-nowrap">
-          convert.
-          <!-- Pixel-accurate SVG double hand-drawn underline under 'convert.' -->
-          <svg class="absolute -bottom-2 sm:-bottom-3 left-0 w-[102%] h-3.5 sm:h-4.5 text-[#3b5bfd] pointer-events-none" viewBox="0 0 140 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2 5.5 C 38 3.5, 96 4, 138 6.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
-            <path d="M26 13.5 C 58 11.5, 102 12, 133 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-          </svg>
-        </span>
-      </span>
-    </h1>
-
-
-    <!-- 4. SUBTITLE COPY -->
-    <p class="hero-subtitle text-[14.5px] sm:text-[16px] max-w-[580px] mx-auto mb-7 sm:mb-9 font-normal">
-      Discover authentic UGC from real people. Find the perfect reaction,<br class="hidden sm:inline" />
-      license it in seconds, and turn it into your next winning ad.
-    </p>
-
-
-    <!-- 5. SEARCH BOX COMPONENT -->
-    <div class="w-full max-w-[520px] sm:max-w-[550px] bg-white border border-[#e5e7eb] rounded-[20px] shadow-search overflow-hidden mb-6 sm:mb-7 text-left transition-all focus-within:border-zinc-300 focus-within:shadow-lg">
-      
-      <!-- Upper Search Input Row -->
-      <div class="flex items-center px-4 py-2.5 sm:py-3 gap-2.5">
-        <!-- Magnifying Glass Icon -->
-        <svg class="w-4 h-4 sm:w-[18px] sm:h-[18px] text-[#9ca3af] shrink-0 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-        </svg>
-
-        <!-- Search Input with Cursor -->
-        <div class="flex-1 flex items-center relative overflow-hidden">
-          <input 
-            type="text" 
-            id="searchInput" 
-            value=""
-            placeholder="" 
-            class="w-full bg-transparent border-none outline-none text-[14.5px] sm:text-[15.5px] text-[#222222] font-normal placeholder-zinc-400 p-0 m-0"
-          />
-          <span id="cursorBar" class="custom-cursor absolute left-0 top-1/2 pointer-events-none" style="transform: translate3d(0, -50%, 0);"></span>
-        </div>
-
-        <!-- Search Button (Pixel-Perfect Copy of Gradient Pill Button) -->
-        <button 
-          id="searchBtn"
-          onclick="performSearch()"
-          style="background: linear-gradient(180deg, #213ae7 0%, #475cee 50%, #7284f7 100%);"
-          class="text-white text-[13.5px] sm:text-[14.5px] font-bold px-6 sm:px-7 py-2 sm:py-2.5 rounded-full shadow-[0_3px_12px_rgba(33,58,231,0.25)] hover:shadow-[0_6px_20px_rgba(33,58,231,0.4)] hover:brightness-105 active:scale-[0.98] transition-all tracking-[-0.02em] shrink-0 flex items-center justify-center cursor-pointer"
-        >
-          <span>Search</span>
-        </button>
       </div>
 
-      <!-- Lower Filter Tags Tray -->
-      <div class="bg-[#fafafa] border-t border-[#f0f0f0] px-4 py-2 flex items-center gap-1.5 sm:gap-2 overflow-x-auto">
-        <span class="text-[10px] font-bold text-[#9ca3af] uppercase tracking-wider shrink-0 mr-0.5">TRY</span>
-        <div class="flex items-center gap-1.5 flex-nowrap shrink-0">
-          <button onclick="setSearch('Shocked')" class="tag-pill bg-white hover:bg-zinc-50 border border-[#e5e5e5] text-[#4b5563] hover:text-black text-[11.5px] sm:text-[12px] font-medium px-2.5 py-0.5 rounded-full shadow-pill transition-all whitespace-nowrap">Shocked</button>
-          <button onclick="setSearch('Crying')" class="tag-pill bg-white hover:bg-zinc-50 border border-[#e5e5e5] text-[#4b5563] hover:text-black text-[11.5px] sm:text-[12px] font-medium px-2.5 py-0.5 rounded-full shadow-pill transition-all whitespace-nowrap">Crying</button>
-          <button onclick="setSearch('Laughing')" class="tag-pill bg-white hover:bg-zinc-50 border border-[#e5e5e5] text-[#4b5563] hover:text-black text-[11.5px] sm:text-[12px] font-medium px-2.5 py-0.5 rounded-full shadow-pill transition-all whitespace-nowrap">Laughing</button>
-          <button onclick="setSearch('Talking head')" class="tag-pill bg-white hover:bg-zinc-50 border border-[#e5e5e5] text-[#4b5563] hover:text-black text-[11.5px] sm:text-[12px] font-medium px-2.5 py-0.5 rounded-full shadow-pill transition-all whitespace-nowrap">Talking head</button>
-          <button onclick="setSearch('Skits')" class="tag-pill bg-white hover:bg-zinc-50 border border-[#e5e5e5] text-[#4b5563] hover:text-black text-[11.5px] sm:text-[12px] font-medium px-2.5 py-0.5 rounded-full shadow-pill transition-all whitespace-nowrap">Skits</button>
-          <button onclick="setSearch('Couples')" class="tag-pill bg-white hover:bg-zinc-50 border border-[#e5e5e5] text-[#4b5563] hover:text-black text-[11.5px] sm:text-[12px] font-medium px-2.5 py-0.5 rounded-full shadow-pill transition-all whitespace-nowrap">Couples</button>
+      <!-- 3. BOTTOM "TRUSTED BY" & LOGOS SECTION -->
+      <div class="w-full flex flex-col items-center mt-4 sm:mt-6 z-10">
+        <!-- Label -->
+        <div class="text-white/75 font-bold text-[14px] sm:text-[15px] tracking-wide mb-6">
+          trusted by
         </div>
+
+        <!-- Marquee Row of Partner Logos -->
+        <div class="w-full overflow-hidden relative [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
+          <div class="marquee-track flex items-center gap-12 sm:gap-16 text-white/80 select-none">
+            
+            <!-- Set 1 of Logos -->
+            <div class="flex items-center gap-12 sm:gap-16 shrink-0">
+              <!-- Warner Records -->
+              <div class="flex items-center gap-2 font-bold tracking-wider text-[13px] sm:text-[14px]">
+                <svg class="w-6 h-6 fill-current shrink-0" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+                  <path d="M7 10h10M6 14h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>WARNER RECORDS</span>
+              </div>
+
+              <!-- Big Loud -->
+              <div class="font-black text-[18px] sm:text-[20px] tracking-tighter uppercase font-sans">
+                BIG LOUD
+              </div>
+
+              <!-- Playkit -->
+              <div class="flex items-center gap-1.5 font-black text-[15px] sm:text-[17px] tracking-wider uppercase">
+                <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                <span>PLAYKIT</span>
+              </div>
+
+              <!-- Universal Music Group -->
+              <div class="flex items-center gap-2 font-bold text-[12px] sm:text-[13px] tracking-widest uppercase">
+                <svg class="w-5 h-5 stroke-current fill-none stroke-[1.8] shrink-0" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="9"/>
+                  <path d="M3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>
+                </svg>
+                <span>MUSIC GROUP</span>
+              </div>
+
+              <!-- Voodoo -->
+              <div class="font-black text-[22px] sm:text-[24px] tracking-tight font-sans lowercase">
+                voodoo
+              </div>
+
+              <!-- Locket -->
+              <div class="flex items-center gap-2 font-bold text-[15px] sm:text-[16px] tracking-tight">
+                <div class="w-5 h-5 rounded-[6px] bg-white/20 flex items-center justify-center shrink-0">
+                  <svg class="w-3 h-3 fill-white" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                  </svg>
+                </div>
+                <span>Locket</span>
+              </div>
+
+              <!-- Karat -->
+              <div class="font-black text-[20px] sm:text-[22px] tracking-tight">
+                Karat
+              </div>
+            </div>
+
+            <!-- Set 2 (Identical Duplicate for Infinite Seamless Marquee) -->
+            <div class="flex items-center gap-12 sm:gap-16 shrink-0" aria-hidden="true">
+              <!-- Warner Records -->
+              <div class="flex items-center gap-2 font-bold tracking-wider text-[13px] sm:text-[14px]">
+                <svg class="w-6 h-6 fill-current shrink-0" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+                  <path d="M7 10h10M6 14h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>WARNER RECORDS</span>
+              </div>
+
+              <!-- Big Loud -->
+              <div class="font-black text-[18px] sm:text-[20px] tracking-tighter uppercase font-sans">
+                BIG LOUD
+              </div>
+
+              <!-- Playkit -->
+              <div class="flex items-center gap-1.5 font-black text-[15px] sm:text-[17px] tracking-wider uppercase">
+                <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                <span>PLAYKIT</span>
+              </div>
+
+              <!-- Universal Music Group -->
+              <div class="flex items-center gap-2 font-bold text-[12px] sm:text-[13px] tracking-widest uppercase">
+                <svg class="w-5 h-5 stroke-current fill-none stroke-[1.8] shrink-0" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="9"/>
+                  <path d="M3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>
+                </svg>
+                <span>MUSIC GROUP</span>
+              </div>
+
+              <!-- Voodoo -->
+              <div class="font-black text-[22px] sm:text-[24px] tracking-tight font-sans lowercase">
+                voodoo
+              </div>
+
+              <!-- Locket -->
+              <div class="flex items-center gap-2 font-bold text-[15px] sm:text-[16px] tracking-tight">
+                <div class="w-5 h-5 rounded-[6px] bg-white/20 flex items-center justify-center shrink-0">
+                  <svg class="w-3 h-3 fill-white" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                  </svg>
+                </div>
+                <span>Locket</span>
+              </div>
+
+              <!-- Karat -->
+              <div class="font-black text-[20px] sm:text-[22px] tracking-tight">
+                Karat
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
-
-    </div>
-
-
-    <!-- 6. BOTTOM CTA BUTTONS ROW -->
-    <div class="flex items-center justify-center gap-3 mb-12 sm:mb-16 flex-wrap">
-      
-      <!-- Button 1: Sign up free with Google -->
-      <button 
-        onclick="openGoogleAuthPopup()" 
-        class="bg-[#111111] hover:bg-black text-white text-[13px] sm:text-[13.5px] font-semibold pl-2.5 pr-4 py-2.5 rounded-full flex items-center gap-2 shadow-btn transition-all hover:scale-[1.02] active:scale-[0.98]"
-      >
-        <span class="w-5 h-5 rounded-full bg-white flex items-center justify-center p-0.5 shadow-sm">
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"/>
-            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24Z"/>
-            <path fill="#FBBC05" d="M5.28 14.27a7.14 7.14 0 0 1 0-4.54V6.58H1.25a11.93 11.93 0 0 0 0 10.84l4.03-3.15Z"/>
-            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98Z"/>
-          </svg>
-        </span>
-        <span>Sign up free with Google</span>
-      </button>
-
-      <!-- Button 2: Browse the library -->
-      <a 
-        href="library.html" 
-        class="bg-white hover:bg-zinc-50 border border-[#e5e5e5] text-[#222222] text-[13px] sm:text-[13.5px] font-medium px-6 sm:px-6.5 py-2.5 rounded-full flex items-center gap-2 shadow-pill transition-all hover:border-zinc-300"
-      >
-        <span>Browse the library</span>
-        <svg class="w-3.5 h-3.5 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-        </svg>
-      </a>
 
     </div>
 
   </div>
+
+  <!-- Interactive Typewriter & Counter Script -->
+  <script>
+    (function initLightreelHero() {
+      const phrases = [
+        "What trending sounds should I use for my skincare brand?",
+        "Find UGC hooks for a fitness brand",
+        "Show me top viral reaction formats this week",
+        "Find creators who convert on TikTok Shop"
+      ];
+      let phraseIdx = 0;
+      let charIdx = 0;
+      let isDeleting = false;
+      const textEl = document.getElementById("lightreelTypewriter");
+      const counterEl = document.getElementById("lightreelCounter");
+
+      function typeLoop() {
+        if (!textEl) return;
+        const currentPhrase = phrases[phraseIdx];
+        if (isDeleting) {
+          charIdx--;
+          textEl.textContent = currentPhrase.substring(0, charIdx);
+        } else {
+          charIdx++;
+          textEl.textContent = currentPhrase.substring(0, charIdx);
+        }
+
+        let speed = isDeleting ? 30 : 65;
+
+        if (!isDeleting && charIdx === currentPhrase.length) {
+          speed = 2800; // Pause at end of sentence
+          isDeleting = true;
+        } else if (isDeleting && charIdx === 0) {
+          isDeleting = false;
+          phraseIdx = (phraseIdx + 1) % phrases.length;
+          speed = 500;
+        }
+
+        setTimeout(typeLoop, speed);
+      }
+
+      // Smooth live counter increment
+      let videoCount = 5665;
+      function incrementCounter() {
+        if (counterEl) {
+          videoCount += Math.floor(Math.random() * 3) + 1;
+          const formatted = (videoCount / 1000).toFixed(3);
+          counterEl.textContent = formatted + " videos watched today";
+        }
+        setTimeout(incrementCounter, Math.random() * 3000 + 2000);
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        typeLoop();
+        incrementCounter();
+      });
+      if (document.readyState === "complete" || document.readyState === "interactive") {
+        typeLoop();
+        incrementCounter();
+      }
+    })();
+  </script>
 
 
   <!-- ================= 6.5. STATEMENT SECTION ================= -->
