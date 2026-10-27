@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sofia - the first AI that doomscrolls</title>
+  <title>Guardbase - AI deserves the same security as software.</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -347,310 +347,233 @@
 
 <body class="bg-white min-h-screen flex flex-col justify-between selection:bg-indigo-100 selection:text-indigo-900 relative">
 
-  <!-- ================= LIGHTREEL TOP HERO SECTION (PIXEL PERFECT COPY) ================= -->
-  <div class="w-full max-w-[1560px] mx-auto px-2.5 sm:px-4 md:px-6 py-2.5 sm:py-4 relative select-none">
+  <!-- ================= GUARDBASE TOP HERO SECTION (PIXEL PERFECT COPY) ================= -->
+  <div class="w-full bg-white relative overflow-hidden select-none border-b border-[#e2e8f0]">
     
-    <!-- Big Blue Hero Card Container with Rounded Corners -->
-    <div style="background: radial-gradient(120% 120% at 50% 0%, #0a70ff 0%, #0064ff 45%, #0252e8 100%);" class="w-full rounded-[28px] sm:rounded-[36px] md:rounded-[44px] px-6 sm:px-10 md:px-14 lg:px-16 xl:px-20 pt-7 sm:pt-8 md:pt-10 pb-10 sm:pb-12 shadow-[0_20px_60px_-15px_rgba(0,102,255,0.35)] relative overflow-hidden flex flex-col justify-between">
-      
-      <!-- 1. NAVIGATION BAR -->
-      <nav class="w-full flex items-center justify-between z-10">
-        <!-- Logo -->
-        <a href="#" class="flex items-center group">
-          <span class="text-white font-extrabold text-[22px] sm:text-[24px] md:text-[26px] tracking-[-0.03em] font-sans">Sofia</span>
-        </a>
+    <!-- TOP NAVIGATION BAR -->
+    <header class="w-full max-w-[1440px] mx-auto px-6 sm:px-10 md:px-12 lg:px-16 pt-5 pb-5 flex items-center justify-between relative z-20">
+      <!-- Logo: Technical Layered Hexagon/Shield + Guardbase -->
+      <a href="#" class="flex items-center gap-2.5 group">
+        <svg class="w-[22px] h-[22px] text-[#090d16]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Layer 1: Top isometric rounded diamond -->
+          <path d="M12 2.5L20.5 7.5L12 12.5L3.5 7.5L12 2.5Z" />
+          <!-- Layer 2: Mid angled chevron -->
+          <path d="M3.5 12L12 17L20.5 12" />
+          <!-- Layer 3: Bottom angled chevron -->
+          <path d="M3.5 16.5L12 21.5L20.5 16.5" />
+        </svg>
+        <span class="text-[#090d16] font-bold text-[19px] sm:text-[20px] tracking-[-0.025em] font-sans">
+          Guardbase
+        </span>
+      </a>
 
-        <!-- Right Action Links -->
-        <div class="flex items-center gap-4 sm:gap-8">
-          <a href="#manage-subscription" class="text-white text-[13.5px] sm:text-[14.5px] font-semibold hover:text-white/80 transition-colors">
-            Manage subscription
+      <!-- Right Navigation Links & Action Button -->
+      <div class="flex items-center gap-6 sm:gap-9">
+        <div class="hidden md:flex items-center gap-8 text-[13.5px] font-medium text-[#0f172a]">
+          <a href="#products" class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
+            <span>Products</span>
+            <svg class="w-3 h-3 text-[#64748b] stroke-[2.4]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
           </a>
-          <a href="#start-free" class="bg-white hover:bg-zinc-50 active:scale-95 text-[#111111] font-bold text-[13.5px] sm:text-[14.5px] px-5 sm:px-6 py-2.5 rounded-full shadow-sm transition-all whitespace-nowrap">
-            Start for free
-          </a>
+          <a href="#company" class="hover:text-blue-600 transition-colors">Company</a>
+          <a href="#blog" class="hover:text-blue-600 transition-colors">Blog</a>
+          <a href="#docs" class="hover:text-blue-600 transition-colors">Docs</a>
         </div>
-      </nav>
 
-      <!-- 2. MAIN TWO-COLUMN HERO CONTENT -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mt-12 sm:mt-16 md:mt-20 mb-12 sm:mb-16 md:mb-20 z-10 w-full">
+        <!-- WATCH DEMO Button -->
+        <a href="#watch-demo" class="bg-[#1d4ed8] hover:bg-[#1e40af] text-white text-[11px] sm:text-[11.5px] font-bold tracking-[0.07em] uppercase px-4 sm:px-5 py-2.5 rounded-[2px] flex items-center gap-2 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99] whitespace-nowrap">
+          <span>WATCH DEMO</span>
+          <span class="text-sm font-normal leading-none">→</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- CAD FRAMED HERO CONTAINER WITH BOUNDARY LINES & CORNER CROSSHAIRS -->
+    <div class="w-full max-w-[1440px] mx-auto px-6 sm:px-10 md:px-12 lg:px-16 relative">
+      
+      <!-- Top Horizontal CAD Line (Frames Hero Container) -->
+      <div class="w-full h-px bg-[#e2e8f0] relative">
+        <!-- Top-Left CAD Crosshair '+' -->
+        <span class="absolute -top-[7px] -left-[5px] text-[#94a3b8] font-mono text-[13px] leading-none select-none pointer-events-none">+</span>
+        <!-- Top-Right CAD Crosshair '+' -->
+        <span class="absolute -top-[7px] -right-[5px] text-[#94a3b8] font-mono text-[13px] leading-none select-none pointer-events-none">+</span>
+      </div>
+
+      <!-- MAIN HERO CONTENT WRAPPER -->
+      <div class="relative pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-24 sm:pb-32 md:pb-40 min-h-[540px] sm:min-h-[580px] lg:min-h-[620px] flex flex-col justify-between">
         
-        <!-- Left Hero Column -->
-        <div class="lg:col-span-7 flex flex-col items-start text-left">
-          <!-- Main Headline -->
-          <h1 class="text-[44px] sm:text-[58px] md:text-[68px] lg:text-[76px] font-black text-white tracking-[-0.04em] leading-[1.01]">
-            the first AI that<br />
-            doomscrolls
+        <!-- Left Vertical CAD Hairline -->
+        <div class="absolute top-0 bottom-0 left-0 w-px bg-[#e2e8f0] pointer-events-none"></div>
+        <!-- Right Vertical CAD Hairline -->
+        <div class="absolute top-0 bottom-0 right-0 w-px bg-[#e2e8f0] pointer-events-none"></div>
+
+        <!-- Left Content Area: Giant Headline, Subheadline & Action Buttons -->
+        <div class="max-w-[780px] relative z-20 px-2 sm:px-4 md:px-6">
+          <!-- Giant Dual-Tone Headline -->
+          <h1 class="text-[44px] sm:text-[62px] md:text-[76px] lg:text-[88px] xl:text-[96px] font-bold tracking-[-0.04em] leading-[1.02] select-none">
+            <span class="text-[#090d16]">AI </span><span class="text-[#8ea4d2] font-semibold">deserves </span><span class="text-[#090d16]">the same</span><br />
+            <span class="text-[#090d16]">security </span><span class="text-[#8ea4d2] font-semibold">as software.</span>
           </h1>
 
-          <!-- Subheadline -->
-          <p class="mt-4 sm:mt-5 text-[16.5px] sm:text-[18px] md:text-[19px] text-white/90 font-normal leading-[1.4] max-w-[500px]">
-            Sofia develops content strategies,<br class="hidden sm:inline" />
-            finds creators, and helps you go viral
+          <!-- Subheadline Copy -->
+          <p class="text-[#475569] text-[15px] sm:text-[16px] md:text-[16.5px] font-normal leading-[1.55] max-w-[440px] mt-6 sm:mt-7">
+            Monitor how agents behave, what attackers<br class="hidden sm:inline" />
+            could exploit, and which risks actually matter.
           </p>
 
-          <!-- Pill CTA Button -->
-          <div class="mt-7 sm:mt-8">
-            <a href="#try" class="inline-flex items-center gap-3 bg-white text-[#111111] font-bold text-[15px] sm:text-[16px] px-6 sm:px-7 py-3 sm:py-3.5 rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.12)] hover:bg-zinc-50 hover:scale-[1.02] active:scale-[0.98] transition-all">
-              <span class="underline decoration-2 underline-offset-4">try 3 days free</span>
-              <span class="text-lg leading-none">→</span>
+          <!-- Dual CTA Buttons Row -->
+          <div class="flex items-center gap-3 mt-7 sm:mt-9 flex-wrap">
+            <!-- Primary Blue Button -->
+            <a href="#watch-demo" class="bg-[#1d4ed8] hover:bg-[#1e40af] text-white text-[11.5px] sm:text-[12px] font-bold tracking-[0.06em] uppercase px-5 sm:px-6 py-3 rounded-[2px] flex items-center gap-2 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99]">
+              <span>WATCH DEMO</span>
+              <span class="text-sm leading-none">→</span>
+            </a>
+
+            <!-- Secondary Outline Button -->
+            <a href="#docs" class="bg-white hover:bg-slate-50 border border-[#cbd5e1] text-[#0f172a] text-[11.5px] sm:text-[12px] font-bold tracking-[0.06em] uppercase px-5 sm:px-6 py-3 rounded-[2px] flex items-center gap-2 shadow-2xs transition-all hover:border-slate-400">
+              <span>VIEW DOCS</span>
+              <svg class="w-3.5 h-3.5 text-[#334155]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
             </a>
           </div>
         </div>
 
-        <!-- Right Interactive AI Card Column -->
-        <div class="lg:col-span-5 flex flex-col items-center lg:items-end justify-center w-full">
-          <div class="w-full max-w-[490px] xl:max-w-[520px]">
-            
-            <!-- Outer Translucent Card Frame -->
-            <div class="p-2 sm:p-2.5 rounded-[24px] sm:rounded-[26px] bg-white/[0.12] border border-white/25 shadow-2xl backdrop-blur-xs">
-              
-              <!-- Inner White Prompt Card -->
-              <div class="w-full bg-white rounded-[18px] sm:rounded-[20px] p-5 sm:p-6 shadow-md flex flex-col justify-between min-h-[165px] sm:min-h-[180px]">
-                
-                <!-- Query Prompt with Dynamic Typewriter -->
-                <div class="text-[#64748b] text-[14px] sm:text-[15.5px] font-normal leading-relaxed min-h-[46px] select-none flex items-start">
-                  <span id="lightreelTypewriter"></span>
-                  <span class="custom-cursor-blink inline-block w-[1.5px] h-[19px] bg-[#64748b] align-middle ml-0.5"></span>
-                </div>
+        <!-- RIGHT / BACKGROUND: PIXEL-PERFECT HALFTONE DITHER MOUNTAIN ARTWORK -->
+        <div class="absolute bottom-0 right-0 w-full sm:w-[85%] md:w-[74%] lg:w-[68%] xl:w-[64%] h-[340px] sm:h-[440px] md:h-[520px] lg:h-[560px] pointer-events-none z-10 overflow-hidden flex items-end justify-end">
+          <svg class="w-full h-full object-cover object-bottom" viewBox="0 0 1000 600" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMax meet">
+            <defs>
+              <!-- Fine Halftone Dotted Pattern (Distant Sky / Low Slopes) -->
+              <pattern id="htFine" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+                <circle cx="4" cy="4" r="1.1" fill="#93c5fd" />
+              </pattern>
 
-                <!-- Bottom Row Inside White Card -->
-                <div class="flex items-center justify-between mt-6 pt-1">
-                  
-                  <!-- Videos Watched Pill Badge -->
-                  <div class="inline-flex items-center gap-2 bg-[#f4f4f5] border border-zinc-200/70 rounded-full pl-2 pr-3 py-1 sm:py-1.5 shadow-2xs">
-                    <div class="flex items-center gap-1 shrink-0">
-                      <!-- TikTok Icon Badge -->
-                      <span class="w-[19px] h-[19px] rounded-full bg-black flex items-center justify-center shrink-0 shadow-2xs">
-                        <svg class="w-2.5 h-2.5 fill-white" viewBox="0 0 24 24">
-                          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 3.13-4.52V9.39a6.34 6.34 0 0 0-5.36 2.13 6.34 6.34 0 0 0 1.25 8.8 6.34 6.34 0 0 0 8.63-1.42 6.34 6.34 0 0 0 1-3.42V8.82a8.21 8.21 0 0 0 4.77 1.52V6.9a4.81 4.81 0 0 1-1-.21z"/>
-                        </svg>
-                      </span>
-                      <!-- Instagram Icon Badge -->
-                      <span class="w-[19px] h-[19px] rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center shrink-0 shadow-2xs">
-                        <svg class="w-2.5 h-2.5 text-white stroke-current fill-none stroke-[2]" viewBox="0 0 24 24">
-                          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                          <circle cx="12" cy="12" r="4"/>
-                          <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/>
-                        </svg>
-                      </span>
-                    </div>
-                    <span id="lightreelCounter" class="text-[11.5px] sm:text-[12px] text-[#52525b] font-medium tracking-tight whitespace-nowrap">
-                      5.665 videos watched today
-                    </span>
-                  </div>
+              <!-- Medium Halftone Dotted Pattern (Mid Mountain Peak) -->
+              <pattern id="htMid" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+                <circle cx="4" cy="4" r="2.1" fill="#60a5fa" />
+              </pattern>
 
-                  <!-- Send / Up-Arrow Button -->
-                  <button aria-label="Submit prompt" class="w-8 h-8 rounded-full bg-[#f4f4f5] hover:bg-[#e4e4e7] text-zinc-400 hover:text-zinc-700 flex items-center justify-center transition-all active:scale-95 shrink-0">
-                    <svg class="w-4 h-4 stroke-[2.4]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 19.5V4.5m0 0l-6 6m6-6l6 6"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
+              <!-- Dense Halftone Dotted Pattern (Shadow Ridges) -->
+              <pattern id="htDense" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+                <circle cx="4" cy="4" r="3.1" fill="#3b82f6" />
+              </pattern>
 
-            <!-- Try our api Link Below White Box -->
-            <div class="w-full flex justify-center mt-3 sm:mt-3.5">
-              <a href="#api" class="inline-flex items-center gap-1.5 font-mono text-[13px] text-white/95 hover:text-white transition-opacity group">
-                <span class="font-bold tracking-tight">&lt;/&gt;</span>
-                <span class="underline decoration-1 underline-offset-4 group-hover:decoration-2">try our api</span>
-              </a>
-            </div>
+              <!-- Fade mask to smoothly dissolve dots on the left -->
+              <linearGradient id="fadeSlopeLeft" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+                <stop offset="28%" stop-color="#ffffff" stop-opacity="0" />
+              </linearGradient>
 
-          </div>
+              <!-- Fade mask for peak summits -->
+              <linearGradient id="fadeSlopeTop" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+                <stop offset="22%" stop-color="#ffffff" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+
+            <!-- 1. Background Distant Slope (Fine Light Blue Dots) -->
+            <path d="M 50 600 L 280 430 L 480 340 L 630 260 L 760 380 L 1000 240 L 1000 600 Z" fill="url(#htFine)" opacity="0.85" />
+
+            <!-- 2. Central Pyramid Peak (Mid Tone Halftone Blue Dots) -->
+            <!-- Left slope incline from x=240, peak at x=630 y=260, right slope into saddle at x=750 y=370 -->
+            <path d="M 180 600 L 390 440 L 530 340 L 630 260 L 750 370 L 880 480 L 1000 520 L 1000 600 Z" fill="url(#htMid)" />
+
+            <!-- 3. Shadow Facet of the Central Peak -->
+            <path d="M 630 260 L 670 330 L 750 370 L 710 460 L 630 520 L 580 600 L 630 600 Z" fill="url(#htDense)" opacity="0.75" />
+
+            <!-- 4. Background Far-Right High Ridge (Mid Halftone) -->
+            <path d="M 740 600 L 800 420 L 880 310 L 960 260 L 1000 270 L 1000 600 Z" fill="url(#htMid)" />
+
+            <!-- 5. Foreground Dramatic Right Peak (Solid Deep Royal Blue with Pixelated Steps) -->
+            <path d="M 620 600 
+                     L 640 570 L 640 550 L 660 550 L 660 520 L 680 520 L 680 480 
+                     L 710 480 L 710 440 L 740 440 L 740 390 L 770 390 L 770 340 
+                     L 810 340 L 810 290 L 840 290 L 840 250 L 860 250 L 860 280 
+                     L 920 340 L 960 410 L 1000 460 L 1000 600 Z" 
+                  fill="#2563eb" />
+
+            <!-- Digital Byte/Pixel Matrix White Cutouts on Foreground Mountain -->
+            <g fill="#ffffff">
+              <rect x="710" y="520" width="8" height="8" />
+              <rect x="730" y="500" width="10" height="10" />
+              <rect x="750" y="530" width="8" height="8" />
+              <rect x="760" y="470" width="10" height="10" />
+              <rect x="780" y="490" width="12" height="12" />
+              <rect x="800" y="440" width="8" height="8" />
+              <rect x="820" y="460" width="10" height="10" />
+              <rect x="830" y="410" width="8" height="8" />
+              <rect x="850" y="430" width="12" height="12" />
+              <rect x="870" y="380" width="8" height="8" />
+              <rect x="880" y="450" width="10" height="10" />
+              <rect x="890" y="420" width="8" height="8" />
+              <rect x="910" y="480" width="10" height="10" />
+              <rect x="920" y="440" width="8" height="8" />
+              <rect x="930" y="510" width="12" height="12" />
+              <rect x="950" y="470" width="8" height="8" />
+              <rect x="960" y="520" width="10" height="10" />
+              <rect x="970" y="490" width="8" height="8" />
+              <rect x="860" y="350" width="8" height="8" />
+              <rect x="840" y="370" width="6" height="6" />
+              <rect x="820" y="390" width="8" height="8" />
+              <rect x="790" y="420" width="6" height="6" />
+              <rect x="770" y="440" width="8" height="8" />
+              <rect x="740" y="470" width="6" height="6" />
+            </g>
+
+            <!-- Floating Halftone Dither Pixels along the Ridge -->
+            <g fill="#3b82f6">
+              <rect x="830" y="240" width="6" height="6" />
+              <rect x="840" y="230" width="6" height="6" />
+              <rect x="850" y="240" width="6" height="6" />
+              <rect x="820" y="270" width="6" height="6" />
+              <rect x="800" y="280" width="8" height="8" />
+              <rect x="780" y="320" width="8" height="8" />
+              <rect x="750" y="370" width="8" height="8" />
+              <rect x="720" y="420" width="8" height="8" />
+              <rect x="690" y="460" width="8" height="8" />
+              <circle cx="860" cy="220" r="3" />
+              <circle cx="875" cy="235" r="2.5" />
+              <circle cx="890" cy="250" r="3" />
+              <circle cx="905" cy="270" r="2.5" />
+              <circle cx="920" cy="290" r="3" />
+              <circle cx="940" cy="310" r="3" />
+              <circle cx="955" cy="330" r="3.5" />
+              <circle cx="970" cy="350" r="3.5" />
+              <circle cx="985" cy="370" r="4" />
+            </g>
+
+            <!-- Soft Horizon Dissolve Masks -->
+            <rect x="0" y="0" width="1000" height="600" fill="url(#fadeSlopeLeft)" />
+            <rect x="0" y="0" width="1000" height="600" fill="url(#fadeSlopeTop)" />
+          </svg>
         </div>
 
       </div>
 
-      <!-- 3. BOTTOM "TRUSTED BY" & LOGOS SECTION -->
-      <div class="w-full flex flex-col items-center mt-4 sm:mt-6 z-10">
-        <!-- Label -->
-        <div class="text-white/75 font-bold text-[14px] sm:text-[15px] tracking-wide mb-6">
-          trusted by
-        </div>
+      <!-- Bottom Horizontal CAD Line (Frames Hero Container) -->
+      <div class="w-full h-px bg-[#e2e8f0] relative">
+        <!-- Bottom-Left CAD Crosshair '+' -->
+        <span class="absolute -top-[7px] -left-[5px] text-[#94a3b8] font-mono text-[13px] leading-none select-none pointer-events-none">+</span>
+        <!-- Bottom-Right CAD Crosshair '+' -->
+        <span class="absolute -top-[7px] -right-[5px] text-[#94a3b8] font-mono text-[13px] leading-none select-none pointer-events-none">+</span>
+      </div>
 
-        <!-- Marquee Row of Partner Logos -->
-        <div class="w-full overflow-hidden relative [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-          <div class="marquee-track flex items-center gap-12 sm:gap-16 text-white/80 select-none">
-            
-            <!-- Set 1 of Logos -->
-            <div class="flex items-center gap-12 sm:gap-16 shrink-0">
-              <!-- Warner Records -->
-              <div class="flex items-center gap-2 font-bold tracking-wider text-[13px] sm:text-[14px]">
-                <svg class="w-6 h-6 fill-current shrink-0" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
-                  <path d="M7 10h10M6 14h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                <span>WARNER RECORDS</span>
-              </div>
-
-              <!-- Big Loud -->
-              <div class="font-black text-[18px] sm:text-[20px] tracking-tighter uppercase font-sans">
-                BIG LOUD
-              </div>
-
-              <!-- Playkit -->
-              <div class="flex items-center gap-1.5 font-black text-[15px] sm:text-[17px] tracking-wider uppercase">
-                <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
-                <span>PLAYKIT</span>
-              </div>
-
-              <!-- Universal Music Group -->
-              <div class="flex items-center gap-2 font-bold text-[12px] sm:text-[13px] tracking-widest uppercase">
-                <svg class="w-5 h-5 stroke-current fill-none stroke-[1.8] shrink-0" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="9"/>
-                  <path d="M3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>
-                </svg>
-                <span>MUSIC GROUP</span>
-              </div>
-
-              <!-- Voodoo -->
-              <div class="font-black text-[22px] sm:text-[24px] tracking-tight font-sans lowercase">
-                voodoo
-              </div>
-
-              <!-- Locket -->
-              <div class="flex items-center gap-2 font-bold text-[15px] sm:text-[16px] tracking-tight">
-                <div class="w-5 h-5 rounded-[6px] bg-white/20 flex items-center justify-center shrink-0">
-                  <svg class="w-3 h-3 fill-white" viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                  </svg>
-                </div>
-                <span>Locket</span>
-              </div>
-
-              <!-- Karat -->
-              <div class="font-black text-[20px] sm:text-[22px] tracking-tight">
-                Karat
-              </div>
-            </div>
-
-            <!-- Set 2 (Identical Duplicate for Infinite Seamless Marquee) -->
-            <div class="flex items-center gap-12 sm:gap-16 shrink-0" aria-hidden="true">
-              <!-- Warner Records -->
-              <div class="flex items-center gap-2 font-bold tracking-wider text-[13px] sm:text-[14px]">
-                <svg class="w-6 h-6 fill-current shrink-0" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
-                  <path d="M7 10h10M6 14h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                <span>WARNER RECORDS</span>
-              </div>
-
-              <!-- Big Loud -->
-              <div class="font-black text-[18px] sm:text-[20px] tracking-tighter uppercase font-sans">
-                BIG LOUD
-              </div>
-
-              <!-- Playkit -->
-              <div class="flex items-center gap-1.5 font-black text-[15px] sm:text-[17px] tracking-wider uppercase">
-                <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
-                <span>PLAYKIT</span>
-              </div>
-
-              <!-- Universal Music Group -->
-              <div class="flex items-center gap-2 font-bold text-[12px] sm:text-[13px] tracking-widest uppercase">
-                <svg class="w-5 h-5 stroke-current fill-none stroke-[1.8] shrink-0" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="9"/>
-                  <path d="M3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>
-                </svg>
-                <span>MUSIC GROUP</span>
-              </div>
-
-              <!-- Voodoo -->
-              <div class="font-black text-[22px] sm:text-[24px] tracking-tight font-sans lowercase">
-                voodoo
-              </div>
-
-              <!-- Locket -->
-              <div class="flex items-center gap-2 font-bold text-[15px] sm:text-[16px] tracking-tight">
-                <div class="w-5 h-5 rounded-[6px] bg-white/20 flex items-center justify-center shrink-0">
-                  <svg class="w-3 h-3 fill-white" viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                  </svg>
-                </div>
-                <span>Locket</span>
-              </div>
-
-              <!-- Karat -->
-              <div class="font-black text-[20px] sm:text-[22px] tracking-tight">
-                Karat
-              </div>
-            </div>
-
-          </div>
-        </div>
-
+      <!-- "■ TRUSTED BY SECURITY TEAMS AT" SUB-ROW -->
+      <div class="w-full py-5 sm:py-6 flex items-center gap-2.5">
+        <span class="w-2 h-2 bg-[#2563eb] inline-block shrink-0 rounded-[0.5px]"></span>
+        <span class="text-[11px] sm:text-[11.5px] font-mono tracking-[0.15em] uppercase text-[#64748b] font-medium select-none">
+          TRUSTED BY SECURITY TEAMS AT
+        </span>
       </div>
 
     </div>
 
   </div>
-
-  <!-- Interactive Typewriter & Counter Script -->
-  <script>
-    (function initLightreelHero() {
-      const phrases = [
-        "What trending sounds should I use for my skincare brand?",
-        "Find UGC hooks for a fitness brand",
-        "Show me top viral reaction formats this week",
-        "Find creators who convert on TikTok Shop"
-      ];
-      let phraseIdx = 0;
-      let charIdx = 0;
-      let isDeleting = false;
-      const textEl = document.getElementById("lightreelTypewriter");
-      const counterEl = document.getElementById("lightreelCounter");
-
-      function typeLoop() {
-        if (!textEl) return;
-        const currentPhrase = phrases[phraseIdx];
-        if (isDeleting) {
-          charIdx--;
-          textEl.textContent = currentPhrase.substring(0, charIdx);
-        } else {
-          charIdx++;
-          textEl.textContent = currentPhrase.substring(0, charIdx);
-        }
-
-        let speed = isDeleting ? 30 : 65;
-
-        if (!isDeleting && charIdx === currentPhrase.length) {
-          speed = 2800; // Pause at end of sentence
-          isDeleting = true;
-        } else if (isDeleting && charIdx === 0) {
-          isDeleting = false;
-          phraseIdx = (phraseIdx + 1) % phrases.length;
-          speed = 500;
-        }
-
-        setTimeout(typeLoop, speed);
-      }
-
-      // Smooth live counter increment
-      let videoCount = 5665;
-      function incrementCounter() {
-        if (counterEl) {
-          videoCount += Math.floor(Math.random() * 3) + 1;
-          const formatted = (videoCount / 1000).toFixed(3);
-          counterEl.textContent = formatted + " videos watched today";
-        }
-        setTimeout(incrementCounter, Math.random() * 3000 + 2000);
-      }
-
-      document.addEventListener("DOMContentLoaded", () => {
-        typeLoop();
-        incrementCounter();
-      });
-      if (document.readyState === "complete" || document.readyState === "interactive") {
-        typeLoop();
-        incrementCounter();
-      }
-    })();
-  </script>
 
 
   <!-- ================= 6.5. STATEMENT SECTION ================= -->
