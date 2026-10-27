@@ -69,6 +69,11 @@
       font-family: 'Switzer', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
+    .billo-glow-bar {
+      background: linear-gradient(90deg, #c5f842 0%, #a2e82e 100%);
+      box-shadow: 0 0 14px rgba(162, 232, 46, 0.55);
+    }
+
     /* Grand Editorial Serif Title */
     .hero-heading {
       font-family: 'Newsreader', 'Playfair Display', Georgia, serif;
@@ -536,18 +541,150 @@
   </script>
 
 
-  <!-- ================= 6.5. STATEMENT SECTION ================= -->
-  <section class="w-full bg-white py-20 sm:py-28 md:py-36 lg:py-44 px-4 sm:px-6 text-center select-none overflow-hidden transition-colors flex flex-col items-center justify-center">
-    <div class="w-full max-w-[1280px] mx-auto flex flex-col items-center justify-center text-center">
-      <h2 id="statementHeading" class="hero-heading text-[24px] sm:text-[34px] md:text-[44px] lg:text-[52px] w-full max-w-6xl mx-auto leading-[1.14] text-center flex flex-col items-center justify-center">
-        <span class="statement-line block w-full text-center text-[#111111] whitespace-normal md:whitespace-nowrap">
-          Everything you need to make people stop scrolling.
-        </span>
-        <span class="statement-line block w-full text-center text-[#111111]/50 whitespace-normal md:whitespace-nowrap mt-1 sm:mt-1.5">
-          Nothing you need to fake.
-        </span>
-      </h2>
+  <!-- ================= 6.5. BILLO PERFORMANCE SECTION (UNDERNEATH LANDING PAGE) ================= -->
+  <section id="billoPerformanceSection" class="w-full relative select-none overflow-hidden py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-8" style="background: radial-gradient(120% 90% at 50% 12%, #ffffff 0%, #edf6ff 45%, #cde5fe 100%);">
+    
+    <div class="w-full max-w-[1140px] mx-auto flex flex-col items-center">
+      
+      <!-- Headline & Subtitle -->
+      <div class="text-center mb-10 sm:mb-12 max-w-[800px]">
+        <h2 class="text-[32px] sm:text-[42px] md:text-[45px] font-normal text-[#111111] tracking-[-0.03em] leading-[1.16]">
+          Billo ads just do better,<br class="hidden sm:inline" /> from the hook to the sale
+        </h2>
+        <p class="text-[#27272a] text-[13px] sm:text-[13.5px] md:text-[14px] font-normal leading-normal mt-3 sm:mt-4 tracking-[-0.01em]">
+          Across $1.24B of brands&rsquo; own ad spend, Billo ads bring more customers per dollar.
+        </p>
+      </div>
+
+      <!-- 3 Cards Grid -->
+      <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 items-stretch">
+        
+        <!-- CARD 1: CPA -->
+        <div class="bg-white rounded-[32px] p-7 sm:p-8 flex flex-col justify-between shadow-[0_10px_35px_-5px_rgba(0,0,0,0.05),0_2px_6px_-1px_rgba(0,0,0,0.02)] border border-white/80">
+          <div>
+            <div class="text-[#52525b] text-[17px] sm:text-[18px] font-normal tracking-wide">
+              CPA
+            </div>
+            <div class="text-[#111111] text-[26px] sm:text-[28px] font-medium tracking-tight mt-1.5 sm:mt-2">
+              11% lower
+            </div>
+
+            <!-- Bars Area -->
+            <div class="mt-6 flex flex-col gap-3">
+              <!-- Billo Bar Row -->
+              <div class="flex items-center gap-3">
+                <div class="w-[125px] sm:w-[130px] h-[14px] billo-glow-bar rounded-full shrink-0"></div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <span class="text-[13.5px] sm:text-[14px] font-medium text-[#111111]">$82</span>
+                  <span class="inline-flex items-center justify-center bg-[#a6eb34] text-black text-[12px] font-bold px-2 py-[1.5px] rounded-full tracking-tight leading-none">billo</span>
+                </div>
+              </div>
+              <!-- Non-Billo Bar Row -->
+              <div class="flex items-center gap-3">
+                <div class="w-[165px] sm:w-[172px] h-[14px] bg-[#e4e7eb] rounded-full shrink-0"></div>
+                <div class="text-[13px] sm:text-[13.5px] font-normal text-[#64748b] shrink-0">
+                  $92 non-Billo
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom description -->
+          <div class="mt-7 pt-1 text-[11.5px] sm:text-[12px] text-[#1e293b] font-normal leading-normal">
+            Cheaper acquisition in 17 of the last 20 months.
+          </div>
+        </div>
+
+        <!-- CARD 2: CTR -->
+        <div class="bg-white rounded-[32px] p-7 sm:p-8 flex flex-col justify-between shadow-[0_10px_35px_-5px_rgba(0,0,0,0.05),0_2px_6px_-1px_rgba(0,0,0,0.02)] border border-white/80">
+          <div>
+            <div class="text-[#52525b] text-[17px] sm:text-[18px] font-normal tracking-wide">
+              CTR
+            </div>
+            <div class="text-[#111111] text-[26px] sm:text-[28px] font-medium tracking-tight mt-1.5 sm:mt-2">
+              +25%
+            </div>
+
+            <!-- Bars Area -->
+            <div class="mt-6 flex flex-col gap-3">
+              <!-- Billo Bar Row -->
+              <div class="flex items-center gap-3">
+                <div class="w-[175px] sm:w-[180px] h-[14px] billo-glow-bar rounded-full shrink-0"></div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <span class="text-[13.5px] sm:text-[14px] font-medium text-[#111111]">2.0%</span>
+                  <span class="inline-flex items-center justify-center bg-[#a6eb34] text-black text-[12px] font-bold px-2 py-[1.5px] rounded-full tracking-tight leading-none">billo</span>
+                </div>
+              </div>
+              <!-- Non-Billo Bar Row -->
+              <div class="flex items-center gap-3">
+                <div class="w-[135px] sm:w-[140px] h-[14px] bg-[#e4e7eb] rounded-full shrink-0"></div>
+                <div class="text-[13px] sm:text-[13.5px] font-normal text-[#64748b] shrink-0">
+                  1.6% non-Billo
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom description -->
+          <div class="mt-7 pt-1 text-[11.5px] sm:text-[12px] text-[#1e293b] font-normal leading-normal">
+            Ahead in 18 of 20 months, and the gap keeps widening.
+          </div>
+        </div>
+
+        <!-- CARD 3: HOOK RATE -->
+        <div class="bg-white rounded-[32px] p-7 sm:p-8 flex flex-col justify-between shadow-[0_10px_35px_-5px_rgba(0,0,0,0.05),0_2px_6px_-1px_rgba(0,0,0,0.02)] border border-white/80">
+          <div>
+            <div class="text-[#52525b] text-[17px] sm:text-[18px] font-normal tracking-wide">
+              HOOK RATE
+            </div>
+            <div class="text-[#111111] text-[26px] sm:text-[28px] font-medium tracking-tight mt-1.5 sm:mt-2">
+              +6 pts
+            </div>
+
+            <!-- Bars Area -->
+            <div class="mt-6 flex flex-col gap-3">
+              <!-- Billo Bar Row -->
+              <div class="flex items-center gap-3">
+                <div class="w-[178px] sm:w-[185px] h-[14px] billo-glow-bar rounded-full shrink-0"></div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <span class="text-[13.5px] sm:text-[14px] font-medium text-[#111111]">30%</span>
+                  <span class="inline-flex items-center justify-center bg-[#a6eb34] text-black text-[12px] font-bold px-2 py-[1.5px] rounded-full tracking-tight leading-none">billo</span>
+                </div>
+              </div>
+              <!-- Non-Billo Bar Row -->
+              <div class="flex items-center gap-3">
+                <div class="w-[145px] sm:w-[150px] h-[14px] bg-[#e4e7eb] rounded-full shrink-0"></div>
+                <div class="text-[13px] sm:text-[13.5px] font-normal text-[#64748b] shrink-0">
+                  24% non-Billo
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom description -->
+          <div class="mt-7 pt-1 text-[11.5px] sm:text-[12px] text-[#1e293b] font-normal leading-normal">
+            30% vs 24%, averaged across our top 5 categories.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footnote left-aligned with cards -->
+      <div class="w-full mt-8 sm:mt-10 text-left">
+        <p class="text-[11px] sm:text-[11.5px] md:text-[12px] text-[#64748b] font-normal tracking-normal">
+          Billo ads vs. all other ads in the same Meta accounts, based on 1.41M Meta ads, $1.24B in spend and $2.5B in purchase value.
+        </p>
+      </div>
+
     </div>
+
+    <!-- Floating Chat Widget Button (Bottom Right) -->
+    <div class="fixed bottom-6 right-6 w-12 h-12 bg-[#a4e637] rounded-[16px] flex items-center justify-center shadow-[0_6px_20px_rgba(164,230,55,0.4)] hover:scale-105 transition-transform cursor-pointer z-50">
+      <svg class="w-6 h-6 text-black" viewBox="0 0 24 24" fill="currentColor">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M4 4.5A2.5 2.5 0 0 1 6.5 2h11A2.5 2.5 0 0 1 20 4.5v9a2.5 2.5 0 0 1-2.5 2.5h-3.693l-3.328 3.55a1 1 0 0 1-1.679-.687V16H6.5A2.5 2.5 0 0 1 4 13.5v-9zm5 6a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H9z"/>
+      </svg>
+    </div>
+
   </section>
 
 

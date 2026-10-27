@@ -128,7 +128,8 @@ const htmlPages = [
   'storefront',
   'connect_success',
   'onboard_complete',
-  'onboard_refresh'
+  'onboard_refresh',
+  'billo'
 ];
 
 htmlPages.forEach(page => {
