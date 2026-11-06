@@ -3024,7 +3024,13 @@
       const searchBox = searchInput ? searchInput.closest('.shadow-search') : null;
       if (!searchInput || !cursorBar) return;
 
-      const phrase = "guy laughing at his phone";
+      const phrases = [
+        "guy laughing at his phone",
+        "girl shocked by her screen time",
+        "mom shocked at the price",
+        "gen-z crying in the car"
+      ];
+      let phraseIndex = 0;
       let currentIndex = 0;
       let isDeleting = false;
       let userInteracted = false;
@@ -3074,17 +3080,18 @@
         if (userInteracted) return;
 
         // If hovered while fully typed or deleting, pause to avoid surprising the user
-        if (isHovered && (currentIndex === phrase.length || isDeleting)) {
+        const currentPhrase = phrases[phraseIndex];
+        if (isHovered && (currentIndex === currentPhrase.length || isDeleting)) {
           timer = setTimeout(typeLoop, 500);
           return;
         }
 
         if (!isDeleting) {
           currentIndex++;
-          searchInput.value = phrase.slice(0, currentIndex);
+          searchInput.value = currentPhrase.slice(0, currentIndex);
           updateCursorPosition();
 
-          if (currentIndex === phrase.length) {
+          if (currentIndex === currentPhrase.length) {
             // Finished typing: pause for 4.2 seconds
             timer = setTimeout(() => {
               if (userInteracted) return;
@@ -3099,11 +3106,12 @@
           timer = setTimeout(typeLoop, delay);
         } else {
           currentIndex--;
-          searchInput.value = phrase.slice(0, currentIndex);
+          searchInput.value = currentPhrase.slice(0, currentIndex);
           updateCursorPosition();
 
           if (currentIndex === 0) {
             isDeleting = false;
+            phraseIndex = (phraseIndex + 1) % phrases.length;
             // Pause before retyping
             timer = setTimeout(typeLoop, 850);
             return;
